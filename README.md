@@ -1,4 +1,5 @@
 # Tootle
+![tootle_pres-16](https://user-images.githubusercontent.com/37731582/39925915-d4b46306-552d-11e8-9d1a-c4e138f181b1.png)
 
 Simple [Mastodon](https://github.com/tootsuite/mastodon) client designed for elementary OS.
 
