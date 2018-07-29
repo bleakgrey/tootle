@@ -6,5 +6,6 @@
     <file alias="dark.css">dark.css</file>
     <file alias="logo128">logo128.png</file>
     <file alias="empty_state">empty_state.png</file>
+    <file preprocess="xml-stripblanks" >ui/new_account_dialog.ui</file>
   </gresource>
 </gresources>

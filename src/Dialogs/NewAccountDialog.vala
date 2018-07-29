@@ -1,16 +1,19 @@
 using Gtk;
 using Tootle;
 
+[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/new_account_dialog.ui")]
 public class Tootle.NewAccountDialog : Gtk.Dialog {
 
     private static NewAccountDialog dialog;
 
+    [GtkChild]
     private Gtk.Grid grid;
-    private Gtk.Button button_done;
-    private Gtk.Image logo;
+    [GtkChild]
     private Gtk.Entry instance_entry;
+    [GtkChild]
     private Gtk.Label instance_register;
     private Gtk.Label code_name;
+    [GtkChild]
     private Gtk.Entry code_entry;
 
     private string? instance;
@@ -22,53 +25,16 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
 
     public NewAccountDialog () {
         Object (
-            border_width: 6,
-            deletable: true,
-            resizable: false,
-            title: _("New Account"),
             transient_for: window
         );
         
-        logo = new Image.from_resource ("/com/github/bleakgrey/tootle/logo128");
-        logo.halign = Gtk.Align.CENTER;
-        logo.hexpand = true;
-        logo.margin_bottom = 24;
-        
-        instance_entry = new Entry ();
-        instance_entry.width_chars = 30;
-        
-        instance_register = new Label ("<a href=\"https://joinmastodon.org/\">%s</a>".printf (_("What's an instance?")));
-        instance_register.halign = Gtk.Align.END;
-        instance_register.set_use_markup (true);
+        instance_register.set_markup("<a href=\"https://joinmastodon.org/\">%s</a>".printf (_("What's an instance?")));
         
         code_name = new AlignedLabel (_("Code:"));
         
-        code_entry = new Entry ();
-        code_entry.secondary_icon_name = "dialog-question-symbolic";
-        code_entry.secondary_icon_tooltip_text = _("Paste your instance authorization code here");
-        code_entry.secondary_icon_activatable = false;
-        
-        button_done = new Gtk.Button.with_label (_("Add Account"));
-        button_done.clicked.connect (on_done_clicked);
-        button_done.halign = Gtk.Align.END;
-        button_done.margin_top = 24;
-        
-        grid = new Gtk.Grid ();
-        grid.column_spacing = 12;
-        grid.row_spacing = 6;
-        grid.hexpand = true;
-        grid.halign = Gtk.Align.CENTER;
-        grid.attach (logo, 0, 0, 2, 1);
         grid.attach (new AlignedLabel (_("Instance:")), 0, 1);
-        grid.attach (instance_entry, 1, 1);
         grid.attach (code_name, 0, 3);
-        grid.attach (code_entry, 1, 3);
-        grid.attach (instance_register, 1, 5);
-        grid.attach (button_done, 1, 10);
-        
-        var content = get_content_area () as Gtk.Box;
-        content.pack_start (grid, false, false, 0);
-        
+
         destroy.connect (() => {
             dialog = null;
             
@@ -87,6 +53,7 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
         client_id = client_secret = code = token = null;
     }
     
+    [GtkCallback]
     private void on_done_clicked () {
         instance = "https://" + instance_entry.text
             .replace ("/", "")
