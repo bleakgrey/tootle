@@ -62,6 +62,7 @@
               <object class="GtkEntry" id="instance_entry">
                 <property name="can_focus">True</property>
                 <property name="width_chars">30</property>
+                <property name="input_purpose">url</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
