@@ -12,6 +12,7 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
     private Gtk.Entry instance_entry;
     [GtkChild]
     private Gtk.Label instance_register;
+    [GtkChild]
     private Gtk.Label code_name;
     [GtkChild]
     private Gtk.Entry code_entry;
@@ -30,11 +31,6 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
         
         instance_register.set_markup("<a href=\"https://joinmastodon.org/\">%s</a>".printf (_("What's an instance?")));
         
-        code_name = new AlignedLabel (_("Code:"));
-        
-        grid.attach (new AlignedLabel (_("Instance:")), 0, 1);
-        grid.attach (code_name, 0, 2);
-
         destroy.connect (() => {
             dialog = null;
             
