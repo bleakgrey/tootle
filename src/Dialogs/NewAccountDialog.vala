@@ -33,7 +33,7 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
         code_name = new AlignedLabel (_("Code:"));
         
         grid.attach (new AlignedLabel (_("Instance:")), 0, 1);
-        grid.attach (code_name, 0, 3);
+        grid.attach (code_name, 0, 2);
 
         destroy.connect (() => {
             dialog = null;
