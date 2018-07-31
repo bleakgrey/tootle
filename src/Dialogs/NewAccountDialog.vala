@@ -38,7 +38,6 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
                 app.remove_window (window_dummy);
         });
         
-        show_all ();
         clear ();
     }
     

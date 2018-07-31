@@ -3,6 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="TootleNewAccountDialog" parent="GtkDialog">
+    <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">New Account</property>
@@ -10,15 +11,18 @@
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="content">
+        <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">30</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
               <object class="GtkButton">
                 <property name="label" translatable="yes">Add Account</property>
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
@@ -41,6 +45,7 @@
         </child>
         <child>
           <object class="GtkGrid" id="grid">
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="hexpand">True</property>
@@ -48,6 +53,7 @@
             <property name="column_spacing">12</property>
             <child>
               <object class="GtkImage">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="margin_bottom">24</property>
@@ -62,6 +68,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="instance_entry">
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
@@ -74,6 +81,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="code_entry">
+                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="secondary_icon_name">dialog-question-symbolic</property>
@@ -87,6 +95,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="instance_register">
+                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">label</property>
