@@ -93,11 +93,11 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="instance_register">
+              <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">label</property>
+                <property name="label" translatable="yes">&lt;a href="https://joinmastodon.org/"&gt;What’s an instance?&lt;/a&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>

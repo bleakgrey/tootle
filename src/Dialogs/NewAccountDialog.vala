@@ -11,8 +11,6 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
     [GtkChild]
     private Gtk.Entry instance_entry;
     [GtkChild]
-    private Gtk.Label instance_register;
-    [GtkChild]
     private Gtk.Label code_name;
     [GtkChild]
     private Gtk.Entry code_entry;
@@ -28,8 +26,6 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
         Object (
             transient_for: window
         );
-        
-        instance_register.set_markup("<a href=\"https://joinmastodon.org/\">%s</a>".printf (_("What's an instance?")));
         
         destroy.connect (() => {
             dialog = null;
