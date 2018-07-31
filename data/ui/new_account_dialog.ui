@@ -20,6 +20,8 @@
               <object class="GtkButton">
                 <property name="label" translatable="yes">Add Account</property>
                 <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">end</property>
                 <signal name="clicked" handler="on_done_clicked" swapped="no"/>
@@ -61,6 +63,7 @@
             <child>
               <object class="GtkEntry" id="instance_entry">
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
                 <property name="width_chars">30</property>
                 <property name="input_purpose">url</property>
               </object>
@@ -72,6 +75,7 @@
             <child>
               <object class="GtkEntry" id="code_entry">
                 <property name="can_focus">True</property>
+                <property name="activates_default">True</property>
                 <property name="secondary_icon_name">dialog-question-symbolic</property>
                 <property name="secondary_icon_activatable">False</property>
                 <property name="secondary_icon_tooltip_text" translatable="yes">Paste your instance authorization code here</property>
