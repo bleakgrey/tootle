@@ -37,15 +37,6 @@ public class Tootle.NewAccountDialog : Gtk.Dialog {
             if (accounts.is_empty ())
                 app.remove_window (window_dummy);
         });
-        
-        clear ();
-    }
-    
-    private void clear () {
-        code_name.hide ();
-        code_entry.hide ();
-        code_entry.text = "";
-        client_id = client_secret = code = token = null;
     }
     
     [GtkCallback]

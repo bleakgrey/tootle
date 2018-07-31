@@ -81,7 +81,6 @@
             </child>
             <child>
               <object class="GtkEntry" id="code_entry">
-                <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="activates_default">True</property>
                 <property name="secondary_icon_name">dialog-question-symbolic</property>
@@ -120,7 +119,6 @@
             </child>
             <child>
               <object class="GtkLabel" id="code_name">
-                <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="label" translatable="yes">Code:</property>
