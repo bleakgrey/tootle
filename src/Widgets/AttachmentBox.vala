@@ -36,14 +36,12 @@ public class Tootle.AttachmentBox : Gtk.ScrolledWindow {
         filter.add_mime_type ("video/webm");
         filter.add_mime_type ("video/mp4");
         
-        var chooser = new Gtk.FileChooserDialog (
+        var chooser = new Gtk.FileChooserNative (
             _("Select media files to add"),
             null,
             Gtk.FileChooserAction.OPEN,
-            _("_Cancel"),
-            Gtk.ResponseType.CANCEL,
             _("_Open"),
-            Gtk.ResponseType.ACCEPT);
+            _("_Cancel"));
         
         chooser.select_multiple = true;
         chooser.set_filter (filter);
@@ -55,7 +53,6 @@ public class Tootle.AttachmentBox : Gtk.ScrolledWindow {
                 box.pack_start (widget, false, false, 6);
             }
         }
-        chooser.close ();
     }
     
     public string get_uri_array () {
