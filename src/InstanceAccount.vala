@@ -1,15 +1,22 @@
-public class Tootle.InstanceAccount : GLib.Object {
+using GLib;
+using Gee;
+
+public class Tootle.InstanceAccount : Object {
 
     public string username {get; set;}
     public string instance {get; set;}
     public string client_id {get; set;}
     public string client_secret {get; set;}
     public string token {get; set;}
-
+    
+    public int64 last_seen_notification {get; set; default = 0;}
+    public bool has_unread_notifications {get; set; default = false;}
+    public ArrayList<Notification> cached_notifications {get; set;}
+    
     private Notificator? notificator;
 
-    public InstanceAccount (){
-        Object ();
+    public InstanceAccount () {
+        cached_notifications = new ArrayList<Notification> ();
     }
     
     public string get_pretty_instance () {
@@ -29,6 +36,10 @@ public class Tootle.InstanceAccount : GLib.Object {
         notificator.start ();
     }
     
+    public bool is_current () {
+    	return accounts.formal.token == token;
+    }
+    
     public Soup.Message get_stream () {
         var url = "%s/api/v1/streaming/?stream=user&access_token=%s".printf (instance, token);
         return new Soup.Message ("GET", url);
@@ -45,15 +56,30 @@ public class Tootle.InstanceAccount : GLib.Object {
         builder.set_member_name ("hash");
         builder.add_string_value ("test");
         builder.set_member_name ("username");
-        builder.add_string_value (this.username);
+        builder.add_string_value (username);
         builder.set_member_name ("instance");
-        builder.add_string_value (this.instance);
+        builder.add_string_value (instance);
         builder.set_member_name ("id");
-        builder.add_string_value (this.client_id);
+        builder.add_string_value (client_id);
         builder.set_member_name ("secret");
-        builder.add_string_value (this.client_secret);
+        builder.add_string_value (client_secret);
         builder.set_member_name ("token");
-        builder.add_string_value (this.token);
+        builder.add_string_value (token);
+        builder.set_member_name ("last_seen_notification");
+        builder.add_int_value (last_seen_notification);
+        builder.set_member_name ("has_unread_notifications");
+        builder.add_boolean_value (has_unread_notifications);
+        
+        builder.set_member_name ("cached_notifications");
+        builder.begin_array ();
+        cached_notifications.@foreach (notification => {
+            var node = notification.serialize ();
+            if (node != null)
+                builder.add_value (node);
+            return true;
+        });
+        builder.end_array ();
+        
         builder.end_object ();
         return builder.get_root ();
     }
@@ -65,10 +91,19 @@ public class Tootle.InstanceAccount : GLib.Object {
         acc.client_id = obj.get_string_member ("id");
         acc.client_secret = obj.get_string_member ("secret");
         acc.token = obj.get_string_member ("token");
+        acc.last_seen_notification = obj.get_int_member ("last_seen_notification");
+        acc.has_unread_notifications = obj.get_boolean_member ("has_unread_notifications");
+        
+        var notifications = obj.get_array_member ("cached_notifications");
+        notifications.foreach_element ((arr, i, node) => {
+            var notification = Notification.parse (node.get_object ());
+            acc.cached_notifications.add (notification);
+        });
+        
         return acc;
     }
     
-    public void notification (ref Notification obj) {
+    public void notification (Notification obj) {
         var title = Html.remove_tags (obj.type.get_desc (obj.account));
         var notification = new GLib.Notification (title);
         if (obj.status != null) {
@@ -82,27 +117,34 @@ public class Tootle.InstanceAccount : GLib.Object {
         if (settings.notifications)
             app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
         
-        if (accounts.formal.token == this.token)
-            network.notification (ref obj);
+        if (is_current ())
+            network.notification (obj);
+            
+        if (obj.type == NotificationType.WATCHLIST) {
+            cached_notifications.add (obj);
+            accounts.save ();
+        }
     }
     
     private void status_removed (int64 id) {
-        if (accounts.formal.token == this.token)
+        if (is_current ())
             network.status_removed (id);
     }
     
-    private void status_added (ref Status status) {
-        if (accounts.formal.token != this.token)
+    private void status_added (Status status) {
+        if (!is_current ())
             return;
         
-        var acct = status.account.acct;
-        var obj = new Notification (-1);
-        obj.type = NotificationType.WATCHLIST;
-        obj.account = status.account;
-        obj.status = status;
         watchlist.users.@foreach (item => {
-            if (item == acct || item == "@" + acct)
-                notification (ref obj);
+        	var acct = status.account.acct;
+            if (item == acct || item == "@" + acct) {
+                var obj = new Notification (-1);
+                obj.type = NotificationType.WATCHLIST;
+                obj.account = status.account;
+                obj.status = status;
+                notification (obj);
+            }
+            return true;
         });
     }
 

@@ -8,15 +8,14 @@ public class Tootle.Notificator : GLib.Object {
     private bool closing = false;
     private int timeout = 2;
     
-    public abstract signal void notification (ref Notification notification);
-    public abstract signal void status_added (ref Status status);
-    public abstract signal void status_removed (int64 id);
+    public signal void notification (Notification notification);
+    public signal void status_added (Status status);
+    public signal void status_removed (int64 id);
     
-    public Notificator (Soup.Message msg){
-        Object ();
-        this.msg = msg;
-        this.msg.priority = Soup.MessagePriority.VERY_HIGH;
-        this.msg.set_flags (Soup.MessageFlags.IGNORE_CONNECTION_LIMITS);
+    public Notificator (Soup.Message _msg){
+        msg = _msg;
+        msg.priority = Soup.MessagePriority.VERY_HIGH;
+        msg.set_flags (Soup.MessageFlags.IGNORE_CONNECTION_LIMITS);
     }
     
     public string get_url () {
@@ -75,7 +74,8 @@ public class Tootle.Notificator : GLib.Object {
     }
     
     private void on_error (Error e) {
-        warning ("Error in %s: %s", get_name (), e.message);
+    	if (!closing)
+        	warning ("Error in %s: %s", get_name (), e.message);
     }
     
     private void on_message (int i, Bytes bytes) {
@@ -92,7 +92,7 @@ public class Tootle.Notificator : GLib.Object {
                     return;
                 
                 var status = Status.parse (sanitize (root));
-                status_added (ref status);
+                status_added (status);
                 break;
             case "delete":
                 if (!settings.live_updates)
@@ -103,7 +103,7 @@ public class Tootle.Notificator : GLib.Object {
                 break;
             case "notification":
                 var notif = Notification.parse (sanitize (root));
-                notification (ref notif);
+                notification (notif);
                 break;
             default:
                 warning ("Unknown push event: %s", type);
