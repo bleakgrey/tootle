@@ -1,23 +1,21 @@
-# French translations for com.github.bleakgrey.tootle package.
-# Copyright (C) 2018 THE com.github.bleakgrey.tootle'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the com.github.bleakgrey.tootle package.
-# Automatically generated, 2018.
+# zh_CN translation for tootle
+# Copyright (C) 2018 gloomy-ghost
+# This file is distributed under the GPL 3.0
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-30 19:17+0300\n"
-"PO-Revision-Date: 2018-06-17 10:07+0200\n"
-"Last-Translator: Guillaume\n"
-"Language-Team: none\n"
-"Language: fr_FR\n"
+"PO-Revision-Date: 2018-10-31 14:47+1300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
-"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 2.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:7 src/MainWindow.vala:68
@@ -27,7 +25,7 @@ msgstr "Tootle"
 #: data/com.github.bleakgrey.tootle.desktop.in:5
 #: data/com.github.bleakgrey.tootle.desktop.in:6
 msgid "Mastodon Client"
-msgstr "Client mastodon"
+msgstr "Mastodon 客户端"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:8
 msgid "com.github.bleakgrey.tootle"
@@ -35,11 +33,11 @@ msgstr "com.github.bleakgrey.tootle"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:11
 msgid "toot;mastodon;social;network;post;"
-msgstr "toot;mastodon;social;réseau;message;"
+msgstr "toot;mastodon;社交;网络;发嘟;"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:8
 msgid "Lightning fast client for Mastodon"
-msgstr "Client léger et rapide pour Mastodon"
+msgstr "轻量快速的 Mastodon 客户端"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:11
 msgid ""
@@ -47,18 +45,16 @@ msgid ""
 "microblogging network with real-time notifications and multiple accounts "
 "support."
 msgstr ""
-"Tootle est un client pour le plus grand réseau mondial de microblogging "
-"décentralisé, libre et open-source, avec un support multicomptes et la "
-"gestion des notifications instantanées."
+"Tootle 是一个社交应用，基于世界上最大的自由、开源、去中心化社交网络，支持实时"
+"通知和多帐户登录。"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:14
 msgid ""
 "Mastodon is lovely crafted with power and speed in mind, resulting in a "
 "free, independent and popular alternative to the centralized social networks."
 msgstr ""
-"Mastodon est conçu avec amour dans un objectif de puissance et de vitesse, "
-"en faisant une alternative libre, indépendante et populaire aux réseaux "
-"sociaux centralisés."
+"Mastodon 以人为本，搭配与生俱来的极致性能，给你一个自由而流行的去中心化社交网"
+"络。"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:17
 msgid ""
@@ -67,359 +63,353 @@ msgid ""
 "Every user can follow each other and share their posts regardless of their "
 "server."
 msgstr ""
-"N'importe qui peut faire tourner un serveur Mastodon. Chaque serveur héberge "
-"des comptes utilisateurs individuels, le contenu qu'ils produisent et le "
-"contenu auquel ils sont abonnés. Chaque utilisateur peut se suivre "
-"mutuellement et partager ses messages indépendamment de son serveur."
+"任何人都可以运营 Mastodon 的节点，各自负责节点上的用户数据。用户可以互相关"
+"注、分享，而这一切都可以跨节点运作。"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:26
 msgid "bleak_grey"
-msgstr ""
+msgstr "bleak_grey"
 
 #: src/Desktop.vala:10 src/API/Account.vala:123 src/API/Account.vala:142
 #: src/API/Account.vala:161 src/Dialogs/NewAccountDialog.vala:102
 msgid "Error"
-msgstr "Erreur"
+msgstr "错误"
 
 #: src/Desktop.vala:46
 msgid "Media downloaded"
-msgstr "Médias téléchargés"
+msgstr "媒体已下载"
 
 #: src/MainWindow.vala:48
 msgid "Back"
-msgstr "Retour"
+msgstr "返回"
 
 #: src/MainWindow.vala:54 src/Dialogs/PostDialog.vala:29
 msgid "Toot"
-msgstr "Écrire un message"
+msgstr "发嘟"
 
 #: src/Network.vala:58
 msgid "TLS Error"
-msgstr "Erreur TLS"
+msgstr "TLS 错误"
 
 #: src/Network.vala:58
 msgid "Can't ensure secure connection: "
-msgstr "Impossible d'assurer une connexion sécurisée:"
+msgstr "无法建立安全连接： "
 
 #: src/Network.vala:66
 #, c-format
 msgid "Error: %s"
-msgstr "Erreur: %s"
+msgstr "错误：%s"
 
 #: src/API/NotificationType.vala:50
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> mentioned you"
-msgstr "<a href=\"%s\"><b>%s</b></a> vous a mentionné"
+msgstr "<a href=\"%s\"><b>%s</b></a> 提及了你"
 
 #: src/API/NotificationType.vala:52
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> boosted your toot"
-msgstr "<a href=\"%s\"><b>%s</b></a> a partagé votre pouet"
+msgstr "<a href=\"%s\"><b>%s</b></a> 转了你的嘟文"
 
 #: src/API/NotificationType.vala:54
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> favorited your toot"
-msgstr "<a href=\"%s\"><b>%s</b></a> a ajouté votre pouet à ses favoris"
+msgstr "<a href=\"%s\"><b>%s</b></a> 赞了你的嘟文"
 
 #: src/API/NotificationType.vala:56
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> now follows you"
-msgstr "<a href=\"%s\"><b>%s</b></a> vous suit désormais"
+msgstr "<a href=\"%s\"><b>%s</b></a> 关注了你"
 
 #: src/API/NotificationType.vala:58
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> wants to follow you"
-msgstr "<a href=\"%s\"><b>%s</b></a> demande à vous suivre"
+msgstr "<a href=\"%s\"><b>%s</b></a> 想要关注你"
 
 #: src/API/NotificationType.vala:60
-#, fuzzy, c-format
+#, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> posted a toot"
-msgstr "<a href=\"%s\"><b>%s</b></a> a publié un pouet"
+msgstr "<a href=\"%s\"><b>%s</b></a> 发了一条嘟文"
 
 #: src/API/Status.vala:174
 msgid "Boosted!"
-msgstr "Partagé!"
+msgstr "转！"
 
 #: src/API/Status.vala:176
 msgid "Removed boost"
-msgstr "Partage annulé"
+msgstr "转嘟已取消"
 
 #: src/API/Status.vala:189
 msgid "Favorited!"
-msgstr "Ajouté aux favoris!"
+msgstr "赞！"
 
 #: src/API/Status.vala:191
 msgid "Removed from favorites"
-msgstr "Supprimé des favoris"
+msgstr "赞已撤回"
 
 #: src/API/Status.vala:204
-#, fuzzy
 msgid "Muted!"
-msgstr "Masqué!"
+msgstr "已隐藏！"
 
 #: src/API/Status.vala:206
 msgid "Conversation unmuted"
-msgstr "Discussion visible"
+msgstr "对话已恢复"
 
 #: src/API/Status.vala:219
 msgid "Pinned!"
-msgstr "Épinglé!"
+msgstr "已置顶！"
 
 #: src/API/Status.vala:221
-#, fuzzy
 msgid "Unpinned from profile"
-msgstr "Désépinglé du profil"
+msgstr "取消置顶"
 
 #: src/API/Status.vala:231
 msgid "Poof!"
-msgstr "Poof!"
+msgstr "已删除！"
 
 #: src/API/StatusVisibility.vala:40
 msgid "Post to public timelines"
-msgstr "Afficher dans le fil public"
+msgstr "发送到公共时间线"
 
 #: src/API/StatusVisibility.vala:42
 msgid "Don't post to public timelines"
-msgstr "Ne pas afficher dans le fil public"
+msgstr "发送到本地时间线"
 
 #: src/API/StatusVisibility.vala:44
 msgid "Post to followers only"
-msgstr "Afficher seulement pour les abonnés"
+msgstr "仅限关注者"
 
 #: src/API/StatusVisibility.vala:46
 msgid "Post to mentioned users only"
-msgstr "N'envoyer qu'aux personnes mentionnées"
+msgstr "仅限提及的用户"
 
 #: src/Widgets/AccountsButton.vala:67
 msgid "Refresh"
-msgstr "Actualiser"
+msgstr "刷新"
 
 #: src/Widgets/AccountsButton.vala:71
 msgid "Favorites"
-msgstr "Favoris"
+msgstr "点赞"
 
 #: src/Widgets/AccountsButton.vala:75 src/Views/DirectView.vala:12
 msgid "Direct Messages"
-msgstr "Messages directs"
+msgstr "私信"
 
 #: src/Widgets/AccountsButton.vala:79 src/Views/SearchView.vala:12
 msgid "Search"
-msgstr "Chercher"
+msgstr "搜索"
 
 #: src/Widgets/AccountsButton.vala:83
 msgid "Watchlist"
-msgstr "Liste de veille"
+msgstr "特别关注"
 
 #: src/Widgets/AccountsButton.vala:87 src/Dialogs/SettingsDialog.vala:18
 msgid "Settings"
-msgstr "Paramètres"
+msgstr "设置"
 
 #: src/Widgets/AccountsButton.vala:142
 msgid "<b>New Account</b>"
-msgstr "<b>Nouveau Compte</b>"
+msgstr "<b>新帐户</b>"
 
 #: src/Widgets/AccountsButton.vala:143
 msgid "Click to add"
-msgstr "Cliquer pour ajouter"
+msgstr "点击添加"
 
 #: src/Widgets/AccountWidget.vala:24 src/Widgets/AttachmentWidget.vala:130
 #: src/Widgets/StatusWidget.vala:289
 msgid "Open in Browser"
-msgstr "Ouvrir dans le navigateur"
+msgstr "浏览器中打开"
 
 #: src/Widgets/AccountWidget.vala:26 src/Widgets/AttachmentWidget.vala:132
 #: src/Widgets/StatusWidget.vala:291
 msgid "Copy Link"
-msgstr "Copier le lien"
+msgstr "复制链接"
 
 #: src/Widgets/AttachmentBox.vala:41
 msgid "Select media files to add"
-msgstr "Sélectionner les média à ajouter"
+msgstr "选择媒体文件"
 
 #: src/Widgets/AttachmentBox.vala:44
 msgid "_Cancel"
-msgstr "_Annuler"
+msgstr "_取消"
 
 #: src/Widgets/AttachmentBox.vala:46
 msgid "_Open"
-msgstr "_Ouvrir"
+msgstr "_打开"
 
 #: src/Widgets/AttachmentWidget.vala:67
 #, c-format
 msgid "Click to open %s media"
-msgstr "Cliquer pour ouvrir les médias %s"
+msgstr "点击打开 %s 媒体"
 
 #: src/Widgets/AttachmentWidget.vala:84
 msgid "Uploading..."
-msgstr "Téléchargement en cours..."
+msgstr "上传中…"
 
 #: src/Widgets/AttachmentWidget.vala:105
 msgid "File read error"
-msgstr "Erreur de lecture du fichier"
+msgstr "文件读取错误"
 
 #: src/Widgets/AttachmentWidget.vala:105
 #, c-format
 msgid "Can't read file %s: %s"
-msgstr "Impossible de lire le fichier %s: %s"
+msgstr "无法读取文件 %s: %s"
 
 #: src/Widgets/AttachmentWidget.vala:124
 msgid "Remove"
-msgstr "Supprimer"
+msgstr "移除"
 
 #: src/Widgets/AttachmentWidget.vala:134
 msgid "Download"
-msgstr "Télécharger"
+msgstr "下载"
 
 #: src/Widgets/NotificationWidget.vala:20
 msgid "Unknown Notification"
-msgstr "Notification inconnue"
+msgstr "未知通知"
 
 #: src/Widgets/NotificationWidget.vala:25
 msgid "Dismiss"
-msgstr "Annuler"
+msgstr "忽略"
 
 #: src/Widgets/NotificationWidget.vala:64
 msgid "Accept"
-msgstr "Accepter"
+msgstr "接受"
 
 #: src/Widgets/NotificationWidget.vala:66
 msgid "Reject"
-msgstr "Rejeter"
+msgstr "拒绝"
 
 #: src/Widgets/StatusWidget.vala:84
 msgid "Boost"
-msgstr "Partager"
+msgstr "转嘟"
 
 #: src/Widgets/StatusWidget.vala:91
 msgid "Favorite"
-msgstr "Ajouter aux favoris"
+msgstr "赞"
 
 #: src/Widgets/StatusWidget.vala:98
 msgid "Reply"
-msgstr "Répondre"
+msgstr "回复"
 
 #: src/Widgets/StatusWidget.vala:136
 #, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> boosted"
-msgstr "<a href=\"%s\"><b>%s</b></a> a partagé"
+msgstr "<a href=\"%s\"><b>%s</b></a> 转嘟了"
 
 #: src/Widgets/StatusWidget.vala:151
 msgid "Toggle content"
-msgstr "Afficher le contenu"
+msgstr "切换隐藏状态"
 
 #: src/Widgets/StatusWidget.vala:165
 msgid "[ This post contains sensitive content ]"
-msgstr "[ Ce message comporte un contenu sensible ]"
+msgstr "[ 此嘟文有敏感内容 ]"
 
 #: src/Widgets/StatusWidget.vala:234
 msgid "This post can't be boosted"
-msgstr "Ce message ne peut être partagé"
+msgstr "无法转发这条嘟文"
 
 #: src/Widgets/StatusWidget.vala:287
 msgid "Unmute Conversation"
-msgstr "Rétablir la discussion"
+msgstr "恢复对话"
 
 #: src/Widgets/StatusWidget.vala:287
 msgid "Mute Conversation"
-msgstr "Masquer la discussion"
+msgstr "隐藏对话"
 
 #: src/Widgets/StatusWidget.vala:293
 msgid "Copy Text"
-msgstr "Copier le texte"
+msgstr "复制文本"
 
 #: src/Widgets/StatusWidget.vala:300
-#, fuzzy
 msgid "Unpin from Profile"
-msgstr "Désépingler du profil"
+msgstr "取消置顶"
 
 #: src/Widgets/StatusWidget.vala:300
-#, fuzzy
 msgid "Pin on Profile"
-msgstr "Épingler sur le profil"
+msgstr "置顶"
 
 #: src/Widgets/StatusWidget.vala:304
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "删除"
 
 #: src/Widgets/StatusWidget.vala:308 src/Dialogs/PostDialog.vala:72
 msgid "Redraft"
-msgstr "Réecrire"
+msgstr "编辑"
 
 #: src/Dialogs/NewAccountDialog.vala:27
 msgid "New Account"
-msgstr "Nouveau compte"
+msgstr "新帐户"
 
 #: src/Dialogs/NewAccountDialog.vala:38
 msgid "What's an instance?"
-msgstr "Qu'est une instance?"
+msgstr "需要帮助？"
 
 #: src/Dialogs/NewAccountDialog.vala:42
 msgid "Code:"
-msgstr "Code:"
+msgstr "授权码："
 
 #: src/Dialogs/NewAccountDialog.vala:46
 msgid "Paste your instance authorization code here"
-msgstr "Coller le code d'autorisation de votre instance ici"
+msgstr "在此粘贴授权码"
 
 #: src/Dialogs/NewAccountDialog.vala:49
 msgid "Add Account"
-msgstr "Ajouter un compte"
+msgstr "添加帐户"
 
 #: src/Dialogs/NewAccountDialog.vala:60
 msgid "Instance:"
-msgstr "Instance:"
+msgstr "实例："
 
 #: src/Dialogs/NewAccountDialog.vala:102
 msgid "Please paste valid instance authorization code"
-msgstr "Veuillez coller un code d'autorisation valide"
+msgstr "请确认授权码是否有效"
 
 #: src/Dialogs/NewAccountDialog.vala:110
 msgid "Network Error"
-msgstr "Erreur réseau"
+msgstr "网络错误"
 
 #: src/Dialogs/PostDialog.vala:45
 msgid "Post Visibility"
-msgstr "Visibilité du message"
+msgstr "嘟文可见范围"
 
 #: src/Dialogs/PostDialog.vala:52
 msgid "Add Media"
-msgstr "Ajouter un média"
+msgstr "添加媒体"
 
 #: src/Dialogs/PostDialog.vala:61
 msgid "Spoiler Warning"
-msgstr "Ajouter un avertissement"
+msgstr "内容预警"
 
 #: src/Dialogs/PostDialog.vala:68
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "取消"
 
 #: src/Dialogs/PostDialog.vala:77
 msgid "Toot!"
-msgstr "Envoyer le message!"
+msgstr "发嘟！"
 
 #: src/Dialogs/PostDialog.vala:85
 msgid "Write your warning here"
-msgstr "Écrire votre avertissement ici"
+msgstr "输入预警提示"
 
 #: src/Dialogs/SettingsDialog.vala:37
 msgid "Appearance"
-msgstr "Apparence"
+msgstr "外观"
 
 #: src/Dialogs/SettingsDialog.vala:38
 msgid "Dark theme:"
-msgstr "Thème sombre:"
+msgstr "暗色主题："
 
 #: src/Dialogs/SettingsDialog.vala:41
 msgid "Timelines"
-msgstr "Fils"
+msgstr "时间线"
 
 #: src/Dialogs/SettingsDialog.vala:42
 msgid "Real-time updates:"
-msgstr "Mises à jour instantanées:"
+msgstr "实时更新："
 
 #: src/Dialogs/SettingsDialog.vala:44
 msgid "Update public timelines:"
-msgstr "Mettre à jour le fil public:"
+msgstr "更新公共时间线："
 
 #. grid.attach (new Granite.HeaderLabel (_("Caching")), 0, i++, 2, 1);
 #. grid.attach (new SettingsLabel (_("Use cache:")), 0, i);
@@ -430,145 +420,141 @@ msgstr "Mettre à jour le fil public:"
 #. grid.attach (cache_size, 1, i++);
 #: src/Dialogs/SettingsDialog.vala:55 src/Views/NotificationsView.vala:34
 msgid "Notifications"
-msgstr "Notifications"
+msgstr "通知"
 
 #: src/Dialogs/SettingsDialog.vala:56
 msgid "Display notifications:"
-msgstr "Afficher les notifications:"
+msgstr "显示通知："
 
 #: src/Dialogs/SettingsDialog.vala:58
 msgid "Always receive notifications:"
-msgstr "Toujours recevoir les notifications:"
+msgstr "总是接收通知："
 
 #: src/Dialogs/SettingsDialog.vala:64
 msgid "_Close"
-msgstr "_Fermer"
+msgstr "_关闭"
 
 #: src/Dialogs/WatchlistDialog.vala:20
 msgid ""
 "You'll be notified when toots from this user appear in your Home timeline."
-msgstr "Vous serez averti lorsque des messages de cet utilisateur apparaîtront sur votre fil d'actualité."
+msgstr "接收特别关心对象的通知。"
 
 #: src/Dialogs/WatchlistDialog.vala:21
 msgid ""
 "You'll be notified when toots with this hashtag appear in any public "
 "timelines."
-msgstr "Vous serez averti lorsque des toots contenant ce hashtag apparaîtront dans n'importe quel fil public."
+msgstr "接收特别关注话题的通知。"
 
 #: src/Dialogs/WatchlistDialog.vala:137
 msgid "Users"
-msgstr "Utilisateurs"
+msgstr "用户"
 
 #: src/Dialogs/WatchlistDialog.vala:138 src/Views/SearchView.vala:100
 msgid "Hashtags"
-msgstr "Hashtags"
+msgstr "话题"
 
 #: src/Dialogs/WatchlistDialog.vala:148
 msgid "Add"
-msgstr "Ajouter"
+msgstr "添加"
 
 #: src/Views/AbstractView.vala:59
 msgid "Nothing to see here"
-msgstr "Rien à voir par ici"
+msgstr "什么也没有"
 
 #: src/Views/AccountView.vala:79
 msgid "Edit Profile"
-msgstr "Éditer votre profil"
+msgstr "编辑个人资料"
 
 #: src/Views/AccountView.vala:80
 msgid "Mention"
-msgstr "Mentionner"
+msgstr "提及"
 
 #: src/Views/AccountView.vala:81
 msgid "Report"
-msgstr "Signaler"
+msgstr "举报"
 
 #: src/Views/AccountView.vala:82 src/Views/AccountView.vala:167
 msgid "Mute"
-msgstr "Masquer"
+msgstr "隐藏"
 
 #: src/Views/AccountView.vala:83 src/Views/AccountView.vala:166
 msgid "Block"
-msgstr "Bloquer"
+msgstr "屏蔽"
 
 #: src/Views/AccountView.vala:95
 msgid "More Actions"
-msgstr "Plus d'actions"
+msgstr "更多"
 
 #: src/Views/AccountView.vala:115
 msgid "Toots"
-msgstr "Pouets"
+msgstr "嘟文"
 
 #: src/Views/AccountView.vala:116
 msgid "Follows"
-msgstr "Abonnements"
+msgstr "关注"
 
 #: src/Views/AccountView.vala:120
 msgid "Followers"
-msgstr "Abonnés"
+msgstr "关注者"
 
 #: src/Views/AccountView.vala:155
 msgid "Unfollow"
-msgstr "Ne plus suivre"
+msgstr "取消关注"
 
 #: src/Views/AccountView.vala:159
 msgid "Follow"
-msgstr "Suivre"
+msgstr "关注"
 
 #: src/Views/AccountView.vala:166
 msgid "Unblock"
-msgstr "Débloquer"
+msgstr "取消屏蔽"
 
 #: src/Views/AccountView.vala:167
 msgid "Unmute"
-msgstr "Rétablir"
+msgstr "取消隐藏"
 
 #: src/Views/AccountView.vala:228
 msgid "Sent follow request"
-msgstr "Demande de suivi envoyée"
+msgstr "已发送关注请求"
 
 #: src/Views/AccountView.vala:230
 msgid "Blocked"
-msgstr "Bloqué"
+msgstr "已屏蔽"
 
 #: src/Views/AccountView.vala:232
 msgid "Follows you"
-msgstr "Vous suis actuellement"
+msgstr "关注了你"
 
 #: src/Views/AccountView.vala:234
 msgid "Blocking this instance"
-msgstr "Blocage de cette instance"
+msgstr "已屏蔽此实例"
 
 #: src/Views/AccountView.vala:269
 msgid "User not found"
-msgstr "Utilisateur non trouvé"
+msgstr "未找到用户"
 
 #: src/Views/FederatedView.vala:12
 msgid "Federated Timeline"
-msgstr "Fil global"
+msgstr "公共时间线"
 
 #: src/Views/HomeView.vala:12 src/Views/TimelineView.vala:36
 msgid "Home"
-msgstr "Accueil"
+msgstr "主页"
 
 #: src/Views/LocalView.vala:12
 msgid "Local Timeline"
-msgstr "Fil local"
+msgstr "本地时间线"
 
 #: src/Views/SearchView.vala:82
 msgid "Accounts"
-msgstr "Comptes"
+msgstr "帐户"
 
 #: src/Views/SearchView.vala:91
 msgid "Statuses"
-msgstr "Statuts"
+msgstr "嘟文"
 
 #~ msgid "Conversation muted"
-#~ msgstr "Discussion masquée"
-
-#, fuzzy
-#~ msgid "Pinned on Profile"
-#~ msgstr "Épinglé sur le profil"
+#~ msgstr "对话已隐藏"
 
 #~ msgid "Toot not found"
-#~ msgstr "Message non trouvé"
+#~ msgstr "未找到嘟文"

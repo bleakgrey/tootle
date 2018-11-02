@@ -4,7 +4,7 @@ using Gdk;
 public class Tootle.AttachmentWidget : Gtk.EventBox {
 
     public Attachment? attachment;
-    private bool editable = false;
+    private bool editable;
     private const int PREVIEW_SIZE = 350;
     private const int SMALL_SIZE = 64;
     
@@ -34,8 +34,9 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
         });
     }
 
-    public AttachmentWidget (Attachment att) {
+    public AttachmentWidget (Attachment att, bool _editable = false) {
         attachment = att;
+        editable = _editable;
         rebind ();
     }
 
@@ -68,7 +69,7 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
                 break;
         }
         show ();
-        button_press_event.connect(on_clicked);
+        button_press_event.connect (on_clicked);
     }
     
     public AttachmentWidget.upload (string uri) {
@@ -87,11 +88,11 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
             var buffer = new Soup.Buffer.take (contents);
             var multipart = new Soup.Multipart (Soup.FORM_MIME_TYPE_MULTIPART);
             multipart.append_form_file ("file", mime.replace ("/", "."), mime, buffer);
-            var url = "%s/api/v1/media".printf (Tootle.accounts.formal.instance);
+            var url = "%s/api/v1/media".printf (accounts.formal.instance);
             var msg = Soup.Form.request_new_from_multipart (url, multipart);
             
             network.queue(msg, (sess, mess) => {
-                var root = Tootle.network.parse (mess);
+                var root = network.parse (mess);
                 attachment = Attachment.parse (root);
                 editable = true;
                 
@@ -101,11 +102,14 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
         }
         catch (Error e) {
             error (e.message);
-            Tootle.app.error (_("File read error"), _("Can't read file %s: %s").printf (uri, e.message));
+            app.error (_("File read error"), _("Can't read file %s: %s").printf (uri, e.message));
         }
     }
     
     private bool on_clicked (EventButton ev){
+        if (ev.button == 8)
+            return false;
+    
         if (ev.button == 3)
             return open_menu (ev.button, ev.time);
         
@@ -115,10 +119,6 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
     
     public virtual bool open_menu (uint button, uint32 time) {
         var menu = new Gtk.Menu ();
-        menu.selection_done.connect (() => {
-            menu.detach ();
-            menu.destroy ();
-        });
         
         if (editable && attachment != null) {
             var item_remove = new Gtk.MenuItem.with_label (_("Remove"));
@@ -141,7 +141,7 @@ public class Tootle.AttachmentWidget : Gtk.EventBox {
         
         menu.show_all ();
         menu.attach_widget = this;
-        menu.popup (null, null, null, button, time);
+        menu.popup_at_pointer ();
         return true;
     }
 

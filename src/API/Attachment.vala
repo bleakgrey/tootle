@@ -6,8 +6,8 @@ public class Tootle.Attachment{
     public string preview_url;
     public string? description;
 
-    public Attachment(int64 id){
-        this.id = id;
+    public Attachment(int64 _id){
+        id = _id;
     }
     
     public static Attachment parse (Json.Object obj){
@@ -22,6 +22,27 @@ public class Tootle.Attachment{
             attachment.description = obj.get_string_member ("description");
         
         return attachment;
+    }
+    
+    public Json.Node? serialize () {
+        var builder = new Json.Builder ();
+        builder.begin_object ();
+        builder.set_member_name ("id");
+        builder.add_string_value (id.to_string ());
+        builder.set_member_name ("type");
+        builder.add_string_value (type);
+        builder.set_member_name ("url");
+        builder.add_string_value (url);
+        builder.set_member_name ("preview_url");
+        builder.add_string_value (preview_url);
+        
+        if (description != null) {
+            builder.set_member_name ("description");
+            builder.add_string_value (description);
+        }
+
+        builder.end_object ();
+        return builder.get_root ();
     }
 
 }

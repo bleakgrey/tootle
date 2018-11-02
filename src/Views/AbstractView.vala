@@ -1,24 +1,24 @@
 using Gtk;
 
-public abstract class Tootle.AbstractView : Gtk.ScrolledWindow {
+public abstract class Tootle.AbstractView : ScrolledWindow {
 
+    public bool current = false;
     public int stack_pos = -1;
-    public Gtk.Image? image;
-    public Gtk.Box view;
-    protected Gtk.Box? empty;
+    public Image? image;
+    public Box view;
+    protected Box? empty;
+    protected Grid? header;
 
     construct {
-        view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        view.valign = Gtk.Align.START;
-        hscrollbar_policy = Gtk.PolicyType.NEVER;
+        view = new Box (Orientation.VERTICAL, 0);
+        view.valign = Align.START;
         add (view);
         
-        edge_reached.connect(pos => {
-            if (pos == Gtk.PositionType.BOTTOM)
-                bottom_reached ();
+        hscrollbar_policy = PolicyType.NEVER;
+        edge_reached.connect (pos => {
+            if (pos == PositionType.BOTTOM)
+                on_bottom_reached ();
         });
-        
-        pre_construct ();
     }
 
     public AbstractView () {
@@ -34,13 +34,14 @@ public abstract class Tootle.AbstractView : Gtk.ScrolledWindow {
     }
     
     public virtual void clear (){
-        view.forall (widget => widget.destroy ());
-        pre_construct ();
+        view.forall (widget => {
+            if (widget != header)
+                widget.destroy ();
+        });
     }
     
-    public virtual void pre_construct () {}
-    
-    public virtual void bottom_reached (){}
+    public virtual void on_bottom_reached () {}
+    public virtual void on_set_current () {}
     
     public virtual bool is_empty () {
         return view.get_children ().length () <= 1;
@@ -52,14 +53,15 @@ public abstract class Tootle.AbstractView : Gtk.ScrolledWindow {
         if (!is_empty ())
             return false;
         
-        empty = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        empty = new Box (Orientation.VERTICAL, 0);
         empty.margin = 64;
         var image = new Image.from_resource ("/com/github/bleakgrey/tootle/empty_state");
-        var text = new Gtk.Label (_("Nothing to see here"));
+        var text = new Label (_("Nothing to see here"));
         text.get_style_context ().add_class ("h2");
         text.opacity = 0.5;
+        empty.hexpand = true;
         empty.vexpand = true;
-        empty.valign = Gtk.Align.FILL;
+        empty.valign = Align.FILL;
         empty.pack_start (image, false, false, 0);
         empty.pack_start (text, false, false, 12);
         empty.show_all ();

@@ -6,6 +6,7 @@ Simple [Mastodon](https://github.com/tootsuite/mastodon) client designed for ele
 ## Building and Installation
 
 [![Get it on AppCenter](https://appcenter.elementary.io/badge.svg)](https://appcenter.elementary.io/com.github.bleakgrey.tootle)
+<a href='https://flathub.org/apps/details/com.github.bleakgrey.tootle'><img height='51' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.png'/></a>
 
 First of all you'll need some dependencies to build and run the app:
 * meson
@@ -38,3 +39,4 @@ If you feel like contributing, you're always welcome to help the project in many
 * French translation by [@Larnicone](https://github.com/Larnicone)
 * Polish translation by [@m4sk1n](https://github.com/m4sk1n)
 * German translation by [@koyuawsmbrtn](https://github.com/koyuawsmbrtn)
+* Simplified Chinese translation by [@gloomy-ghost](https://github.com/gloomy-ghost)

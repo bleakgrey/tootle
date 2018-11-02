@@ -3,51 +3,87 @@ using Gdk;
 
 public class Tootle.NotificationsView : AbstractView {
 
+    private int64 last_id = 0;
+    private bool force_dot = false;
+
     public NotificationsView () {
         base ();
         view.remove.connect (on_remove);
-        accounts.switched.connect(on_account_changed);
-        app.refresh.connect(on_refresh);
+        accounts.switched.connect (on_account_changed);
+        app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
         
         request ();
     }
     
+    private bool has_unread () {
+        if (accounts.formal == null)
+            return false;
+        else
+            return last_id > accounts.formal.last_seen_notification || force_dot;
+    }
+    
     public override string get_icon () {
-        return Desktop.fallback_icon ("notification-symbolic", "user-invisible-symbolic");
+        if (has_unread ())
+            return Desktop.fallback_icon ("notification-new-symbolic", "user-available-symbolic");
+        else
+            return Desktop.fallback_icon ("notification-symbolic", "user-invisible-symbolic");
     }
     
     public override string get_name () {
         return _("Notifications");
     }
     
-    public void prepend (ref Notification notification) {
-        append (ref notification, true);
+    public void prepend (Notification notification) {
+        append (notification, true);
     }
     
-    public void append (ref Notification notification, bool reverse = false) {
+    public void append (Notification notification, bool reverse = false) {
         if (empty != null)
             empty.destroy ();
     
-        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+        var separator = new Gtk.Separator (Orientation.HORIZONTAL);
         separator.show ();
         
-        var widget = new NotificationWidget(notification);
+        var widget = new NotificationWidget (notification);
         widget.separator = separator;
-        image.icon_name = Desktop.fallback_icon ("notification-new-symbolic", "user-available-symbolic");
-        view.pack_start(separator, false, false, 0);
-        view.pack_start(widget, false, false, 0);
+        view.pack_start (separator, false, false, 0);
+        view.pack_start (widget, false, false, 0);
         
         if (reverse) {
             view.reorder_child (widget, 0);
             view.reorder_child (separator, 0);
+            
+            if (!current) {
+                force_dot = true;
+                accounts.formal.has_unread_notifications = force_dot;
+            }
+        }
+        
+        if (notification.id > last_id)
+            last_id = notification.id;
+        
+        if (has_unread ()) {
+            accounts.save ();
+            image.icon_name = get_icon ();
+        }
+    }
+    
+    public override void on_set_current () {
+        var account = accounts.formal;
+        if (has_unread ()) {
+            force_dot = false;
+            account.has_unread_notifications = force_dot;
+            account.last_seen_notification = last_id;
+            accounts.save ();
+            image.icon_name = get_icon ();
         }
     }
     
     public virtual void on_remove (Widget widget) {
         if (!(widget is NotificationWidget))
             return;
-
+        
         empty_state ();
     }
     
@@ -61,13 +97,19 @@ public class Tootle.NotificationsView : AbstractView {
 
     public virtual void on_refresh () {
         clear ();
+        accounts.formal.cached_notifications.@foreach (notification => {
+            append (notification);
+            return true;
+        });
         request ();
     }
 
     public virtual void on_account_changed (Account? account) {
-        if(account == null)
+        if (account == null)
             return;
         
+        last_id = accounts.formal.last_seen_notification;
+        force_dot = accounts.formal.has_unread_notifications;
         on_refresh ();
     }
     
@@ -78,14 +120,14 @@ public class Tootle.NotificationsView : AbstractView {
         }
     
         var url = "%s/api/v1/follow_requests".printf (accounts.formal.instance);
-        var msg = new Soup.Message("GET", url);
-        network.queue(msg, (sess, mess) => {
-            try{
+        var msg = new Soup.Message ("GET", url);
+        network.queue (msg, (sess, mess) => {
+            try {
                 network.parse_array (mess).foreach_element ((array, i, node) => {
                     var obj = node.get_object ();
                     if (obj != null){
-                        var notification = Notification.parse_follow_request(obj);
-                        append (ref notification);
+                        var notification = Notification.parse_follow_request (obj);
+                        append (notification);
                     }
                 });
             }
@@ -96,14 +138,14 @@ public class Tootle.NotificationsView : AbstractView {
         });
     
         var url2 = "%s/api/v1/notifications?limit=30".printf (accounts.formal.instance);
-        var msg2 = new Soup.Message("GET", url2);
-        network.queue(msg2, (sess, mess) => {
-            try{
+        var msg2 = new Soup.Message ("GET", url2);
+        network.queue (msg2, (sess, mess) => {
+            try {
                 network.parse_array (mess).foreach_element ((array, i, node) => {
                     var obj = node.get_object ();
                     if (obj != null){
-                        var notification = Notification.parse(obj);
-                        append (ref notification);
+                        var notification = Notification.parse (obj);
+                        append (notification);
                     }
                 });
             }
