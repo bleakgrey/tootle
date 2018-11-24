@@ -8,6 +8,10 @@ public class Tootle.Desktop {
         catch (GLib.Error e){
             warning ("Can't open %s: %s", uri, e.message);
             app.error (_("Error"), e.message);
+            // This happens when GLib cannot find a browser
+            if (e.message == "Operation not supported") {
+                app.error (_("Open this in a web browser:\n\n"+uri),"");
+            }
         }
     }
 
