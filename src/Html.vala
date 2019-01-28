@@ -13,7 +13,7 @@ public class Tootle.Html {
         .replace("<p>", "")
         .replace("</p>", "\n\n");
 
-        var html_params = new Regex("(class|target|rel)=\"(.|\n)*?\"", RegexCompileFlags.CASELESS);
+        var html_params = new Regex("(class|target|rel|data-.*)=\"(.|\n)*?\"", RegexCompileFlags.CASELESS);
         var simplified = html_params.replace(divided, -1, 0, "");
 
         while (simplified.has_suffix ("\n"))
