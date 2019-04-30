@@ -5,7 +5,8 @@ public enum Tootle.API.NotificationType {
     FAVORITE,
     FOLLOW,
     FOLLOW_REQUEST,     // Internal
-    WATCHLIST;          // Internal
+    WATCHLIST,          // Internal
+    UNKNOWN;            // Fallback
 
     public string to_string() {
         switch (this) {
@@ -23,8 +24,9 @@ public enum Tootle.API.NotificationType {
                 return "follow_request";
             case WATCHLIST:
                 return "watchlist";
+            case UNKNOWN:
             default:
-                assert_not_reached();
+                return "unknown";
         }
     }
 
@@ -44,8 +46,9 @@ public enum Tootle.API.NotificationType {
                 return FOLLOW_REQUEST;
             case "watchlist":
                 return WATCHLIST;
+            case "unknown":
             default:
-                assert_not_reached();
+                return UNKNOWN;
         }
     }
 
@@ -65,6 +68,8 @@ public enum Tootle.API.NotificationType {
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> wants to follow you</span>").printf (account.url, account.display_name);
             case WATCHLIST:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> posted a toot</span>").printf (account.url, account.display_name);
+            case UNKNOWN:
+                return _("<span underline=\"none\">Unrecognized notification from <a href=\"%s\"><b>%s</b></a></span>").printf (account.url, account.display_name);
             default:
                 assert_not_reached();
         }
@@ -82,8 +87,9 @@ public enum Tootle.API.NotificationType {
             case FOLLOW:
             case FOLLOW_REQUEST:
                 return "contact-new-symbolic";
+            case UNKNOWN:
             default:
-                assert_not_reached();
+                return "dialog-warning";
         }
     }
 
