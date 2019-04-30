@@ -18,6 +18,7 @@ public class Tootle.Dialogs.NewAccount : Dialog {
     private string? code;
     private string? token;
     private string? username;
+    private int64? instance_status_char_limit;
 
     public NewAccount () {
         border_width = 6;
@@ -92,6 +93,8 @@ public class Tootle.Dialogs.NewAccount : Dialog {
             .replace ("http", "");
         code = code_entry.text;
 
+        request_instance_status_charlimit();
+
         if (client_id == null || client_secret == null) {
             request_client_tokens ();
             return;
@@ -101,6 +104,17 @@ public class Tootle.Dialogs.NewAccount : Dialog {
             app.error (_("Error"), _("Please paste valid instance authorization code"));
         else
             try_auth (code);
+    }
+
+    private void request_instance_status_charlimit () {
+        var instance_query = new Soup.Message("GET", "%s/api/v1/instance".printf(instance));
+        network.queue(instance_query, (sess, msg) => {
+            var root = network.parse (msg);
+            instance_status_char_limit = root.get_int_member ("max_toot_chars");
+            info ("Got new instance status character limit: %s".printf(instance_status_char_limit.to_string()));
+        }, (_, __) => {
+            warning ("Could not determine maximum status length, falling back to settings");
+        });
     }
 
     private void request_client_tokens (){
@@ -180,6 +194,7 @@ public class Tootle.Dialogs.NewAccount : Dialog {
         account.client_id = client_id;
         account.client_secret = client_secret;
         account.token = token;
+        account.status_char_limit = instance_status_char_limit;
         accounts.add (account);
         app.activate ();
     }

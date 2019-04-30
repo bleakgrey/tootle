@@ -8,6 +8,7 @@ public class Tootle.InstanceAccount : Object {
     public string client_id {get; set;}
     public string client_secret {get; set;}
     public string token {get; set;}
+    public int64? status_char_limit {get; set;}
 
     public int64 last_seen_notification {get; set; default = 0;}
     public bool has_unread_notifications {get; set; default = false;}
@@ -69,6 +70,10 @@ public class Tootle.InstanceAccount : Object {
         builder.add_int_value (last_seen_notification);
         builder.set_member_name ("has_unread_notifications");
         builder.add_boolean_value (has_unread_notifications);
+        if (status_char_limit != null) {
+            builder.set_member_name ("status_char_limit");
+            builder.add_int_value (status_char_limit);
+        }
 
         builder.set_member_name ("cached_notifications");
         builder.begin_array ();
@@ -93,6 +98,11 @@ public class Tootle.InstanceAccount : Object {
         acc.token = obj.get_string_member ("token");
         acc.last_seen_notification = obj.get_int_member ("last_seen_notification");
         acc.has_unread_notifications = obj.get_boolean_member ("has_unread_notifications");
+        if (obj.has_member("status_char_limit")) {
+            acc.status_char_limit = obj.get_int_member ("status_char_limit");
+        } else {
+            acc.status_char_limit = null;
+        }
 
         var notifications = obj.get_array_member ("cached_notifications");
         notifications.foreach_element ((arr, i, node) => {

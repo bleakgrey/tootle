@@ -19,7 +19,7 @@ public class Tootle.Dialogs.Compose : Dialog {
     protected API.Status? replying_to;
     protected API.Status? redrafting;
     protected API.StatusVisibility visibility_opt = API.StatusVisibility.PUBLIC;
-    protected int char_limit;
+    protected int64 char_limit;
 
     public Compose (API.Status? _replying_to = null, API.Status? _redrafting = null) {
         border_width = 6;
@@ -27,7 +27,7 @@ public class Tootle.Dialogs.Compose : Dialog {
         resizable = true;
         title = _("Toot");
         transient_for = window;
-        char_limit = settings.char_limit;
+        char_limit = accounts.formal.status_char_limit ?? settings.char_limit;
         replying_to = _replying_to;
         redrafting = _redrafting;
 
