@@ -94,17 +94,18 @@ public class Tootle.API.Account {
         var url = "%s/api/v1/accounts/relationships?id=%lld".printf (accounts.formal.instance, id);
         var msg = new Soup.Message("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
-        Tootle.network.queue (msg, (sess, mess) => {
-            try{
-                var root = Tootle.network.parse_array (mess).get_object_element (0);
+        network.queue (
+            msg,
+            (sess, mess) => {
+                var root = network.parse_array (mess).get_object_element (0);
                 rs = Relationship.parse (root);
                 updated ();
+            },
+            (status, status_message) => {
+                app.error (_("Error"), status_message);
+                warning ("Account::set_following Couldn't get account relationship with status %i".printf(status));
             }
-            catch (GLib.Error e) {
-                warning ("Can't get account relationship:");
-                warning (e.message);
-            }
-        });
+        );
         return msg;
     }
 
@@ -113,17 +114,18 @@ public class Tootle.API.Account {
         var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
+        network.queue (
+            msg,
+            (sess, mess) => {
                 var root = network.parse (mess);
                 rs = Relationship.parse (root);
                 updated ();
+            },
+            (status, status_message) => {
+                app.error (_("Error"), status_message);
+                warning ("Account::set_following Could not set following status with status %i".printf(status));
             }
-            catch (GLib.Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
+        );
         return msg;
     }
 
@@ -132,17 +134,18 @@ public class Tootle.API.Account {
         var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
+        network.queue (
+            msg,
+            (sess, mess) => {
                 var root = network.parse (mess);
                 rs = Relationship.parse (root);
                 updated ();
+            },
+            (status, status_message) => {
+                app.error (_("Error"), status_message);
+                warning ("Account::set_muted Could not set muting status with status %i".printf(status));
             }
-            catch (GLib.Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
+        );
         return msg;
     }
 
@@ -151,17 +154,18 @@ public class Tootle.API.Account {
         var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
+        network.queue (
+            msg,
+            (sess, mess) => {
                 var root = network.parse (mess);
                 rs = Relationship.parse (root);
                 updated ();
+            },
+            (status, status_message) => {
+                app.error (_("Error"), status_message);
+                warning ("Account::set_blocked Could not set blocking status with status %i".printf(status));
             }
-            catch (GLib.Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
+        );
         return msg;
     }
 

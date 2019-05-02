@@ -58,8 +58,10 @@ public class Tootle.Network : GLib.Object {
     private void inject_headers (ref Soup.Message msg) {
         var headers = msg.request_headers;
         var formal = accounts.formal;
-        if (headers.get_one (INJECT_TOKEN) != null && formal != null) {
+        if (headers.get_one (INJECT_TOKEN) != null) {
             headers.remove (INJECT_TOKEN);
+        }
+        if (formal != null) {
             headers.append ("Authorization", "Bearer " + formal.token);
         }
     }
@@ -88,7 +90,7 @@ public class Tootle.Network : GLib.Object {
             	}
             	else {
             		if (errcb != null)
-            			errcb ((int32)status, get_error_reason ((int32)status));
+                        errcb ((int32)status, get_error_reason ((int32)status));
             	}
             }
             // msg.request_body.free ();
