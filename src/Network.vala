@@ -98,6 +98,38 @@ public class Tootle.Network : GLib.Object {
         });
     }
 
+    public void queue_noauth (owned Soup.Message message, owned SuccessCallback? cb = null, owned ErrorCallback? errcb = null) {
+        requests_processing++;
+        started ();
+
+        session.queue_message (message, (sess, msg) => {
+        	var status = msg.status_code;
+            if (status != Soup.Status.CANCELLED) {
+            	if (status == Soup.Status.OK) {
+            		if (cb != null) {
+            		    try {
+            		        cb (session, msg);
+            		    }
+            		    catch (Error e) {
+            		        warning ("Caught exception on network request:");
+            		        warning (e.message);
+                    		if (errcb != null)
+                    			errcb (Soup.Status.NONE, e.message);
+            		    }
+            		}
+            	}
+            	else {
+            		if (errcb != null)
+                        errcb ((int32)status, get_error_reason ((int32)status));
+            	}
+            }
+            // msg.request_body.free ();
+            // msg.response_body.free ();
+            // msg.request_headers.free ();
+            // msg.response_headers.free ();
+        });
+    }
+
 	public string get_error_reason (int32 status) {
 		return "Error " + status.to_string () + ": " + Soup.Status.get_phrase (status);
 	}
@@ -131,78 +163,66 @@ public class Tootle.Network : GLib.Object {
         parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
         return parser.get_root ().get_array ();
     }
-
-    //TODO: Cache
-    public void load_avatar (string url, Granite.Widgets.Avatar avatar, int size){
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
-                avatar.show_default (size);
-                return;
-            }
-
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream_at_scale (stream, size, size, true);
-
-            avatar.pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR);
-        });
-    }
-
+    
     //TODO: Cache
     public delegate void PixbufCallback (Gdk.Pixbuf pixbuf);
-    public Soup.Message load_pixbuf (string url, PixbufCallback cb) {
+    public Soup.Message load_pixbuf (string url, PixbufCallback cb, owned ErrorCallback? errcb = null, int? size = null) {
         var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            Gdk.Pixbuf? pixbuf = null;
-            try {
-                var data = msg.response_body.flatten ().data;
-                var stream = new MemoryInputStream.from_data (data);
-                pixbuf = new Gdk.Pixbuf.from_stream (stream);
+        network.queue_noauth (
+            message, 
+            (sess, msg) => {
+                Gdk.Pixbuf? pixbuf = null;
+                try {
+                    var data = msg.response_body.flatten ().data;
+                    var stream = new MemoryInputStream.from_data (data);
+                    if (size == null)
+                        pixbuf = new Gdk.Pixbuf.from_stream (stream);
+                    else 
+                        pixbuf = new Gdk.Pixbuf.from_stream_at_scale (stream, size, size, true);
+                }
+                catch (Error e) {
+                    warning ("Can't decode image: %s".printf (url));
+                    warning ("Reason: " + e.message);
+                }
+                cb (pixbuf);
+            },
+            (status, status_message) => {
+                warning ("Could not get an image %s with http status: %i".printf (url, status));
+                if (errcb != null)
+                    errcb (status, status_message);
             }
-            catch (Error e) {
-                warning ("Can't get image: %s".printf (url));
-                warning ("Reason: " + e.message);
-            }
-            finally {
-                if (msg.status_code != Soup.Status.OK)
-                    warning ("Invalid response code %s: %s".printf (msg.status_code.to_string (), url));
-            }
-            cb (pixbuf);
-        });
+        );
         return message;
     }
 
-    //TODO: Cache
     public void load_image (string url, Gtk.Image image) {
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
+        load_pixbuf(
+            url,
+            image.set_from_pixbuf,
+            (_, __) => {
                 image.set_from_icon_name ("image-missing", Gtk.IconSize.LARGE_TOOLBAR);
-                return;
             }
-
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream (stream);
-            image.set_from_pixbuf (pixbuf);
-        });
+        );
     }
 
-    //TODO: Cache
     public void load_scaled_image (string url, Gtk.Image image, int size) {
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
+        load_pixbuf(
+            url,
+            image.set_from_pixbuf,
+            (_, __) => {
                 image.set_from_icon_name ("image-missing", Gtk.IconSize.LARGE_TOOLBAR);
-                return;
-            }
+            },
+            size
+        );
+    }
 
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream_at_scale (stream, size, size, true);
-            image.set_from_pixbuf (pixbuf);
-        });
+    public void load_avatar (string url, Granite.Widgets.Avatar avatar, int size){
+        load_pixbuf(
+            url,
+            (pixbuf) => { avatar.pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR); },
+            (_, __) => { avatar.show_default (size); },
+            size
+        );
     }
 
 }
