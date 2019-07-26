@@ -1,17 +1,17 @@
 public class Tootle.API.Attachment {
 
-    public int64 id;
+    public string id;
     public string type;
     public string url;
     public string preview_url;
     public string? description;
 
-    public Attachment (int64 _id) {
+    public Attachment (string _id) {
         id = _id;
     }
 
     public static Attachment parse (Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var attachment = new Attachment (id);
 
         attachment.type = obj.get_string_member ("type");

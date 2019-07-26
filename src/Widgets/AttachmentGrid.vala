@@ -83,7 +83,7 @@ public class Tootle.Widgets.AttachmentGrid : Grid {
         get_children ().@foreach (w => {
             var widget = (ImageAttachment) w;
             if (widget.attachment != null)
-                str += "&media_ids[]=%lld".printf (widget.attachment.id);
+                str += "&media_ids[]=%s".printf (widget.attachment.id);
         });
         return str;
     }

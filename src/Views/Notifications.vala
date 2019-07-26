@@ -3,7 +3,7 @@ using Gdk;
 
 public class Tootle.Views.Notifications : Views.Abstract {
 
-    private int64 last_id = 0;
+    private string last_id;
     private bool force_dot = false;
 
     public Notifications () {

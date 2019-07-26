@@ -80,7 +80,7 @@ public class Tootle.Widgets.Notification : Grid {
         }
     }
 
-    private void on_status_removed (int64 id) {
+    private void on_status_removed (string id) {
         if (id == notification.status.id) {
             if (notification.type == API.NotificationType.WATCHLIST)
                 notification.dismiss ();

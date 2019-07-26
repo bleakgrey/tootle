@@ -10,7 +10,7 @@ public class Tootle.Notificator : GLib.Object {
 
     public signal void notification (API.Notification notification);
     public signal void status_added (API.Status status);
-    public signal void status_removed (int64 id);
+    public signal void status_removed (string id);
 
     public Notificator (Soup.Message _msg){
         msg = _msg;
@@ -98,7 +98,7 @@ public class Tootle.Notificator : GLib.Object {
                 if (!settings.live_updates)
                     return;
 
-                var id = int64.parse (root.get_string_member("payload"));
+                var id = root.get_string_member("payload");
                 status_removed (id);
                 break;
             case "notification":

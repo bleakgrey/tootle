@@ -2,7 +2,7 @@ public class Tootle.API.Account {
 
     public abstract signal void updated ();
 
-    public int64 id;
+    public string id;
     public string username;
     public string acct;
     public string display_name;
@@ -17,12 +17,12 @@ public class Tootle.API.Account {
 
     public Relationship? rs;
 
-    public Account (int64 _id){
+    public Account (string _id){
         id = _id;
     }
 
     public static Account parse(Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var account = new Account (id);
 
         account.username = obj.get_string_member ("username");
@@ -91,7 +91,7 @@ public class Tootle.API.Account {
     }
 
     public Soup.Message get_relationship (){
-        var url = "%s/api/v1/accounts/relationships?id=%lld".printf (accounts.formal.instance, id);
+        var url = "%s/api/v1/accounts/relationships?id=%s".printf (accounts.formal.instance, id);
         var msg = new Soup.Message("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
         Tootle.network.queue (msg, (sess, mess) => {
@@ -110,7 +110,7 @@ public class Tootle.API.Account {
 
     public Soup.Message set_following (bool follow = true){
         var action = follow ? "follow" : "unfollow";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = "%s/api/v1/accounts/%s/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -129,7 +129,7 @@ public class Tootle.API.Account {
 
     public Soup.Message set_muted (bool mute = true){
         var action = mute ? "mute" : "unmute";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = "%s/api/v1/accounts/%s/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -148,7 +148,7 @@ public class Tootle.API.Account {
 
     public Soup.Message set_blocked (bool block = true){
         var action = block ? "block" : "unblock";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = "%s/api/v1/accounts/%s/%s".printf (accounts.formal.instance, id, action);
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {

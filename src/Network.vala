@@ -10,7 +10,7 @@ public class Tootle.Network : GLib.Object {
     public signal void started ();
     public signal void finished ();
     public signal void notification (API.Notification notification);
-    public signal void status_removed (int64 id);
+    public signal void status_removed (string id);
 
 	public delegate void ErrorCallback (int32 code, string reason);
 	public delegate void SuccessCallback (Session session, Message msg) throws GLib.Error;

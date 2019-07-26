@@ -2,7 +2,7 @@ using GLib;
 
 public class Tootle.API.Relationship : Object {
 
-    public int64 id;
+    public string id;
     public bool following;
     public bool followed_by;
     public bool blocking;
@@ -11,12 +11,12 @@ public class Tootle.API.Relationship : Object {
     public bool requested;
     public bool domain_blocking;
 
-    public Relationship (int64 _id) {
+    public Relationship (string _id) {
         id = _id;
     }
 
     public static Relationship parse (Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var relationship = new Relationship (id);
         relationship.following = obj.get_boolean_member ("following");
         relationship.followed_by = obj.get_boolean_member ("followed_by");

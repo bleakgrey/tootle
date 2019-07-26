@@ -3,7 +3,7 @@ public class Tootle.API.Status {
     public signal void updated ();
 
     public API.Account account;
-    public int64 id;
+    public string id;
     public string uri;
     public string url;
     public string? spoiler_text;
@@ -22,7 +22,7 @@ public class Tootle.API.Status {
     public API.Mention[]? mentions;
     public API.Attachment[]? attachments;
 
-    public Status (int64 _id) {
+    public Status (string _id) {
         id = _id;
     }
 
@@ -31,7 +31,7 @@ public class Tootle.API.Status {
     }
 
     public static Status parse (Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var status = new Status (id);
 
         status.account = Account.parse (obj.get_object_member ("account"));
@@ -90,7 +90,7 @@ public class Tootle.API.Status {
         var builder = new Json.Builder ();
         builder.begin_object ();
         builder.set_member_name ("id");
-        builder.add_string_value (id.to_string ());
+        builder.add_string_value (id);
         builder.set_member_name ("uri");
         builder.add_string_value (uri);
         builder.set_member_name ("url");
@@ -169,7 +169,7 @@ public class Tootle.API.Status {
 
     public void set_reblogged (bool rebl, Network.ErrorCallback? err = network.on_error) {
         var action = rebl ? "reblog" : "unreblog";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%s/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -182,7 +182,7 @@ public class Tootle.API.Status {
 
     public void set_favorited (bool fav, Network.ErrorCallback? err = network.on_error) {
         var action = fav ? "favourite" : "unfavourite";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%s/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
             network.queue (msg, (sess, message) => {
@@ -195,7 +195,7 @@ public class Tootle.API.Status {
 
     public void set_muted (bool mute, Network.ErrorCallback? err = network.on_error) {
         var action = mute ? "mute" : "unmute";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%s/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -208,7 +208,7 @@ public class Tootle.API.Status {
 
     public void set_pinned (bool pin, Network.ErrorCallback? err = network.on_error) {
         var action = pin ? "pin" : "unpin";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%s/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -220,7 +220,7 @@ public class Tootle.API.Status {
     }
 
     public void poof (Soup.SessionCallback? cb = null, Network.ErrorCallback? err = network.on_error) {
-        var msg = new Soup.Message ("DELETE", "%s/api/v1/statuses/%lld".printf (accounts.formal.instance, id));
+        var msg = new Soup.Message ("DELETE", "%s/api/v1/statuses/%s".printf (accounts.formal.instance, id));
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {

@@ -80,7 +80,7 @@ public class Tootle.Watchlist : Object {
     }
 
     private void on_status_added (API.Status status) {
-        var obj = new API.Notification (-1);
+        var obj = new API.Notification ("");
         obj.type = API.NotificationType.WATCHLIST;
         obj.account = status.account;
         obj.status = status;

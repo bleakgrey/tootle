@@ -1,11 +1,11 @@
 public class Tootle.API.Mention : GLib.Object {
 
-    public int64 id;
+    public string id;
     public string username;
     public string acct;
     public string url;
 
-    public Mention (int64 _id){
+    public Mention (string _id){
         id = _id;
     }
 
@@ -17,7 +17,7 @@ public class Tootle.API.Mention : GLib.Object {
     }
 
     public static Mention parse (Json.Object obj){
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var mention = new Mention (id);
 
         mention.username = obj.get_string_member ("username");

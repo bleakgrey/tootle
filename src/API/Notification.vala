@@ -1,18 +1,18 @@
 public class Tootle.API.Notification {
 
-    public int64 id;
+    public string id;
     public NotificationType type;
     public string created_at;
 
     public Status? status;
     public Account? account;
 
-    public Notification (int64 _id) {
+    public Notification (string _id) {
         id = _id;
     }
 
     public static Notification parse (Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
+        var id = obj.get_string_member ("id");
         var notification = new Notification (id);
 
         notification.type = NotificationType.from_string (obj.get_string_member ("type"));
@@ -50,7 +50,7 @@ public class Tootle.API.Notification {
     }
 
     public static Notification parse_follow_request (Json.Object obj) {
-        var notification = new Notification (-1);
+        var notification = new Notification ("");
         var account = Account.parse (obj);
 
         notification.type = NotificationType.FOLLOW_REQUEST;
@@ -69,7 +69,7 @@ public class Tootle.API.Notification {
         if (type == NotificationType.FOLLOW_REQUEST)
             return reject_follow_request ();
 
-        var url = "%s/api/v1/notifications/dismiss?id=%lld".printf (accounts.formal.instance, id);
+        var url = "%s/api/v1/notifications/dismiss?id=%s".printf (accounts.formal.instance, id);
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);
@@ -77,7 +77,7 @@ public class Tootle.API.Notification {
     }
 
     public Soup.Message accept_follow_request () {
-        var url = "%s/api/v1/follow_requests/%lld/authorize".printf (accounts.formal.instance, account.id);
+        var url = "%s/api/v1/follow_requests/%s/authorize".printf (accounts.formal.instance, account.id);
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);
@@ -85,7 +85,7 @@ public class Tootle.API.Notification {
     }
 
     public Soup.Message reject_follow_request () {
-        var url = "%s/api/v1/follow_requests/%lld/reject".printf (accounts.formal.instance, account.id);
+        var url = "%s/api/v1/follow_requests/%s/reject".printf (accounts.formal.instance, account.id);
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);
