@@ -1,33 +1,35 @@
+using Gee;
+
 public class Tootle.API.Status : GLib.Object {
 
     public signal void updated (); //TODO: get rid of this
 
-    public API.Account account;
-    public int64 id;
-    public string uri;
-    public string url;
-    public string? spoiler_text;
-    public string content;
-    public int64 replies_count;
-    public int64 reblogs_count;
-    public int64 favourites_count;
-    public string created_at;
-    public bool reblogged = false;
-    public bool favorited = false;
-    public bool sensitive = false;
-    public bool muted = false;
-    public bool pinned = false;
-    public API.Visibility visibility;
-    public API.Status? reblog;
-    public API.Mention[]? mentions;
-    public API.Attachment[]? attachments;
+    public API.Account account { get; set; }
+    public int64 id { get; set; }
+    public string uri { get; set; }
+    public string? url { get; set; }
+    public string? spoiler_text { get; set; }
+    public string content { get; set; }
+    public int64 replies_count { get; set; }
+    public int64 reblogs_count { get; set; }
+    public int64 favourites_count { get; set; }
+    public string created_at { get; set; }
+    public bool reblogged { get; set; default = false; }
+    public bool favorited { get; set; default = false; }
+    public bool sensitive { get; set; default = false; }
+    public bool muted { get; set; default = false; }
+    public bool pinned { get; set; default = false; }
+    public API.Visibility visibility { get; set; }
+    public API.Status? reblog { get; set; }
+    public ArrayList<API.Mention>? mentions { get; set; }
+    public ArrayList<API.Attachment>? attachments { get; set; }
 
-    public Status (int64 _id) {
-        id = _id;
+    public Status formal {
+        get { return reblog ?? this; }
     }
 
-    public Status get_formal () {
-        return reblog != null ? reblog : this;
+    public Status (int64 _id) {
+        Object (id: _id);
     }
 
     public static Status parse (Json.Object obj) {
@@ -65,23 +67,23 @@ public class Tootle.API.Status : GLib.Object {
         if (obj.has_member ("reblog") && obj.get_null_member("reblog") != true)
             status.reblog = Status.parse (obj.get_object_member ("reblog"));
 
-        API.Mention[]? _mentions = {};
         obj.get_array_member ("mentions").foreach_element ((array, i, node) => {
-            var object = node.get_object ();
-            if (object != null)
-                _mentions += API.Mention.parse (object);
+            var entity = node.get_object ();
+            if (entity != null) {
+                if (status.mentions == null)
+                    status.mentions = new ArrayList<API.Mention> ();
+                status.mentions.add (API.Mention.parse (entity));
+            }
         });
-        if (_mentions.length > 0)
-            status.mentions = _mentions;
 
-        API.Attachment[]? _attachments = {};
         obj.get_array_member ("media_attachments").foreach_element ((array, i, node) => {
-            var object = node.get_object ();
-            if (object != null)
-                _attachments += API.Attachment.parse (object);
+            var entity = node.get_object ();
+            if (entity != null) {
+                if (status.attachments == null)
+                    status.attachments = new ArrayList<API.Attachment> ();
+                status.attachments.add (API.Attachment.parse (entity));
+            }
         });
-        if (_attachments.length > 0)
-            status.attachments = _attachments;
 
         return status;
     }
@@ -142,11 +144,11 @@ public class Tootle.API.Status : GLib.Object {
     }
 
     public bool is_owned (){
-        return get_formal ().account.id == accounts.current.id;
+        return formal.account.id == accounts.current.id;
     }
 
     public bool has_spoiler () {
-        return get_formal ().spoiler_text != null || get_formal ().sensitive;
+        return formal.spoiler_text != null || formal.sensitive;
     }
 
     public string get_reply_mentions () {
@@ -167,7 +169,7 @@ public class Tootle.API.Status : GLib.Object {
         return result;
     }
 
-    public void set_reblogged (bool rebl, Network.ErrorCallback? err = network.on_error) {
+    public void update_reblogged (bool rebl, Network.ErrorCallback? err = network.on_error) {
         var action = rebl ? "reblog" : "unreblog";
         var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
@@ -180,7 +182,7 @@ public class Tootle.API.Status : GLib.Object {
             });
     }
 
-    public void set_favorited (bool fav, Network.ErrorCallback? err = network.on_error) {
+    public void update_favorited (bool fav, Network.ErrorCallback? err = network.on_error) {
         var action = fav ? "favourite" : "unfavourite";
         var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
@@ -193,7 +195,7 @@ public class Tootle.API.Status : GLib.Object {
             });
     }
 
-    public void set_muted (bool mute, Network.ErrorCallback? err = network.on_error) {
+    public void update_muted (bool mute, Network.ErrorCallback? err = network.on_error) {
         var action = mute ? "mute" : "unmute";
         var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;
@@ -206,7 +208,7 @@ public class Tootle.API.Status : GLib.Object {
             });
     }
 
-    public void set_pinned (bool pin, Network.ErrorCallback? err = network.on_error) {
+    public void update_pinned (bool pin, Network.ErrorCallback? err = network.on_error) {
         var action = pin ? "pin" : "unpin";
         var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
         msg.priority = Soup.MessagePriority.HIGH;

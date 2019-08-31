@@ -84,21 +84,21 @@ public class Tootle.Widgets.Status : EventBox {
         reblog.tooltip_text = _("Boost");
         reblog.toggled.connect (() => {
             if (reblog.sensitive)
-                status.get_formal ().set_reblogged (reblog.get_active ());
+                status.formal.update_reblogged (reblog.get_active ());
         });
         favorite = new Widgets.ImageToggleButton ("emblem-favorite-symbolic");
         favorite.set_action ();
         favorite.tooltip_text = _("Favorite");
         favorite.toggled.connect (() => {
             if (favorite.sensitive)
-                status.get_formal ().set_favorited (favorite.get_active ());
+                status.formal.update_favorited (favorite.get_active ());
         });
         reply = new Widgets.ImageToggleButton ("mail-replied-symbolic");
         reply.set_action ();
         reply.tooltip_text = _("Reply");
         reply.toggled.connect (() => {
             reply.set_active (false);
-            Dialogs.Compose.reply (status.get_formal ());
+            Dialogs.Compose.reply (status.formal);
         });
 
         counters = new Box (Orientation.HORIZONTAL, 6);
@@ -175,8 +175,8 @@ public class Tootle.Widgets.Status : EventBox {
             grid.attach (spoiler_box, 2, 3, 1, 1);
         }
 
-        if (!is_notification && status.get_formal ().attachments != null)
-            attachments.pack (status.get_formal ().attachments);
+        if (!is_notification && status.formal.attachments != null)
+            attachments.pack (status.formal.attachments);
         else
             attachments.destroy ();
 
@@ -204,7 +204,7 @@ public class Tootle.Widgets.Status : EventBox {
     }
 
     public void rebind () {
-        var formal = status.get_formal ();
+        var formal = status.formal;
 
         title_user.set_label ("<b>%s</b>".printf ((formal.account.display_name)));
         title_acct.label = "@" + formal.account.acct;
@@ -245,7 +245,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     public bool on_avatar_clicked (EventButton ev) {
         if (ev.button == 1) {
-            var view = new Views.Profile (status.get_formal ().account);
+            var view = new Views.Profile (status.formal.account);
             return window.open_view (view);
         }
         return false;
@@ -253,7 +253,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     public bool open (EventButton ev) {
         if (ev.button == 1) {
-            var formal = status.get_formal ();
+            var formal = status.formal;
             var view = new Views.ExpandedStatus (formal);
             return window.open_view (view);
         }
@@ -274,20 +274,20 @@ public class Tootle.Widgets.Status : EventBox {
         var is_pinned = status.pinned;
 
         var item_muting = new Gtk.MenuItem.with_label (is_muted ? _("Unmute Conversation") : _("Mute Conversation"));
-        item_muting.activate.connect (() => status.set_muted (!is_muted));
+        item_muting.activate.connect (() => status.update_muted (!is_muted));
         var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
-        item_open_link.activate.connect (() => Desktop.open_uri (status.get_formal ().url));
+        item_open_link.activate.connect (() => Desktop.open_uri (status.formal.url));
         var item_copy_link = new Gtk.MenuItem.with_label (_("Copy Link"));
-        item_copy_link.activate.connect (() => Desktop.copy (status.get_formal ().url));
+        item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
         var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
         item_copy.activate.connect (() => {
-            var sanitized = Html.remove_tags (status.get_formal ().content);
+            var sanitized = Html.remove_tags (status.formal.content);
             Desktop.copy (sanitized);
         });
 
         if (status.is_owned ()) {
             var item_pin = new Gtk.MenuItem.with_label (is_pinned ? _("Unpin from Profile") : _("Pin on Profile"));
-            item_pin.activate.connect (() => status.set_pinned (!is_pinned));
+            item_pin.activate.connect (() => status.update_pinned (!is_pinned));
             menu.add (item_pin);
 
             var item_delete = new Gtk.MenuItem.with_label (_("Delete"));
@@ -295,7 +295,7 @@ public class Tootle.Widgets.Status : EventBox {
             menu.add (item_delete);
 
             var item_redraft = new Gtk.MenuItem.with_label (_("Redraft"));
-            item_redraft.activate.connect (() => Dialogs.Compose.redraft (status.get_formal ()));
+            item_redraft.activate.connect (() => Dialogs.Compose.redraft (status.formal));
             menu.add (item_redraft);
 
             menu.add (new SeparatorMenuItem ());

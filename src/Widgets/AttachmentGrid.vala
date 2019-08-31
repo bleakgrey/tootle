@@ -1,5 +1,6 @@
 using Gtk;
 using GLib;
+using Gee;
 
 public class Tootle.Widgets.AttachmentGrid : Grid {
 
@@ -14,9 +15,10 @@ public class Tootle.Widgets.AttachmentGrid : Grid {
 		allow_editing = edit;
 	}
 
-	public void append (API.Attachment attachment) {
+	public bool append (API.Attachment attachment) {
 		var widget = new ImageAttachment (attachment);
 		attach_widget (widget);
+		return true;
 	}
 	public void append_widget (ImageAttachment widget) {
 		attach_widget (widget);
@@ -28,19 +30,17 @@ public class Tootle.Widgets.AttachmentGrid : Grid {
 	    show_all ();
 	}
 
-    public void pack (API.Attachment[] attachments) {
+    public void pack (ArrayList<API.Attachment> attachments) {
         clear ();
-        var len = attachments.length;
+        var len = attachments.size;
 
         if (len == 1) {
-            var widget = new ImageAttachment (attachments[0]);
+            var widget = new ImageAttachment (attachments.@get (0));
             attach_widget (widget);
             widget.fill_parent ();
         }
         else {
-            foreach (API.Attachment attachment in attachments) {
-                append (attachment);
-            }
+            attachments.@foreach (attachment => append (attachment));
         }
     }
 

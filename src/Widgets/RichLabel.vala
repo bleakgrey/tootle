@@ -1,8 +1,9 @@
 using Gtk;
+using Gee;
 
 public class Tootle.Widgets.RichLabel : Label {
 
-    public weak API.Mention[]? mentions;
+    public weak ArrayList<API.Mention>? mentions;
 
     public RichLabel (string text) {
         set_label (text);
@@ -40,12 +41,11 @@ public class Tootle.Widgets.RichLabel : Label {
 
     public bool open_link (string url) {
         if (mentions != null){
-            foreach (API.Mention mention in mentions) {
-                if (url == mention.url){
+            mentions.@foreach (mention => {
+                if (url == mention.url)
                     Views.Profile.open_from_id (mention.id);
-                    return true;
-                }
-            }
+                return true;
+            });
         }
 
         if ("/tags/" in url) {
