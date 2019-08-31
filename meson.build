@@ -35,7 +35,7 @@ executable(
     'src/API/Mention.vala',
     'src/API/Tag.vala',
     'src/API/Status.vala',
-    'src/API/StatusVisibility.vala',
+    'src/API/Visibility.vala',
     'src/API/Notification.vala',
     'src/API/NotificationType.vala',
     'src/API/Attachment.vala',

@@ -1,6 +1,6 @@
-public class Tootle.API.Status {
+public class Tootle.API.Status : GLib.Object {
 
-    public signal void updated ();
+    public signal void updated (); //TODO: get rid of this
 
     public API.Account account;
     public int64 id;
@@ -17,7 +17,7 @@ public class Tootle.API.Status {
     public bool sensitive = false;
     public bool muted = false;
     public bool pinned = false;
-    public API.StatusVisibility visibility;
+    public API.Visibility visibility;
     public API.Status? reblog;
     public API.Mention[]? mentions;
     public API.Attachment[]? attachments;
@@ -42,7 +42,7 @@ public class Tootle.API.Status {
         status.favourites_count = obj.get_int_member ("favourites_count");
         status.content = Html.simplify ( obj.get_string_member ("content"));
         status.sensitive = obj.get_boolean_member ("sensitive");
-        status.visibility = StatusVisibility.from_string (obj.get_string_member ("visibility"));
+        status.visibility = Visibility.from_string (obj.get_string_member ("visibility"));
 
         if (obj.has_member ("url"))
             status.url = obj.get_string_member ("url");

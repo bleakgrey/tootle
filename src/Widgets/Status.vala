@@ -226,7 +226,7 @@ public class Tootle.Widgets.Status : EventBox {
         favorite.active = formal.favorited;
         favorite.sensitive = true;
 
-        if (formal.visibility == API.StatusVisibility.DIRECT) {
+        if (formal.visibility == API.Visibility.DIRECT) {
             reblog.sensitive = false;
             reblog.icon.icon_name = formal.visibility.get_icon ();
             reblog.tooltip_text = _("This post can't be boosted");

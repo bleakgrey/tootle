@@ -1,4 +1,4 @@
-public enum Tootle.API.StatusVisibility {
+public enum Tootle.API.Visibility {
     PUBLIC,
     UNLISTED,
     PRIVATE,
@@ -6,8 +6,6 @@ public enum Tootle.API.StatusVisibility {
 
     public string to_string () {
         switch (this) {
-            case PUBLIC:
-                return "public";
             case UNLISTED:
                 return "unlisted";
             case PRIVATE:
@@ -15,29 +13,38 @@ public enum Tootle.API.StatusVisibility {
             case DIRECT:
                 return "direct";
             default:
-                assert_not_reached();
+                return "public";
         }
     }
 
-    public static StatusVisibility from_string (string str) {
+    public static Visibility from_string (string str) {
         switch (str) {
-            case "public":
-                return StatusVisibility.PUBLIC;
             case "unlisted":
-                return StatusVisibility.UNLISTED;
+                return Visibility.UNLISTED;
             case "private":
-                return StatusVisibility.PRIVATE;
+                return Visibility.PRIVATE;
             case "direct":
-                return StatusVisibility.DIRECT;
+                return Visibility.DIRECT;
             default:
-                assert_not_reached();
+                return Visibility.PUBLIC;
+        }
+    }
+
+    public string get_name () {
+        switch (this) {
+            case UNLISTED:
+                return _("Unlisted");
+            case PRIVATE:
+                return _("Followers-only");
+            case DIRECT:
+                return _("Direct");
+            default:
+                return _("Public");
         }
     }
 
     public string get_desc () {
         switch (this) {
-            case PUBLIC:
-                return _("Post to public timelines");
             case UNLISTED:
                 return _("Don\'t post to public timelines");
             case PRIVATE:
@@ -45,14 +52,12 @@ public enum Tootle.API.StatusVisibility {
             case DIRECT:
                 return _("Post to mentioned users only");
             default:
-                assert_not_reached();
+                return _("Post to public timelines");
         }
     }
 
     public string get_icon () {
         switch (this) {
-            case PUBLIC:
-                return "network-workgroup-symbolic";
             case UNLISTED:
                 return "view-private-symbolic";
             case PRIVATE:
@@ -60,12 +65,12 @@ public enum Tootle.API.StatusVisibility {
             case DIRECT:
                 return "user-available-symbolic";
             default:
-                assert_not_reached();
+                return "network-workgroup-symbolic";
         }
     }
 
-    public static StatusVisibility[] get_all () {
-    	return {StatusVisibility.PUBLIC, StatusVisibility.UNLISTED, StatusVisibility.PRIVATE, StatusVisibility.DIRECT};
+    public static Visibility[] all () {
+    	return {Visibility.PUBLIC, Visibility.UNLISTED, Visibility.PRIVATE, Visibility.DIRECT};
     }
 
 }

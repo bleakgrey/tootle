@@ -18,7 +18,7 @@ public class Tootle.Dialogs.Compose : Dialog {
 
     protected API.Status? replying_to;
     protected API.Status? redrafting;
-    protected API.StatusVisibility visibility_opt = API.StatusVisibility.PUBLIC;
+    protected API.Visibility visibility_opt = API.Visibility.PUBLIC;
     protected int char_limit;
 
     public Compose (API.Status? _replying_to = null, API.Status? _redrafting = null) {
@@ -145,7 +145,7 @@ public class Tootle.Dialogs.Compose : Dialog {
         button.image = new Image.from_icon_name (visibility_opt.get_icon (), IconSize.BUTTON);
 
         RadioButton? first = null;
-        foreach (API.StatusVisibility opt in API.StatusVisibility.get_all ()){
+        foreach (API.Visibility opt in API.Visibility.all ()){
             var item = new RadioButton.with_label_from_widget (first, opt.get_desc ());
             if (first == null)
                 first = item;
