@@ -35,10 +35,10 @@ namespace Tootle {
         };
 
         construct {
-            application_id = "com.github.bleakgrey.tootle";
+            application_id = Build.DOMAIN;
             flags = ApplicationFlags.FLAGS_NONE;
-            program_name = "Tootle";
-            build_version = "0.2.0";
+            program_name = Build.NAME;
+            build_version = Build.VERSION;
         }
 
         public string[] ACCEL_NEW_POST = {"<Ctrl>T"};

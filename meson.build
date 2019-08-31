@@ -18,6 +18,7 @@ asresources = gnome.compile_resources(
 executable(
     meson.project_name(),
     asresources,
+    'src/Build.vala',
     'src/Application.vala',
     'src/Desktop.vala',
     'src/Drawing.vala',
