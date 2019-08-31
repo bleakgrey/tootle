@@ -10,7 +10,7 @@ add_global_arguments([
 )
 
 asresources = gnome.compile_resources(
-  'as-resources', 'data/' + meson.project_name() + '.gresource.xml',
+  'as-resources', 'data/gresource.xml',
   source_dir: 'data',
   c_name: 'as'
 )
@@ -23,6 +23,7 @@ executable(
     'src/Desktop.vala',
     'src/Drawing.vala',
     'src/Html.vala',
+    'src/Utils.vala',
     'src/InstanceAccount.vala',
     'src/Services/Settings.vala',
     'src/Services/Accounts.vala',
@@ -50,11 +51,11 @@ executable(
     'src/Widgets/AttachmentGrid.vala',
     'src/Dialogs/ISavedWindow.vala',
     'src/Dialogs/MainWindow.vala',
-    'src/Dialogs/NewAccount.vala',
     'src/Dialogs/Compose.vala',
     'src/Dialogs/Preferences.vala',
     'src/Dialogs/WatchlistEditor.vala',
     'src/Views/Abstract.vala',
+    'src/Views/NewAccount.vala',
     'src/Views/Timeline.vala',
     'src/Views/Home.vala',
     'src/Views/Local.vala',

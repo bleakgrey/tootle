@@ -111,7 +111,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         list.row_activated.connect (row => {
             var widget = row as AccountItemView;
             if (widget.id == -1) {
-                Dialogs.NewAccount.open ();
+                window.open_view (new Views.NewAccount ());
                 return;
             }
             if (widget.id == settings.current_account)

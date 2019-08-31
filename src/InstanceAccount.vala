@@ -1,28 +1,35 @@
 using GLib;
 using Gee;
 
-public class Tootle.InstanceAccount : Object {
+public class Tootle.InstanceAccount : API.Account {
 
-    public string username {get; set;}
-    public string instance {get; set;}
-    public string client_id {get; set;}
-    public string client_secret {get; set;}
-    public string token {get; set;}
+    public string instance { get; set; }
+    public string client_id { get; set; }
+    public string client_secret { get; set; }
+    public string token { get; set; }
 
-    public int64 last_seen_notification {get; set; default = 0;}
-    public bool has_unread_notifications {get; set; default = false;}
-    public ArrayList<API.Notification> cached_notifications {get; set;}
+    public int64 last_seen_notification { get; set; default = 0; }
+    public bool has_unread_notifications { get; set; default = false; }
+    public ArrayList<API.Notification> cached_notifications { get; set; default = new ArrayList<API.Notification> (); }
+    private Notificator? notificator { get; set; }
 
-    private Notificator? notificator;
+    public InstanceAccount (int64 _id){
+        base (_id);
+    }
 
-    public InstanceAccount () {
-        cached_notifications = new ArrayList<API.Notification> ();
+    public InstanceAccount.from_account (API.Account account) {
+        base (account.id);
+        Utils.merge (this, account);
     }
 
     public string get_pretty_instance () {
         return instance
             .replace ("https://", "")
             .replace ("/","");
+    }
+
+    public string get_handle () {
+        return @"$username@$(get_pretty_instance ())";
     }
 
     public void start_notificator () {
@@ -50,9 +57,10 @@ public class Tootle.InstanceAccount : Object {
             notificator.close ();
     }
 
-    public Json.Node serialize () {
+    public override Json.Node? serialize () {
         var builder = new Json.Builder ();
         builder.begin_object ();
+
         builder.set_member_name ("hash");
         builder.add_string_value ("test");
         builder.set_member_name ("username");
@@ -63,12 +71,16 @@ public class Tootle.InstanceAccount : Object {
         builder.add_string_value (client_id);
         builder.set_member_name ("secret");
         builder.add_string_value (client_secret);
-        builder.set_member_name ("token");
+        builder.set_member_name ("access_token");
         builder.add_string_value (token);
         builder.set_member_name ("last_seen_notification");
         builder.add_int_value (last_seen_notification);
         builder.set_member_name ("has_unread_notifications");
         builder.add_boolean_value (has_unread_notifications);
+
+        var cached_profile = base.serialize ();
+        builder.set_member_name ("cached_profile");
+        builder.add_value (cached_profile);
 
         builder.set_member_name ("cached_notifications");
         builder.begin_array ();
@@ -84,15 +96,20 @@ public class Tootle.InstanceAccount : Object {
         return builder.get_root ();
     }
 
-    public static InstanceAccount parse (Json.Object obj) {
-        var acc = new InstanceAccount ();
+    public new static InstanceAccount parse (Json.Object obj) {
+        InstanceAccount acc = new InstanceAccount (-1);
+
         acc.username = obj.get_string_member ("username");
         acc.instance = obj.get_string_member ("instance");
         acc.client_id = obj.get_string_member ("id");
         acc.client_secret = obj.get_string_member ("secret");
-        acc.token = obj.get_string_member ("token");
+        acc.token = obj.get_string_member ("access_token");
         acc.last_seen_notification = obj.get_int_member ("last_seen_notification");
         acc.has_unread_notifications = obj.get_boolean_member ("has_unread_notifications");
+
+        var cached = obj.get_object_member ("cached_profile");
+    	var cached_account = API.Account.parse (cached);
+        Utils.merge (acc, cached_account);
 
         var notifications = obj.get_array_member ("cached_notifications");
         notifications.foreach_element ((arr, i, node) => {

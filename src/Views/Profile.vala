@@ -104,7 +104,7 @@ public class Tootle.Views.Profile : Views.Timeline {
         button_follow.hide ();
         header.attach (actions, 0, 0, 2, 2);
 
-        view.pack_start (header, false, false, 0);
+        content.pack_start (header, false, false, 0);
     }
 
     public Profile (API.Account acc) {
@@ -208,7 +208,7 @@ public class Tootle.Views.Profile : Views.Timeline {
     }
 
     public override bool is_empty () {
-        return view.get_children ().length () <= 2;
+        return content.get_children ().length () <= 2;
     }
 
     public override string get_url () {

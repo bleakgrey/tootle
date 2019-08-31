@@ -8,7 +8,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
 
     public Notifications () {
         base ();
-        view.remove.connect (on_remove);
+        content.remove.connect (on_remove);
         accounts.switched.connect (on_account_changed);
         app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
@@ -47,12 +47,12 @@ public class Tootle.Views.Notifications : Views.Abstract {
 
         var widget = new Widgets.Notification (notification);
         widget.separator = separator;
-        view.pack_start (separator, false, false, 0);
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (separator, false, false, 0);
+        content.pack_start (widget, false, false, 0);
 
         if (reverse) {
-            view.reorder_child (widget, 0);
-            view.reorder_child (separator, 0);
+            content.reorder_child (widget, 0);
+            content.reorder_child (separator, 0);
 
             if (!current) {
                 force_dot = true;

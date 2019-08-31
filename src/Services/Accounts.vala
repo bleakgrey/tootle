@@ -59,10 +59,8 @@ public class Tootle.Accounts : Object {
         save ();
         updated (saved_accounts);
 
-        if (is_empty ()) {
-            window.destroy ();
-            Dialogs.NewAccount.open ();
-        }
+        if (is_empty ())
+            window.open_view (new Views.NewAccount (false));
     }
 
     public bool is_empty () {
@@ -74,7 +72,7 @@ public class Tootle.Accounts : Object {
         load ();
 
         if (saved_accounts.length < 1)
-            Dialogs.NewAccount.open ();
+            window.open_view (new Views.NewAccount (false));
         else
             switch_account (settings.current_account);
     }

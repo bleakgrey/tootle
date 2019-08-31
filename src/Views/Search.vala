@@ -6,7 +6,7 @@ public class Tootle.Views.Search : Views.Abstract {
     private Entry entry;
 
     construct {
-        view.margin_bottom = 6;
+        content.margin_bottom = 6;
 
         entry = new Entry ();
         entry.placeholder_text = _("Search");
@@ -28,13 +28,13 @@ public class Tootle.Views.Search : Views.Abstract {
 
     private void append_account (API.Account acc) {
         var widget = new Widgets.Account (acc);
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (widget, false, false, 0);
     }
 
     private void append_status (API.Status status) {
         var widget = new Widgets.Status (status);
         widget.button_press_event.connect (widget.on_avatar_clicked);
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (widget, false, false, 0);
     }
 
     private void append_header (string name) {
@@ -44,7 +44,7 @@ public class Tootle.Views.Search : Views.Abstract {
         widget.margin = 6;
         widget.margin_bottom = 0;
         widget.show ();
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (widget, false, false, 0);
     }
 
     private void append_hashtag (string name) {
@@ -55,7 +55,7 @@ public class Tootle.Views.Search : Views.Abstract {
         widget.margin = 6;
         widget.margin_bottom = 0;
         widget.show ();
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (widget, false, false, 0);
     }
 
     private void request () {

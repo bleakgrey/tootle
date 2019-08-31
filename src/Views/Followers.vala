@@ -15,8 +15,8 @@ public class Tootle.Views.Followers : Views.Timeline {
 
         var widget = new Widgets.Account (account);
         widget.separator = separator;
-        view.pack_start (separator, false, false, 0);
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (separator, false, false, 0);
+        content.pack_start (widget, false, false, 0);
     }
 
     public override string get_url (){

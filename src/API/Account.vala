@@ -1,27 +1,26 @@
-public class Tootle.API.Account {
+public class Tootle.API.Account : GLib.Object {
 
     public abstract signal void updated ();
 
-    public int64 id;
-    public string username;
-    public string acct;
-    public string display_name;
-    public string note;
-    public string header;
-    public string avatar;
-    public string url;
-    public string created_at;
-    public int64 followers_count;
-    public int64 following_count;
-    public int64 statuses_count;
-
-    public Relationship? rs;
+    public int64 id { get; set; }
+    public string username { get; set; }
+    public string acct { get; set; }
+    public string? display_name { get; set; }
+    public string note { get; set; }
+    public string header { get; set; }
+    public string avatar { get; set; }
+    public string url { get; set; }
+    public string created_at { get; set; }
+    public int64 followers_count { get; set; }
+    public int64 following_count { get; set; }
+    public int64 statuses_count { get; set; }
+    public Relationship? rs { get; set; }
 
     public Account (int64 _id){
-        id = _id;
+        Object (id: _id);
     }
 
-    public static Account parse(Json.Object obj) {
+    public static Account parse (Json.Object obj) {
         var id = int64.parse (obj.get_string_member ("id"));
         var account = new Account (id);
 
@@ -54,7 +53,7 @@ public class Tootle.API.Account {
         return account;
     }
 
-    public Json.Node? serialize () {
+    public virtual Json.Node? serialize () {
         var builder = new Json.Builder ();
         builder.begin_object ();
         builder.set_member_name ("id");
@@ -94,9 +93,9 @@ public class Tootle.API.Account {
         var url = "%s/api/v1/accounts/relationships?id=%lld".printf (accounts.formal.instance, id);
         var msg = new Soup.Message("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
-        Tootle.network.queue (msg, (sess, mess) => {
+        network.queue (msg, (sess, mess) => {
             try{
-                var root = Tootle.network.parse_array (mess).get_object_element (0);
+                var root = network.parse_array (mess).get_object_element (0);
                 rs = Relationship.parse (root);
                 updated ();
             }

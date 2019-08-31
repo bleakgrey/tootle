@@ -34,9 +34,9 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
 
         if (!last_status_was_root) {
             widget.separator = separator;
-            view.pack_start (separator, false, false, 0);
+            content.pack_start (separator, false, false, 0);
         }
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (widget, false, false, 0);
         last_status_was_root = is_root;
 
         if (status.has_spoiler ())
@@ -94,7 +94,7 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
 
     private void on_reveal_toggle () {
         sensitive_visible = !sensitive_visible;
-        view.forall (w => {
+        content.forall (w => {
             if (!(w is Widgets.Status))
                 return;
 

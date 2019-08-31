@@ -60,13 +60,13 @@ public class Tootle.Views.Timeline : Views.Abstract {
         widget.button_press_event.connect (widget.open);
         if (!is_status_owned (status))
             widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
-        view.pack_start (separator, false, false, 0);
-        view.pack_start (widget, false, false, 0);
+        content.pack_start (separator, false, false, 0);
+        content.pack_start (widget, false, false, 0);
 
         if (first || status.pinned) {
             var new_index = header == null ? 1 : 0;
-            view.reorder_child (separator, new_index);
-            view.reorder_child (widget, new_index);
+            content.reorder_child (separator, new_index);
+            content.reorder_child (widget, new_index);
         }
     }
 

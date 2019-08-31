@@ -5,14 +5,16 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
     public bool current = false;
     public int stack_pos = -1;
     public Image? image;
-    public Box view;
+    public Box content;
     protected Box? empty;
     protected Grid? header;
+    
+    public bool allow_closing { get; set; default = true; }
 
     construct {
-        view = new Box (Orientation.VERTICAL, 0);
-        view.valign = Align.START;
-        add (view);
+        content = new Box (Orientation.VERTICAL, 0);
+        content.valign = Align.START;
+        add (content);
 
         hscrollbar_policy = PolicyType.NEVER;
         edge_reached.connect (pos => {
@@ -34,7 +36,7 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
     }
 
     public virtual void clear (){
-        view.forall (widget => {
+        content.forall (widget => {
             if (widget != header)
                 widget.destroy ();
         });
@@ -44,7 +46,7 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
     public virtual void on_set_current () {}
 
     public virtual bool is_empty () {
-        return view.get_children ().length () <= 1;
+        return content.get_children ().length () <= 1;
     }
 
     public virtual bool empty_state () {
@@ -65,7 +67,7 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
         empty.pack_start (image, false, false, 0);
         empty.pack_start (text, false, false, 12);
         empty.show_all ();
-        view.pack_start (empty, false, false, 0);
+        content.pack_start (empty, false, false, 0);
 
         return true;
     }
