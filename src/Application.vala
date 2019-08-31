@@ -3,6 +3,12 @@ using Granite;
 
 namespace Tootle {
 
+    public errordomain Oopsie {
+        USER,
+    	PARSING,
+    	INSTANCE
+    }
+
     public static Application app;
     public static Dialogs.MainWindow? window;
     public static Window window_dummy;
@@ -16,6 +22,13 @@ namespace Tootle {
     public static bool start_hidden = false;
 
     public class Application : Granite.Application {
+
+        // These are used for the GTK Inspector
+        public Settings app_settings { get {return Tootle.settings; } }
+        public Accounts app_accounts { get {return Tootle.accounts; } }
+        public Network app_network { get {return Tootle.network; } }
+        public ImageCache app_cache { get {return Tootle.image_cache; } }
+        public Watchlist app_watchlist { get {return Tootle.watchlist; } }
 
         public abstract signal void refresh ();
         public abstract signal void toast (string title);
