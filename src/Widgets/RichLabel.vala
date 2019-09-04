@@ -56,39 +56,37 @@ public class Tootle.Widgets.RichLabel : Label {
         }
 
         if ("@" in url || "tags" in url) {
-            var query = Soup.URI.encode (url, null);
-            var msg_url = "%s/api/v1/search?q=%s&resolve=true".printf (accounts.active.instance, query);
-            var msg = new Soup.Message("GET", msg_url);
-            msg.priority = Soup.MessagePriority.HIGH;
-            network.inject (msg, Network.INJECT_TOKEN);
-            network.queue (msg, (sess, mess) => {
-                var root = network.parse (mess);
-                var accounts = root.get_array_member ("accounts");
-                var statuses = root.get_array_member ("statuses");
-                var hashtags = root.get_array_member ("hashtags");
+            new Request.GET ("/api/v1/search")
+                .with_account ()
+                .with_param ("resolve", "true")
+                .with_param ("q", Soup.URI.encode (url, null))
+                .then ((sess, mess) => {
+                    var root = network.parse (mess);
+                    var accounts = root.get_array_member ("accounts");
+                    var statuses = root.get_array_member ("statuses");
+                    var hashtags = root.get_array_member ("hashtags");
 
-                if (accounts.get_length () > 0) {
-                    var item = accounts.get_object_element (0);
-                    var obj = API.Account.parse (item);
-                    window.open_view (new Views.Profile (obj));
-                }
-                else if (statuses.get_length () > 0) {
-                    var item = accounts.get_object_element (0);
-                    var obj = API.Status.parse (item);
-                    window.open_view (new Views.ExpandedStatus (obj));
-                }
-                else if (hashtags.get_length () > 0) {
-                    var item = accounts.get_object_element (0);
-                    var obj = API.Tag.parse (item);
-                    window.open_view (new Views.Hashtag (obj.name));
-                }
-                else {
-                    Desktop.open_uri (url);
-                }
-
-            }, (status, reason) => {
-                open_link_fallback (url, reason);
-            });
+                    if (accounts.get_length () > 0) {
+                        var item = accounts.get_object_element (0);
+                        var obj = API.Account.parse (item);
+                        window.open_view (new Views.Profile (obj));
+                    }
+                    else if (statuses.get_length () > 0) {
+                        var item = accounts.get_object_element (0);
+                        var obj = API.Status.parse (item);
+                        window.open_view (new Views.ExpandedStatus (obj));
+                    }
+                    else if (hashtags.get_length () > 0) {
+                        var item = accounts.get_object_element (0);
+                        var obj = API.Tag.parse (item);
+                        window.open_view (new Views.Hashtag (obj.name));
+                    }
+                    else {
+                        Desktop.open_uri (url);
+                    }
+                })
+                .on_error ((status, reason) => open_link_fallback (url, reason))
+                .exec ();
         }
         else {
             Desktop.open_uri (url);

@@ -211,25 +211,33 @@ public class Tootle.Dialogs.Compose : Dialog {
     }
 
     private void publish_post () {
-        var pars = "?status=%s&visibility=%s".printf (Html.uri_encode (text.buffer.text), visibility_opt.to_string ());
-        pars += attachments.get_uri_array ();
+        var req = new Request.POST ("api/v1/statuses")
+            .with_account ()
+            .with_param ("visibility", visibility_opt.to_string ())
+            .with_param ("status", Html.uri_encode (text.buffer.text));
+
+        attachments.get_children ().@foreach (w => {
+            var widget = (Widgets.ImageAttachment) w;
+            if (widget.attachment != null)
+                req.with_param ("media_ids[]", widget.attachment.id.to_string ());
+        });
+
         if (replying_to != null)
-            pars += "&in_reply_to_id=%s".printf (replying_to.id.to_string ());
+            req.with_param ("in_reply_to_id", replying_to.id.to_string ());
 
         if (spoiler.active) {
-            pars += "&sensitive=true";
-            pars += "&spoiler_text=" + Html.uri_encode (spoiler_text.buffer.text);
+            req.with_param ("sensitive", "true");
+            req.with_param ("spoiler_text", Html.uri_encode (spoiler_text.buffer.text));
         }
 
-        var url = "%s/api/v1/statuses%s".printf (accounts.active.instance, pars);
-        var msg = new Soup.Message ("POST", url);
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
+        req.then ((sess, mess) => {
             var root = network.parse (mess);
             var status = API.Status.parse (root);
-            debug ("Posted: %s", status.id.to_string ()); //TODO: Live updates
+            info ("Posted: %s", status.id.to_string ());
             destroy ();
-        });
+        })
+        .on_error (network.on_error)
+        .exec ();
     }
 
     private void redraft_post () {

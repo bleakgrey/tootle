@@ -15,6 +15,9 @@ public class Tootle.Request : Soup.Message {
 	public Request.POST (string url) {
 		Object (method: "POST", url: url);
 	}
+	public Request.DELETE (string url) {
+		Object (method: "DELETE", url: url);
+	}
 	
 	public Request then (owned Network.SuccessCallback cb) {
 		this.cb = (owned) cb;
@@ -64,8 +67,8 @@ public class Tootle.Request : Soup.Message {
 			});
 		}
 		
+		warning (@"$method: $url$parameters");
 		this.uri = new URI (account.instance + "" + url + parameters);
-		warning (this.method + ": " + uri.to_string (false));
 		network.queue (this, (owned) cb, (owned) error_cb);
 		return this;
 	}

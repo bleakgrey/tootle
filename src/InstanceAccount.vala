@@ -127,7 +127,7 @@ public class Tootle.InstanceAccount : API.Account {
     }
 
     public void notification (API.Notification obj) {
-        var title = Html.remove_tags (obj.type.get_desc (obj.account));
+        var title = Html.remove_tags (obj.kind.get_desc (obj.account));
         var notification = new GLib.Notification (title);
         if (obj.status != null) {
             var body = "";
@@ -143,7 +143,7 @@ public class Tootle.InstanceAccount : API.Account {
         if (is_current ())
             network.notification (obj);
 
-        if (obj.type == API.NotificationType.WATCHLIST) {
+        if (obj.kind == API.NotificationType.WATCHLIST) {
             cached_notifications.add (obj);
             accounts.save ();
         }
@@ -162,7 +162,7 @@ public class Tootle.InstanceAccount : API.Account {
         	var acct = status.account.acct;
             if (item == acct || item == "@" + acct) {
                 var obj = new API.Notification (-1);
-                obj.type = API.NotificationType.WATCHLIST;
+                obj.kind = API.NotificationType.WATCHLIST;
                 obj.account = status.account;
                 obj.status = status;
                 notification (obj);

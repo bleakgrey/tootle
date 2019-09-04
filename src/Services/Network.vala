@@ -47,15 +47,7 @@ public class Tootle.Network : GLib.Object {
         session.cancel_message (msg, Soup.Status.CANCELLED);
     }
 
-    public void inject (Soup.Message msg, string header) {}
-    public const string INJECT_TOKEN = "";
-
     public void queue (owned Soup.Message message, owned SuccessCallback? cb = null, owned ErrorCallback? errcb = null) {
-    	if (!(message is Tootle.Request)) {
-        	warning ("Deprecated request: %s", message.uri.to_string (true));
-        	return;
-    	}
-    	
         requests_processing++;
         started ();
 

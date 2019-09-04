@@ -28,8 +28,8 @@ public class Tootle.API.Status : GLib.Object {
         get { return reblog ?? this; }
     }
 
-    public Status (int64 _id) {
-        Object (id: _id);
+    public Status (int64 id) {
+        Object (id: id);
     }
 
     public static Status parse (Json.Object obj) {
@@ -169,69 +169,63 @@ public class Tootle.API.Status : GLib.Object {
         return result;
     }
 
-    public void update_reblogged (bool rebl, Network.ErrorCallback? err = network.on_error) {
-        var action = rebl ? "reblog" : "unreblog";
-        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, message) => {
-                reblogged = rebl;
+    public void update_reblogged (bool state, owned Network.ErrorCallback? err = network.on_error) {
+        var action = state ? "reblog" : "unreblog";
+        new Request.POST (@"/api/v1/statuses/$id/$action")
+        	.with_account ()
+        	.then ((sess, msg) => {
+                reblogged = state;
                 updated ();
-            }, (status, reason) => {
-                err (status, reason);
-            });
+            })
+            .on_error ((status, reason) => err (status, reason))
+        	.exec ();
     }
 
-    public void update_favorited (bool fav, Network.ErrorCallback? err = network.on_error) {
-        var action = fav ? "favourite" : "unfavourite";
-        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-            network.queue (msg, (sess, message) => {
-                favorited = fav;
+    public void update_favorited (bool state, owned Network.ErrorCallback? err = network.on_error) {
+        var action = state ? "favourite" : "unfavourite";
+        new Request.POST (@"/api/v1/statuses/$id/$action")
+        	.with_account ()
+        	.then ((sess, msg) => {
+                favorited = state;
                 updated ();
-            }, (status, reason) => {
-                err (status, reason);
-            });
+            })
+            .on_error ((status, reason) => err (status, reason))
+        	.exec ();
     }
 
-    public void update_muted (bool mute, Network.ErrorCallback? err = network.on_error) {
-        var action = mute ? "mute" : "unmute";
-        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, message) => {
-                muted = mute;
+    public void update_muted (bool state, owned Network.ErrorCallback? err = network.on_error) {
+        var action = state ? "mute" : "unmute";
+        new Request.POST (@"/api/v1/statuses/$id/$action")
+        	.with_account ()
+        	.then ((sess, msg) => {
+                muted = state;
                 updated ();
-            }, (status, reason) => {
-                err (status, reason);
-            });
+            })
+            .on_error ((status, reason) => err (status, reason))
+        	.exec ();
     }
 
-    public void update_pinned (bool pin, Network.ErrorCallback? err = network.on_error) {
-        var action = pin ? "pin" : "unpin";
-        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, message) => {
-                pinned = pin;
+    public void update_pinned (bool state, owned Network.ErrorCallback? err = network.on_error) {
+        var action = state ? "pin" : "unpin";
+        new Request.POST (@"/api/v1/statuses/$id/$action")
+        	.with_account ()
+        	.then ((sess, msg) => {
+                pinned = state;
                 updated ();
-            }, (status, reason) => {
-                err (status, reason);
-            });
+            })
+            .on_error ((status, reason) => err (status, reason))
+        	.exec ();
     }
 
-    public void poof (Soup.SessionCallback? cb = null, Network.ErrorCallback? err = network.on_error) {
-        var msg = new Soup.Message ("DELETE", @"$(accounts.active.instance)/api/v1/statuses/$id");
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, message) => {
-                network.status_removed (id);
-                if (cb != null)
-                    cb (sess, message);
-            }, (status, reason) => {
-                err (status, reason);
-            });
+    public void poof (owned Soup.SessionCallback? cb = null, owned Network.ErrorCallback? err = network.on_error) {
+        new Request.DELETE (@"/api/v1/statuses/$id")
+        	.with_account ()
+        	.then ((sess, msg) => {
+        	    network.status_removed (id);
+        	    cb (sess, msg);
+        	})
+            .on_error ((status, reason) => err (status, reason))
+        	.exec ();
     }
 
 }

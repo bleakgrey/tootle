@@ -46,50 +46,51 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
     }
 
     public Soup.Message request (){
-        var url = "%s/api/v1/statuses/%lld/context".printf (accounts.active.instance, root_status.id);
-        var msg = new Soup.Message ("GET", url);
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
-            var root = network.parse (mess);
-            var ancestors = root.get_array_member ("ancestors");
-            ancestors.foreach_element ((array, i, node) => {
-                var object = node.get_object ();
-                if (object != null) {
-                    var status = API.Status.parse (object);
-                    prepend (status);
-                }
-            });
-
-            prepend (root_status, true);
-
-            var descendants = root.get_array_member ("descendants");
-            descendants.foreach_element ((array, i, node) => {
-                var object = node.get_object ();
-                if (object != null) {
-                    var status = API.Status.parse (object);
-                    prepend (status);
-                }
-            });
-        });
-        return msg;
+        var req = new Request.GET (@"/api/v1/statuses/$(root_status.id)/context")
+            .with_account ()
+            .then ((sess, msg) => {
+                var root = network.parse (msg);
+                var ancestors = root.get_array_member ("ancestors");
+                ancestors.foreach_element ((array, i, node) => {
+                    var object = node.get_object ();
+                    if (object != null) {
+                        var status = API.Status.parse (object);
+                        prepend (status);
+                    }
+                });
+                
+                prepend (root_status, true);
+                
+                var descendants = root.get_array_member ("descendants");
+                descendants.foreach_element ((array, i, node) => {
+                    var object = node.get_object ();
+                    if (object != null) {
+                        var status = API.Status.parse (object);
+                        prepend (status);
+                    }
+                });
+            })
+            .exec ();
+        return req;
     }
 
-    public static void open_from_link (string q){
-        var url = "%s/api/v1/search?q=%s&resolve=true".printf (accounts.active.instance, q);
-        var msg = new Soup.Message ("GET", url);
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
-            var root = network.parse (mess);
-            var statuses = root.get_array_member ("statuses");
-            var object = statuses.get_element (0).get_object ();
-            if (object != null){
-                var st = API.Status.parse (object);
-                window.open_view (new Views.ExpandedStatus (st));
-            }
-            else
-                Desktop.open_uri (q);
-        });
+    public static void open_from_link (string q) {
+        new Request.GET ("/api/v1/search")
+            .with_account ()
+            .with_param ("q", q)
+            .with_param ("resolve", "true")
+            .then ((sess, msg) => {
+                var root = network.parse (msg);
+                var statuses = root.get_array_member ("statuses");
+                var object = statuses.get_element (0).get_object ();
+                if (object != null){
+                    var status = API.Status.parse (object);
+                    window.open_view (new Views.ExpandedStatus (status));
+                }
+                else
+                    Desktop.open_uri (q);
+            })
+            .exec ();
     }
 
     private void on_reveal_toggle () {

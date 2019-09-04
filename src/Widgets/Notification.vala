@@ -36,8 +36,8 @@ public class Tootle.Widgets.Notification : Grid {
 
     public Notification (API.Notification _notification) {
         notification = _notification;
-        image.icon_name = notification.type.get_icon ();
-        label.set_label (notification.type.get_desc (notification.account));
+        image.icon_name = notification.kind.get_icon ();
+        label.set_label (notification.kind.get_desc (notification.account));
         get_style_context ().add_class ("notification");
 
         if (notification.status != null)
@@ -58,7 +58,7 @@ public class Tootle.Widgets.Notification : Grid {
             attach (status_widget, 1, 3, 3, 1);
         }
 
-        if (notification.type == API.NotificationType.FOLLOW_REQUEST) {
+        if (notification.kind == API.NotificationType.FOLLOW_REQUEST) {
             var box = new Box (Orientation.HORIZONTAL, 6);
             box.margin_start = 32 + 16 + 8;
             var accept = new Button.with_label (_("Accept"));
@@ -82,7 +82,7 @@ public class Tootle.Widgets.Notification : Grid {
 
     private void on_status_removed (int64 id) {
         if (id == notification.status.id) {
-            if (notification.type == API.NotificationType.WATCHLIST)
+            if (notification.kind == API.NotificationType.WATCHLIST)
                 notification.dismiss ();
 
             destroy ();

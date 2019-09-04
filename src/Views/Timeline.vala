@@ -102,7 +102,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
         if (page_next != null)
             return page_next;
 
-        var url = "%s/api/v1/timelines/%s?limit=%i".printf (accounts.active.instance, this.timeline, this.limit);
+        var url = @"/api/v1/timelines/$timeline";
         url += this.pars;
         return url;
     }
@@ -113,9 +113,10 @@ public class Tootle.Views.Timeline : Views.Abstract {
             return;
         }
 
-        var msg = new Soup.Message ("GET", get_url ());
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
+		new Request.GET (get_url ())
+			.with_account ()
+			.with_param ("limit", this.limit.to_string ())
+			.then ((sess, mess) => {
                 network.parse_array (mess).foreach_element ((array, i, node) => {
                     var object = node.get_object ();
                     if (object != null) {
@@ -125,8 +126,9 @@ public class Tootle.Views.Timeline : Views.Abstract {
                 });
                 get_pages (mess.response_headers.get_one ("Link"));
                 empty_state ();
-            },
-            network.on_error);
+            })
+			.on_error (network.on_error)
+			.exec ();
     }
 
     public virtual void on_refresh (){

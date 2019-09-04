@@ -9,7 +9,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
     public Notifications () {
         base ();
         content.remove.connect (on_remove);
-        //accounts.switched.connect (on_account_changed);
+        accounts.notify["active"].connect (() => on_account_changed (accounts.active));
         app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
 
@@ -99,12 +99,12 @@ public class Tootle.Views.Notifications : Views.Abstract {
         request ();
     }
 
-    public virtual void on_account_changed (API.Account? account) {
+    public virtual void on_account_changed (InstanceAccount? account) {
         if (account == null)
             return;
 
-        last_id = accounts.active.last_seen_notification;
-        force_dot = accounts.active.has_unread_notifications;
+        last_id = account.last_seen_notification;
+        force_dot = account.has_unread_notifications;
         on_refresh ();
     }
 
@@ -119,29 +119,32 @@ public class Tootle.Views.Notifications : Views.Abstract {
             return true;
         });
 
-        var msg = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/follow_requests");
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
-            network.parse_array (mess).foreach_element ((array, i, node) => {
-                var obj = node.get_object ();
-                if (obj != null){
-                    var notification = API.Notification.parse_follow_request (obj);
-                    append (notification);
-                }
-            });
-        });
+        new Request.GET ("/api/v1/follow_requests")
+        	.with_account ()
+        	.then ((sess, mess) => {
+		        network.parse_array (mess).foreach_element ((array, i, node) => {
+		            var obj = node.get_object ();
+		            if (obj != null){
+		                var notification = API.Notification.parse_follow_request (obj);
+		                append (notification);
+		            }
+		        });
+        	})
+        	.exec ();
 
-        var msg2 = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/notifications?limit=30");
-        network.inject (msg2, Network.INJECT_TOKEN);
-        network.queue (msg2, (sess, mess) => {
-            network.parse_array (mess).foreach_element ((array, i, node) => {
-                var obj = node.get_object ();
-                if (obj != null){
-                    var notification = API.Notification.parse (obj);
-                    append (notification);
-                }
-            });
-        });
+        new Request.GET ("/api/v1/notifications")
+        	.with_account ()
+        	.with_param ("limit", "30")
+        	.then ((sess, mess) => {
+            	network.parse_array (mess).foreach_element ((array, i, node) => {
+				    var obj = node.get_object ();
+				    if (obj != null){
+				        var notification = API.Notification.parse (obj);
+				        append (notification);
+				    }
+		    	});
+        	})
+        	.exec ();
 
         empty_state ();
     }
