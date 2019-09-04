@@ -221,7 +221,7 @@ public class Tootle.Dialogs.Compose : Dialog {
             pars += "&spoiler_text=" + Html.uri_encode (spoiler_text.buffer.text);
         }
 
-        var url = "%s/api/v1/statuses%s".printf (accounts.formal.instance, pars);
+        var url = "%s/api/v1/statuses%s".printf (accounts.active.instance, pars);
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, mess) => {

@@ -5,8 +5,6 @@ using Json;
 
 public class Tootle.Network : GLib.Object {
 
-    public const string INJECT_TOKEN = "X-HeyMate-PlsInjectToken4MeThx";
-
     public signal void started ();
     public signal void finished ();
     public signal void notification (API.Notification notification);
@@ -16,7 +14,7 @@ public class Tootle.Network : GLib.Object {
 	public delegate void SuccessCallback (Session session, Message msg) throws GLib.Error;
 
     private int requests_processing = 0;
-    private Soup.Session session;
+    public Soup.Session session;
 
     construct {
         session = new Soup.Session ();
@@ -34,9 +32,7 @@ public class Tootle.Network : GLib.Object {
         // session.add_feature (logger);
     }
 
-    public Network () {}
-
-    public async WebsocketConnection stream (Soup.Message msg) throws GLib.Error {
+    public async WebsocketConnection stream (Soup.Message msg) throws Error {
         return yield session.websocket_connect_async (msg, null, null, null);
     }
 
@@ -51,24 +47,17 @@ public class Tootle.Network : GLib.Object {
         session.cancel_message (msg, Soup.Status.CANCELLED);
     }
 
-    public void inject (Soup.Message msg, string header) {
-        msg.request_headers.append (header, "VeryPls");
-    }
-
-    private void inject_headers (ref Soup.Message msg) {
-        var headers = msg.request_headers;
-        var formal = accounts.formal;
-        if (headers.get_one (INJECT_TOKEN) != null && formal != null) {
-            headers.remove (INJECT_TOKEN);
-            headers.append ("Authorization", "Bearer " + formal.token);
-        }
-    }
+    public void inject (Soup.Message msg, string header) {}
+    public const string INJECT_TOKEN = "";
 
     public void queue (owned Soup.Message message, owned SuccessCallback? cb = null, owned ErrorCallback? errcb = null) {
+    	if (!(message is Tootle.Request)) {
+        	warning ("Deprecated request: %s", message.uri.to_string (true));
+        	return;
+    	}
+    	
         requests_processing++;
         started ();
-
-        inject_headers (ref message);
 
         session.queue_message (message, (sess, msg) => {
         	var status = msg.status_code;
@@ -112,7 +101,7 @@ public class Tootle.Network : GLib.Object {
     	app.error (_("Network Error"), message);
     }
 
-    public Json.Object parse (Soup.Message msg) throws GLib.Error {
+    public Json.Object parse (Soup.Message msg) throws Error {
         // debug ("Status Code: %u", msg.status_code);
         // debug ("Message length: %lld", msg.response_body.length);
         // debug ("Object: %s", (string) msg.response_body.data);
@@ -122,7 +111,7 @@ public class Tootle.Network : GLib.Object {
         return parser.get_root ().get_object ();
     }
 
-    public Json.Array parse_array (Soup.Message msg) throws GLib.Error {
+    public Json.Array parse_array (Soup.Message msg) throws Error {
         // debug ("Status Code: %u", msg.status_code);
         // debug ("Message length: %lld", msg.response_body.length);
         // debug ("Array: %s", (string) msg.response_body.data);

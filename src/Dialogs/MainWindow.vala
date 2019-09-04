@@ -23,19 +23,18 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     public Views.Federated federated = new Views.Federated ();
 
     construct {
-
         var provider = new Gtk.CssProvider ();
-        provider.load_from_resource ("/com/github/bleakgrey/tootle/app.css");
-        StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        provider.load_from_resource (@"$(Build.RESOURCES)app.css");
+        StyleContext.add_provider_for_screen (Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         settings.changed.connect (update_theme);
         update_theme ();
 
-        timeline_stack = new Stack();
-        timeline_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+        timeline_stack = new Stack ();
+        timeline_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
         timeline_stack.show ();
         view_stack = new Stack();
-        view_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+        view_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
         view_stack.show ();
         view_stack.add_named (timeline_stack, "0");
         view_stack.hexpand = view_stack.vexpand = true;
@@ -73,7 +72,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         header = new HeaderBar ();
         header.get_style_context ().add_class ("compact");
         header.show_close_button = true;
-        header.title = _("Tootle");
+        header.title = Build.NAME;
         header.custom_title = button_mode;
         header.pack_start (button_back);
         header.pack_start (button_toot);
@@ -81,6 +80,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         header.pack_end (button_reveal);
         header.pack_end (spinner);
         header.show_all ();
+        set_titlebar (header);
 
         grid = new Grid ();
         grid.attach (view_stack, 0, 0, 1, 1);
@@ -109,14 +109,15 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         icon_name = "com.github.bleakgrey.tootle";
         resizable = true;
         window_position = WindowPosition.CENTER;
-        set_titlebar (header);
         update_header ();
 
         app.toast.connect (on_toast);
         network.started.connect (() => spinner.show ());
         network.finished.connect (() => spinner.hide ());
-        accounts.updated (accounts.saved_accounts);
         button_press_event.connect (on_button_press);
+        
+        if (accounts.is_empty ())
+            open_view (new Views.NewAccount (false));
     }
 
     private bool on_button_press (EventButton ev) {
@@ -171,7 +172,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         }
     }
 
-    public override bool delete_event (Gdk.EventAny event) {
+    public override bool delete_event (EventAny event) {
         destroy.connect (() => {
             if (!settings.always_online || accounts.is_empty ())
                 app.remove_window (window_dummy);
@@ -188,8 +189,8 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         var provider = new Gtk.CssProvider ();
         var is_dark = settings.dark_theme;
         var theme = is_dark ? "dark" : "light";
-        provider.load_from_resource ("/com/github/bleakgrey/tootle/%s.css".printf (theme));
-        StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        provider.load_from_resource (@"$(Build.RESOURCES)%s.css".printf (theme));
+        StyleContext.add_provider_for_screen (Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = is_dark;
     }
 

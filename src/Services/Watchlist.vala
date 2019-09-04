@@ -8,7 +8,7 @@ public class Tootle.Watchlist : Object {
     public ArrayList<Notificator> notificators = new ArrayList<Notificator> ();
 
     construct {
-        accounts.switched.connect (on_account_changed);
+        accounts.notify["active"].connect (() => on_account_changed (accounts.active));
     }
 
     public Watchlist () {}
@@ -19,8 +19,6 @@ public class Tootle.Watchlist : Object {
     }
 
     private void reload () {
-        info ("Reloading");
-
         notificators.@foreach (notificator => {
             notificator.close ();
             return true;
@@ -30,7 +28,7 @@ public class Tootle.Watchlist : Object {
         hashtags.clear ();
 
         load ();
-        info ("Watching for %i users and %i hashtags", users.size, hashtags.size);
+        info ("Reloaded for %i users and %i hashtags", users.size, hashtags.size);
     }
 
     private void load () {
@@ -72,7 +70,7 @@ public class Tootle.Watchlist : Object {
     }
 
     private Notificator get_notificator (string hashtag) {
-        var url = "%s/api/v1/streaming/?stream=hashtag&tag=%s&access_token=%s".printf (accounts.formal.instance, hashtag, accounts.formal.token);
+        var url = "%s/api/v1/streaming/?stream=hashtag&tag=%s&access_token=%s".printf (accounts.active.instance, hashtag, accounts.active.token);
         var msg = new Soup.Message ("GET", url);
         var notificator = new Notificator (msg);
         notificator.status_added.connect (on_status_added);
@@ -84,7 +82,7 @@ public class Tootle.Watchlist : Object {
         obj.type = API.NotificationType.WATCHLIST;
         obj.account = status.account;
         obj.status = status;
-        accounts.formal.notification (obj);
+        accounts.active.notification (obj);
     }
 
     public void add (string entity, bool is_hashtag) {

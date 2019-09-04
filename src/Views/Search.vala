@@ -48,7 +48,7 @@ public class Tootle.Views.Search : Views.Abstract {
     }
 
     private void append_hashtag (string name) {
-        var text = "<a href=\"%s/tags/%s\">#%s</a>".printf (accounts.formal.instance, Soup.URI.encode (name, null), name);
+        var text = "<a href=\"%s/tags/%s\">#%s</a>".printf (accounts.active.instance, Soup.URI.encode (name, null), name);
         var widget = new Widgets.RichLabel (text);
         widget.use_markup = true;
         widget.halign = Align.START;
@@ -67,7 +67,7 @@ public class Tootle.Views.Search : Views.Abstract {
         window.reopen_view (this.stack_pos);
 
         var query_encoded = Soup.URI.encode (query, null);
-        var url = "%s/api/v1/search?q=%s&resolve=true".printf (accounts.formal.instance, query_encoded);
+        var url = "%s/api/v1/search?q=%s&resolve=true".printf (accounts.active.instance, query_encoded);
         var msg = new Soup.Message("GET", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, mess) => {

@@ -23,7 +23,7 @@ public class Tootle.Views.Followers : Views.Timeline {
         if (page_next != null)
             return page_next;
 
-        var url = "%s/api/v1/accounts/%s/followers".printf (accounts.formal.instance, this.timeline);
+        var url = "%s/api/v1/accounts/%s/followers".printf (accounts.active.instance, this.timeline);
         return url;
     }
 

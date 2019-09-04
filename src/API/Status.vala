@@ -144,7 +144,7 @@ public class Tootle.API.Status : GLib.Object {
     }
 
     public bool is_owned (){
-        return formal.account.id == accounts.current.id;
+        return formal.account.id == accounts.active.id;
     }
 
     public bool has_spoiler () {
@@ -153,12 +153,12 @@ public class Tootle.API.Status : GLib.Object {
 
     public string get_reply_mentions () {
         var result = "";
-        if (account.acct != accounts.current.acct)
+        if (account.acct != accounts.active.acct)
             result = "@%s ".printf (account.acct);
 
         if (mentions != null) {
             foreach (var mention in mentions) {
-                var equals_current = mention.acct == accounts.current.acct;
+                var equals_current = mention.acct == accounts.active.acct;
                 var already_mentioned = mention.acct in result;
 
                 if (!equals_current && ! already_mentioned)
@@ -171,7 +171,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void update_reblogged (bool rebl, Network.ErrorCallback? err = network.on_error) {
         var action = rebl ? "reblog" : "unreblog";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -184,7 +184,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void update_favorited (bool fav, Network.ErrorCallback? err = network.on_error) {
         var action = fav ? "favourite" : "unfavourite";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
             network.queue (msg, (sess, message) => {
@@ -197,7 +197,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void update_muted (bool mute, Network.ErrorCallback? err = network.on_error) {
         var action = mute ? "mute" : "unmute";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -210,7 +210,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void update_pinned (bool pin, Network.ErrorCallback? err = network.on_error) {
         var action = pin ? "pin" : "unpin";
-        var msg = new Soup.Message ("POST", "%s/api/v1/statuses/%lld/%s".printf (accounts.formal.instance, id, action));
+        var msg = new Soup.Message ("POST", @"$(accounts.active.instance)/api/v1/statuses/$id/$action");
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {
@@ -222,7 +222,7 @@ public class Tootle.API.Status : GLib.Object {
     }
 
     public void poof (Soup.SessionCallback? cb = null, Network.ErrorCallback? err = network.on_error) {
-        var msg = new Soup.Message ("DELETE", "%s/api/v1/statuses/%lld".printf (accounts.formal.instance, id));
+        var msg = new Soup.Message ("DELETE", @"$(accounts.active.instance)/api/v1/statuses/$id");
         msg.priority = Soup.MessagePriority.HIGH;
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, message) => {

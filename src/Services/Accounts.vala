@@ -1,77 +1,76 @@
-using GLib;
+using Gee;
 
-public class Tootle.Accounts : Object {
+public class Tootle.Accounts : GLib.Object {
 
     private string dir_path;
     private string file_path;
 
-    public signal void switched (API.Account? account);
-    public signal void updated (GenericArray<InstanceAccount> accounts);
+    public ArrayList<InstanceAccount> saved { get; set; default = new ArrayList<InstanceAccount> (); }
+    public InstanceAccount? active { get; set; }
 
-    public GenericArray<InstanceAccount> saved_accounts = new GenericArray<InstanceAccount> ();
-    public InstanceAccount? formal {get; set;}
-    public API.Account? current {get; set;}
-
-    public Accounts () {
+    construct {
         dir_path = "%s/%s".printf (GLib.Environment.get_user_config_dir (), app.application_id);
         file_path = "%s/%s".printf (dir_path, "accounts.json");
     }
 
     public void switch_account (int id) {
-        info ("Switching to #%i", id);
-        settings.current_account = id;
-        formal = saved_accounts.@get (id);
-        var msg = new Soup.Message ("GET", "%s/api/v1/accounts/verify_credentials".printf (accounts.formal.instance));
-        network.inject (msg, Network.INJECT_TOKEN);
-        network.queue (msg, (sess, mess) => {
+        var acc = saved.@get (id);
+        info (@"Switching to account: $(acc.handle)...");
+        new Request.GET ("/api/v1/accounts/verify_credentials")
+            .with_account (acc)
+            .then ((sess, mess) => {
                 var root = network.parse (mess);
-                current = API.Account.parse (root);
-                switched (current);
-                updated (saved_accounts);
-            },
-            network.on_show_error);
+                var profile = API.Account.parse (root);
+                acc.patch (profile);
+                active = acc;
+                settings.current_account = id;
+                info ("OK: Token is valid");
+            })
+            .on_error ((code, reason) => {
+                warning ("Token invalid!");
+                network.on_show_error (code, _("This instance has invalidated this session. Please sign in again.\n\n%s").printf (reason));
+            })
+            .exec ();
     }
 
     public void add (InstanceAccount account) {
-        info ("Adding account for %s at %s", account.username, account.instance);
-        saved_accounts.add (account);
+        info (@"Adding new account: $(account.handle)");
+        saved.add (account);
         save ();
-        updated (saved_accounts);
-        switch_account (saved_accounts.length - 1);
+        switch_account (saved.size - 1);
         account.start_notificator ();
     }
 
     public void remove (int i) {
-        var account = saved_accounts.@get (i);
+        var account = saved.@get (i);
         account.close_notificator ();
 
-        saved_accounts.remove_index (i);
-        if (saved_accounts.length < 1)
-            switched (null);
+        saved.remove_at (i);
+        if (saved.size < 1)
+            active = null;
         else {
             var id = settings.current_account - 1;
-            if (id > saved_accounts.length - 1)
-                id = saved_accounts.length - 1;
-            else if (id < saved_accounts.length - 1)
+            if (id > saved.size - 1)
+                id = saved.size - 1;
+            else if (id < saved.size - 1)
                 id = 0;
             switch_account (id);
         }
         save ();
-        updated (saved_accounts);
 
         if (is_empty ())
             window.open_view (new Views.NewAccount (false));
     }
 
     public bool is_empty () {
-        return saved_accounts.length == 0;
+        return saved.size == 0;
     }
 
     public void init () {
         save (false);
         load ();
 
-        if (saved_accounts.length < 1)
+        if (saved.size < 1)
             window.open_view (new Views.NewAccount (false));
         else
             switch_account (settings.current_account);
@@ -89,9 +88,10 @@ public class Tootle.Accounts : Object {
 
             var builder = new Json.Builder ();
             builder.begin_array ();
-            saved_accounts.foreach ((acc) => {
+            saved.foreach ((acc) => {
                 var node = acc.serialize ();
                 builder.add_value (node);
+                return true;
             });
             builder.end_array ();
 
@@ -104,8 +104,9 @@ public class Tootle.Accounts : Object {
 
             FileOutputStream stream = file.create (FileCreateFlags.PRIVATE);
             stream.write (data.data);
+            info ("Saved accounts");
         }
-        catch (GLib.Error e){
+        catch (Error e){
             warning (e.message);
         }
     }
@@ -122,19 +123,17 @@ public class Tootle.Accounts : Object {
             parser.load_from_data (contents, -1);
             var array = parser.get_root ().get_array ();
 
-            saved_accounts = new GenericArray<InstanceAccount> ();
             array.foreach_element ((_arr, _i, node) => {
                 var obj = node.get_object ();
                 var account = InstanceAccount.parse (obj);
                 if (account != null) {
-                    saved_accounts.add (account);
+                    saved.add (account);
                     account.start_notificator ();
                 }
             });
-            debug ("Loaded %i saved accounts", saved_accounts.length);
-            updated (saved_accounts);
+            info (@"Loaded $(saved.size) accounts");
         }
-        catch (GLib.Error e){
+        catch (Error e){
             warning (e.message);
         }
     }

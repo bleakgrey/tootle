@@ -4,11 +4,13 @@ public class Tootle.Views.NewAccount : Views.Abstract {
 
 	private string? instance { get; set; }
 	private string? code { get; set; }
+	private string scopes = "read%20write%20follow";
 
 	private string? client_id { get; set; }
 	private string? client_secret { get; set; }
 	private string? access_token { get; set; }
 	private string redirect_uri { get; set; default = "urn:ietf:wg:oauth:2.0:oob"; } //TODO: Investigate URI handling for automatic token getting
+	private InstanceAccount account;
 
 	private Button next_button;
 	private Entry instance_entry;
@@ -37,10 +39,11 @@ public class Tootle.Views.NewAccount : Views.Abstract {
 		next_button.clicked.connect (on_next_clicked);
 		reset_label.activate_link.connect (reset);
 		instance_entry.text = "https://mastodon.social/"; //TODO: REMOVE ME
+		info ("New account view was requested");
 	}
 
 	private bool reset () {
-		debug ("Resetting instance state");
+		info ("State invalidated");
 		instance = code = client_id = client_secret = access_token = null;
 		instance_entry.sensitive = true;
 		stack.visible_child = step1;
@@ -74,7 +77,7 @@ public class Tootle.Views.NewAccount : Views.Abstract {
 	}
 
 	private void setup_instance () throws Error {
-		debug ("Checking instance URL");
+		info ("Checking instance URL");
 
 		var str = instance_entry.text
 			.replace ("/", "")
@@ -89,31 +92,38 @@ public class Tootle.Views.NewAccount : Views.Abstract {
 	}
 
 	private void register_client () throws Error {
-		debug ("Registering client");
-
-        var pars = @"client_name=$(Build.NAME)&website=$(Build.WEBSITE)&scopes=read%20write%20follow&redirect_uris=$redirect_uri";
-        var url = @"$instance/api/v1/apps?$pars";
-		var message = new Soup.Message ("POST", url);
+		info ("Registering client");
 		instance_entry.sensitive = false;
+		
+		account = new InstanceAccount (-1);
+		account.instance = instance;
+		
+		new Request.POST (@"/api/v1/apps")
+			.with_param ("client_name", Build.NAME)
+			.with_param ("website", Build.WEBSITE)
+			.with_param ("scopes", scopes)
+			.with_param ("redirect_uris", redirect_uri)
+			.with_account (account)
+			.then ((sess, msg) => {
+				var root = network.parse (msg);
+				client_id = root.get_string_member ("client_id");
+				client_secret = root.get_string_member ("client_secret");
+				info ("OK: instance registered client");
+				stack.visible_child = step2;
 
-		network.queue (message, (sess, msg) => {
-			var root = network.parse (msg);
-			client_id = root.get_string_member ("client_id");
-			client_secret = root.get_string_member ("client_secret");
-			debug ("OK: instance registered client");
-			stack.visible_child = step2;
-
-			open_confirmation_page ();
-		}, (status, reason) => {
-			oopsie (reason);
-			instance_entry.sensitive = true;
-		});
+				open_confirmation_page ();
+			})
+			.on_error ((status, reason) => {
+				oopsie (reason);
+				instance_entry.sensitive = true;
+			})
+			.exec ();
 	}
 
 	private void open_confirmation_page () {
-		debug ("Opening permission request page");
+		info ("Opening permission request page");
 
-		var pars = @"scope=read%20write%20follow&response_type=code&redirect_uri=$redirect_uri&client_id=$client_id";
+		var pars = @"scope=$scopes&response_type=code&redirect_uri=$redirect_uri&client_id=$client_id";
 		var url = @"$instance/oauth/authorize?$pars";
 		Desktop.open_uri (url);
 	}
@@ -122,46 +132,51 @@ public class Tootle.Views.NewAccount : Views.Abstract {
 		if (code.char_count () <= 10)
 			throw new Oopsie.USER (_("Please paste a valid authorization code"));
 
-		debug ("Requesting access token");
-
-		var pars = @"client_id=$client_id&client_secret=$client_secret&redirect_uri=$redirect_uri&grant_type=authorization_code&code=$code";
-		var url = @"$instance/oauth/token?$pars";
-        var message = new Soup.Message ("POST", url);
-
-        network.queue (message, (sess, msg) => {
-        	var root = network.parse (msg);
-        	access_token = root.get_string_member ("access_token");
-        	debug ("OK: received access token");
-        	request_profile ();
-        }, (status, reason) => {
-        	oopsie (reason);
-        });
+		info ("Requesting access token");
+        new Request.POST (@"/oauth/token")
+        	.with_account (account)
+        	.with_param ("client_id", client_id)
+        	.with_param ("client_secret", client_secret)
+        	.with_param ("redirect_uri", redirect_uri)
+        	.with_param ("grant_type", "authorization_code")
+        	.with_param ("code", code)
+        	.then ((sess, msg) => {
+		    	var root = network.parse (msg);
+		    	access_token = root.get_string_member ("access_token");
+		    	account.token = access_token;
+		    	account.id = 0;
+		    	info ("OK: received access token");
+		    	request_profile ();
+        	})
+        	.on_error ((code, reason) => oopsie (reason))
+        	.exec ();
 	}
 
 	private void request_profile () throws Error {
-		debug ("Testing received access token");
-		var message = new Soup.Message ("GET", @"$instance/api/v1/accounts/verify_credentials");
-		message.request_headers.append ("Authorization", @"Bearer $access_token");
-
-		network.queue (message, (sess, msg) => {
-			var root = network.parse (msg);
-			var account = API.Account.parse (root);
-			debug ("OK: received user profile");
-			save (account);
-		}, (status, reason) => {
-			reset ();
-			oopsie (reason);
-		});
+		info ("Testing received access token");
+		new Request.GET ("/api/v1/accounts/verify_credentials")
+			.with_account (account)
+			.then ((sess, msg) => {
+				var root = network.parse (msg);
+				var account = API.Account.parse (root);
+				info ("OK: received user profile");
+				save (account);
+			})
+			.on_error ((status, reason) => {
+				reset ();
+				oopsie (reason);
+			})
+			.exec ();
 	}
 
-	private void save (API.Account account) {
-		debug ("Saving account");
-		InstanceAccount saved = new InstanceAccount.from_account (account);
-		saved.instance = instance;
-		saved.client_id = client_id;
-		saved.client_secret = client_secret;
-		saved.token = access_token;
-		//accounts.add (saved);
+	private void save (API.Account profile) {
+		info ("Account validated. Saving...");
+		account.patch (profile);
+		account.instance = instance;
+		account.client_id = client_id;
+		account.client_secret = client_secret;
+		account.token = access_token;
+		accounts.add (account);
 
 		destroy ();
 	}

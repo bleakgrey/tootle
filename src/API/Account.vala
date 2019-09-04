@@ -1,6 +1,6 @@
 public class Tootle.API.Account : GLib.Object {
 
-    public abstract signal void updated ();
+    public signal void updated ();
 
     public int64 id { get; set; }
     public string username { get; set; }
@@ -86,11 +86,11 @@ public class Tootle.API.Account : GLib.Object {
     }
 
     public bool is_self (){
-        return id == accounts.current.id;
+        return id == accounts.active.id;
     }
 
     public Soup.Message get_relationship (){
-        var url = "%s/api/v1/accounts/relationships?id=%lld".printf (accounts.formal.instance, id);
+        var url = @"$(accounts.active.instance)/api/v1/accounts/relationships?id=$id";
         var msg = new Soup.Message("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -99,7 +99,7 @@ public class Tootle.API.Account : GLib.Object {
                 rs = Relationship.parse (root);
                 updated ();
             }
-            catch (GLib.Error e) {
+            catch (Error e) {
                 warning ("Can't get account relationship:");
                 warning (e.message);
             }
@@ -109,7 +109,7 @@ public class Tootle.API.Account : GLib.Object {
 
     public Soup.Message set_following (bool follow = true){
         var action = follow ? "follow" : "unfollow";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -118,7 +118,7 @@ public class Tootle.API.Account : GLib.Object {
                 rs = Relationship.parse (root);
                 updated ();
             }
-            catch (GLib.Error e) {
+            catch (Error e) {
                 app.error (_("Error"), e.message);
                 warning (e.message);
             }
@@ -128,7 +128,7 @@ public class Tootle.API.Account : GLib.Object {
 
     public Soup.Message set_muted (bool mute = true){
         var action = mute ? "mute" : "unmute";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -137,7 +137,7 @@ public class Tootle.API.Account : GLib.Object {
                 rs = Relationship.parse (root);
                 updated ();
             }
-            catch (GLib.Error e) {
+            catch (Error e) {
                 app.error (_("Error"), e.message);
                 warning (e.message);
             }
@@ -147,7 +147,7 @@ public class Tootle.API.Account : GLib.Object {
 
     public Soup.Message set_blocked (bool block = true){
         var action = block ? "block" : "unblock";
-        var url = "%s/api/v1/accounts/%lld/%s".printf (accounts.formal.instance, id, action);
+        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
         var msg = new Soup.Message("POST", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
@@ -156,7 +156,7 @@ public class Tootle.API.Account : GLib.Object {
                 rs = Relationship.parse (root);
                 updated ();
             }
-            catch (GLib.Error e) {
+            catch (Error e) {
                 app.error (_("Error"), e.message);
                 warning (e.message);
             }

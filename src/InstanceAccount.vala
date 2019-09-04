@@ -13,24 +13,30 @@ public class Tootle.InstanceAccount : API.Account {
     public ArrayList<API.Notification> cached_notifications { get; set; default = new ArrayList<API.Notification> (); }
     private Notificator? notificator { get; set; }
 
+    public string handle {
+        owned get { return @"$username@$short_instance"; }
+    }
+    public string short_instance {
+        owned get {
+            return instance
+                .replace ("https://", "")
+                .replace ("/","");
+        }
+    }
+
     public InstanceAccount (int64 _id){
         base (_id);
     }
 
     public InstanceAccount.from_account (API.Account account) {
         base (account.id);
-        Utils.merge (this, account);
+        patch (account);
     }
 
-    public string get_pretty_instance () {
-        return instance
-            .replace ("https://", "")
-            .replace ("/","");
-    }
-
-    public string get_handle () {
-        return @"$username@$(get_pretty_instance ())";
-    }
+	public InstanceAccount patch (API.Account account) {
+	    Utils.merge (this, account);
+	    return this;
+	}
 
     public void start_notificator () {
         if (notificator != null)
@@ -44,7 +50,7 @@ public class Tootle.InstanceAccount : API.Account {
     }
 
     public bool is_current () {
-    	return accounts.formal.token == token;
+    	return accounts.active.token == token;
     }
 
     public Soup.Message get_stream () {
@@ -109,7 +115,7 @@ public class Tootle.InstanceAccount : API.Account {
 
         var cached = obj.get_object_member ("cached_profile");
     	var cached_account = API.Account.parse (cached);
-        Utils.merge (acc, cached_account);
+        acc.patch (cached_account);
 
         var notifications = obj.get_array_member ("cached_notifications");
         notifications.foreach_element ((arr, i, node) => {
@@ -125,7 +131,7 @@ public class Tootle.InstanceAccount : API.Account {
         var notification = new GLib.Notification (title);
         if (obj.status != null) {
             var body = "";
-            body += get_pretty_instance ();
+            body += short_instance;
             body += "\n";
             body += Html.remove_tags (obj.status.content);
             notification.set_body (body);

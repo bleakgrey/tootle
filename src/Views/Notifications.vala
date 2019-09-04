@@ -9,7 +9,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
     public Notifications () {
         base ();
         content.remove.connect (on_remove);
-        accounts.switched.connect (on_account_changed);
+        //accounts.switched.connect (on_account_changed);
         app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
 
@@ -17,10 +17,9 @@ public class Tootle.Views.Notifications : Views.Abstract {
     }
 
     private bool has_unread () {
-        var account = accounts.formal;
-        if (account == null)
+        if (accounts.active == null)
             return false;
-        return last_id > account.last_seen_notification || force_dot;
+        return last_id > accounts.active.last_seen_notification || force_dot;
     }
 
     public override string get_icon () {
@@ -56,7 +55,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
 
             if (!current) {
                 force_dot = true;
-                accounts.formal.has_unread_notifications = force_dot;
+                accounts.active.has_unread_notifications = force_dot;
             }
         }
 
@@ -70,7 +69,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
     }
 
     public override void on_set_current () {
-        var account = accounts.formal;
+        var account = accounts.active;
         if (has_unread ()) {
             force_dot = false;
             account.has_unread_notifications = force_dot;
@@ -104,24 +103,23 @@ public class Tootle.Views.Notifications : Views.Abstract {
         if (account == null)
             return;
 
-        last_id = accounts.formal.last_seen_notification;
-        force_dot = accounts.formal.has_unread_notifications;
+        last_id = accounts.active.last_seen_notification;
+        force_dot = accounts.active.has_unread_notifications;
         on_refresh ();
     }
 
     public void request () {
-        if (accounts.current == null) {
+        if (accounts.active == null) {
             empty_state ();
             return;
         }
 
-        accounts.formal.cached_notifications.@foreach (notification => {
+        accounts.active.cached_notifications.@foreach (notification => {
             append (notification);
             return true;
         });
 
-        var url = "%s/api/v1/follow_requests".printf (accounts.formal.instance);
-        var msg = new Soup.Message ("GET", url);
+        var msg = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/follow_requests");
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg, (sess, mess) => {
             network.parse_array (mess).foreach_element ((array, i, node) => {
@@ -133,8 +131,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
             });
         });
 
-        var url2 = "%s/api/v1/notifications?limit=30".printf (accounts.formal.instance);
-        var msg2 = new Soup.Message ("GET", url2);
+        var msg2 = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/notifications?limit=30");
         network.inject (msg2, Network.INJECT_TOKEN);
         network.queue (msg2, (sess, mess) => {
             network.parse_array (mess).foreach_element ((array, i, node) => {

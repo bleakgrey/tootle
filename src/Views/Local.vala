@@ -23,7 +23,7 @@ public class Tootle.Views.Local : Views.Timeline {
     }
 
     public override Soup.Message? get_stream () {
-        var url = "%s/api/v1/streaming/?stream=public:local&access_token=%s".printf (accounts.formal.instance, accounts.formal.token);
+        var url = "%s/api/v1/streaming/?stream=public:local&access_token=%s".printf (accounts.active.instance, accounts.active.token);
         return new Soup.Message("GET", url);
     }
 

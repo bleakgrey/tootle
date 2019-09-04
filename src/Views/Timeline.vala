@@ -17,7 +17,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
         this.timeline = timeline;
         this.pars = pars;
 
-        accounts.switched.connect (on_account_changed);
+        accounts.notify["active"].connect (() => on_account_changed (accounts.active));
         app.refresh.connect (on_refresh);
         destroy.connect (() => {
             if (notificator != null)
@@ -102,13 +102,13 @@ public class Tootle.Views.Timeline : Views.Abstract {
         if (page_next != null)
             return page_next;
 
-        var url = "%s/api/v1/timelines/%s?limit=%i".printf (accounts.formal.instance, this.timeline, this.limit);
+        var url = "%s/api/v1/timelines/%s?limit=%i".printf (accounts.active.instance, this.timeline, this.limit);
         url += this.pars;
         return url;
     }
 
     public virtual void request (){
-        if (accounts.current == null) {
+        if (accounts.active == null) {
             empty_state ();
             return;
         }
@@ -139,7 +139,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
     }
 
     public virtual void on_account_changed (API.Account? account){
-        if(account == null)
+        if (account == null)
             return;
 
         var stream = get_stream ();

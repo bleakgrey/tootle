@@ -54,7 +54,7 @@ public class Tootle.Widgets.ImageAttachment : DrawingArea {
             var buffer = new Soup.Buffer.take (contents);
             var multipart = new Soup.Multipart (Soup.FORM_MIME_TYPE_MULTIPART);
             multipart.append_form_file ("file", mime.replace ("/", "."), mime, buffer);
-            var url = "%s/api/v1/media".printf (accounts.formal.instance);
+            var url = "%s/api/v1/media".printf (accounts.active.instance);
             var msg = Soup.Form.request_new_from_multipart (url, multipart);
 
             network.queue (msg, (sess, mess) => {

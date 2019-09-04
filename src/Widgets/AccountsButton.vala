@@ -106,8 +106,8 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         add (avatar);
         show_all ();
 
-        accounts.updated.connect (accounts_updated);
-        accounts.switched.connect (account_switched);
+        //accounts.updated.connect (accounts_updated); //TODO: IMPLEMENT
+        accounts.notify["active"].connect (() => on_account_switched (accounts.active));
         list.row_activated.connect (row => {
             var widget = row as AccountItemView;
             if (widget.id == -1) {
@@ -115,7 +115,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
                 return;
             }
             if (widget.id == settings.current_account)
-                Views.Profile.open_from_id (accounts.current.id);
+                Views.Profile.open_from_id (accounts.active.id);
             else
                 accounts.switch_account (widget.id);
 
@@ -131,7 +131,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
             var widget = new AccountItemView ();
             widget.id = i;
             widget.display_name.label = "<b>@"+account.username+"</b>";
-            widget.instance.label = account.get_pretty_instance ();
+            widget.instance.label = account.short_instance;
             list.add (widget);
         });
 
@@ -143,7 +143,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         update_selection ();
     }
 
-    private void account_switched (API.Account? account) {
+    private void on_account_switched (API.Account? account) {
         if (account == null)
             avatar.show_default (AVATAR_SIZE);
         else
@@ -162,7 +162,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
     }
 
     public AccountsButton () {
-        account_switched (accounts.current);
+        on_account_switched (accounts.active);
     }
 
 }

@@ -61,7 +61,7 @@ public class Tootle.API.Notification {
 
     public Soup.Message? dismiss () {
         if (type == NotificationType.WATCHLIST) {
-            if (accounts.formal.cached_notifications.remove (this))
+            if (accounts.active.cached_notifications.remove (this))
                 accounts.save ();
             return null;
         }
@@ -69,7 +69,7 @@ public class Tootle.API.Notification {
         if (type == NotificationType.FOLLOW_REQUEST)
             return reject_follow_request ();
 
-        var url = "%s/api/v1/notifications/dismiss?id=%lld".printf (accounts.formal.instance, id);
+        var url = @"$(accounts.active.instance)/api/v1/notifications/dismiss?id=$id";
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);
@@ -77,7 +77,7 @@ public class Tootle.API.Notification {
     }
 
     public Soup.Message accept_follow_request () {
-        var url = "%s/api/v1/follow_requests/%lld/authorize".printf (accounts.formal.instance, account.id);
+        var url = @"$(accounts.active.instance)/api/v1/follow_requests/$(account.id)/authorize";
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);
@@ -85,7 +85,7 @@ public class Tootle.API.Notification {
     }
 
     public Soup.Message reject_follow_request () {
-        var url = "%s/api/v1/follow_requests/%lld/reject".printf (accounts.formal.instance, account.id);
+        var url = @"$(accounts.active.instance)/api/v1/follow_requests/$(account.id)/reject";
         var msg = new Soup.Message ("POST", url);
         network.inject (msg, Network.INJECT_TOKEN);
         network.queue (msg);

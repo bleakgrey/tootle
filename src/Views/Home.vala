@@ -13,7 +13,7 @@ public class Tootle.Views.Home : Views.Timeline {
     }
 
     public override Soup.Message? get_stream () {
-        return accounts.formal.get_stream ();
+        return accounts.active.get_stream ();
     }
 
 }

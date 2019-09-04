@@ -120,8 +120,6 @@ namespace Tootle {
             debug ("Creating new window");
             window = new Dialogs.MainWindow (this);
             window.present ();
-            if (accounts.is_empty ())
-                window.open_view (new Views.NewAccount (false));
         }
 
         protected void on_error (string title, string msg){

@@ -215,7 +215,7 @@ public class Tootle.Views.Profile : Views.Timeline {
         if (page_next != null)
             return page_next;
 
-        var url = "%s/api/v1/accounts/%lld/statuses?limit=%i".printf (accounts.formal.instance, account.id, this.limit);
+        var url = "%s/api/v1/accounts/%lld/statuses?limit=%i".printf (accounts.active.instance, account.id, this.limit);
         return url;
     }
 
@@ -238,7 +238,7 @@ public class Tootle.Views.Profile : Views.Timeline {
     }
 
     public static void open_from_id (int64 id){
-        var url = "%s/api/v1/accounts/%lld".printf (accounts.formal.instance, id);
+        var url = "%s/api/v1/accounts/%lld".printf (accounts.active.instance, id);
         var msg = new Soup.Message ("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
