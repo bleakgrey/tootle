@@ -11,7 +11,7 @@ public class Tootle.API.Notification : GLib.Object {
         Object (id: id);
     }
 
-    public static Notification parse (Json.Object obj) {
+    public static Notification parse (Json.Object obj) throws Oopsie {
         var id = int64.parse (obj.get_string_member ("id"));
         var notification = new Notification (id);
 

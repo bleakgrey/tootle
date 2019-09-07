@@ -7,7 +7,7 @@ public enum Tootle.API.NotificationType {
     FOLLOW_REQUEST,     // Internal
     WATCHLIST;          // Internal
 
-    public string to_string() {
+    public string to_string () {
         switch (this) {
             case MENTION:
                 return "mention";
@@ -24,11 +24,11 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return "watchlist";
             default:
-                assert_not_reached();
+                assert_not_reached ();
         }
     }
 
-    public static NotificationType from_string (string str) {
+    public static NotificationType? from_string (string str) throws Oopsie {
         switch (str) {
             case "mention":
                 return MENTION;
@@ -45,7 +45,7 @@ public enum Tootle.API.NotificationType {
             case "watchlist":
                 return WATCHLIST;
             default:
-                assert_not_reached();
+                throw new Oopsie.INSTANCE ("Unknown notification type: %s", str);
         }
     }
 
@@ -66,7 +66,7 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> posted a toot</span>").printf (account.url, account.display_name);
             default:
-                assert_not_reached();
+                assert_not_reached ();
         }
     }
 
@@ -83,7 +83,7 @@ public enum Tootle.API.NotificationType {
             case FOLLOW_REQUEST:
                 return "contact-new-symbolic";
             default:
-                assert_not_reached();
+                assert_not_reached ();
         }
     }
 

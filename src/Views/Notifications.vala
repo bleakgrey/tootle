@@ -121,28 +121,18 @@ public class Tootle.Views.Notifications : Views.Abstract {
 
         new Request.GET ("/api/v1/follow_requests")
         	.with_account ()
-        	.then ((sess, mess) => {
-		        network.parse_array (mess).foreach_element ((array, i, node) => {
-		            var obj = node.get_object ();
-		            if (obj != null){
-		                var notification = API.Notification.parse_follow_request (obj);
-		                append (notification);
-		            }
-		        });
+        	.then_parse_array (node => {
+		        var notification = API.Notification.parse_follow_request (node.get_object ());
+		        append (notification);
         	})
         	.exec ();
 
         new Request.GET ("/api/v1/notifications")
         	.with_account ()
         	.with_param ("limit", "30")
-        	.then ((sess, mess) => {
-            	network.parse_array (mess).foreach_element ((array, i, node) => {
-				    var obj = node.get_object ();
-				    if (obj != null){
-				        var notification = API.Notification.parse (obj);
-				        append (notification);
-				    }
-		    	});
+        	.then_parse_array (node => {
+				var notification = API.Notification.parse (node.get_object ());
+				append (notification);
         	})
         	.exec ();
 

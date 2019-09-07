@@ -12,6 +12,7 @@ public class Tootle.Network : GLib.Object {
 
 	public delegate void ErrorCallback (int32 code, string reason);
 	public delegate void SuccessCallback (Session session, Message msg) throws GLib.Error;
+	public delegate void NodeCallback (Json.Node node);
 
     private int requests_processing = 0;
     public Soup.Session session;
@@ -39,6 +40,7 @@ public class Tootle.Network : GLib.Object {
     public void cancel_request (Soup.Message? msg) {
         if (msg == null)
             return;
+
         switch (msg.status_code) {
             case Soup.Status.CANCELLED:
             case Soup.Status.OK:
@@ -55,27 +57,18 @@ public class Tootle.Network : GLib.Object {
         	var status = msg.status_code;
             if (status != Soup.Status.CANCELLED) {
             	if (status == Soup.Status.OK) {
-            		if (cb != null) {
-            		    try {
-            		        cb (session, msg);
-            		    }
-            		    catch (Error e) {
-            		        warning ("Caught exception on network request:");
-            		        warning (e.message);
-                    		if (errcb != null)
-                    			errcb (Soup.Status.NONE, e.message);
-            		    }
+            		try {
+            		    cb (session, msg);
+            		}
+            		catch (Error e) {
+            		    warning ("Caught exception on network request: %s", e.message);
+                    	errcb (Soup.Status.NONE, e.message);
             		}
             	}
             	else {
-            		if (errcb != null)
-            			errcb ((int32)status, get_error_reason ((int32)status));
+            		errcb ((int32)status, get_error_reason ((int32)status));
             	}
             }
-            // msg.request_body.free ();
-            // msg.response_body.free ();
-            // msg.request_headers.free ();
-            // msg.response_headers.free ();
         });
     }
 
@@ -147,7 +140,7 @@ public class Tootle.Network : GLib.Object {
             }
             finally {
                 if (msg.status_code != Soup.Status.OK)
-                    warning ("Invalid response code %s: %s".printf (msg.status_code.to_string (), url));
+                    warning ("Invalid response code %s: %s", msg.status_code.to_string (), url);
             }
             cb (pixbuf);
         });

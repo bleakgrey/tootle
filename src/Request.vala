@@ -25,6 +25,21 @@ public class Tootle.Request : Soup.Message {
 		return this;
 	}
 	
+	public Request then_parse_array (owned Network.NodeCallback cb) {
+		this.cb = (sess, msg) => {
+			try {
+				var parser = new Json.Parser ();
+				parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
+				parser.get_root ().get_array ().foreach_element ((array, i, node) => cb (node));
+			}
+			catch (Error e) {
+				warning (@"$method $url expected an array item: %s", e.message);
+				this.error_cb ((int32) msg.status_code, "Server returned invalid data");
+			}
+		};
+		return this;
+	}
+	
 	public Request on_error (owned Network.ErrorCallback cb) {
 		this.error_cb = (owned) cb;
 		return this;
@@ -81,8 +96,8 @@ public class Tootle.Request : Soup.Message {
 		
 		this.uri = new URI (url + "" + parameters);
 		
-		var dbguri = uri.to_string (false);
-		warning (@"$method: $dbguri");
+		url = uri.to_string (false);
+		info (@"$method: $url");
 		
 		network.queue (this, (owned) cb, (owned) error_cb);
 		return this;
