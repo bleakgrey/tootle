@@ -27,7 +27,7 @@ public class Tootle.API.Account : GLib.Object {
         account.username = obj.get_string_member ("username");
         account.acct = obj.get_string_member ("acct");
         account.display_name = obj.get_string_member ("display_name");
-        if (account.display_name == "")
+        if (account.display_name == "") // TODO: No. Don't.
             account.display_name = account.username;
         account.note = obj.get_string_member ("note");
         account.avatar = obj.get_string_member ("avatar");
@@ -85,11 +85,11 @@ public class Tootle.API.Account : GLib.Object {
         return builder.get_root ();
     }
 
-    public bool is_self (){
+    public bool is_self () {
         return id == accounts.active.id;
     }
 
-    public Request get_relationship (){
+    public Request get_relationship () {
     	return new Request.GET ("/api/v1/accounts/relationships")
     		.with_account ()
     		.with_param ("id", id.to_string ())
@@ -102,61 +102,43 @@ public class Tootle.API.Account : GLib.Object {
     		.exec ();
     }
 
-    public Soup.Message set_following (bool follow = true){
-        var action = follow ? "follow" : "unfollow";
-        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
-        var msg = new Soup.Message("POST", url);
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
-                var root = network.parse (mess);
+    public Request set_following (bool state = true) {
+        var action = state ? "follow" : "unfollow";
+        return new Request.POST (@"/api/v1/accounts/$id/$action")
+            .with_account ()
+            .then ((sess, msg) => {
+                var root = network.parse (msg);
                 rs = Relationship.parse (root);
                 updated ();
-            }
-            catch (Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
-        return msg;
+            })
+    		.on_error (network.on_error)
+    		.exec ();
     }
 
-    public Soup.Message set_muted (bool mute = true){
-        var action = mute ? "mute" : "unmute";
-        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
-        var msg = new Soup.Message("POST", url);
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
-                var root = network.parse (mess);
+    public Request set_muted (bool state = true) {
+        var action = state ? "mute" : "unmute";
+        return new Request.POST (@"/api/v1/accounts/$id/$action")
+            .with_account ()
+            .then ((sess, msg) => {
+                var root = network.parse (msg);
                 rs = Relationship.parse (root);
                 updated ();
-            }
-            catch (Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
-        return msg;
+            })
+    		.on_error (network.on_error)
+    		.exec ();
     }
 
-    public Soup.Message set_blocked (bool block = true){
-        var action = block ? "block" : "unblock";
-        var url = @"$(accounts.active.instance)/api/v1/accounts/$id/$action";
-        var msg = new Soup.Message("POST", url);
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
-                var root = network.parse (mess);
+    public Request set_blocked (bool state = true) {
+        var action = state ? "block" : "unblock";
+        return new Request.POST (@"/api/v1/accounts/$id/$action")
+            .with_account ()
+            .then ((sess, msg) => {
+                var root = network.parse (msg);
                 rs = Relationship.parse (root);
                 updated ();
-            }
-            catch (Error e) {
-                app.error (_("Error"), e.message);
-                warning (e.message);
-            }
-        });
-        return msg;
+            })
+    		.on_error (network.on_error)
+    		.exec ();
     }
 
 }
