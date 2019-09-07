@@ -89,22 +89,17 @@ public class Tootle.API.Account : GLib.Object {
         return id == accounts.active.id;
     }
 
-    public Soup.Message get_relationship (){
-        var url = @"$(accounts.active.instance)/api/v1/accounts/relationships?id=$id";
-        var msg = new Soup.Message("GET", url);
-        msg.priority = Soup.MessagePriority.HIGH;
-        network.queue (msg, (sess, mess) => {
-            try{
-                var root = network.parse_array (mess).get_object_element (0);
-                rs = Relationship.parse (root);
+    public Request get_relationship (){
+    	return new Request.GET ("/api/v1/accounts/relationships")
+    		.with_account ()
+    		.with_param ("id", id.to_string ())
+    		.then_parse_array (node => {
+                var obj = node.get_object ();
+                this.rs = Relationship.parse (obj);
                 updated ();
-            }
-            catch (Error e) {
-                warning ("Can't get account relationship:");
-                warning (e.message);
-            }
-        });
-        return msg;
+    		})
+    		.on_error (network.on_error)
+    		.exec ();
     }
 
     public Soup.Message set_following (bool follow = true){

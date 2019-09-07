@@ -30,7 +30,7 @@ public class Tootle.Request : Soup.Message {
 			try {
 				var parser = new Json.Parser ();
 				parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
-				parser.get_root ().get_array ().foreach_element ((array, i, node) => cb (node));
+				parser.get_root ().get_array ().foreach_element ((array, i, node) => cb (node, msg));
 			}
 			catch (Error e) {
 				warning (@"$method $url expected an array item: %s", e.message);

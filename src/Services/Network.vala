@@ -12,7 +12,7 @@ public class Tootle.Network : GLib.Object {
 
 	public delegate void ErrorCallback (int32 code, string reason);
 	public delegate void SuccessCallback (Session session, Message msg) throws GLib.Error;
-	public delegate void NodeCallback (Json.Node node);
+	public delegate void NodeCallback (Json.Node node, Message msg);
 
     private int requests_processing = 0;
     public Soup.Session session;
@@ -94,16 +94,6 @@ public class Tootle.Network : GLib.Object {
         var parser = new Json.Parser ();
         parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
         return parser.get_root ().get_object ();
-    }
-
-    public Json.Array parse_array (Soup.Message msg) throws Error {
-        // debug ("Status Code: %u", msg.status_code);
-        // debug ("Message length: %lld", msg.response_body.length);
-        // debug ("Array: %s", (string) msg.response_body.data);
-
-        var parser = new Json.Parser ();
-        parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
-        return parser.get_root ().get_array ();
     }
 
     //TODO: Cache

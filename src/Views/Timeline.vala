@@ -115,14 +115,12 @@ public class Tootle.Views.Timeline : Views.Abstract {
 
 		append_params (new Request.GET (get_url ()))
 		.with_account ()
-		.then ((sess, msg) => {
-            network.parse_array (msg).foreach_element ((array, i, node) => {
-                var object = node.get_object ();
-                if (object != null) {
-                    var status = API.Status.parse (object);
-                    append (status);
-                }
-            });
+		.then_parse_array ((node, msg) => {
+            var obj = node.get_object ();
+            if (obj != null) {
+                var status = API.Status.parse (obj);
+                append (status);
+            }
             get_pages (msg.response_headers.get_one ("Link"));
             empty_state ();
         })

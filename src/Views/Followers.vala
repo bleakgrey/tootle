@@ -6,7 +6,7 @@ public class Tootle.Views.Followers : Views.Timeline {
         base (account.id.to_string ());
     }
 
-    public new void append (API.Account account){
+    public new void append (API.Account account) {
         if (empty != null)
             empty.destroy ();
 
@@ -19,7 +19,7 @@ public class Tootle.Views.Followers : Views.Timeline {
         content.pack_start (widget, false, false, 0);
     }
 
-    public override string get_url (){
+    public override string get_url () {
         if (page_next != null)
             return page_next;
 
@@ -27,26 +27,21 @@ public class Tootle.Views.Followers : Views.Timeline {
         return url;
     }
 
-    public override void request (){
-        var msg = new Soup.Message("GET", get_url ());
-        msg.finished.connect (() => empty_state ());
-        network.queue (msg, (sess, mess) => {
-            try {
-                network.parse_array (mess).foreach_element ((array, i, node) => {
-                    var object = node.get_object ();
-                    if (object != null){
-                        var status = API.Account.parse (object);
-                        append (status);
-                    }
-                });
+    public override void request () {
+    	new Request.GET (get_url ())
+    		.with_account ()
+    		.then_parse_array ((node, msg) => {
+                var obj = node.get_object ();
+                if (obj != null){
+                    var status = API.Account.parse (obj);
+                    append (status);
+                }
 
-                get_pages (mess.response_headers.get_one ("Link"));
-            }
-            catch (GLib.Error e) {
-                warning ("Can't get account follow info:");
-                warning (e.message);
-            }
-        });
+                get_pages (msg.response_headers.get_one ("Link"));
+                empty_state ();
+    		})
+    		.on_error (network.on_error)
+    		.exec ();
     }
 
 }
