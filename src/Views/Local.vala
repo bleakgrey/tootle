@@ -12,10 +12,8 @@ public class Tootle.Views.Local : Views.Timeline {
         return _("Local Timeline");
     }
 
-    public override string get_url (){
-        var url = base.get_url ();
-        url += "&local=true";
-        return url;
+    public override Request append_params (Request req) {
+        return req.with_param ("local", "true");
     }
 
     protected override bool is_public () {
@@ -24,7 +22,7 @@ public class Tootle.Views.Local : Views.Timeline {
 
     public override Soup.Message? get_stream () {
         var url = "%s/api/v1/streaming/?stream=public:local&access_token=%s".printf (accounts.active.instance, accounts.active.token);
-        return new Soup.Message("GET", url);
+        return new Soup.Message ("GET", url);
     }
 
 }

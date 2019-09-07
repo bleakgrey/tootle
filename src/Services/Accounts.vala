@@ -22,9 +22,9 @@ public class Tootle.Accounts : GLib.Object {
                 var root = network.parse (mess);
                 var profile = API.Account.parse (root);
                 acc.patch (profile);
+                info ("OK: Token is valid");
                 active = acc;
                 settings.current_account = id;
-                info ("OK: Token is valid");
             })
             .on_error ((code, reason) => {
                 warning ("Token invalid!");

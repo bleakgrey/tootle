@@ -4,7 +4,6 @@ using Gdk;
 public class Tootle.Views.Timeline : Views.Abstract {
 
     protected string timeline;
-    protected string pars;
     protected int limit = 25;
     protected bool is_last_page = false;
     protected string? page_next;
@@ -12,10 +11,9 @@ public class Tootle.Views.Timeline : Views.Abstract {
 
     protected Notificator? notificator;
 
-    public Timeline (string timeline, string pars = "") {
+    public Timeline (string timeline) {
         base ();
         this.timeline = timeline;
-        this.pars = pars;
 
         accounts.notify["active"].connect (() => on_account_changed (accounts.active));
         app.refresh.connect (on_refresh);
@@ -48,7 +46,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
         append (status, true);
     }
 
-    public void append (API.Status status, bool first = false){
+    public void append (API.Status status, bool first = false) {
         if (empty != null)
             empty.destroy ();
 
@@ -102,45 +100,46 @@ public class Tootle.Views.Timeline : Views.Abstract {
         if (page_next != null)
             return page_next;
 
-        var url = @"/api/v1/timelines/$timeline";
-        url += this.pars;
-        return url;
+        return @"/api/v1/timelines/$timeline";
     }
 
-    public virtual void request (){
+    public virtual Request append_params (Request req) {
+        return req.with_param ("limit", this.limit.to_string ());
+    }
+
+    public virtual void request () {
         if (accounts.active == null) {
             empty_state ();
             return;
         }
 
-		new Request.GET (get_url ())
-			.with_account ()
-			.with_param ("limit", this.limit.to_string ())
-			.then ((sess, mess) => {
-                network.parse_array (mess).foreach_element ((array, i, node) => {
-                    var object = node.get_object ();
-                    if (object != null) {
-                        var status = API.Status.parse (object);
-                        append (status);
-                    }
-                });
-                get_pages (mess.response_headers.get_one ("Link"));
-                empty_state ();
-            })
-			.on_error (network.on_error)
-			.exec ();
+		append_params (new Request.GET (get_url ()))
+		.with_account ()
+		.then ((sess, msg) => {
+            network.parse_array (msg).foreach_element ((array, i, node) => {
+                var object = node.get_object ();
+                if (object != null) {
+                    var status = API.Status.parse (object);
+                    append (status);
+                }
+            });
+            get_pages (msg.response_headers.get_one ("Link"));
+            empty_state ();
+        })
+		.on_error (network.on_error)
+		.exec ();
     }
 
-    public virtual void on_refresh (){
+    public virtual void on_refresh () {
         clear ();
         request ();
     }
 
-    public virtual Soup.Message? get_stream (){
+    public virtual Soup.Message? get_stream () {
         return null;
     }
 
-    public virtual void on_account_changed (API.Account? account){
+    public virtual void on_account_changed (InstanceAccount? account) {
         if (account == null)
             return;
 

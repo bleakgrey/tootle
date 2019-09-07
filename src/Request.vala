@@ -8,6 +8,7 @@ public class Tootle.Request : Soup.Message {
 	private Network.ErrorCallback? error_cb;
 	private HashMap<string, string>? pars;
 	private weak InstanceAccount? account;
+	private bool needs_token = false;
 
 	public Request.GET (string url) {
 		Object (method: "GET", url: url);
@@ -30,9 +31,8 @@ public class Tootle.Request : Soup.Message {
 	}
 	
 	public Request with_account (InstanceAccount? account = null) {
-		if (account == null)
-			account = accounts.active;
-		else
+		this.needs_token = true;
+		if (account != null)
 			this.account = account;
 		return this;
 	}
@@ -46,10 +46,6 @@ public class Tootle.Request : Soup.Message {
 
 	// Should be used for requests with default priority
 	public Request queue () {
-		if (account != null && account.id >= 0) {
-			request_headers.append ("Authorization", @"Bearer $(account.token)");
-		}
-		
 		var parameters = "";
 		if (pars != null) {
 			parameters = "?";
@@ -67,8 +63,27 @@ public class Tootle.Request : Soup.Message {
 			});
 		}
 		
-		warning (@"$method: $url$parameters");
-		this.uri = new URI (account.instance + "" + url + parameters);
+		if (needs_token) {
+			if (account == null)
+				account = accounts.active;
+			
+			if (account == null) {
+				warning (@"No token given or found for $method: $url$parameters");
+				return this;
+			}
+			
+			request_headers.append ("Authorization", @"Bearer $(account.token)");
+		}
+		
+		if (!("://" in url)) {
+			url = account.instance + url;
+		}
+		
+		this.uri = new URI (url + "" + parameters);
+		
+		var dbguri = uri.to_string (false);
+		warning (@"$method: $dbguri");
+		
 		network.queue (this, (owned) cb, (owned) error_cb);
 		return this;
 	}
