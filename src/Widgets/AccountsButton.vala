@@ -2,17 +2,16 @@ using Gtk;
 
 public class Tootle.Widgets.AccountsButton : MenuButton {
 
-    const int AVATAR_SIZE = 24;
-    Granite.Widgets.Avatar avatar;
-    Grid grid;
-    Popover menu;
-    ListBox list;
-    ModelButton item_settings;
-    ModelButton item_refresh;
-    ModelButton item_search;
-    ModelButton item_favs;
-    ModelButton item_direct;
-    ModelButton item_watchlist;
+    private Widgets.Avatar avatar;
+    private Grid grid;
+    private Popover menu;
+    private ListBox list;
+    private ModelButton item_settings;
+    private ModelButton item_refresh;
+    private ModelButton item_search;
+    private ModelButton item_favs;
+    private ModelButton item_direct;
+    private ModelButton item_watchlist;
 
     private class AccountItemView : ListBoxRow {
 
@@ -53,7 +52,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
     }
 
     construct{
-        avatar = new Granite.Widgets.Avatar.with_default_icon (AVATAR_SIZE);
+        avatar = new Widgets.Avatar (24);
         list = new ListBox ();
 
         var item_separator = new Separator (Orientation.HORIZONTAL);
@@ -145,9 +144,9 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
 
     private void on_account_switched (API.Account? account) {
         if (account == null)
-            avatar.show_default (AVATAR_SIZE);
+            avatar.url = null;
         else
-            network.load_avatar (account.avatar, avatar, get_avatar_size ());
+            avatar.url = account.avatar;
     }
 
     private void update_selection () {
@@ -155,10 +154,6 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         var row = list.get_row_at_index (id);
         if (row != null)
             list.select_row (row);
-    }
-
-    public int get_avatar_size () {
-        return AVATAR_SIZE * get_style_context ().get_scale ();
     }
 
     public AccountsButton () {

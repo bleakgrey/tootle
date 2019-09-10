@@ -3,12 +3,11 @@ using Granite;
 
 public class Tootle.Views.Profile : Views.Timeline {
 
-    const int AVATAR_SIZE = 128;
     protected API.Account account;
 
     protected Grid header_image;
     protected Box header_info;
-    protected Granite.Widgets.Avatar avatar;
+    protected Widgets.Avatar avatar;
     protected Widgets.RichLabel display_name;
     protected Label username;
     protected Label relationship;
@@ -44,7 +43,8 @@ public class Tootle.Views.Profile : Views.Timeline {
         relationship.margin = 12;
         header.attach (relationship, 0, 0, 1, 1);
 
-        avatar = new Granite.Widgets.Avatar.with_default_icon (AVATAR_SIZE);
+        avatar = new Widgets.Avatar (128);
+        avatar.halign = Align.CENTER;
         avatar.hexpand = true;
         avatar.margin_bottom = 6;
         header_info.pack_start (avatar, false, false, 0);
@@ -146,7 +146,7 @@ public class Tootle.Views.Profile : Views.Timeline {
         username.label = "@" + account.acct;
         note.set_label (account.note);
         button_follow.visible = !account.is_self ();
-        network.load_avatar (account.avatar, avatar, 128);
+        avatar.url = account.avatar;
 
         menu_edit.visible = account.is_self ();
 

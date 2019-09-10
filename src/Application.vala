@@ -16,7 +16,7 @@ namespace Tootle {
     public static Settings settings;
     public static Accounts accounts;
     public static Network network;
-    public static ImageCache image_cache;
+    public static Cache cache;
     public static Watchlist watchlist;
 
     public static bool start_hidden = false;
@@ -27,7 +27,7 @@ namespace Tootle {
         public Settings app_settings { get {return Tootle.settings; } }
         public Accounts app_accounts { get {return Tootle.accounts; } }
         public Network app_network { get {return Tootle.network; } }
-        public ImageCache app_cache { get {return Tootle.image_cache; } }
+        public Cache app_cache { get {return Tootle.cache; } }
         public Watchlist app_watchlist { get {return Tootle.watchlist; } }
 
         public abstract signal void refresh ();
@@ -86,7 +86,7 @@ namespace Tootle {
             settings = new Settings ();
             accounts = new Accounts ();
             network = new Network ();
-            image_cache = new ImageCache ();
+            cache = new Cache ();
             watchlist = new Watchlist ();
             accounts.init ();
 

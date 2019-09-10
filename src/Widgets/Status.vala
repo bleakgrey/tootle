@@ -6,10 +6,9 @@ public class Tootle.Widgets.Status : EventBox {
 
     public API.Status status;
     public bool is_notification = false;
-    public const int AVATAR_SIZE = 32;
 
     public Separator? separator;
-    public Granite.Widgets.Avatar avatar;
+    public Widgets.Avatar avatar;
     protected Grid grid;
     protected Widgets.RichLabel title_user;
     protected Label title_date;
@@ -33,7 +32,7 @@ public class Tootle.Widgets.Status : EventBox {
     construct {
         grid = new Grid ();
 
-        avatar = new Granite.Widgets.Avatar.with_default_icon (AVATAR_SIZE);
+        avatar = new Widgets.Avatar ();
         avatar.valign = Align.START;
         avatar.margin_top = 6;
         avatar.margin_start = 6;
@@ -181,7 +180,6 @@ public class Tootle.Widgets.Status : EventBox {
             attachments.destroy ();
 
         destroy.connect (() => {
-            avatar.show_default (AVATAR_SIZE);
             if (separator != null)
                 separator.destroy ();
         });
@@ -197,10 +195,6 @@ public class Tootle.Widgets.Status : EventBox {
     public void highlight () {
         grid.get_style_context ().add_class ("card");
         grid.margin_bottom = 6;
-    }
-
-    public int get_avatar_size () {
-        return AVATAR_SIZE * get_style_context ().get_scale ();
     }
 
     public void rebind () {
@@ -232,7 +226,7 @@ public class Tootle.Widgets.Status : EventBox {
             reblog.tooltip_text = _("This post can't be boosted");
         }
 
-        network.load_avatar (formal.account.avatar, avatar, get_avatar_size ());
+        avatar.url = formal.account.avatar;
     }
 
     private GLib.DateTime? parse_date_iso8601 (string date) {

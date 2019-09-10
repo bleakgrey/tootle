@@ -1,20 +1,5 @@
-.titlebar.compact {
-    padding: 0 6px;
-}
-
-.mode .toggle{
-    border-radius:0px;
-    border-top:none;
-    border-bottom:none;
-    padding:10px;
-    margin:0px;
-}
-
-.button_avatar{
-    padding:0;
-    border:0;
-    box-shadow:none;
-    background:none;
+.avatar {
+	border-radius: 4px;
 }
 
 .toot-text, .toot-text text{
