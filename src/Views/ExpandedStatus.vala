@@ -22,9 +22,6 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
     }
 
     private void prepend (API.Status status, bool is_root = false){
-        var separator = new Separator (Orientation.HORIZONTAL);
-        separator.show ();
-
         var widget = new Widgets.Status (status);
         widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
         if (!is_root)
@@ -32,10 +29,6 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
         else
             widget.highlight ();
 
-        if (!last_status_was_root) {
-            widget.separator = separator;
-            content.pack_start (separator, false, false, 0);
-        }
         content.pack_start (widget, false, false, 0);
         last_status_was_root = is_root;
 
@@ -105,8 +98,8 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
     }
 
     private void reveal_sensitive (Widgets.Status widget) {
-        if (widget.status.has_spoiler ())
-            widget.revealer.reveal_child = sensitive_visible;
+        // if (widget.status.has_spoiler ())
+        //     widget.revealer.reveal_child = sensitive_visible;
     }
 
 }

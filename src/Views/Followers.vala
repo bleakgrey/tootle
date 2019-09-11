@@ -10,12 +10,7 @@ public class Tootle.Views.Followers : Views.Timeline {
         if (empty != null)
             empty.destroy ();
 
-        var separator = new Separator (Orientation.HORIZONTAL);
-        separator.show ();
-
         var widget = new Widgets.Account (account);
-        widget.separator = separator;
-        content.pack_start (separator, false, false, 0);
         content.pack_start (widget, false, false, 0);
     }
 

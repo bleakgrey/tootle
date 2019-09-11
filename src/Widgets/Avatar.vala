@@ -4,19 +4,19 @@ using Gdk;
 public class Tootle.Widgets.Avatar : EventBox {
 
 	public string? url { get; set; }
-	public int size { get; set; }
+	public int size { get; set; default = 48; }
 	
 	private Cache.Reference? cached;
 
 	construct {
 		get_style_context ().add_class ("avatar");
-	}
-
-	public Avatar (int size = 48) {
-		this.size = size;
 		notify["url"].connect (on_url_updated);
 		Screen.get_default ().monitors_changed.connect (on_redraw);
 		on_url_updated ();
+	}
+
+	public Avatar (int size = this.size) {
+		Object (size: size);
 	}
 	
 	~Avatar () {

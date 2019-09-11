@@ -51,33 +51,32 @@ public class Tootle.Widgets.Notification : Grid {
         });
 
         if (notification.status != null){
-            status_widget = new Widgets.Status (notification.status, true);
-            status_widget.is_notification = true;
+            status_widget = new Widgets.Status (notification.status, notification.kind);
             status_widget.button_press_event.connect (status_widget.open);
             status_widget.avatar.button_press_event.connect (status_widget.on_avatar_clicked);
             attach (status_widget, 1, 3, 3, 1);
         }
 
-        if (notification.kind == API.NotificationType.FOLLOW_REQUEST) {
-            var box = new Box (Orientation.HORIZONTAL, 6);
-            box.margin_start = 32 + 16 + 8;
-            var accept = new Button.with_label (_("Accept"));
-            box.pack_start (accept, false, false, 0);
-            var reject = new Button.with_label (_("Reject"));
-            box.pack_start (reject, false, false, 0);
+        // if (notification.kind == API.NotificationType.FOLLOW_REQUEST) {
+        //     var box = new Box (Orientation.HORIZONTAL, 6);
+        //     box.margin_start = 32 + 16 + 8;
+        //     var accept = new Button.with_label (_("Accept"));
+        //     box.pack_start (accept, false, false, 0);
+        //     var reject = new Button.with_label (_("Reject"));
+        //     box.pack_start (reject, false, false, 0);
 
-            attach (box, 1, 3, 3, 1);
-            box.show_all ();
+        //     attach (box, 1, 3, 3, 1);
+        //     box.show_all ();
 
-            accept.clicked.connect (() => {
-                destroy ();
-                notification.accept_follow_request ();
-            });
-            reject.clicked.connect (() => {
-                destroy ();
-                notification.reject_follow_request ();
-            });
-        }
+        //     accept.clicked.connect (() => {
+        //         destroy ();
+        //         notification.accept_follow_request ();
+        //     });
+        //     reject.clicked.connect (() => {
+        //         destroy ();
+        //         notification.reject_follow_request ();
+        //     });
+        // }
     }
 
     private void on_status_removed (int64 id) {

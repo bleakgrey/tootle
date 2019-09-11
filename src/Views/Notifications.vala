@@ -41,17 +41,11 @@ public class Tootle.Views.Notifications : Views.Abstract {
         if (empty != null)
             empty.destroy ();
 
-        var separator = new Separator (Orientation.HORIZONTAL);
-        separator.show ();
-
         var widget = new Widgets.Notification (notification);
-        widget.separator = separator;
-        content.pack_start (separator, false, false, 0);
         content.pack_start (widget, false, false, 0);
 
         if (reverse) {
             content.reorder_child (widget, 0);
-            content.reorder_child (separator, 0);
 
             if (!current) {
                 force_dot = true;
@@ -123,7 +117,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
         	.with_account ()
         	.then_parse_array (node => {
 		        var notification = API.Notification.parse_follow_request (node.get_object ());
-		        append (notification);
+		        //append (notification);
         	})
         	.exec ();
 
@@ -132,7 +126,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
         	.with_param ("limit", "30")
         	.then_parse_array (node => {
 				var notification = API.Notification.parse (node.get_object ());
-				append (notification);
+				//append (notification);
         	})
         	.exec ();
 

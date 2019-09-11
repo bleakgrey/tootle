@@ -5,10 +5,13 @@ public class Tootle.Widgets.RichLabel : Label {
 
     public weak ArrayList<API.Mention>? mentions;
 
+	construct {
+		use_markup = true;
+		activate_link.connect (open_link);
+	}
+
     public RichLabel (string text) {
         set_label (text);
-        set_use_markup (true);
-        activate_link.connect (open_link);
     }
 
     public static string escape_entities (string content) {

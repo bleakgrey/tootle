@@ -76,6 +76,7 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return "user-available-symbolic";
             case REBLOG:
+            case REBLOG_REMOTE_USER:
                 return "media-playlist-repeat-symbolic";
             case FAVORITE:
                 return "emblem-favorite-symbolic";

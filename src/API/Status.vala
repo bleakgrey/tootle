@@ -20,7 +20,7 @@ public class Tootle.API.Status : GLib.Object {
     public bool muted { get; set; default = false; }
     public bool pinned { get; set; default = false; }
     public API.Visibility visibility { get; set; }
-    public API.Status? reblog { get; set; }
+    public API.Status? reblog { get; set; default = null; }
     public ArrayList<API.Mention>? mentions { get; set; }
     public ArrayList<API.Attachment>? attachments { get; set; }
 

@@ -38,10 +38,10 @@ public class Tootle.Notificator : GLib.Object {
 
         try {
             info ("Starting: %s", get_name ());
-            connection = yield network.stream (msg);
-            connection.error.connect (on_error);
-            connection.message.connect (on_message);
-            connection.closed.connect (on_closed);
+            // connection = yield network.stream (msg);
+            // connection.error.connect (on_error);
+            // connection.message.connect (on_message);
+            // connection.closed.connect (on_closed);
             timeout = 2;
         }
         catch (GLib.Error e) {
