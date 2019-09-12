@@ -33,6 +33,8 @@ public class Tootle.Widgets.Status : EventBox {
     [GtkChild]
     protected ToggleButton reblog_button;
     [GtkChild]
+    protected Image reblog_icon;
+    [GtkChild]
     protected ToggleButton favorite_button;
 
     protected string escaped_content {
@@ -61,6 +63,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     construct {
         button_press_event.connect (on_clicked);
+        network.status_removed.connect (on_status_removed);
         notify["kind"].connect (on_kind_changed);
     }
 
@@ -89,22 +92,11 @@ public class Tootle.Widgets.Status : EventBox {
 			return true;
 		});
 
-        // if (status.reblog != null) {
-        //     var image = new Image.from_icon_name("media-playlist-repeat-symbolic", IconSize.BUTTON);
-        //     image.halign = Align.END;
-        //     image.margin_end = 6;
-        //     image.margin_top = 6;
-        //     image.show ();
-
-        //     var label_text = API.NotificationType.REBLOG_REMOTE_USER.get_desc (status.account);
-        //     var label = new Widgets.RichLabel (label_text);
-        //     label.halign = Align.START;
-        //     label.margin_top = 6;
-        //     label.show ();
-
-        //     grid.attach (image, 1, 0, 1, 1);
-        //     grid.attach (label, 2, 0, 2, 1);
-        // }
+        if (status.formal.visibility == API.Visibility.DIRECT) {
+            reblog_icon.icon_name = status.formal.visibility.get_icon ();
+            reblog_button.sensitive = false;
+            reblog_button.tooltip_text = _("This post can't be boosted");
+        }
 
         // if (status.has_spoiler ()) {
         //     revealer.reveal_child = false;
@@ -141,19 +133,18 @@ public class Tootle.Widgets.Status : EventBox {
         //     attachments.pack (status.formal.attachments);
         // else
         //     attachments.destroy ();
-
-        // destroy.connect (() => {
-        //     if (separator != null)
-        //         separator.destroy ();
-        // });
-
-        // network.status_removed.connect (id => {
-        //     if (id == status.id)
-        //         destroy ();
-        // });
-
-        // rebind ();
     }
+
+    ~Status () {
+        button_press_event.disconnect (on_clicked);
+        network.status_removed.disconnect (on_status_removed);
+        notify["kind"].disconnect (on_kind_changed);
+    }
+
+	protected void on_status_removed (int64 id) {
+        if (id == status.id)
+            destroy ();
+	}
 
     protected void on_kind_changed () {
         header_icon.visible = header_label.visible = (kind != null);
@@ -167,14 +158,6 @@ public class Tootle.Widgets.Status : EventBox {
     public void highlight () {
         get_style_context ().add_class ("card");
     }
-
-    // public void rebind () {
-    //     if (formal.visibility == API.Visibility.DIRECT) {
-    //         reblog.sensitive = false;
-    //         reblog.icon.icon_name = formal.visibility.get_icon ();
-    //         reblog.tooltip_text = _("This post can't be boosted");
-    //     }
-    // }
 
     private GLib.DateTime? parse_date_iso8601 (string date) {
         var timeval = GLib.TimeVal ();
