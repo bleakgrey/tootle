@@ -32,7 +32,7 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
         content.pack_start (widget, false, false, 0);
         last_status_was_root = is_root;
 
-        if (status.has_spoiler ())
+        if (status.has_spoiler)
             window.button_reveal.show ();
         if (sensitive_visible)
             reveal_sensitive (widget);

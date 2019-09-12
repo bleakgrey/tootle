@@ -20,13 +20,17 @@ public class Tootle.Widgets.Status : EventBox {
     [GtkChild]
     public Widgets.Avatar avatar;
     [GtkChild]
-    protected Widgets.RichLabel content;
-    [GtkChild]
     protected Widgets.RichLabel handle_label;
     [GtkChild]
     protected Label date_label;
     [GtkChild]
     protected Image pin_indicator;
+    [GtkChild]
+    protected Revealer revealer;
+    [GtkChild]
+    protected Widgets.RichLabel content;
+    [GtkChild]
+    protected Widgets.RichLabel revealer_content;
 
     [GtkChild]
     protected Button reply_button;
@@ -37,9 +41,21 @@ public class Tootle.Widgets.Status : EventBox {
     [GtkChild]
     protected ToggleButton favorite_button;
 
+    protected string escaped_spoiler {
+        owned get {
+            if (status.formal.has_spoiler) {
+                var text = Html.simplify (status.formal.spoiler_text ?? "");
+                text += " <a href='tootle://toggle'>[ Show more ]</a>";
+                return text;
+            }
+            else
+                return Html.simplify (status.formal.content);
+        }
+    }
+    
     protected string escaped_content {
         owned get {
-            return Html.simplify (status.formal.content);
+            return status.formal.has_spoiler ? Html.simplify (status.formal.content) : "";
         }
     }
 
@@ -64,6 +80,7 @@ public class Tootle.Widgets.Status : EventBox {
     construct {
         button_press_event.connect (on_clicked);
         network.status_removed.connect (on_status_removed);
+        content.activate_link.connect (on_toggle_spoiler);
         notify["kind"].connect (on_kind_changed);
     }
 
@@ -73,8 +90,9 @@ public class Tootle.Widgets.Status : EventBox {
             if (status.reblog != null)
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
-        
-        bind_property ("escaped_content", content, "label", BindingFlags.SYNC_CREATE);
+
+        bind_property ("escaped-spoiler", content, "label", BindingFlags.SYNC_CREATE);
+        bind_property ("escaped-content", revealer_content, "label", BindingFlags.SYNC_CREATE);
         status.formal.account.bind_property ("avatar", avatar, "url", BindingFlags.SYNC_CREATE);
 		bind_property ("handle", handle_label, "label", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
@@ -145,6 +163,14 @@ public class Tootle.Widgets.Status : EventBox {
         if (id == status.id)
             destroy ();
 	}
+
+    protected bool on_toggle_spoiler (string uri) {
+        if (uri == "tootle://toggle") {
+            revealer.reveal_child = !revealer.reveal_child;
+            return true;
+        }
+        return false;
+    }
 
     protected void on_kind_changed () {
         header_icon.visible = header_label.visible = (kind != null);

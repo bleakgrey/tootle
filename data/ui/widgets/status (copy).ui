@@ -259,7 +259,11 @@
               </packing>
             </child>
             <child>
-              <object class="TootleWidgetsRichLabel" id="content">
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="TootleWidgetsRichLabel" id="content">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
@@ -269,6 +273,30 @@
             <property name="width_chars">15</property>
             <property name="xalign">0</property>
           </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="spoiler_toggler">
+                    <property name="can_focus">True</property>
+                    <property name="halign">end</property>
+                    <property name="valign">start</property>
+                    <property name="label" translatable="yes">&lt;a href=""&gt;Show more&lt;/a&gt;</property>
+                    <property name="use_markup">True</property>
+                    <property name="single_line_mode">True</property>
+                    <property name="track_visited_links">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">8</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>

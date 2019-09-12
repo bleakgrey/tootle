@@ -43,6 +43,9 @@ public class Tootle.Widgets.RichLabel : Label {
     }
 
     public bool open_link (string url) {
+        if ("tootle://" in url)
+            return false;
+
         if (mentions != null){
             mentions.@foreach (mention => {
                 if (url == mention.url)

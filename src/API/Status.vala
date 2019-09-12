@@ -28,6 +28,12 @@ public class Tootle.API.Status : GLib.Object {
         get { return reblog ?? this; }
     }
 
+	public bool has_spoiler {
+        get {
+            return formal.spoiler_text != null || formal.sensitive;
+        }
+	}
+
     public Status (int64 id) {
         Object (id: id);
     }
@@ -145,10 +151,6 @@ public class Tootle.API.Status : GLib.Object {
 
     public bool is_owned (){
         return formal.account.id == accounts.active.id;
-    }
-
-    public bool has_spoiler () {
-        return formal.spoiler_text != null || formal.sensitive;
     }
 
     public string get_reply_mentions () {
