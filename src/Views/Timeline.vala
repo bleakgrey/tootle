@@ -59,6 +59,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
         }
         
         state = "content";
+        check_resize ();
     }
 
     public override void clear () {

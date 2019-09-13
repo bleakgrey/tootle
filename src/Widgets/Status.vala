@@ -61,8 +61,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     protected string handle {
 		owned get {
-			var name = status.formal.account.display_name ?? status.formal.account.username;
-			return @"<b>$name</b> @$(status.formal.account.acct)";
+			return @"<b>$(status.formal.account.display_name)</b> @$(status.formal.account.acct)";
 		}
 	}
 
@@ -82,15 +81,12 @@ public class Tootle.Widgets.Status : EventBox {
         network.status_removed.connect (on_status_removed);
         content.activate_link.connect (on_toggle_spoiler);
         notify["kind"].connect (on_kind_changed);
-    }
-
-    public Status (API.Status status, API.NotificationType? _kind = null) {
-        Object (status: status, kind: _kind);
+        
         if (kind == null) {
             if (status.reblog != null)
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
-
+        
         bind_property ("escaped-spoiler", content, "label", BindingFlags.SYNC_CREATE);
         bind_property ("escaped-content", revealer_content, "label", BindingFlags.SYNC_CREATE);
         status.formal.account.bind_property ("avatar", avatar, "url", BindingFlags.SYNC_CREATE);
@@ -115,6 +111,10 @@ public class Tootle.Widgets.Status : EventBox {
             reblog_button.sensitive = false;
             reblog_button.tooltip_text = _("This post can't be boosted");
         }
+    }
+
+    public Status (API.Status status, API.NotificationType? _kind = null) {
+        Object (status: status, kind: _kind);
 
         // if (status.has_spoiler ()) {
         //     revealer.reveal_child = false;

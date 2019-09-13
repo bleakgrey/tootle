@@ -6,21 +6,23 @@
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="hscrollbar_policy">never</property>
-    <property name="shadow_type">in</property>
     <child>
       <object class="GtkViewport">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="shadow_type">none</property>
         <child>
-          <object class="GtkGrid" id="view">
+          <object class="GtkBox" id="view">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
             <child>
               <object class="GtkStack" id="states">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
                 <property name="vhomogeneous">False</property>
                 <property name="transition_duration">100</property>
                 <property name="transition_type">crossfade</property>
@@ -50,8 +52,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="opacity">0.50196078431372548</property>
-                        <property name="margin_left">128</property>
-                        <property name="margin_right">128</property>
                         <property name="label">&lt;span size="large"&gt;Nothing to see here&lt;/span&gt;</property>
                         <property name="use_markup">True</property>
                       </object>
@@ -71,7 +71,6 @@
                   <object class="GtkBox" id="content">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <placeholder/>
@@ -85,12 +84,11 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>

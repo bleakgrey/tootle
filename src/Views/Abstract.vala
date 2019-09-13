@@ -10,7 +10,7 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
     public Image? image;
     
     [GtkChild]
-    public Grid view;
+    public Box view;
     [GtkChild]
     public Stack states;
     [GtkChild]

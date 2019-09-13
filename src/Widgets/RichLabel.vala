@@ -7,6 +7,11 @@ public class Tootle.Widgets.RichLabel : Label {
 
 	construct {
 		use_markup = true;
+		xalign = 0;
+        wrap_mode = Pango.WrapMode.WORD_CHAR;
+        justify = Justification.LEFT;
+        single_line_mode = false;
+        set_line_wrap (true);
 		activate_link.connect (open_link);
 	}
 
@@ -31,15 +36,6 @@ public class Tootle.Widgets.RichLabel : Label {
 
     public new void set_label (string text) {
         base.set_markup (Html.simplify(escape_entities (text)));
-    }
-
-    public void wrap_words () {
-        halign = Align.START;
-        single_line_mode = false;
-        set_line_wrap (true);
-        wrap_mode = Pango.WrapMode.WORD_CHAR;
-        justify = Justification.LEFT;
-        xalign = 0;
     }
 
     public bool open_link (string url) {

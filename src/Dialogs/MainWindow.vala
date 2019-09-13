@@ -33,7 +33,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         timeline_stack = new Stack ();
         timeline_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
         timeline_stack.show ();
-        view_stack = new Stack();
+        view_stack = new Stack ();
         view_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
         view_stack.show ();
         view_stack.add_named (timeline_stack, "0");

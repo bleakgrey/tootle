@@ -5,7 +5,15 @@ public class Tootle.API.Account : GLib.Object {
     public int64 id { get; set; }
     public string username { get; set; }
     public string acct { get; set; }
-    public string? display_name { get; set; }
+    public string? _display_name = null;
+    public string display_name {
+        set {
+            this._display_name = value;
+        }
+    	get {
+    		return (_display_name == null || _display_name == "") ? username : _display_name;
+    	}
+    }
     public string note { get; set; }
     public string header { get; set; }
     public string avatar { get; set; }
@@ -13,7 +21,7 @@ public class Tootle.API.Account : GLib.Object {
     public string created_at { get; set; }
     public int64 followers_count { get; set; }
     public int64 following_count { get; set; }
-    public int64 statuses_count { get; set; }
+    public int64 posts_count { get; set; }
     public Relationship? rs { get; set; }
 
     public Account (int64 _id){
@@ -27,8 +35,6 @@ public class Tootle.API.Account : GLib.Object {
         account.username = obj.get_string_member ("username");
         account.acct = obj.get_string_member ("acct");
         account.display_name = obj.get_string_member ("display_name");
-        if (account.display_name == "") // TODO: No. Don't.
-            account.display_name = account.username;
         account.note = obj.get_string_member ("note");
         account.avatar = obj.get_string_member ("avatar");
         account.header = obj.get_string_member ("header");
@@ -37,7 +43,7 @@ public class Tootle.API.Account : GLib.Object {
 
         account.followers_count = obj.get_int_member ("followers_count");
         account.following_count = obj.get_int_member ("following_count");
-        account.statuses_count = obj.get_int_member ("statuses_count");
+        account.posts_count = obj.get_int_member ("statuses_count");
 
         if (obj.has_member ("fields")) {
             obj.get_array_member ("fields").foreach_element ((array, i, node) => {
@@ -65,7 +71,7 @@ public class Tootle.API.Account : GLib.Object {
         builder.set_member_name ("followers_count");
         builder.add_int_value (followers_count);
         builder.set_member_name ("statuses_count");
-        builder.add_int_value (statuses_count);
+        builder.add_int_value (posts_count);
         builder.set_member_name ("display_name");
         builder.add_string_value (display_name);
         builder.set_member_name ("username");
