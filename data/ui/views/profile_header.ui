@@ -17,7 +17,7 @@
         <property name="homogeneous">True</property>
         <child>
           <object class="GtkRadioButton" id="filter_all">
-            <property name="label" translatable="yes">All Posts</property>
+            <property name="label" translatable="yes">Posts</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -32,7 +32,7 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="filter_replies">
-            <property name="label" translatable="yes">Only with Replies</property>
+            <property name="label" translatable="yes">Posts and Replies</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -48,7 +48,8 @@
         </child>
         <child>
           <object class="GtkRadioButton" id="filter_media">
-            <property name="label" translatable="yes">Only Media</property>
+            <property name="label" translatable="yes">Media</property>
+            <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="active">True</property>

@@ -8,6 +8,9 @@ public class Tootle.Views.Profile : Views.Timeline {
     protected Label posts_label;
     protected Label following_label;
     protected Label followers_label;
+    protected RadioButton filter_all;
+    protected RadioButton filter_replies;
+    protected RadioButton filter_media;
 
     construct {
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
@@ -53,6 +56,13 @@ public class Tootle.Views.Profile : Views.Timeline {
 			target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
 			return true;
 		});
+		
+		filter_all = builder.get_object ("filter_all") as RadioButton;
+		filter_all.toggled.connect (on_filter_changed);
+		filter_replies = builder.get_object ("filter_replies") as RadioButton;
+		filter_replies.toggled.connect (on_filter_changed);
+		filter_media = builder.get_object ("filter_media") as RadioButton;
+		filter_media.toggled.connect (on_filter_changed);
     }
 
     public Profile (API.Account acc) {
@@ -67,13 +77,22 @@ public class Tootle.Views.Profile : Views.Timeline {
         return status.is_owned ();
     }
 
+	protected void on_filter_changed () {
+		clear ();
+		request ();
+	}
+
     public override string get_url () {
         if (page_next != null)
             return page_next;
-
-        var url = "%s/api/v1/accounts/%lld/statuses?limit=%i".printf (accounts.active.instance, account.id, this.limit);
-        return url;
+        return @"/api/v1/accounts/$(account.id)/statuses";
     }
+
+	public override Request append_params (Request req) {
+		req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
+		req.with_param ("only_media", filter_media.active.to_string ());
+		return base.append_params (req);
+	}
 
     public override void request () {
         if (account != null)
