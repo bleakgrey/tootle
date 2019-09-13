@@ -9,20 +9,20 @@ public class Tootle.API.Status : GLib.Object {
     public string uri { get; set; }
     public string? url { get; set; }
     public string? spoiler_text { get; set; }
-    public string content { get; set; }
-    public int64 replies_count { get; set; }
-    public int64 reblogs_count { get; set; }
-    public int64 favourites_count { get; set; }
-    public string created_at { get; set; }
+    public string content { get; set; default = ""; }
+    public int64 replies_count { get; set; default = 0; }
+    public int64 reblogs_count { get; set; default = 0; }
+    public int64 favourites_count { get; set; default = 0; }
+    public string created_at { get; set; default = "0"; }
     public bool reblogged { get; set; default = false; }
     public bool favorited { get; set; default = false; }
     public bool sensitive { get; set; default = false; }
     public bool muted { get; set; default = false; }
     public bool pinned { get; set; default = false; }
-    public API.Visibility visibility { get; set; }
+    public API.Visibility visibility { get; set; default = API.Visibility.PUBLIC; }
     public API.Status? reblog { get; set; default = null; }
-    public ArrayList<API.Mention>? mentions { get; set; }
-    public ArrayList<API.Attachment>? attachments { get; set; }
+    public ArrayList<API.Mention>? mentions { get; set; default = null; }
+    public ArrayList<API.Attachment>? attachments { get; set; default = null; }
 
     public Status formal {
         get { return reblog ?? this; }
@@ -37,6 +37,21 @@ public class Tootle.API.Status : GLib.Object {
     public Status (int64 id) {
         Object (id: id);
     }
+
+	public static Status from_account (API.Account account) {
+        var status = new API.Status (-10);
+        status.account = account;
+        status.created_at = account.created_at;
+
+        if (account.note == "")
+            status.content = "";
+        else if ("\n" in account.note)
+            status.content = Html.remove_tags (account.note.split ("\n")[0]);
+        else
+            status.content = Html.remove_tags (account.note);
+
+        return status;
+	}
 
     public static Status parse (Json.Object obj) {
         var id = int64.parse (obj.get_string_member ("id"));

@@ -2,7 +2,7 @@ public class Tootle.Html {
 
     public static string remove_tags (string content) {
         var all_tags = new Regex ("<(.|\n)*?>", RegexCompileFlags.CASELESS);
-        return all_tags.replace (content, -1, 0, "");
+        return GLib.Markup.escape_text (all_tags.replace (content, -1, 0, ""));
     }
 
     public static string simplify (string content) {

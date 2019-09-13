@@ -24,7 +24,7 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return "watchlist";
             default:
-                assert_not_reached ();
+                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
         }
     }
 
@@ -54,19 +54,19 @@ public enum Tootle.API.NotificationType {
             case MENTION:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> mentioned you</span>").printf (account.url, account.display_name);
             case REBLOG:
-                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> boosted your toot</span>").printf (account.url, account.display_name);
+                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> boosted your status</span>").printf (account.url, account.display_name);
             case REBLOG_REMOTE_USER:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> boosted</span>").printf (account.url, account.display_name);
             case FAVORITE:
-                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> favorited your toot</span>").printf (account.url, account.display_name);
+                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> favorited your status</span>").printf (account.url, account.display_name);
             case FOLLOW:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> now follows you</span>").printf (account.url, account.display_name);
             case FOLLOW_REQUEST:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> wants to follow you</span>").printf (account.url, account.display_name);
             case WATCHLIST:
-                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> posted a toot</span>").printf (account.url, account.display_name);
+                return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> posted a status</span>").printf (account.url, account.display_name);
             default:
-                assert_not_reached ();
+                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
         }
     }
 
@@ -84,7 +84,7 @@ public enum Tootle.API.NotificationType {
             case FOLLOW_REQUEST:
                 return "contact-new-symbolic";
             default:
-                assert_not_reached ();
+                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
         }
     }
 

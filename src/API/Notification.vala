@@ -4,8 +4,8 @@ public class Tootle.API.Notification : GLib.Object {
     public NotificationType kind { get; set; }
     public string created_at { get; set; }
 
-    public Status? status { get; set; }
-    public Account? account { get; set; }
+    public Status? status { get; set; default = null; }
+    public Account account { get; set; }
 
     public Notification (int64 id) {
         Object (id: id);

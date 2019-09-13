@@ -33,6 +33,8 @@ public class Tootle.Widgets.Status : EventBox {
     protected Widgets.RichLabel revealer_content;
 
     [GtkChild]
+    protected Box actions;
+    [GtkChild]
     protected Button reply_button;
     [GtkChild]
     protected ToggleButton reblog_button;
@@ -159,7 +161,7 @@ public class Tootle.Widgets.Status : EventBox {
         notify["kind"].disconnect (on_kind_changed);
     }
 
-	protected void on_status_removed (int64 id) {
+	protected virtual void on_status_removed (int64 id) {
         if (id == status.id)
             destroy ();
 	}
@@ -172,7 +174,7 @@ public class Tootle.Widgets.Status : EventBox {
         return false;
     }
 
-    protected void on_kind_changed () {
+    protected virtual void on_kind_changed () {
         header_icon.visible = header_label.visible = (kind != null);
         if (kind == null)
             return;

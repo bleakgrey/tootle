@@ -112,20 +112,20 @@ public class Tootle.Views.Notifications : Views.Abstract {
             return true;
         });
 
-        new Request.GET ("/api/v1/follow_requests")
-        	.with_account ()
-        	.then_parse_array (node => {
-		        var notification = API.Notification.parse_follow_request (node.get_object ());
-		        //append (notification);
-        	})
-        	.exec ();
+        // new Request.GET ("/api/v1/follow_requests")  //TODO: this
+        // 	.with_account ()
+        // 	.then_parse_array (node => {
+		      //   var notification = API.Notification.parse_follow_request (node.get_object ());
+		      //   append (notification);
+        // 	})
+        // 	.exec ();
 
         new Request.GET ("/api/v1/notifications")
         	.with_account ()
         	.with_param ("limit", "30")
         	.then_parse_array (node => {
 				var notification = API.Notification.parse (node.get_object ());
-				//append (notification);
+				append (notification);
         	})
         	.exec ();
 
