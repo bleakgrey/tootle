@@ -1,30 +1,46 @@
 using Gtk;
 
+[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/base.ui")]
 public abstract class Tootle.Views.Abstract : ScrolledWindow {
+
+    public static string STATUS_EMPTY = _("Nothing to see here");
 
     public bool current = false;
     public int stack_pos = -1;
     public Image? image;
-    public Box content;
-    protected Box? empty;
-    protected Grid? header;
     
+    [GtkChild]
+    public Grid view;
+    [GtkChild]
+    public Stack states;
+    [GtkChild]
+    public Box content;
+    [GtkChild]
+    public Label status_message_label;
+    
+    protected Grid? header; //TODO: Remove
+    
+    public string state { get; set; default = "status"; }
+    public string status_message { get; set; default = STATUS_EMPTY; }
     public bool allow_closing { get; set; default = true; }
+    
+    public bool empty {
+        get {
+            return content.get_children ().length () <= 0;
+        }
+    }
 
     construct {
-        content = new Box (Orientation.VERTICAL, 0);
-        content.valign = Align.START;
-        add (content);
-
-        hscrollbar_policy = PolicyType.NEVER;
+        bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
+		bind_property ("status-message", status_message_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		    var label = (string) src;
+			target.set_string (@"<span size='large'>$label</span>");
+			return true;
+		});
         edge_reached.connect (pos => {
             if (pos == PositionType.BOTTOM)
                 on_bottom_reached ();
         });
-    }
-
-    public Abstract () {
-        show_all ();
     }
 
     public virtual string get_icon () {
@@ -37,39 +53,23 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
 
     public virtual void clear (){
         content.forall (widget => {
-            if (widget != header)
-                widget.destroy ();
+            widget.destroy ();
         });
     }
 
     public virtual void on_bottom_reached () {}
     public virtual void on_set_current () {}
 
-    public virtual bool is_empty () {
-        return content.get_children ().length () <= 1;
-    }
-
     public virtual bool empty_state () {
-        if (empty != null)
-            empty.destroy ();
-        if (!is_empty ())
+        if (empty) {
+            status_message = STATUS_EMPTY;
+            state = "status";
             return false;
-
-        empty = new Box (Orientation.VERTICAL, 0);
-        empty.margin = 64;
-        var image = new Image.from_resource ("/com/github/bleakgrey/tootle/empty_state");
-        var text = new Label (_("Nothing to see here"));
-        text.get_style_context ().add_class ("h2");
-        text.opacity = 0.5;
-        empty.hexpand = true;
-        empty.vexpand = true;
-        empty.valign = Align.FILL;
-        empty.pack_start (image, false, false, 0);
-        empty.pack_start (text, false, false, 12);
-        empty.show_all ();
-        content.pack_start (empty, false, false, 0);
-
-        return true;
+        }
+        else {
+            state = "content";
+            return true;
+        }
     }
 
 }

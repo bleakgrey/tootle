@@ -6,6 +6,7 @@
         <file alias="dark.css">dark.css</file>
         <file alias="empty_state">empty_state.png</file>
         <file preprocess="xml-stripblanks">ui/views/new_account.ui</file>
+        <file preprocess="xml-stripblanks">ui/views/base.ui</file>
         <file preprocess="xml-stripblanks">ui/widgets/status.ui</file>
     </gresource>
 </gresources>

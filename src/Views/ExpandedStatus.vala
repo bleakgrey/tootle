@@ -2,13 +2,11 @@ using Gtk;
 
 public class Tootle.Views.ExpandedStatus : Views.Abstract {
 
-    private API.Status root_status;
-    private bool last_status_was_root = false;
+    public API.Status root_status { get; construct set; }
     private bool sensitive_visible = false;
 
     public ExpandedStatus (API.Status status) {
-        base ();
-        root_status = status;
+        Object (root_status: status, state: "content");
         request ();
 
         window.button_reveal.clicked.connect (on_reveal_toggle);
@@ -30,7 +28,6 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
             widget.highlight ();
 
         content.pack_start (widget, false, false, 0);
-        last_status_was_root = is_root;
 
         if (status.has_spoiler)
             window.button_reveal.show ();
@@ -38,7 +35,7 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
             reveal_sensitive (widget);
     }
 
-    public Soup.Message request (){
+    public Soup.Message request () {
         var req = new Request.GET (@"/api/v1/statuses/$(root_status.id)/context")
             .with_account ()
             .then ((sess, msg) => {
@@ -98,7 +95,7 @@ public class Tootle.Views.ExpandedStatus : Views.Abstract {
     }
 
     private void reveal_sensitive (Widgets.Status widget) {
-        // if (widget.status.has_spoiler ())
+        // if (widget.status.has_spoiler)
         //     widget.revealer.reveal_child = sensitive_visible;
     }
 

@@ -47,9 +47,6 @@ public class Tootle.Views.Timeline : Views.Abstract {
     }
 
     public void append (API.Status status, bool first = false) {
-        if (empty != null)
-            empty.destroy ();
-
         var widget = new Widgets.Status (status);
         widget.button_press_event.connect (widget.open);
         if (!is_status_owned (status))
@@ -60,6 +57,8 @@ public class Tootle.Views.Timeline : Views.Abstract {
             var new_index = header == null ? 1 : 0;
             content.reorder_child (widget, new_index);
         }
+        
+        state = "content";
     }
 
     public override void clear () {

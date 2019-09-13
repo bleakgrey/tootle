@@ -7,11 +7,9 @@ public class Tootle.Views.Followers : Views.Timeline {
     }
 
     public new void append (API.Account account) {
-        if (empty != null)
-            empty.destroy ();
-
         var widget = new Widgets.Account (account);
         content.pack_start (widget, false, false, 0);
+        state = "content";
     }
 
     public override string get_url () {

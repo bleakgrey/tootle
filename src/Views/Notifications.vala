@@ -38,9 +38,6 @@ public class Tootle.Views.Notifications : Views.Abstract {
     }
 
     public void append (API.Notification notification, bool reverse = false) {
-        if (empty != null)
-            empty.destroy ();
-
         var widget = new Widgets.Notification (notification);
         content.pack_start (widget, false, false, 0);
 
@@ -60,6 +57,8 @@ public class Tootle.Views.Notifications : Views.Abstract {
             accounts.save ();
             image.icon_name = get_icon ();
         }
+        
+        state = "content";
     }
 
     public override void on_set_current () {

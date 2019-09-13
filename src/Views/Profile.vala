@@ -207,10 +207,6 @@ public class Tootle.Views.Profile : Views.Timeline {
         return btn;
     }
 
-    public override bool is_empty () {
-        return content.get_children ().length () <= 2;
-    }
-
     public override string get_url () {
         if (page_next != null)
             return page_next;
