@@ -1,7 +1,5 @@
 public class Tootle.API.Account : GLib.Object {
 
-    public signal void updated ();
-
     public int64 id { get; set; }
     public string username { get; set; }
     public string acct { get; set; }
@@ -113,7 +111,6 @@ public class Tootle.API.Account : GLib.Object {
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);
-                updated ();
             })
     		.on_error (network.on_error)
     		.exec ();
@@ -126,7 +123,6 @@ public class Tootle.API.Account : GLib.Object {
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);
-                updated ();
             })
     		.on_error (network.on_error)
     		.exec ();
@@ -139,7 +135,6 @@ public class Tootle.API.Account : GLib.Object {
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);
-                updated ();
             })
     		.on_error (network.on_error)
     		.exec ();

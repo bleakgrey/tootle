@@ -51,6 +51,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		
 		actions = builder.get_object ("actions") as Box;
 		follow_button = builder.get_object ("follow_button") as Button;
+		follow_button.clicked.connect (on_follow_button_clicked);
 		options_button = builder.get_object ("options_button") as MenuButton;
 		relationship = builder.get_object ("relationship") as Label;
 		
@@ -94,6 +95,11 @@ public class Tootle.Views.Profile : Views.Timeline {
     public Profile (API.Account acc) {
         Object (account: acc);
     }
+
+	protected void on_follow_button_clicked () {
+		actions.sensitive = false;
+		account.set_following (!account.rs.following);
+	}
 
 	protected void on_rs_updated () {
 		var rs = account.rs;
