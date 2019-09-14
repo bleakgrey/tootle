@@ -113,6 +113,18 @@ public class Tootle.Widgets.Status : EventBox {
             reblog_button.sensitive = false;
             reblog_button.tooltip_text = _("This post can't be boosted");
         }
+        
+        if (status.id <= -10) {
+            actions.destroy ();
+            date_label.destroy ();
+            content.single_line_mode = true;
+            content.lines = 2;
+            content.ellipsize = Pango.EllipsizeMode.END;
+            button_press_event.connect (on_avatar_clicked);
+        }
+        else {
+            button_press_event.connect (open);
+        }
     }
 
     public Status (API.Status status, API.NotificationType? _kind = null) {

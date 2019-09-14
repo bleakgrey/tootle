@@ -182,7 +182,7 @@
                         <property name="hexpand">True</property>
                         <property name="spacing">32</property>
                         <child>
-                          <object class="GtkRadioButton" id="tab_posts">
+                          <object class="GtkRadioButton" id="posts_tab">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -207,12 +207,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="tab_follows">
+                          <object class="GtkRadioButton" id="following_tab">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">tab_posts</property>
+                            <property name="group">posts_tab</property>
                             <child>
                               <object class="GtkLabel" id="following_label">
                                 <property name="visible">True</property>
@@ -232,12 +232,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton" id="tab_followers">
+                          <object class="GtkRadioButton" id="followers_tab">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
-                            <property name="group">tab_posts</property>
+                            <property name="group">posts_tab</property>
                             <child>
                               <object class="GtkLabel" id="followers_label">
                                 <property name="visible">True</property>

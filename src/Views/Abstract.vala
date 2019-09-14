@@ -55,6 +55,7 @@ public abstract class Tootle.Views.Abstract : ScrolledWindow {
         content.forall (widget => {
             widget.destroy ();
         });
+        state = "status";
     }
 
     public virtual void on_bottom_reached () {}

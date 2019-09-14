@@ -66,8 +66,6 @@ executable(
     'src/Views/Direct.vala',
     'src/Views/ExpandedStatus.vala',
     'src/Views/Profile.vala',
-    'src/Views/Followers.vala',
-    'src/Views/Following.vala',
     'src/Views/Favorites.vala',
     'src/Views/Search.vala',
     'src/Views/Hashtag.vala',

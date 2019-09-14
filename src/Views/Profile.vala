@@ -5,12 +5,16 @@ public class Tootle.Views.Profile : Views.Timeline {
 
     public API.Account account { get; construct set; } 
 
-    protected Label posts_label;
-    protected Label following_label;
-    protected Label followers_label;
     protected RadioButton filter_all;
     protected RadioButton filter_replies;
     protected RadioButton filter_media;
+    
+    protected Label posts_label;
+    protected Label following_label;
+    protected Label followers_label;
+    protected RadioButton posts_tab;
+    protected RadioButton following_tab;
+    protected RadioButton followers_tab;
 
     construct {
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
@@ -63,10 +67,17 @@ public class Tootle.Views.Profile : Views.Timeline {
 		filter_replies.toggled.connect (on_filter_changed);
 		filter_media = builder.get_object ("filter_media") as RadioButton;
 		filter_media.toggled.connect (on_filter_changed);
+		
+		posts_tab = builder.get_object ("posts_tab") as RadioButton;
+		posts_tab.toggled.connect (on_filter_changed);
+		following_tab = builder.get_object ("following_tab") as RadioButton;
+		following_tab.toggled.connect (on_filter_changed);
+		followers_tab = builder.get_object ("followers_tab") as RadioButton;
+		followers_tab.toggled.connect (on_filter_changed);
     }
 
     public Profile (API.Account acc) {
-        Object (account: acc, state: "content");
+        Object (account: acc);
         //account.updated.connect (rebind);
 
         account.get_relationship ();
@@ -85,7 +96,13 @@ public class Tootle.Views.Profile : Views.Timeline {
     public override string get_url () {
         if (page_next != null)
             return page_next;
-        return @"/api/v1/accounts/$(account.id)/statuses";
+    
+    	if (following_tab.active)
+    		return @"/api/v1/accounts/$(account.id)/following";
+    	else if (followers_tab.active)
+    		return @"/api/v1/accounts/$(account.id)/followers";
+    	else
+        	return @"/api/v1/accounts/$(account.id)/statuses";
     }
 
 	public override Request append_params (Request req) {
@@ -95,8 +112,31 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
     public override void request () {
-        if (account != null)
-            base.request ();
+        if (accounts.active == null) {
+            empty_state ();
+            return;
+        }
+
+		append_params (new Request.GET (get_url ()))
+		.with_account ()
+		.then_parse_array ((node, msg) => {
+            var obj = node.get_object ();
+            if (obj != null) {
+            	API.Status status;
+            	if (posts_tab.active)
+                	status = API.Status.parse (obj);
+                else {
+                	var account = API.Account.parse (obj);
+                	status = API.Status.from_account (account);
+                }
+                
+                append (status);
+            }
+            get_pages (msg.response_headers.get_one ("Link"));
+            empty_state ();
+        })
+		.on_error (network.on_error)
+		.exec ();
     }
 
     public static void open_from_id (int64 id){
