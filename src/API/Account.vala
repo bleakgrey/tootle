@@ -22,7 +22,7 @@ public class Tootle.API.Account : GLib.Object {
     public int64 followers_count { get; set; }
     public int64 following_count { get; set; }
     public int64 posts_count { get; set; }
-    public Relationship? rs { get; set; }
+    public Relationship? rs { get; set; default = null; }
 
     public Account (int64 _id){
         Object (id: _id);
@@ -100,9 +100,7 @@ public class Tootle.API.Account : GLib.Object {
     		.with_account ()
     		.with_param ("id", id.to_string ())
     		.then_parse_array (node => {
-                var obj = node.get_object ();
-                this.rs = Relationship.parse (obj);
-                updated ();
+                rs = Relationship.parse (node.get_object ());
     		})
     		.on_error (network.on_error)
     		.exec ();

@@ -9,6 +9,11 @@ public class Tootle.Views.Profile : Views.Timeline {
     protected RadioButton filter_replies;
     protected RadioButton filter_media;
     
+    protected Label relationship;
+    protected Box actions;
+    protected Button follow_button;
+    protected MenuButton options_button;
+    
     protected Label posts_label;
     protected Label following_label;
     protected Label followers_label;
@@ -17,6 +22,8 @@ public class Tootle.Views.Profile : Views.Timeline {
     protected RadioButton followers_tab;
 
     construct {
+    	account.notify["rs"].connect (on_rs_updated);
+    
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
 		view.pack_start (builder.get_object ("grid") as Grid, false, false, 0);
 		
@@ -41,6 +48,11 @@ public class Tootle.Views.Profile : Views.Timeline {
 			target.set_string (Html.simplify ((string) src));
 			return true;
 		});
+		
+		actions = builder.get_object ("actions") as Box;
+		follow_button = builder.get_object ("follow_button") as Button;
+		options_button = builder.get_object ("options_button") as MenuButton;
+		relationship = builder.get_object ("relationship") as Label;
 		
 		posts_label = builder.get_object ("posts_label") as Label;
 		account.bind_property ("posts_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
@@ -74,15 +86,46 @@ public class Tootle.Views.Profile : Views.Timeline {
 		following_tab.toggled.connect (on_refresh);
 		followers_tab = builder.get_object ("followers_tab") as RadioButton;
 		followers_tab.toggled.connect (on_refresh);
+		
+		account.get_relationship ();
+		request ();
     }
 
     public Profile (API.Account acc) {
         Object (account: acc);
-        //account.updated.connect (rebind);
-
-        account.get_relationship ();
-        request ();
     }
+
+	protected void on_rs_updated () {
+		var rs = account.rs;
+		var label = "";
+		if (actions.sensitive = rs != null) {
+			if (rs.requested)
+				label = _("Sent follow request");
+			else if (rs.followed_by && rs.following)
+				label = _("Mutually follows you");
+			else if (rs.followed_by)
+				label = _("Follows you");
+
+			foreach (Widget w in new Widget[] { follow_button, options_button }) {
+				var ctx = w.get_style_context ();
+				ctx.remove_class (STYLE_CLASS_SUGGESTED_ACTION);
+				ctx.remove_class (STYLE_CLASS_DESTRUCTIVE_ACTION);
+				ctx.add_class (rs.following ? STYLE_CLASS_DESTRUCTIVE_ACTION : STYLE_CLASS_SUGGESTED_ACTION);
+			}
+
+			var label2 = "";
+			if (rs.followed_by && !rs.following)
+				label2 = _("Follow back");
+			else if (rs.following)
+				label2 = _("Unfollow");
+			else
+				label2 = _("Follow");
+
+			follow_button.label = label2;
+		}
+
+		relationship.label = label;
+	}
 
     public override bool is_status_owned (API.Status status) {
         return status.is_owned ();
