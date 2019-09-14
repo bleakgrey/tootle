@@ -199,14 +199,6 @@ public class Tootle.Widgets.Status : EventBox {
         get_style_context ().add_class ("card");
     }
 
-    private GLib.DateTime? parse_date_iso8601 (string date) {
-        var timeval = GLib.TimeVal ();
-        if (timeval.from_iso8601 (date))
-            return new GLib.DateTime.from_timeval_local (timeval);
-
-        return null;
-    }
-
     public bool on_avatar_clicked (EventButton ev) {
         if (ev.button == 1) {
             var view = new Views.Profile (status.formal.account);

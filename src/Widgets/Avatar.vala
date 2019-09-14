@@ -17,6 +17,7 @@ public class Tootle.Widgets.Avatar : EventBox {
 
 	public Avatar (int size = this.size) {
 		Object (size: size);
+		on_redraw ();
 	}
 	
 	~Avatar () {

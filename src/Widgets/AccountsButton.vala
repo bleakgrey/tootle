@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Widgets.AccountsButton : MenuButton {
+public class Tootle.Widgets.AccountsButton : MenuButton, IAccountListener {
 
     private Widgets.Avatar avatar;
     private Grid grid;
@@ -51,7 +51,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
 
     }
 
-    construct{
+    construct {
         avatar = new Widgets.Avatar (24);
         list = new ListBox ();
 
@@ -105,8 +105,7 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         add (avatar);
         show_all ();
 
-        //accounts.updated.connect (accounts_updated); //TODO: IMPLEMENT
-        accounts.notify["active"].connect (() => on_account_switched (accounts.active));
+        connect_account_service ();
         list.row_activated.connect (row => {
             var widget = row as AccountItemView;
             if (widget.id == -1) {
@@ -122,27 +121,28 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         });
     }
 
-    private void accounts_updated (GenericArray<InstanceAccount> accounts) {
-        list.forall (widget => widget.destroy ());
-        int i = -1;
-        accounts.foreach (account => {
-            i++;
-            var widget = new AccountItemView ();
-            widget.id = i;
-            widget.display_name.label = "<b>@"+account.username+"</b>";
-            widget.instance.label = account.short_instance;
-            list.add (widget);
-        });
+    public virtual void on_available_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {
+    // private void accounts_updated (GenericArray<InstanceAccount> accounts) {
+    //     list.forall (widget => widget.destroy ());
+    //     int i = -1;
+    //     accounts.foreach (account => {
+    //         i++;
+    //         var widget = new AccountItemView ();
+    //         widget.id = i;
+    //         widget.display_name.label = "<b>@"+account.username+"</b>";
+    //         widget.instance.label = account.short_instance;
+    //         list.add (widget);
+    //     });
 
-        var add_account = new AccountItemView ();
-        add_account.display_name.label = _("<b>New Account</b>");
-        add_account.instance.label = _("Click to add");
-        add_account.button.hide ();
-        list.add (add_account);
-        update_selection ();
+    //     var add_account = new AccountItemView ();
+    //     add_account.display_name.label = _("<b>New Account</b>");
+    //     add_account.instance.label = _("Click to add");
+    //     add_account.button.hide ();
+    //     list.add (add_account);
+    //     update_selection ();
     }
 
-    private void on_account_switched (API.Account? account) {
+    public virtual void on_account_changed (InstanceAccount? account) {
         if (account == null)
             avatar.url = null;
         else
@@ -154,10 +154,6 @@ public class Tootle.Widgets.AccountsButton : MenuButton {
         var row = list.get_row_at_index (id);
         if (row != null)
             list.select_row (row);
-    }
-
-    public AccountsButton () {
-        on_account_switched (accounts.active);
     }
 
 }

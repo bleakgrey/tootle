@@ -24,11 +24,12 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return "watchlist";
             default:
-                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
+                warning (@"Unknown notification type: $this");
+                return "";
         }
     }
 
-    public static NotificationType? from_string (string str) throws Oopsie {
+    public static NotificationType from_string (string str) throws Oopsie {
         switch (str) {
             case "mention":
                 return MENTION;
@@ -45,7 +46,7 @@ public enum Tootle.API.NotificationType {
             case "watchlist":
                 return WATCHLIST;
             default:
-                throw new Oopsie.INSTANCE ("Unknown notification type: %s", str);
+                throw new Oopsie.INSTANCE (@"Unknown notification type: $str");
         }
     }
 
@@ -66,7 +67,8 @@ public enum Tootle.API.NotificationType {
             case WATCHLIST:
                 return _("<span underline=\"none\"><a href=\"%s\"><b>%s</b></a> posted a status</span>").printf (account.url, account.display_name);
             default:
-                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
+                warning (@"Unknown notification type: $this");
+                return "";
         }
     }
 
@@ -84,7 +86,8 @@ public enum Tootle.API.NotificationType {
             case FOLLOW_REQUEST:
                 return "contact-new-symbolic";
             default:
-                throw new Oopsie.INSTANCE ("Unknown notification type: %s", this.to_string ());
+                warning (@"Unknown notification type: $this");
+                return "";
         }
     }
 

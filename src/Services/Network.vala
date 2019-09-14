@@ -11,8 +11,8 @@ public class Tootle.Network : GLib.Object {
     public signal void status_removed (int64 id);
 
 	public delegate void ErrorCallback (int32 code, string reason);
-	public delegate void SuccessCallback (Session session, Message msg) throws GLib.Error;
-	public delegate void NodeCallback (Json.Node node, Message msg);
+	public delegate void SuccessCallback (Session session, Message msg) throws Error;
+	public delegate void NodeCallback (Json.Node node, Message msg) throws Error;
 
     private int requests_processing = 0;
     public Soup.Session session;
@@ -94,23 +94,6 @@ public class Tootle.Network : GLib.Object {
         var parser = new Json.Parser ();
         parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
         return parser.get_root ().get_object ();
-    }
-
-    //TODO: Cache
-    public void load_avatar (string url, Granite.Widgets.Avatar avatar, int size){
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
-                avatar.show_default (size);
-                return;
-            }
-
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream_at_scale (stream, size, size, true);
-
-            avatar.pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR);
-        });
     }
 
     //TODO: Cache

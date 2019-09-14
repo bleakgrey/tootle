@@ -29,6 +29,7 @@ executable(
     'src/Services/Notificator.vala',
     'src/Services/Settings.vala',
     'src/Services/Accounts.vala',
+    'src/Services/IAccountListener.vala',
     'src/Services/Cache.vala',
     'src/Services/Network.vala',
     'src/Services/Watchlist.vala',

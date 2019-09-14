@@ -62,18 +62,18 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		
 		filter_all = builder.get_object ("filter_all") as RadioButton;
-		filter_all.toggled.connect (on_filter_changed);
+		filter_all.toggled.connect (on_refresh);
 		filter_replies = builder.get_object ("filter_replies") as RadioButton;
-		filter_replies.toggled.connect (on_filter_changed);
+		filter_replies.toggled.connect (on_refresh);
 		filter_media = builder.get_object ("filter_media") as RadioButton;
-		filter_media.toggled.connect (on_filter_changed);
+		filter_media.toggled.connect (on_refresh);
 		
 		posts_tab = builder.get_object ("posts_tab") as RadioButton;
-		posts_tab.toggled.connect (on_filter_changed);
+		posts_tab.toggled.connect (on_refresh);
 		following_tab = builder.get_object ("following_tab") as RadioButton;
-		following_tab.toggled.connect (on_filter_changed);
+		following_tab.toggled.connect (on_refresh);
 		followers_tab = builder.get_object ("followers_tab") as RadioButton;
-		followers_tab.toggled.connect (on_filter_changed);
+		followers_tab.toggled.connect (on_refresh);
     }
 
     public Profile (API.Account acc) {
@@ -87,11 +87,6 @@ public class Tootle.Views.Profile : Views.Timeline {
     public override bool is_status_owned (API.Status status) {
         return status.is_owned ();
     }
-
-	protected void on_filter_changed () {
-		clear ();
-		request ();
-	}
 
     public override string get_url () {
         if (page_next != null)

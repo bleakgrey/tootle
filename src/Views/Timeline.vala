@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Timeline : Views.Abstract {
+public class Tootle.Views.Timeline : Views.Abstract, IAccountListener {
 
     protected string timeline;
     protected int limit = 25;
@@ -15,15 +15,15 @@ public class Tootle.Views.Timeline : Views.Abstract {
         base ();
         this.timeline = timeline;
 
-        accounts.notify["active"].connect (() => on_account_changed (accounts.active));
+        connect_account_service ();
         app.refresh.connect (on_refresh);
-        destroy.connect (() => {
-            if (notificator != null)
-                notificator.close ();
-        });
 
         setup_notificator ();
         request ();
+    }
+    ~Timeline () {
+        if (notificator != null)
+            notificator.close ();
     }
 
     public override string get_icon () {
@@ -39,6 +39,10 @@ public class Tootle.Views.Timeline : Views.Abstract {
     }
 
     public virtual bool is_status_owned (API.Status status) {
+        return false;
+    }
+
+    protected virtual bool is_public () {
         return false;
     }
 
@@ -164,10 +168,6 @@ public class Tootle.Views.Timeline : Views.Abstract {
         notificator.start ();
     }
 
-    protected virtual bool is_public () {
-        return false;
-    }
-
     protected virtual bool can_stream () {
         var allowed_public = true;
         if (is_public ())
@@ -178,7 +178,7 @@ public class Tootle.Views.Timeline : Views.Abstract {
 
     protected override void on_bottom_reached () {
         if (is_last_page) {
-            debug ("Last page reached");
+            info ("Last page reached");
             return;
         }
         request ();

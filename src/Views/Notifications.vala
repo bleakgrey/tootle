@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Notifications : Views.Abstract {
+public class Tootle.Views.Notifications : Views.Abstract, IAccountListener {
 
     private int64 last_id = 0;
     private bool force_dot = false;
@@ -9,7 +9,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
     public Notifications () {
         base ();
         content.remove.connect (on_remove);
-        accounts.notify["active"].connect (() => on_account_changed (accounts.active));
+        connect_account_service ();
         app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
 
@@ -59,6 +59,7 @@ public class Tootle.Views.Notifications : Views.Abstract {
         }
         
         state = "content";
+        check_resize ();
     }
 
     public override void on_set_current () {
