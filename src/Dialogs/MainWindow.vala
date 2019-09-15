@@ -106,7 +106,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
     public MainWindow (Gtk.Application _app) {
         application = _app;
-        icon_name = "com.github.bleakgrey.tootle";
+        icon_name = Build.DOMAIN;
         resizable = true;
         window_position = WindowPosition.CENTER;
         update_header ();
@@ -186,12 +186,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     }
 
     private void update_theme () {
-        var provider = new Gtk.CssProvider ();
-        var is_dark = settings.dark_theme;
-        var theme = is_dark ? "dark" : "light";
-        provider.load_from_resource (@"$(Build.RESOURCES)%s.css".printf (theme));
-        StyleContext.add_provider_for_screen (Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = is_dark;
+        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = settings.dark_theme;
     }
 
     private void update_header () {

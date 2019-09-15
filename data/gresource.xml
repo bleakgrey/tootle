@@ -2,8 +2,6 @@
 <gresources>
     <gresource prefix="/com/github/bleakgrey/tootle/">
         <file alias="app.css">app.css</file>
-        <file alias="light.css">light.css</file>
-        <file alias="dark.css">dark.css</file>
         <file alias="empty_state">empty_state.png</file>
         <file preprocess="xml-stripblanks">ui/views/new_account.ui</file>
         <file preprocess="xml-stripblanks">ui/views/base.ui</file>

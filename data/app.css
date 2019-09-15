@@ -3,23 +3,6 @@
 }
 
 .attachment {
-	border-radius: 4;
+	border-radius: 4px;
 	background: rgba (150, 150, 150, 0.5);
-}
-
-.toot-text, .toot-text text{
-    background-color: transparent;
-}
-
-.header{
-    background-size: cover;
-    background-position: 50%;
-    opacity: 0.15;
-}
-
-.relationship {
-    background: rgba (0,0,0,.5);
-    padding: 6px;
-    border-radius: 3px;
-    color: #fff;
 }
