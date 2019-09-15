@@ -21,6 +21,7 @@ public class Tootle.Cache : GLib.Object {
     public struct Reference {
         public string key;
         public weak Pixbuf item;
+        public bool loading;
     }
 
     public void unload (Reference? item) {
@@ -42,7 +43,8 @@ public class Tootle.Cache : GLib.Object {
             //info (@"> LOAD $key");
             cb (Reference () {
                 item = item,
-                key = key
+                key = key,
+                loading = false
             });
             return;
         }
@@ -62,7 +64,8 @@ public class Tootle.Cache : GLib.Object {
                 store (key, pixbuf);
                 cb (Reference () {
                     item = items[key],
-                    key = key
+                    key = key,
+                    loading = false
                 });
 
                 message.disconnect (id);
@@ -75,6 +78,12 @@ public class Tootle.Cache : GLib.Object {
                 cb (null);
             });
 
+            cb (Reference () {
+                item = null,
+                key = key,
+                loading = true
+            });
+
             items_in_progress.insert (key, message);
         }
         else {
@@ -83,7 +92,8 @@ public class Tootle.Cache : GLib.Object {
             id = message.finished.connect_after (() => {
                 cb (Reference () {
                     item = items[key],
-                    key = key
+                    key = key,
+                    loading = false
                 });
                 message.disconnect (id);
             });

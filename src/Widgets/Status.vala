@@ -132,11 +132,8 @@ public class Tootle.Widgets.Status : EventBox {
             button_press_event.connect (open);
         }
         
-        if (status.attachments == null || status.id <= -10) {
+        if (!attachments.populate (status.formal.attachments) || status.id <= -10) {
             attachments.destroy ();
-        }
-        else {
-            // TODO: Populate attachments
         }
     }
 

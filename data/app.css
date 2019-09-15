@@ -1,10 +1,10 @@
 .avatar {
-	border-radius: 8px;
+	border-radius: 4px;
 }
 
 .attachment {
-	border-radius: 8px;
-	background: black;
+	border-radius: 4;
+	background: rgba (150, 150, 150, 0.5);
 }
 
 .toot-text, .toot-text text{

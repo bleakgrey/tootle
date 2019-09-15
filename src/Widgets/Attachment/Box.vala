@@ -8,6 +8,8 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
 
 	construct {
 	    hexpand = true;
+	    can_focus = false;
+	    selection_mode = SelectionMode.NONE;
 	}
 
 	public Box (bool editing = false) {
@@ -42,6 +44,21 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
             }
         }
         chooser.close ();
+    }
+
+    public bool populate (ArrayList<API.Attachment>? list) {
+        if (list == null)
+            return false;
+        
+        //max_children_per_line = (int)Math.fmin (list.size, 5);
+        list.@foreach (obj => pack (obj));
+        return true;
+    }
+
+    public bool pack (API.Attachment obj) {
+        var w = new Widgets.Attachment.Item (obj);
+        insert (w, -1);
+        return true;
     }
 
 }

@@ -130,7 +130,7 @@
               </object>
               <packing>
                 <property name="left_attach">1</property>
-                <property name="top_attach">5</property>
+                <property name="top_attach">4</property>
                 <property name="width">3</property>
               </packing>
             </child>
@@ -201,7 +201,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">8</property>
                     <child>
                       <object class="TootleWidgetsRichLabel" id="revealer_content">
                         <property name="visible">True</property>
@@ -222,6 +221,7 @@
                     <child>
                       <object class="TootleWidgetsAttachmentBox" id="attachments">
                         <property name="visible">True</property>
+                        <property name="margin_top">8</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -251,7 +251,7 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="height">5</property>
+                <property name="height">4</property>
               </packing>
             </child>
             <child>
@@ -282,15 +282,6 @@
                 <property name="top_attach">2</property>
                 <property name="width">3</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>

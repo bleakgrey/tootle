@@ -76,7 +76,8 @@ executable(
         dependency('gee-0.8', version: '>=0.8.5'),
         dependency('granite', version: '>=5.2.0'),
         dependency('json-glib-1.0'),
-        dependency('libsoup-2.4')
+        dependency('libsoup-2.4'),
+        meson.get_compiler('c').find_library('m', required: true), #Required by GLib.Math
     ],
     install: true
 )
