@@ -2,6 +2,11 @@
 	border-radius: 8px;
 }
 
+.attachment {
+	border-radius: 8px;
+	background: black;
+}
+
 .toot-text, .toot-text text{
     background-color: transparent;
 }

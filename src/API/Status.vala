@@ -107,7 +107,7 @@ public class Tootle.API.Status : GLib.Object {
             if (entity != null) {
                 if (status.attachments == null)
                     status.attachments = new ArrayList<API.Attachment> ();
-                status.attachments.add (API.Attachment.parse (entity));
+                status.attachments.add (new API.Attachment.parse (entity));
             }
         });
 

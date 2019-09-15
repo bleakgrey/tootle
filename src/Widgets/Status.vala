@@ -31,6 +31,8 @@ public class Tootle.Widgets.Status : EventBox {
     protected Widgets.RichLabel content;
     [GtkChild]
     protected Widgets.RichLabel revealer_content;
+    [GtkChild]
+    protected Widgets.Attachment.Box attachments;
 
     [GtkChild]
     protected Box actions;
@@ -47,7 +49,8 @@ public class Tootle.Widgets.Status : EventBox {
         owned get {
             if (status.formal.has_spoiler) {
                 var text = Html.simplify (status.formal.spoiler_text ?? "");
-                text += " <a href='tootle://toggle'>[ Show more ]</a>";
+                var label = _("[ Show more ]");
+                text += @" <a href='tootle://toggle'>$label</a>";
                 return text;
             }
             else
@@ -108,6 +111,9 @@ public class Tootle.Widgets.Status : EventBox {
 			return true;
 		});
 
+        status.formal.bind_property ("has_spoiler", revealer_content, "visible", BindingFlags.SYNC_CREATE);
+        revealer.reveal_child = !status.formal.has_spoiler;
+
         if (status.formal.visibility == API.Visibility.DIRECT) {
             reblog_icon.icon_name = status.formal.visibility.get_icon ();
             reblog_button.sensitive = false;
@@ -125,46 +131,17 @@ public class Tootle.Widgets.Status : EventBox {
         else {
             button_press_event.connect (open);
         }
+        
+        if (status.attachments == null || status.id <= -10) {
+            attachments.destroy ();
+        }
+        else {
+            // TODO: Populate attachments
+        }
     }
 
     public Status (API.Status status, API.NotificationType? _kind = null) {
         Object (status: status, kind: _kind);
-
-        // if (status.has_spoiler ()) {
-        //     revealer.reveal_child = false;
-        //     var spoiler_box = new Box (Orientation.HORIZONTAL, 6);
-        //     spoiler_box.margin_end = 12;
-
-        //     var spoiler_button_text = _("Toggle content");
-        //     if (status.sensitive && status.attachments != null) {
-        //         spoiler_button = new Button.from_icon_name ("mail-attachment-symbolic", IconSize.BUTTON);
-        //         spoiler_button.label = spoiler_button_text;
-        //         spoiler_button.always_show_image = true;
-        //         content_label.margin_top = 6;
-        //     }
-        //     else {
-        //         spoiler_button = new Button.with_label (spoiler_button_text);
-        //     }
-        //     spoiler_button.hexpand = true;
-        //     spoiler_button.halign = Align.END;
-        //     spoiler_button.clicked.connect (() => revealer.set_reveal_child (!revealer.child_revealed));
-
-        //     var spoiler_text = _("[ This post contains sensitive content ]");
-        //     if (status.spoiler_text != null)
-        //         spoiler_text = status.spoiler_text;
-        //     content_spoiler = new Widgets.RichLabel (spoiler_text);
-        //     content_spoiler.wrap_words ();
-
-        //     spoiler_box.add (content_spoiler);
-        //     spoiler_box.add (spoiler_button);
-        //     spoiler_box.show_all ();
-        //     grid.attach (spoiler_box, 2, 3, 1, 1);
-        // }
-
-        // if (!is_notification && status.formal.attachments != null)
-        //     attachments.pack (status.formal.attachments);
-        // else
-        //     attachments.destroy ();
     }
 
     ~Status () {

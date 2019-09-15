@@ -142,11 +142,11 @@
                 <property name="spacing">8</property>
                 <child>
                   <object class="TootleWidgetsRichLabel" id="handle_label">
-                <property name="visible">True</property>
-                <property name="label">Handle</property>
-                <property name="ellipsize">end</property>
-                <property name="xalign">0</property>
-              </object>
+                    <property name="visible">True</property>
+                    <property name="label">Handle</property>
+                    <property name="ellipsize">end</property>
+                    <property name="xalign">0</property>
+                  </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
@@ -195,6 +195,7 @@
               <object class="GtkRevealer" id="revealer">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="reveal_child">True</property>
                 <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
@@ -219,7 +220,14 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="TootleWidgetsAttachmentBox" id="attachments">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </object>
                 </child>
@@ -232,14 +240,14 @@
             </child>
             <child>
               <object class="TootleWidgetsAvatar" id="avatar">
-            <property name="width_request">48</property>
-            <property name="height_request">48</property>
-            <property name="valign">start</property>
-            <property name="visible">true</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
+                <property name="width_request">48</property>
+                <property name="height_request">48</property>
+                <property name="valign">start</property>
+                <property name="visible">true</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
@@ -260,15 +268,15 @@
             </child>
             <child>
               <object class="TootleWidgetsRichLabel" id="content">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</property>
-            <property name="wrap">True</property>
-            <property name="wrap_mode">word-char</property>
-            <property name="width_chars">15</property>
-            <property name="xalign">0</property>
-          </object>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="label">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</property>
+                <property name="wrap">True</property>
+                <property name="wrap_mode">word-char</property>
+                <property name="width_chars">15</property>
+                <property name="xalign">0</property>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
