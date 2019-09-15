@@ -54,7 +54,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         button_toot = new Button ();
         button_toot.valign = Align.CENTER;
         button_toot.image = new Image.from_icon_name ("document-edit-symbolic", IconSize.LARGE_TOOLBAR);
-        button_toot.clicked.connect (() => Dialogs.Compose.open ());
+        button_toot.clicked.connect (() => new Dialogs.Compose ());
         Desktop.set_hotkey_tooltip (button_toot, _("Toot"), app.ACCEL_NEW_POST);
 
         button_reveal = new Button ();

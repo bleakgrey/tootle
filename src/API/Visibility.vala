@@ -59,9 +59,9 @@ public enum Tootle.API.Visibility {
     public string get_icon () {
         switch (this) {
             case UNLISTED:
-                return "view-private-symbolic";
+                return "changes-allow-symbolic";
             case PRIVATE:
-                return "security-medium-symbolic";
+                return "changes-prevent-symbolic";
             case DIRECT:
                 return "user-available-symbolic";
             default:

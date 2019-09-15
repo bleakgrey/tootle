@@ -9,5 +9,6 @@
         <file preprocess="xml-stripblanks">ui/views/base.ui</file>
         <file preprocess="xml-stripblanks">ui/views/profile_header.ui</file>
         <file preprocess="xml-stripblanks">ui/widgets/status.ui</file>
+        <file preprocess="xml-stripblanks">ui/dialogs/compose.ui</file>
     </gresource>
 </gresources>

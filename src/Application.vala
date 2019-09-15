@@ -134,7 +134,7 @@ namespace Tootle {
         }
 
         private void compose_toot_activated () {
-            Dialogs.Compose.open ();
+            new Dialogs.Compose ();
         }
 
         private void back_activated () {

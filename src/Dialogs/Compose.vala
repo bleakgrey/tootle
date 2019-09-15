@@ -1,249 +1,136 @@
 using Gtk;
 
-public class Tootle.Dialogs.Compose : Dialog {
+[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/compose.ui")]
+public class Tootle.Dialogs.Compose : Window {
 
-    private static Compose dialog;
+    public API.Status? status { get; construct set; }
+    public string style_class { get; construct set; }
+    public string label { get; construct set; }
+    public int char_limit {
+        get {
+            return 250;
+        }
+    }
 
-    protected TextView text;
-    private ScrolledWindow scroll;
-    private Label counter;
-    private Widgets.ImageToggleButton spoiler;
-    private MenuButton visibility;
-    private Button attach;
-    private Button cancel;
-    private Button publish;
-    protected Widgets.AttachmentGrid attachments;
-    private Revealer spoiler_revealer;
-    private Entry spoiler_text;
+    [GtkChild]
+    protected Box box;
+    
+    [GtkChild]
+    protected Revealer cw_revealer;
+    [GtkChild]
+    protected ToggleButton cw_button;
+    [GtkChild]
+    protected Entry cw;
+    [GtkChild]
+    protected Label counter;
+    
+    [GtkChild]
+    protected MenuButton visibility_button;
+    [GtkChild]
+    protected Image visibility_icon;
+    protected Widgets.VisibilityPopover visibility_popover;
+    [GtkChild]
+    protected Button post_button;
+    
+    [GtkChild]
+    protected TextView content;
 
-    protected API.Status? replying_to;
-    protected API.Status? redrafting;
-    protected API.Visibility visibility_opt = API.Visibility.PUBLIC;
-    protected int char_limit;
-
-    public Compose (API.Status? _replying_to = null, API.Status? _redrafting = null) {
-        border_width = 6;
-        deletable = false;
-        resizable = true;
-        title = _("Toot");
+    construct {
         transient_for = window;
-        char_limit = settings.char_limit;
-        replying_to = _replying_to;
-        redrafting = _redrafting;
-
-        if (replying_to != null)
-            visibility_opt = replying_to.visibility;
-        if (redrafting != null)
-            visibility_opt = redrafting.visibility;
-
-        var actions = get_action_area ().get_parent () as Box;
-        var content = get_content_area ();
-        get_action_area ().hexpand = false;
-
-        visibility = get_visibility_btn ();
-        visibility.tooltip_text = _("Post Visibility");
-        visibility.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        visibility.get_style_context ().remove_class ("image-button");
-        visibility.can_default = false;
-        (visibility as Widget).set_focus_on_click (false);
-
-        attach = new Button.from_icon_name ("mail-attachment-symbolic");
-        attach.tooltip_text = _("Add Media");
-        attach.valign = Align.CENTER;
-        attach.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        attach.get_style_context ().remove_class ("image-button");
-        attach.can_default = false;
-        (attach as Widget).set_focus_on_click (false);
-        attach.clicked.connect (() => attachments.select ());
-
-        spoiler = new Widgets.ImageToggleButton ("image-red-eye-symbolic");
-        spoiler.tooltip_text = _("Spoiler Warning");
-        spoiler.set_action ();
-        spoiler.toggled.connect (() => {
-            spoiler_revealer.reveal_child = spoiler.active;
-            validate ();
-        });
-
-        cancel = add_button (_("Cancel"), 5) as Button;
-        cancel.clicked.connect(() => destroy ());
-
-        if (redrafting != null) {
-            publish = add_button (_("Redraft"), 5) as Button;
-            publish.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
-            publish.clicked.connect (redraft_post);
+        
+        post_button.label = label;
+		foreach (Widget w in new Widget[] { visibility_button, post_button })
+			w.get_style_context ().add_class (style_class);
+        
+        visibility_popover = new Widgets.VisibilityPopover.with_button (visibility_button);
+        visibility_popover.bind_property ("selected", visibility_icon, "icon-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+			target.set_string (((API.Visibility)src).get_icon ());
+			return true;
+		});
+        
+        cw_button.bind_property ("active", cw_revealer, "reveal_child", BindingFlags.SYNC_CREATE);
+        
+        cw_button.toggled.connect (validate);
+        cw.buffer.deleted_text.connect (() => validate ());
+        cw.buffer.inserted_text.connect (() => validate ());
+        content.buffer.changed.connect (validate);
+        post_button.clicked.connect (try_publish);
+        
+        if (status.spoiler_text != null) {
+            cw.text = status.spoiler_text;
+            cw_button.active = true;
         }
-        else {
-            publish = add_button (_("Toot!"), 5) as Button;
-            publish.get_style_context ().add_class (Gtk.STYLE_CLASS_SUGGESTED_ACTION);
-            publish.clicked.connect (publish_post);
-        }
-
-        spoiler_text = new Entry ();
-        spoiler_text.margin_start = 6;
-        spoiler_text.margin_end = 6;
-        spoiler_text.placeholder_text = _("Write your warning here");
-        spoiler_text.changed.connect (validate);
-
-        spoiler_revealer = new Revealer ();
-        spoiler_revealer.add (spoiler_text);
-
-        text = new TextView ();
-        text.get_style_context ().add_class ("toot-text");
-        text.wrap_mode = WrapMode.WORD;
-        text.accepts_tab = false;
-        text.vexpand = true;
-        text.buffer.changed.connect (validate);
-
-        scroll = new ScrolledWindow (null, null);
-        scroll.hscrollbar_policy = PolicyType.NEVER;
-        scroll.min_content_height = 120;
-        scroll.vexpand = true;
-        scroll.propagate_natural_height = true;
-        scroll.margin_start = 6;
-        scroll.margin_end = 6;
-        scroll.add (text);
-        scroll.show_all ();
-
-        attachments = new Widgets.AttachmentGrid (true);
-        counter = new Label ("");
-
-        actions.pack_start (counter, false, false, 6);
-        actions.pack_end (spoiler, false, false, 6);
-        actions.pack_end (visibility, false, false, 0);
-        actions.pack_end (attach, false, false, 6);
-        content.pack_start (spoiler_revealer, false, false, 6);
-        content.pack_start (scroll, false, false, 6);
-        content.pack_start (attachments, false, false, 6);
-        content.set_size_request (350, 120);
-
-        if (replying_to != null) {
-            spoiler.active = replying_to.sensitive;
-            var status_spoiler_text = replying_to.spoiler_text != null ? replying_to.spoiler_text : "";
-            spoiler_text.set_text (status_spoiler_text);
-        }
-        if (redrafting != null) {
-            spoiler.active = redrafting.sensitive;
-            var status_spoiler_text = redrafting.spoiler_text != null ? redrafting.spoiler_text : "";
-            spoiler_text.set_text (status_spoiler_text);
-        }
-
-        destroy.connect (() => dialog = null);
-
-        show_all ();
-        attachments.hide ();
-        text.grab_focus ();
-        validate ();
+        content.buffer.text = Html.remove_tags (status.content);
+        
+        show ();
     }
 
-    private MenuButton get_visibility_btn () {
-        var button = new MenuButton ();
-        var menu = new Popover (null);
-        var box = new Box (Orientation.VERTICAL, 6);
-        box.margin = 12;
-        menu.add (box);
-        button.direction = ArrowType.DOWN;
-        button.image = new Image.from_icon_name (visibility_opt.get_icon (), IconSize.BUTTON);
-
-        RadioButton? first = null;
-        foreach (API.Visibility opt in API.Visibility.all ()){
-            var item = new RadioButton.with_label_from_widget (first, opt.get_desc ());
-            if (first == null)
-                first = item;
-
-            item.toggled.connect (() => {
-                visibility_opt = opt;
-                (button.image as Image).icon_name = visibility_opt.get_icon ();
-            });
-            item.active = visibility_opt == opt;
-            box.pack_start (item, false, false, 0);
-        }
-
-        box.show_all ();
-        button.use_popover = true;
-        button.popover = menu;
-        button.valign = Align.CENTER;
-        button.show ();
-        return button;
+    public Compose () {
+        Object (status: new API.Status (-1), style_class: STYLE_CLASS_SUGGESTED_ACTION, label: _("Post"));
+    }
+    
+    public Compose.redraft (API.Status status) {
+        Object (status: status, style_class: STYLE_CLASS_DESTRUCTIVE_ACTION, label: _("Redraft"));
     }
 
-    private void validate () {
-        var remain = char_limit - text.buffer.get_char_count ();
-        if (spoiler.active)
-            remain -= (int)spoiler_text.buffer.length;
+    protected void validate () {
+        var remain = char_limit - content.buffer.get_char_count ();
+        if (cw_button.active)
+            remain -= (int)cw.buffer.length;
 
         counter.label = remain.to_string ();
-        publish.sensitive = remain >= 0;
+        post_button.sensitive = remain >= 0;
+        visibility_button.sensitive = true;
+        box.sensitive = true;
     }
-
-    public static void open (string? text = null, API.Status? reply_to = null) {
-        if (dialog == null){
-            dialog = new Compose (reply_to);
-
-		    if (text != null)
-		        dialog.text.buffer.text = text;
-		}
-		else if (text != null)
-		    dialog.text.buffer.text += text;
+    
+    protected void on_error (int32 code, string reason) {
+        warning (reason);
+        validate ();
     }
-
-    public static void reply (API.Status status) {
-        if (dialog != null)
-            return;
-
-        open (null, status);
-        dialog.text.buffer.text = status.get_reply_mentions ();
-    }
-
-    public static void redraft (API.Status status) {
-        if (dialog != null)
-            return;
-        dialog = new Compose (null, status);
-
-        if (status.attachments != null) {
-            foreach (API.Attachment attachment in status.attachments)
-                dialog.attachments.append (attachment);
+    
+    protected void try_publish () {
+        post_button.sensitive = false;
+        visibility_button.sensitive = false;
+        box.sensitive = false;
+        
+        if (status.id >= 0) {
+            info ("Removing old status...");
+            status.poof (publish, on_error);
         }
-
-        var content = Html.simplify (status.content);
-        content = Html.remove_tags (content);
-        content = Widgets.RichLabel.restore_entities (content);
-        dialog.text.buffer.text = content;
+        else {
+            publish ();
+        }
     }
+    
+    protected void publish () {
+        info ("Publishing new status...");
+        status.content = content.buffer.text;
+        status.spoiler_text = cw.text;
 
-    private void publish_post () {
-        var req = new Request.POST ("api/v1/statuses")
+        var req = new Request.POST ("/api/v1/statuses")
             .with_account ()
-            .with_param ("visibility", visibility_opt.to_string ())
-            .with_param ("status", Html.uri_encode (text.buffer.text));
-
-        attachments.get_children ().@foreach (w => {
-            var widget = (Widgets.ImageAttachment) w;
-            if (widget.attachment != null)
-                req.with_param ("media_ids[]", widget.attachment.id.to_string ());
-        });
-
-        if (replying_to != null)
-            req.with_param ("in_reply_to_id", replying_to.id.to_string ());
-
-        if (spoiler.active) {
+            .with_param ("visibility", visibility_popover.selected.to_string ())
+            .with_param ("status", Html.uri_encode (status.content));
+            
+        if (cw_button.active) {
             req.with_param ("sensitive", "true");
-            req.with_param ("spoiler_text", Html.uri_encode (spoiler_text.buffer.text));
+            req.with_param ("spoiler_text", Html.uri_encode (cw.text));
         }
 
+        if (status.in_reply_to_id != null)
+            req.with_param ("in_reply_to_id", status.in_reply_to_id);
+        if (status.in_reply_to_account_id != null)
+            req.with_param ("in_reply_to_account_id", status.in_reply_to_account_id);
+        
         req.then ((sess, mess) => {
             var root = network.parse (mess);
             var status = API.Status.parse (root);
-            info ("Posted: %s", status.id.to_string ());
+            info ("OK: status id is %s", status.id.to_string ());
             destroy ();
         })
-        .on_error (network.on_error)
+        .on_error (on_error)
         .exec ();
-    }
-
-    private void redraft_post () {
-        redrafting.poof ((sess, msg) => {
-            publish_post ();
-        });
     }
 
 }

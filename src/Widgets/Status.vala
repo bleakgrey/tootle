@@ -249,7 +249,7 @@ public class Tootle.Widgets.Status : EventBox {
             menu.add (item_delete);
 
             var item_redraft = new Gtk.MenuItem.with_label (_("Redraft"));
-            item_redraft.activate.connect (() => Dialogs.Compose.redraft (status.formal));
+            item_redraft.activate.connect (() => new Dialogs.Compose.redraft (status.formal));
             menu.add (item_redraft);
 
             menu.add (new SeparatorMenuItem ());

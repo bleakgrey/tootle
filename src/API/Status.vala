@@ -7,8 +7,10 @@ public class Tootle.API.Status : GLib.Object {
     public API.Account account { get; set; }
     public int64 id { get; set; }
     public string uri { get; set; }
-    public string? url { get; set; }
-    public string? spoiler_text { get; set; }
+    public string? url { get; set; default = null; }
+    public string? spoiler_text { get; set; default = null; }
+    public string? in_reply_to_id { get; set; default = null; }
+    public string? in_reply_to_account_id { get; set; default = null; }
     public string content { get; set; default = ""; }
     public int64 replies_count { get; set; default = 0; }
     public int64 reblogs_count { get; set; default = 0; }
@@ -66,6 +68,9 @@ public class Tootle.API.Status : GLib.Object {
         status.content = Html.simplify ( obj.get_string_member ("content"));
         status.sensitive = obj.get_boolean_member ("sensitive");
         status.visibility = Visibility.from_string (obj.get_string_member ("visibility"));
+
+        status.in_reply_to_id = obj.get_string_member ("in_reply_to_id") ?? null;
+        status.in_reply_to_account_id = obj.get_string_member ("in_reply_to_account_id") ?? null;
 
         if (obj.has_member ("url"))
             status.url = obj.get_string_member ("url");
