@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.Search : Views.Abstract {
+public class Tootle.Views.Search : Views.Base {
 
     private string query = "";
     private Entry entry;

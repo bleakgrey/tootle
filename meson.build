@@ -57,7 +57,7 @@ executable(
     'src/Dialogs/Compose.vala',
     'src/Dialogs/Preferences.vala',
     'src/Dialogs/WatchlistEditor.vala',
-    'src/Views/Abstract.vala',
+    'src/Views/Base.vala',
     'src/Views/NewAccount.vala',
     'src/Views/Timeline.vala',
     'src/Views/Home.vala',

@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Notifications : Views.Abstract, IAccountListener {
+public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 
     private int64 last_id = 0;
     private bool force_dot = false;

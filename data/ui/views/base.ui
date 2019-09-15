@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <template class="TootleViewsAbstract" parent="GtkScrolledWindow">
+  <template class="TootleViewsBase" parent="GtkScrolledWindow">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="hscrollbar_policy">never</property>

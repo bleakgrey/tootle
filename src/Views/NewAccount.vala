@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.NewAccount : Views.Abstract {
+public class Tootle.Views.NewAccount : Views.Base {
 
 	private string? instance { get; set; }
 	private string? code { get; set; }

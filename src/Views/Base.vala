@@ -1,7 +1,7 @@
 using Gtk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/base.ui")]
-public abstract class Tootle.Views.Abstract : ScrolledWindow {
+public class Tootle.Views.Base : ScrolledWindow {
 
     public static string STATUS_EMPTY = _("Nothing to see here");
 

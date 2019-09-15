@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Timeline : Views.Abstract, IAccountListener {
+public class Tootle.Views.Timeline : Views.Base, IAccountListener {
 
     protected string timeline;
     protected int limit = 25;

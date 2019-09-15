@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.ExpandedStatus : Views.Abstract {
+public class Tootle.Views.ExpandedStatus : Views.Base {
 
     public API.Status root_status { get; construct set; }
     private bool sensitive_visible = false;

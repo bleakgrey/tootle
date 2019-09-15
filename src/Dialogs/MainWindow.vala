@@ -126,7 +126,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         return false;
     }
 
-    private void add_header_view (Views.Abstract view, string[] accelerators, int32 num) {
+    private void add_header_view (Views.Base view, string[] accelerators, int32 num) {
         var img = new Image.from_icon_name (view.get_icon (), IconSize.LARGE_TOOLBAR);
         Desktop.set_hotkey_tooltip (img, view.get_name (), accelerators);
         button_mode.append (img);
@@ -141,7 +141,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         return int.parse (view_stack.get_visible_child_name ());
     }
 
-    public bool open_view (Views.Abstract widget) {
+    public bool open_view (Views.Base widget) {
         var i = get_visible_id ();
         i++;
         widget.stack_pos = i;
@@ -209,12 +209,12 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     }
 
     private void on_mode_changed (Widget widget) {
-        var visible = timeline_stack.get_visible_child () as Views.Abstract;
+        var visible = timeline_stack.get_visible_child () as Views.Base;
         visible.current = false;
 
         timeline_stack.set_visible_child_name (button_mode.selected.to_string ());
 
-        visible = timeline_stack.get_visible_child () as Views.Abstract;
+        visible = timeline_stack.get_visible_child () as Views.Base;
         visible.current = true;
         visible.on_set_current ();
     }
