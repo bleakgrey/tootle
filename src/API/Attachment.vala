@@ -3,7 +3,7 @@ public class Tootle.API.Attachment : GLib.Object {
     public int64 id { get; construct set; }
     public string kind { get; set; }
     public string url { get; set; }
-    public string? description { get; set; }
+    public string? description { get; set; default = null; }
 
     public string? _preview_url = null;
     public string preview_url {

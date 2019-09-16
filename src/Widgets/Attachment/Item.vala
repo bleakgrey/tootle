@@ -18,6 +18,10 @@ public class Tootle.Widgets.Attachment.Item : EventBox {
 		get_style_context ().add_class ("attachment");
 		width_request = height_request = 128;
 		hexpand = true;
+		tooltip_text = attachment.description ?? _("No description is available");
+		
+		button_press_event.connect (on_clicked);
+		
 		show ();
 		on_request ();
 	}
@@ -37,6 +41,17 @@ public class Tootle.Widgets.Attachment.Item : EventBox {
 	protected void on_cache_result (Cache.Reference? result) {
 		cached = result;
 		on_redraw ();
+	}
+
+	protected void download () {
+        Desktop.download (attachment.url, path => {
+        	app.toast (_("Attachment downloaded"));
+        });
+	}
+	protected void open () {
+        Desktop.download (attachment.url, path => {
+        	Desktop.open_uri (path);
+        });
 	}
 
 	public override bool draw (Cairo.Context ctx) {
@@ -62,5 +77,29 @@ public class Tootle.Widgets.Attachment.Item : EventBox {
 		
 		return Gdk.EVENT_STOP;
 	}
+
+    protected virtual bool on_clicked (EventButton ev) {
+		if (ev.button == 1) {
+			open ();
+			return true;
+		}
+        else if (ev.button == 3) {
+        	var menu = new Gtk.Menu ();
+        	
+        	var item_open = new Gtk.MenuItem.with_label (_("Open"));
+        	item_open.activate.connect (open);
+        	menu.add (item_open);
+        	
+        	var item_download = new Gtk.MenuItem.with_label (_("Download"));
+        	item_download.activate.connect (download);
+        	menu.add (item_download);
+        	
+		    menu.show_all ();
+		    menu.attach_widget = this;
+		    menu.popup_at_pointer ();
+        	return true;
+        }
+        return false;
+    }
 
 }

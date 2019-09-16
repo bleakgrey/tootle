@@ -66,7 +66,9 @@ public class Tootle.Widgets.Status : EventBox {
 
     protected string handle {
 		owned get {
-			return @"<b>$(status.formal.account.display_name)</b> @$(status.formal.account.acct)";
+			var name = Html.simplify (status.formal.account.display_name);
+			var handle = Html.simplify (status.formal.account.acct);
+			return @"<b>$name</b> @$handle";
 		}
 	}
 
@@ -194,7 +196,6 @@ public class Tootle.Widgets.Status : EventBox {
         if (ev.button == 3)
             return open_menu (ev.button, ev.time);
         return false;
-
     }
 
     public virtual bool open_menu (uint button, uint32 time) {
