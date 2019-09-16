@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-30 19:17+0300\n"
-"PO-Revision-Date: 2019-05-22 16:11+0200\n"
+"PO-Revision-Date: 2019-09-16 12:46+0200\n"
 "Last-Translator: Joel G <joel.gil@pm.me>\n"
 "Language-Team: Spanish - Mexico <>\n"
 "Language: es_MX\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 3.32.1\n"
+"X-Generator: Gtranslator 3.34.0\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:7 src/MainWindow.vala:68
@@ -47,7 +47,7 @@ msgid ""
 "microblogging network with real-time notifications and multiple accounts "
 "support."
 msgstr ""
-"Tootle es un client para la mayor red mundial de microblogging libre, de "
+"Tootle es un cliente para la mayor red del mundo de microblogging libre, de "
 "código abierto y descentralizada, con soporte para múltiples cuentas y "
 "notificaciones en tiempo real."
 
@@ -56,7 +56,7 @@ msgid ""
 "Mastodon is lovely crafted with power and speed in mind, resulting in a "
 "free, independent and popular alternative to the centralized social networks."
 msgstr ""
-"Mastodon es preciosamente hecho con poder y velocidad en mente, dando como "
+"Mastodon es creado artesanalmente con poder y velocidad en mente, dando como "
 "resultado una alternativa libre, independiente y popular a las redes "
 "sociales centralizadas."
 
@@ -74,7 +74,7 @@ msgstr ""
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:26
 msgid "bleak_grey"
-msgstr ""
+msgstr "bleak_grey"
 
 #: src/Desktop.vala:10 src/API/Account.vala:123 src/API/Account.vala:142
 #: src/API/Account.vala:161 src/Dialogs/NewAccountDialog.vala:102
@@ -335,7 +335,7 @@ msgstr "Desfijar del Perfil"
 #: src/Widgets/StatusWidget.vala:300
 #, fuzzy
 msgid "Pin on Profile"
-msgstr "Fijar en el Perfil"
+msgstr "Fijar al Perfil"
 
 #: src/Widgets/StatusWidget.vala:304
 msgid "Delete"
