@@ -48,10 +48,15 @@ public class Tootle.Widgets.Attachment.Item : EventBox {
 		
 		if (cached != null) {
 			if (cached.item != null) {
+				var thumb = Drawing.make_thumbnail (cached.item, w, h);
 				Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
-				var pixbuf = cached.item.scale_simple (w, h, InterpType.BILINEAR);
-				Gdk.cairo_set_source_pixbuf (ctx, pixbuf, 0, 0);
+				Drawing.center (ctx, w, h, thumb.width, thumb.height);
+				Gdk.cairo_set_source_pixbuf (ctx, thumb, 0, 0);
 				ctx.fill ();
+			}
+			else {
+				Drawing.center (ctx, w, h, 32, 32);
+				get_style_context ().render_activity (ctx, 0, 0, 32, 32);
 			}
 		}
 		
