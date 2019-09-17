@@ -15,7 +15,6 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     private Spinner spinner;
     private Button button_toot;
     private Button button_back;
-    public Button button_reveal;
 
     public Views.Home home = new Views.Home ();
     public Views.Notifications notifications = new Views.Notifications ();
@@ -57,11 +56,6 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         button_toot.clicked.connect (() => new Dialogs.Compose ());
         Desktop.set_hotkey_tooltip (button_toot, _("Toot"), app.ACCEL_NEW_POST);
 
-        button_reveal = new Button ();
-        button_reveal.valign = Align.CENTER;
-        button_reveal.image = new Image.from_icon_name ("image-red-eye-symbolic", IconSize.LARGE_TOOLBAR);
-        Desktop.set_hotkey_tooltip (button_reveal, _("Toggle content"), app.ACCEL_TOGGLE_REVEAL);
-
         button_mode = new Granite.Widgets.ModeButton ();
         button_mode.get_style_context ().add_class ("mode");
         button_mode.vexpand = true;
@@ -77,7 +71,6 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         header.pack_start (button_back);
         header.pack_start (button_toot);
         header.pack_end (button_accounts);
-        header.pack_end (button_reveal);
         header.pack_end (spinner);
         header.show_all ();
         set_titlebar (header);
@@ -100,8 +93,6 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
         restore_state ();
         show_all ();
-
-        button_reveal.hide ();
     }
 
     public MainWindow (Gtk.Application _app) {

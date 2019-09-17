@@ -6,3 +6,7 @@
 	border-radius: 4px;
 	background: rgba (150, 150, 150, 0.2);
 }
+
+.highlight {
+	background: @theme_base_color;
+}

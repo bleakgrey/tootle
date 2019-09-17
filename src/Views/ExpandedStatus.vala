@@ -3,36 +3,33 @@ using Gtk;
 public class Tootle.Views.ExpandedStatus : Views.Base {
 
     public API.Status root_status { get; construct set; }
-    private bool sensitive_visible = false;
+    private Widgets.Status root_widget;
 
     public ExpandedStatus (API.Status status) {
         Object (root_status: status, state: "content");
+
+        root_widget = append (status);
+        root_widget.avatar.button_press_event.connect (root_widget.on_avatar_clicked);
+        root_widget.get_style_context ().add_class ("card");
+        root_widget.get_style_context ().add_class ("highlight");
+
         request ();
-
-        window.button_reveal.clicked.connect (on_reveal_toggle);
     }
 
-    ~ExpandedStatus () {
-        if (window != null) {
-            window.button_reveal.clicked.disconnect (on_reveal_toggle);
-            window.button_reveal.hide ();
-        }
-    }
-
-    private void prepend (API.Status status, bool is_root = false){
+    private Widgets.Status prepend (API.Status status, bool to_end = false){
         var widget = new Widgets.Status (status);
         widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
-        if (!is_root)
-            widget.button_press_event.connect (widget.open);
-        else
-            widget.highlight ();
+        widget.revealer.reveal_child = true;
 
         content.pack_start (widget, false, false, 0);
+        if (!to_end)
+            content.reorder_child (widget, 0);
 
-        if (status.has_spoiler)
-            window.button_reveal.show ();
-        if (sensitive_visible)
-            reveal_sensitive (widget);
+        check_resize ();
+        return widget;
+    }
+    private Widgets.Status append (API.Status status) {
+    	return prepend (status, true);
     }
 
     public Soup.Message request () {
@@ -49,16 +46,18 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
                     }
                 });
                 
-                prepend (root_status, true);
-                
                 var descendants = root.get_array_member ("descendants");
                 descendants.foreach_element ((array, i, node) => {
                     var object = node.get_object ();
                     if (object != null) {
                         var status = API.Status.parse (object);
-                        prepend (status);
+                        append (status);
                     }
                 });
+                
+                int x,y;
+                translate_coordinates (root_widget, 0, 0, out x, out y);
+                scrolled.vadjustment.value = (double)(y*-1); //TODO: Animate scrolling?
             })
             .exec ();
         return req;
@@ -81,22 +80,6 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
                     Desktop.open_uri (q);
             })
             .exec ();
-    }
-
-    private void on_reveal_toggle () {
-        sensitive_visible = !sensitive_visible;
-        content.forall (w => {
-            if (!(w is Widgets.Status))
-                return;
-
-            var widget = w as Widgets.Status;
-            reveal_sensitive (widget);
-        });
-    }
-
-    private void reveal_sensitive (Widgets.Status widget) {
-        // if (widget.status.has_spoiler)
-        //     widget.revealer.reveal_child = sensitive_visible;
     }
 
 }

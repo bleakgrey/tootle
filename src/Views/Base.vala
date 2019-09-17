@@ -8,7 +8,7 @@ public class Tootle.Views.Base : Box {
     public bool current = false;
     public int stack_pos = -1;
     public Image? image;
-    
+
     [GtkChild]
     public ScrolledWindow scrolled;
     [GtkChild]
@@ -19,13 +19,11 @@ public class Tootle.Views.Base : Box {
     public Box content;
     [GtkChild]
     public Label status_message_label;
-    
-    protected Grid? header; //TODO: Remove
-    
+
     public string state { get; set; default = "status"; }
     public string status_message { get; set; default = STATUS_EMPTY; }
     public bool allow_closing { get; set; default = true; }
-    
+
     public bool empty {
         get {
             return content.get_children ().length () <= 0;

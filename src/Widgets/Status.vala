@@ -26,7 +26,7 @@ public class Tootle.Widgets.Status : EventBox {
     [GtkChild]
     protected Image pin_indicator;
     [GtkChild]
-    protected Revealer revealer;
+    public Revealer revealer;
     [GtkChild]
     protected Widgets.RichLabel content;
     [GtkChild]
@@ -49,7 +49,7 @@ public class Tootle.Widgets.Status : EventBox {
         owned get {
             if (status.formal.has_spoiler) {
                 var text = Html.simplify (status.formal.spoiler_text ?? "");
-                var label = _("[ Show more ]");
+                var label = _("[ Toggle content ]");
                 text += @" <a href='tootle://toggle'>$label</a>";
                 return text;
             }
@@ -169,10 +169,6 @@ public class Tootle.Widgets.Status : EventBox {
         
         header_icon.icon_name = kind.get_icon ();
         header_label.label = kind.get_desc (status.account);
-    }
-
-    public void highlight () {
-        get_style_context ().add_class ("card");
     }
 
     public bool on_avatar_clicked (EventButton ev) {

@@ -57,10 +57,8 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
             widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
         content.pack_start (widget, false, false, 0);
 
-        if (first || status.pinned) {
-            var new_index = header == null ? 1 : 0;
-            content.reorder_child (widget, new_index);
-        }
+        if (first || status.pinned)
+            content.reorder_child (widget, 0);
         
         state = "content";
         check_resize ();
