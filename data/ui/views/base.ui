@@ -2,99 +2,112 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <template class="TootleViewsBase" parent="GtkScrolledWindow">
+  <template class="TootleViewsBase" parent="GtkBox">
     <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="hscrollbar_policy">never</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkViewport">
+      <object class="GtkScrolledWindow" id="scrolled">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="shadow_type">none</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">never</property>
         <child>
-          <object class="GtkBox" id="view">
+          <object class="GtkViewport">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
+            <property name="shadow_type">none</property>
             <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkStack" id="states">
+              <object class="GtkBox" id="view">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="vhomogeneous">False</property>
-                <property name="transition_duration">100</property>
-                <property name="transition_type">crossfade</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox" id="status">
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkStack" id="states">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">24</property>
+                    <property name="vhomogeneous">False</property>
+                    <property name="transition_duration">100</property>
+                    <property name="transition_type">crossfade</property>
                     <child>
-                      <object class="GtkImage">
+                      <object class="GtkBox" id="status">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="margin_top">32</property>
-                        <property name="pixel_size">128</property>
-                        <property name="resource">/com/github/bleakgrey/tootle/empty_state</property>
-                        <property name="icon_size">0</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">24</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_top">32</property>
+                            <property name="pixel_size">128</property>
+                            <property name="resource">/com/github/bleakgrey/tootle/empty_state</property>
+                            <property name="icon_size">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="status_message_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="opacity">0.50196078431372548</property>
+                            <property name="margin_bottom">32</property>
+                            <property name="label">&lt;span size="large"&gt;Nothing to see here&lt;/span&gt;</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="name">status</property>
+                        <property name="title" translatable="yes">page1</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="status_message_label">
+                      <object class="GtkBox" id="content">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="opacity">0.50196078431372548</property>
-                        <property name="margin_bottom">32</property>
-                        <property name="label">&lt;span size="large"&gt;Nothing to see here&lt;/span&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
+                        <property name="name">content</property>
+                        <property name="title" translatable="yes">page0</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="name">status</property>
-                    <property name="title" translatable="yes">page1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="content">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="name">content</property>
-                    <property name="title" translatable="yes">page0</property>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="pack_type">end</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
         </child>
       </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="pack_type">end</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </template>
 </interface>

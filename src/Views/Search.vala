@@ -3,31 +3,31 @@ using Gtk;
 public class Tootle.Views.Search : Views.Base {
 
     private string query = "";
-    private Entry entry;
+    private SearchBar bar;
+    private SearchEntry entry;
 
     construct {
-        content.margin_bottom = 6;
-
-        entry = new Entry ();
-        entry.placeholder_text = _("Search");
-        entry.secondary_icon_name = "system-search-symbolic";
+        bar = new SearchBar ();
+        bar.search_mode_enabled = true;
+        bar.show ();
+        pack_start (bar, false, false, 0);
+        
+        entry = new SearchEntry ();
         entry.width_chars = 25;
         entry.text = query;
-        entry.valign = Align.CENTER;
         entry.show ();
-        window.header.pack_start (entry);
+        bar.add (entry);
+        bar.connect_entry (entry);
 
-        destroy.connect (() => entry.destroy ());
         entry.activate.connect (() => request ());
         entry.icon_press.connect (() => request ());
-    }
-
-    public Search () {
         entry.grab_focus_without_selecting ();
     }
 
     private void append_account (API.Account acc) {
-        var widget = new Widgets.Account (acc);
+        var status = API.Status.from_account (acc);
+        var widget = new Widgets.Status (status);
+        widget.button_press_event.connect (widget.on_avatar_clicked);
         content.pack_start (widget, false, false, 0);
     }
 
@@ -38,18 +38,17 @@ public class Tootle.Views.Search : Views.Base {
     }
 
     private void append_header (string name) {
-        var widget = new Label (name);
-        widget.get_style_context ().add_class ("h4");
+        var widget = new Label (@"<span weight='bold' size='medium'>$name</span>");
         widget.halign = Align.START;
-        widget.margin = 6;
-        widget.margin_bottom = 0;
+        widget.margin = 8;
+        widget.use_markup = true;
         widget.show ();
         content.pack_start (widget, false, false, 0);
     }
 
     private void append_hashtag (string name) {
-        var text = "<a href=\"%s/tags/%s\">#%s</a>".printf (accounts.active.instance, Soup.URI.encode (name, null), name);
-        var widget = new Widgets.RichLabel (text);
+        var encoded = Soup.URI.encode (name, null);
+        var widget = new Widgets.RichLabel (@"<a href=\"$(accounts.active.instance)/tags/$encoded\">#$name</a>");
         widget.use_markup = true;
         widget.halign = Align.START;
         widget.margin = 6;
@@ -64,9 +63,8 @@ public class Tootle.Views.Search : Views.Base {
             clear ();
             return;
         }
-        window.reopen_view (this.stack_pos);
 
-        new Request.GET ("api/v1/search")
+        new Request.GET ("/api/v1/search")
         	.with_account ()
         	.with_param ("resolve", "true")
         	.with_param ("q", Soup.URI.encode (query, null))
@@ -77,6 +75,13 @@ public class Tootle.Views.Search : Views.Base {
                 var hashtags = root.get_array_member ("hashtags");
 
                 clear ();
+
+                if (hashtags.get_length () > 0) {
+                    append_header (_("Hashtags"));
+                    hashtags.foreach_element ((array, i, node) => {
+                        append_hashtag (node.get_string ());
+                    });
+                }
 
                 if (accounts.get_length () > 0) {
                     append_header (_("Accounts"));
@@ -93,13 +98,6 @@ public class Tootle.Views.Search : Views.Base {
                         var obj = node.get_object ();
                         var status = API.Status.parse (obj);
                         append_status (status);
-                    });
-                }
-
-                if (hashtags.get_length () > 0) {
-                    append_header (_("Hashtags"));
-                    hashtags.foreach_element ((array, i, node) => {
-                        append_hashtag (node.get_string ());
                     });
                 }
 

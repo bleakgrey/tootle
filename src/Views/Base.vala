@@ -1,7 +1,7 @@
 using Gtk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/base.ui")]
-public class Tootle.Views.Base : ScrolledWindow {
+public class Tootle.Views.Base : Box {
 
     public static string STATUS_EMPTY = _("Nothing to see here");
 
@@ -9,6 +9,8 @@ public class Tootle.Views.Base : ScrolledWindow {
     public int stack_pos = -1;
     public Image? image;
     
+    [GtkChild]
+    public ScrolledWindow scrolled;
     [GtkChild]
     public Box view;
     [GtkChild]
@@ -37,7 +39,7 @@ public class Tootle.Views.Base : ScrolledWindow {
 			target.set_string (@"<span size='large'>$label</span>");
 			return true;
 		});
-        edge_reached.connect (pos => {
+        scrolled.edge_reached.connect (pos => {
             if (pos == PositionType.BOTTOM)
                 on_bottom_reached ();
         });
