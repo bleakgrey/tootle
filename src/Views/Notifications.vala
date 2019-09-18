@@ -10,6 +10,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         base ();
         connect_account_service ();
         app.refresh.connect (on_refresh);
+        status_button.clicked.connect (on_refresh);
         network.notification.connect (prepend);
 
         request ();
@@ -103,9 +104,10 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         // new Request.GET ("/api/v1/follow_requests")  //TODO: this
         // 	.with_account ()
         // 	.then_parse_array (node => {
-		      //   var notification = API.Notification.parse_follow_request (node.get_object ());
-		      //   append (notification);
+        //   var notification = API.Notification.parse_follow_request (node.get_object ());
+        //   append (notification);
         // 	})
+        // 	.on_error (on_error)
         // 	.exec ();
 
         new Request.GET ("/api/v1/notifications")
@@ -115,6 +117,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 				var notification = API.Notification.parse (node.get_object ());
 				append (notification);
         	})
+        	.on_error (on_error)
         	.exec ();
     }
 

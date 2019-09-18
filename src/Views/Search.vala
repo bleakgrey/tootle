@@ -22,6 +22,7 @@ public class Tootle.Views.Search : Views.Base {
         entry.activate.connect (() => request ());
         entry.icon_press.connect (() => request ());
         entry.grab_focus_without_selecting ();
+        status_button.clicked.connect (request);
     }
 
     private void append_account (API.Account acc) {
@@ -29,12 +30,14 @@ public class Tootle.Views.Search : Views.Base {
         var widget = new Widgets.Status (status);
         widget.button_press_event.connect (widget.on_avatar_clicked);
         content.pack_start (widget, false, false, 0);
+        on_content_changed ();
     }
 
     private void append_status (API.Status status) {
         var widget = new Widgets.Status (status);
         widget.button_press_event.connect (widget.on_avatar_clicked);
         content.pack_start (widget, false, false, 0);
+        on_content_changed ();
     }
 
     private void append_header (string name) {
@@ -44,6 +47,7 @@ public class Tootle.Views.Search : Views.Base {
         widget.use_markup = true;
         widget.show ();
         content.pack_start (widget, false, false, 0);
+        on_content_changed ();
     }
 
     private void append_hashtag (string name) {
@@ -101,6 +105,7 @@ public class Tootle.Views.Search : Views.Base {
                     });
                 }
         	})
+        	.on_error (on_error)
         	.exec ();
     }
 
