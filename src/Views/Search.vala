@@ -100,8 +100,6 @@ public class Tootle.Views.Search : Views.Base {
                         append_status (status);
                     });
                 }
-
-                empty_state ();
         	})
         	.exec ();
     }

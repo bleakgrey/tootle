@@ -8,7 +8,6 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 
     public Notifications () {
         base ();
-        content.remove.connect (on_remove);
         connect_account_service ();
         app.refresh.connect (on_refresh);
         network.notification.connect (prepend);
@@ -50,6 +49,8 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
             }
         }
 
+        on_content_changed ();
+
         if (notification.id > last_id)
             last_id = notification.id;
 
@@ -57,9 +58,6 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
             accounts.save ();
             image.icon_name = get_icon ();
         }
-        
-        state = "content";
-        check_resize ();
     }
 
     public override void on_set_current () {
@@ -73,19 +71,10 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         }
     }
 
-    public virtual void on_remove (Widget widget) {
-        if (!(widget is Widgets.Notification))
-            return;
-
-        empty_state ();
-    }
-
-    public override bool empty_state () {
-        var is_empty = base.empty_state ();
-        if (image != null && is_empty)
+    public override void on_content_changed () {
+        base.on_content_changed ();
+        if (image != null && empty)
             image.icon_name = get_icon ();
-
-        return is_empty;
     }
 
     public virtual void on_refresh () {
@@ -103,10 +92,8 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
     }
 
     public void request () {
-        if (accounts.active == null) {
-            empty_state ();
+        if (accounts.active == null)
             return;
-        }
 
         accounts.active.cached_notifications.@foreach (notification => {
             append (notification);
@@ -129,8 +116,6 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 				append (notification);
         	})
         	.exec ();
-
-        empty_state ();
     }
 
 }

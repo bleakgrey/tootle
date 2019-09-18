@@ -10,15 +10,17 @@ public class Tootle.Views.Base : Box {
     public Image? image;
 
     [GtkChild]
-    public ScrolledWindow scrolled;
+    protected ScrolledWindow scrolled;
     [GtkChild]
-    public Box view;
+    protected Box view;
     [GtkChild]
-    public Stack states;
+    protected Stack states;
     [GtkChild]
-    public Box content;
+    protected Box content;
     [GtkChild]
-    public Label status_message_label;
+    protected Label status_message_label;
+    [GtkChild]
+    protected Button status_button;
 
     public string state { get; set; default = "status"; }
     public string status_message { get; set; default = STATUS_EMPTY; }
@@ -31,6 +33,7 @@ public class Tootle.Views.Base : Box {
     }
 
     construct {
+        status_button.label = _("Reload");
         bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
 		bind_property ("status-message", status_message_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var label = (string) src;
@@ -41,6 +44,7 @@ public class Tootle.Views.Base : Box {
             if (pos == PositionType.BOTTOM)
                 on_bottom_reached ();
         });
+        content.remove.connect (() => on_content_changed ());
     }
 
     public virtual string get_icon () {
@@ -61,16 +65,23 @@ public class Tootle.Views.Base : Box {
     public virtual void on_bottom_reached () {}
     public virtual void on_set_current () {}
 
-    public virtual bool empty_state () {
+    public virtual void on_content_changed () {
         if (empty) {
             status_message = STATUS_EMPTY;
+            status_button.visible = false;
             state = "status";
-            return false;
         }
         else {
             state = "content";
-            return true;
         }
+        check_resize ();
+    }
+
+    public virtual void on_error (int32 code, string reason) {
+        status_message = reason;
+        status_button.visible = true;
+        status_button.sensitive = true;
+        state = "status";
     }
 
 }

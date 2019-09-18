@@ -22,15 +22,12 @@ public class Tootle.Network : GLib.Object {
         session.ssl_strict = true;
         session.ssl_use_system_ca_file = true;
         session.timeout = 15;
-        session.max_conns = 20;
+        session.max_conns = 30;
         session.request_unqueued.connect (msg => {
             requests_processing--;
             if (requests_processing <= 0)
                 finished ();
         });
-
-        // Soup.Logger logger = new Soup.Logger (Soup.LoggerLogLevel.BODY, -1);
-        // session.add_feature (logger);
     }
 
     public async WebsocketConnection stream (Soup.Message msg) throws Error {
@@ -49,7 +46,7 @@ public class Tootle.Network : GLib.Object {
         session.cancel_message (msg, Soup.Status.CANCELLED);
     }
 
-    public void queue (owned Soup.Message message, owned SuccessCallback? cb = null, owned ErrorCallback? errcb = null) {
+    public void queue (owned Soup.Message message, owned SuccessCallback? cb, owned ErrorCallback? errcb = null) {
         requests_processing++;
         started ();
 
@@ -61,19 +58,22 @@ public class Tootle.Network : GLib.Object {
             		    cb (session, msg);
             		}
             		catch (Error e) {
-            		    warning ("Caught exception on network request: %s", e.message);
-                    	errcb (Soup.Status.NONE, e.message);
+            		    warning ("Exception on network request: %s", e.message);
+                    	if (errcb != null)
+                    	    errcb (Soup.Status.NONE, e.message);
             		}
             	}
             	else {
-            		errcb ((int32)status, get_error_reason ((int32)status));
+            	    if (errcb != null)
+            		    errcb ((int32)status, describe_error ((int32)status));
             	}
             }
         });
     }
 
-	public string get_error_reason (int32 status) {
-		return "Error " + status.to_string () + ": " + Soup.Status.get_phrase (status);
+	public string describe_error (int32 code) {
+	    var reason = Soup.Status.get_phrase (code);
+		return @"$reason ($code)";
 	}
 
     public void on_error (int32 code, string message) {
@@ -87,69 +87,9 @@ public class Tootle.Network : GLib.Object {
     }
 
     public Json.Object parse (Soup.Message msg) throws Error {
-        // debug ("Status Code: %u", msg.status_code);
-        // debug ("Message length: %lld", msg.response_body.length);
-        // debug ("Object: %s", (string) msg.response_body.data);
-
         var parser = new Json.Parser ();
         parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
         return parser.get_root ().get_object ();
-    }
-
-    //TODO: Cache
-    public delegate void PixbufCallback (Gdk.Pixbuf pixbuf);
-    public Soup.Message load_pixbuf (string url, PixbufCallback cb) {
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            Gdk.Pixbuf? pixbuf = null;
-            try {
-                var data = msg.response_body.flatten ().data;
-                var stream = new MemoryInputStream.from_data (data);
-                pixbuf = new Gdk.Pixbuf.from_stream (stream);
-            }
-            catch (Error e) {
-                warning ("Can't get image: %s".printf (url));
-                warning ("Reason: " + e.message);
-            }
-            finally {
-                if (msg.status_code != Soup.Status.OK)
-                    warning ("Invalid response code %s: %s", msg.status_code.to_string (), url);
-            }
-            cb (pixbuf);
-        });
-        return message;
-    }
-
-    //TODO: Cache
-    public void load_image (string url, Gtk.Image image) {
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
-                image.set_from_icon_name ("image-missing", Gtk.IconSize.LARGE_TOOLBAR);
-                return;
-            }
-
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream (stream);
-            image.set_from_pixbuf (pixbuf);
-        });
-    }
-
-    //TODO: Cache
-    public void load_scaled_image (string url, Gtk.Image image, int size) {
-        var message = new Soup.Message("GET", url);
-        network.queue (message, (sess, msg) => {
-            if (msg.status_code != Soup.Status.OK) {
-                image.set_from_icon_name ("image-missing", Gtk.IconSize.LARGE_TOOLBAR);
-                return;
-            }
-
-            var data = msg.response_body.data;
-            var stream = new MemoryInputStream.from_data (data);
-            var pixbuf = new Gdk.Pixbuf.from_stream_at_scale (stream, size, size, true);
-            image.set_from_pixbuf (pixbuf);
-        });
     }
 
 }

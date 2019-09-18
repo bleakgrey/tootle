@@ -12,11 +12,12 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
     protected Notificator? notificator;
 
     public Timeline (string timeline) {
-        base ();
+        Object ();
         this.timeline = timeline;
 
         connect_account_service ();
         app.refresh.connect (on_refresh);
+        status_button.clicked.connect (on_refresh);
 
         setup_notificator ();
         request ();
@@ -55,13 +56,12 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         widget.button_press_event.connect (widget.open);
         if (!is_status_owned (status))
             widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
-        content.pack_start (widget, false, false, 0);
 
+        content.pack_start (widget, false, false, 0);
         if (first || status.pinned)
             content.reorder_child (widget, 0);
-        
-        state = "content";
-        check_resize ();
+
+        on_content_changed ();
     }
 
     public override void clear () {
@@ -104,10 +104,8 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
     }
 
     public virtual void request () {
-        if (accounts.active == null) {
-            empty_state ();
+        if (accounts.active == null) // TODO: Add account reference to IAccountListener
             return;
-        }
 
 		append_params (new Request.GET (get_url ()))
 		.with_account ()
@@ -118,13 +116,13 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
                 append (status);
             }
             get_pages (msg.response_headers.get_one ("Link"));
-            empty_state ();
         })
-		.on_error (network.on_error)
+		.on_error (on_error)
 		.exec ();
     }
 
     public virtual void on_refresh () {
+        status_button.sensitive = false;
         clear ();
         request ();
     }

@@ -156,10 +156,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
     public override void request () {
-        if (accounts.active == null) {
-            empty_state ();
+        if (accounts.active == null)
             return;
-        }
 
 		append_params (new Request.GET (get_url ()))
 		.with_account ()
@@ -173,11 +171,10 @@ public class Tootle.Views.Profile : Views.Timeline {
                 	var account = API.Account.parse (obj);
                 	status = API.Status.from_account (account);
                 }
-                
+
                 append (status);
             }
             get_pages (msg.response_headers.get_one ("Link"));
-            empty_state ();
         })
 		.on_error (network.on_error)
 		.exec ();
