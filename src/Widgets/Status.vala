@@ -94,6 +94,8 @@ public class Tootle.Widgets.Status : EventBox {
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
         
+        reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
+        
         bind_property ("escaped-spoiler", content, "label", BindingFlags.SYNC_CREATE);
         bind_property ("escaped-content", revealer_content, "label", BindingFlags.SYNC_CREATE);
         status.formal.account.bind_property ("avatar", avatar, "url", BindingFlags.SYNC_CREATE);

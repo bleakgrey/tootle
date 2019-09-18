@@ -73,6 +73,15 @@ public class Tootle.Dialogs.Compose : Window {
         Object (status: status, style_class: STYLE_CLASS_DESTRUCTIVE_ACTION, label: _("Redraft"));
     }
 
+	public Compose.reply (API.Status status) {
+		var template = new API.Status (-1);
+		template.in_reply_to_id = status.in_reply_to_id;
+		template.in_reply_to_account_id = status.in_reply_to_account_id;
+		template.content = status.get_reply_mentions ();
+		Object (status: template, style_class: STYLE_CLASS_SUGGESTED_ACTION, label: _("Reply"));
+		visibility_popover.selected = status.visibility;
+	}
+
     protected void validate () {
         var remain = char_limit - content.buffer.get_char_count ();
         if (cw_button.active)
