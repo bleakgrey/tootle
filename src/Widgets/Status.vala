@@ -94,6 +94,16 @@ public class Tootle.Widgets.Status : EventBox {
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
         
+        status.formal.bind_property ("favorited", favorite_button, "active", BindingFlags.SYNC_CREATE);
+        favorite_button.clicked.connect (() => {
+            status.action (status.formal.favorited ? "unfavourite" : "favourite");
+        });
+        
+        status.formal.bind_property ("reblogged", reblog_button, "active", BindingFlags.SYNC_CREATE);
+        reblog_button.clicked.connect (() => {
+            status.action (status.formal.reblogged ? "unreblog" : "reblog");
+        });
+        
         reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
         
         bind_property ("escaped-spoiler", content, "label", BindingFlags.SYNC_CREATE);
@@ -199,9 +209,6 @@ public class Tootle.Widgets.Status : EventBox {
     public virtual bool open_menu (uint button, uint32 time) {
         var menu = new Gtk.Menu ();
 
-        var is_muted = status.muted;
-        var is_pinned = status.pinned;
-
         var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
         item_open_link.activate.connect (() => Desktop.open_uri (status.formal.url));
         var item_copy_link = new Gtk.MenuItem.with_label (_("Copy Link"));
@@ -213,8 +220,10 @@ public class Tootle.Widgets.Status : EventBox {
         });
 
         if (status.is_owned ()) {
-            var item_pin = new Gtk.MenuItem.with_label (is_pinned ? _("Unpin from Profile") : _("Pin on Profile"));
-            item_pin.activate.connect (() => status.update_pinned (!is_pinned));
+            var item_pin = new Gtk.MenuItem.with_label (status.pinned ? _("Unpin from Profile") : _("Pin on Profile"));
+            item_pin.activate.connect (() => {
+                status.action (status.formal.pinned ? "unpin" : "pin");
+            });
             menu.add (item_pin);
 
             var item_delete = new Gtk.MenuItem.with_label (_("Delete"));
@@ -229,8 +238,8 @@ public class Tootle.Widgets.Status : EventBox {
         }
 
         // if (is_notification) {
-        //     var item_muting = new Gtk.MenuItem.with_label (is_muted ? _("Unmute Conversation") : _("Mute Conversation"));
-        //     item_muting.activate.connect (() => status.update_muted (!is_muted));
+        //     var item_muting = new Gtk.MenuItem.with_label (status.muted ? _("Unmute Conversation") : _("Mute Conversation"));
+        //     item_muting.activate.connect (() => status.update_muted (!is_muted) );
         //     menu.add (item_muting);
         // }
 

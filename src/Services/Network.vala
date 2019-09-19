@@ -13,6 +13,7 @@ public class Tootle.Network : GLib.Object {
 	public delegate void ErrorCallback (int32 code, string reason);
 	public delegate void SuccessCallback (Session session, Message msg) throws Error;
 	public delegate void NodeCallback (Json.Node node, Message msg) throws Error;
+	public delegate void ObjectCallback (Json.Object node) throws Error;
 
     private int requests_processing = 0;
     public Soup.Session session;

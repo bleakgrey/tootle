@@ -54,7 +54,7 @@ public class Tootle.Dialogs.Compose : Window {
         cw.buffer.deleted_text.connect (() => validate ());
         cw.buffer.inserted_text.connect (() => validate ());
         content.buffer.changed.connect (validate);
-        post_button.clicked.connect (try_publish);
+        post_button.clicked.connect (on_post_button_clicked);
         
         if (status.spoiler_text != null) {
             cw.text = status.spoiler_text;
@@ -77,7 +77,7 @@ public class Tootle.Dialogs.Compose : Window {
 		var template = new API.Status (-1);
 		template.in_reply_to_id = status.in_reply_to_id;
 		template.in_reply_to_account_id = status.in_reply_to_account_id;
-		template.content = status.get_reply_mentions ();
+		template.content = status.formal.get_reply_mentions ();
 		Object (status: template, style_class: STYLE_CLASS_SUGGESTED_ACTION, label: _("Reply"));
 		visibility_popover.selected = status.visibility;
 	}
@@ -98,7 +98,7 @@ public class Tootle.Dialogs.Compose : Window {
         validate ();
     }
     
-    protected void try_publish () {
+    protected void on_post_button_clicked () {
         post_button.sensitive = false;
         visibility_button.sensitive = false;
         box.sensitive = false;

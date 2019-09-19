@@ -191,49 +191,15 @@ public class Tootle.API.Status : GLib.Object {
         return result;
     }
 
-    public void update_reblogged (bool state, owned Network.ErrorCallback? err = network.on_error) {
-        var action = state ? "reblog" : "unreblog";
-        new Request.POST (@"/api/v1/statuses/$id/$action")
+    public void action (string action, owned Network.ErrorCallback? err = network.on_error) {
+        new Request.POST (@"/api/v1/statuses/$(formal.id)/$action")
         	.with_account ()
-        	.then ((sess, msg) => {
-                reblogged = state;
-                updated ();
-            })
-            .on_error ((status, reason) => err (status, reason))
-        	.exec ();
-    }
-
-    public void update_favorited (bool state, owned Network.ErrorCallback? err = network.on_error) {
-        var action = state ? "favourite" : "unfavourite";
-        new Request.POST (@"/api/v1/statuses/$id/$action")
-        	.with_account ()
-        	.then ((sess, msg) => {
-                favorited = state;
-                updated ();
-            })
-            .on_error ((status, reason) => err (status, reason))
-        	.exec ();
-    }
-
-    public void update_muted (bool state, owned Network.ErrorCallback? err = network.on_error) {
-        var action = state ? "mute" : "unmute";
-        new Request.POST (@"/api/v1/statuses/$id/$action")
-        	.with_account ()
-        	.then ((sess, msg) => {
-                muted = state;
-                updated ();
-            })
-            .on_error ((status, reason) => err (status, reason))
-        	.exec ();
-    }
-
-    public void update_pinned (bool state, owned Network.ErrorCallback? err = network.on_error) {
-        var action = state ? "pin" : "unpin";
-        new Request.POST (@"/api/v1/statuses/$id/$action")
-        	.with_account ()
-        	.then ((sess, msg) => {
-                pinned = state;
-                updated ();
+        	.then_parse_obj (obj => {
+        	    var status = API.Status.parse (obj).formal;
+        	    formal.reblogged = status.reblogged;
+        	    formal.favorited = status.favorited;
+        	    formal.muted = status.muted;
+        	    formal.pinned = status.pinned;
             })
             .on_error ((status, reason) => err (status, reason))
         	.exec ();

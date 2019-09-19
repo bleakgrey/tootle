@@ -133,10 +133,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 		relationship.label = label;
 	}
 
-    public override bool is_status_owned (API.Status status) {
-        return status.is_owned ();
-    }
-
     public override string get_url () {
         if (page_next != null)
             return page_next;

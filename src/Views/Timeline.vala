@@ -40,7 +40,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
     }
 
     public virtual bool is_status_owned (API.Status status) {
-        return false;
+        return status.is_owned ();
     }
 
     protected virtual bool is_public () {
