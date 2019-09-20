@@ -11,6 +11,7 @@ public class Tootle.Widgets.Avatar : EventBox {
 	construct {
 		get_style_context ().add_class ("avatar");
 		notify["url"].connect (on_url_updated);
+		notify["size"].connect (on_redraw);
 		Screen.get_default ().monitors_changed.connect (on_redraw);
 		on_url_updated ();
 	}

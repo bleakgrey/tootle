@@ -1,112 +1,58 @@
 using Gtk;
 using Gdk;
 
+[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/main.ui")]
 public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
-    private Overlay overlay;
-    public Granite.Widgets.Toast toast;
-    private Grid grid;
-    private Stack view_stack;
-    private Stack timeline_stack;
+    [GtkChild]
+    protected Stack view_stack;
+    [GtkChild]
+    protected Stack timeline_stack;
 
-    public HeaderBar header;
-    public Granite.Widgets.ModeButton button_mode;
-    private Widgets.AccountsButton button_accounts;
-    private Spinner spinner;
-    private Button button_toot;
-    private Button button_back;
+    [GtkChild]
+    protected HeaderBar header;
+    [GtkChild]
+    protected Button back_button;
+    [GtkChild]
+    protected Button compose_button;
+    [GtkChild]
+    protected Granite.Widgets.ModeButton timeline_switcher;
+    [GtkChild]
+    protected Widgets.AccountsButton accounts_button;
 
-    public Views.Home home = new Views.Home ();
-    public Views.Notifications notifications = new Views.Notifications ();
-    public Views.Local local = new Views.Local ();
-    public Views.Federated federated = new Views.Federated ();
+    protected Views.Home home = new Views.Home ();
+    protected Views.Notifications notifications = new Views.Notifications ();
+    protected Views.Local local = new Views.Local ();
+    protected Views.Federated federated = new Views.Federated ();
 
     construct {
         var provider = new Gtk.CssProvider ();
         provider.load_from_resource (@"$(Build.RESOURCES)app.css");
         StyleContext.add_provider_for_screen (Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-        settings.changed.connect (update_theme);
-        update_theme ();
+        back_button.clicked.connect (() => back ());
+        Desktop.set_hotkey_tooltip (back_button, _("Back"), app.ACCEL_BACK);
 
-        timeline_stack = new Stack ();
-        timeline_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
-        timeline_stack.show ();
-        view_stack = new Stack ();
-        view_stack.transition_type = StackTransitionType.SLIDE_LEFT_RIGHT;
-        view_stack.show ();
-        view_stack.add_named (timeline_stack, "0");
-        view_stack.hexpand = view_stack.vexpand = true;
+        compose_button.clicked.connect (() => new Dialogs.Compose ());
+        Desktop.set_hotkey_tooltip (compose_button, _("Compose"), app.ACCEL_NEW_POST);
 
-        spinner = new Spinner ();
-        spinner.active = true;
-
-        button_accounts = new Widgets.AccountsButton ();
-
-        button_back = new Button ();
-        button_back.valign = Align.CENTER;
-        button_back.label = _("Back");
-        button_back.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
-        button_back.clicked.connect (() => back ());
-        Desktop.set_hotkey_tooltip (button_back, null, app.ACCEL_BACK);
-
-        button_toot = new Button ();
-        button_toot.valign = Align.CENTER;
-        button_toot.image = new Image.from_icon_name ("document-edit-symbolic", IconSize.LARGE_TOOLBAR);
-        button_toot.clicked.connect (() => new Dialogs.Compose ());
-        Desktop.set_hotkey_tooltip (button_toot, _("Toot"), app.ACCEL_NEW_POST);
-
-        button_mode = new Granite.Widgets.ModeButton ();
-        button_mode.get_style_context ().add_class ("mode");
-        button_mode.vexpand = true;
-        button_mode.valign = Align.FILL;
-        button_mode.mode_changed.connect (on_mode_changed);
-        button_mode.show ();
-
-        header = new HeaderBar ();
-        header.get_style_context ().add_class ("compact");
-        header.show_close_button = true;
-        header.title = Build.NAME;
-        header.custom_title = button_mode;
-        header.pack_start (button_back);
-        header.pack_start (button_toot);
-        header.pack_end (button_accounts);
-        header.pack_end (spinner);
-        header.show_all ();
-        set_titlebar (header);
-
-        grid = new Grid ();
-        grid.attach (view_stack, 0, 0, 1, 1);
+        timeline_switcher.mode_changed.connect (on_mode_changed);
 
         add_header_view (home, app.ACCEL_TIMELINE_0, 0);
         add_header_view (notifications, app.ACCEL_TIMELINE_1, 1);
         add_header_view (local, app.ACCEL_TIMELINE_2, 2);
         add_header_view (federated, app.ACCEL_TIMELINE_3, 3);
-        button_mode.set_active (0);
+        timeline_switcher.set_active (0);
 
-        toast = new Granite.Widgets.Toast ("");
-        overlay = new Overlay ();
-        overlay.add_overlay (grid);
-        overlay.add_overlay (toast);
-        overlay.set_size_request (450, 600);
-        add (overlay);
-
+        button_press_event.connect (on_button_press);
+        settings.changed.connect (update_theme);
+        update_theme ();
+        update_header ();
         restore_state ();
-        show_all ();
     }
 
-    public MainWindow (Gtk.Application _app) {
-        application = _app;
-        icon_name = Build.DOMAIN;
-        resizable = true;
-        window_position = WindowPosition.CENTER;
-        update_header ();
-
-        app.toast.connect (on_toast);
-        network.started.connect (() => spinner.show ());
-        network.finished.connect (() => spinner.hide ());
-        button_press_event.connect (on_button_press);
-        
+    public MainWindow (Gtk.Application app) {
+        Object (application: app, icon_name: Build.DOMAIN, resizable: true, window_position: WindowPosition.CENTER);
         if (accounts.is_empty ())
             open_view (new Views.NewAccount (false));
     }
@@ -120,12 +66,9 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     private void add_header_view (Views.Base view, string[] accelerators, int32 num) {
         var img = new Image.from_icon_name (view.get_icon (), IconSize.LARGE_TOOLBAR);
         Desktop.set_hotkey_tooltip (img, view.get_name (), accelerators);
-        button_mode.append (img);
+        timeline_switcher.append (img);
         view.image = img;
         timeline_stack.add_named (view, num.to_string ());
-
-        if (view is Views.Notifications)
-            img.pixel_size = 20; // For some reason Notifications icon is too small without this
     }
 
     public int get_visible_id () {
@@ -173,7 +116,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     }
 
     public void switch_timeline (int32 timeline_no) {
-        button_mode.set_active (timeline_no);
+        timeline_switcher.set_active (timeline_no);
     }
 
     private void update_theme () {
@@ -182,23 +125,17 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
     private void update_header () {
         bool primary_mode = get_visible_id () == 0;
-        button_mode.sensitive = primary_mode;
-        button_mode.opacity = primary_mode ? 1 : 0; //Prevent HeaderBar height jitter
-        button_toot.set_visible (primary_mode);
-        button_back.set_visible (!primary_mode);
-        button_accounts.set_visible (true);
-    }
-
-    private void on_toast (string msg){
-        toast.title = msg;
-        toast.send_notification ();
+        timeline_switcher.sensitive = primary_mode;
+        timeline_switcher.opacity = primary_mode ? 1 : 0; //Prevent HeaderBar height jitter
+        compose_button.visible = primary_mode;
+        back_button.visible = !primary_mode;
     }
 
     private void on_mode_changed (Widget widget) {
         var visible = timeline_stack.get_visible_child () as Views.Base;
         visible.current = false;
 
-        timeline_stack.set_visible_child_name (button_mode.selected.to_string ());
+        timeline_stack.set_visible_child_name (timeline_switcher.selected.to_string ());
 
         visible = timeline_stack.get_visible_child () as Views.Base;
         visible.current = true;

@@ -97,18 +97,9 @@ public class Tootle.Widgets.RichLabel : Label {
     }
 
     public bool open_link_fallback (string url, string reason) {
-        warning ("Can't resolve url: " + url);
-        warning ("Reason: " + reason);
-
-        var toast = window.toast;
-        toast.title = reason;
-        toast.set_default_action (_("Open in Browser"));
-        ulong signal_id = 0;
-        signal_id = toast.default_action.connect (() => {
-            Desktop.open_uri (url);
-            toast.disconnect (signal_id);
-        });
-        toast.send_notification ();
+        warning (@"Can't resolve url: $url");
+        warning (@"Reason: $reason");
+        Desktop.open_uri (url);
         return true;
     }
 
