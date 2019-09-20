@@ -3,7 +3,9 @@ using Gdk;
 
 public class Tootle.Views.Timeline : Views.Base, IAccountListener {
 
-    protected string timeline;
+    public string timeline { get; construct set; }
+    public bool is_public { get; construct set; default = false; }
+
     protected int limit = 25;
     protected bool is_last_page = false;
     protected string? page_next;
@@ -11,10 +13,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
 
     protected Notificator? notificator;
 
-    public Timeline (string timeline) {
-        Object ();
-        this.timeline = timeline;
-
+    construct {
         connect_account_service ();
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
@@ -22,6 +21,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         setup_notificator ();
         request ();
     }
+
     ~Timeline () {
         if (notificator != null)
             notificator.close ();
@@ -41,10 +41,6 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
 
     public virtual bool is_status_owned (API.Status status) {
         return status.is_owned ();
-    }
-
-    protected virtual bool is_public () {
-        return false;
     }
 
     public void prepend (API.Status status) {
@@ -100,7 +96,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
     }
 
     public virtual Request append_params (Request req) {
-        return req.with_param ("limit", this.limit.to_string ());
+        return req.with_param ("limit", limit.to_string ());
     }
 
     public virtual void request () {
@@ -166,7 +162,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
 
     protected virtual bool can_stream () {
         var allowed_public = true;
-        if (is_public ())
+        if (is_public)
             allowed_public = settings.live_updates_public;
 
         return settings.live_updates && allowed_public;

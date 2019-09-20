@@ -1,7 +1,7 @@
 public class Tootle.Views.Direct : Views.Timeline {
 
     public Direct () {
-        base ("direct");
+        Object (timeline: "direct");
     }
     
     public override string get_icon () {
@@ -13,8 +13,8 @@ public class Tootle.Views.Direct : Views.Timeline {
     }
     
     public override Soup.Message? get_stream () {
-        var url = "%s/api/v1/streaming/?stream=direct&access_token=%s".printf (accounts.active.instance, accounts.active.token);
-        return new Soup.Message("GET", url);
+        var url = @"/api/v1/streaming/?stream=direct&access_token=$(accounts.active.token)";
+        return new Soup.Message ("GET", url);
     }
 
 }

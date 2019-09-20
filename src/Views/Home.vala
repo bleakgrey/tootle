@@ -1,7 +1,7 @@
 public class Tootle.Views.Home : Views.Timeline {
 
     public Home () {
-        base ("home");
+        Object (timeline: "home");
     }
 
     public override string get_icon () {

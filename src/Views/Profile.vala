@@ -82,14 +82,19 @@ public class Tootle.Views.Profile : Views.Timeline {
 		filter_media.toggled.connect (on_refresh);
 		
 		posts_tab = builder.get_object ("posts_tab") as RadioButton;
-		posts_tab.toggled.connect (on_refresh);
+		posts_tab.toggled.connect (() => {
+			if (posts_tab.active) on_refresh ();
+		});
 		following_tab = builder.get_object ("following_tab") as RadioButton;
-		following_tab.toggled.connect (on_refresh);
+		following_tab.toggled.connect (() => {
+			if (following_tab.active) on_refresh ();
+		});
 		followers_tab = builder.get_object ("followers_tab") as RadioButton;
-		followers_tab.toggled.connect (on_refresh);
+		followers_tab.toggled.connect (() => {
+			if (followers_tab.active) on_refresh ();
+		});
 		
 		account.get_relationship ();
-		request ();
     }
 
     public Profile (API.Account acc) {

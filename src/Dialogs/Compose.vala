@@ -93,7 +93,7 @@ public class Tootle.Dialogs.Compose : Window {
         box.sensitive = true;
     }
     
-    protected void on_error (int32 code, string reason) {
+    protected void on_error (int32 code, string reason) { //TODO: display errors
         warning (reason);
         validate ();
     }
