@@ -2,13 +2,14 @@
 # Copyright (C) 2018 THE com.github.bleakgrey.tootle'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the com.github.bleakgrey.tootle package.
 # Automatically generated, 2018.
+# Guillaume <>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-30 19:17+0300\n"
-"PO-Revision-Date: 2018-06-17 10:07+0200\n"
+"PO-Revision-Date: 2019-10-15 22:09+0200\n"
 "Last-Translator: Guillaume\n"
 "Language-Team: none\n"
 "Language: fr_FR\n"
@@ -16,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Gtranslator 3.32.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
@@ -27,7 +28,7 @@ msgstr "Tootle"
 #: data/com.github.bleakgrey.tootle.desktop.in:5
 #: data/com.github.bleakgrey.tootle.desktop.in:6
 msgid "Mastodon Client"
-msgstr "Client mastodon"
+msgstr "Client Mastodon"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:8
 msgid "com.github.bleakgrey.tootle"
@@ -74,7 +75,7 @@ msgstr ""
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:26
 msgid "bleak_grey"
-msgstr ""
+msgstr "bleak_grey"
 
 #: src/Desktop.vala:10 src/API/Account.vala:123 src/API/Account.vala:142
 #: src/API/Account.vala:161 src/Dialogs/NewAccountDialog.vala:102
@@ -99,12 +100,12 @@ msgstr "Erreur TLS"
 
 #: src/Network.vala:58
 msgid "Can't ensure secure connection: "
-msgstr "Impossible d'assurer une connexion sécurisée:"
+msgstr "Impossible d'assurer une connexion sécurisée :"
 
 #: src/Network.vala:66
 #, c-format
 msgid "Error: %s"
-msgstr "Erreur: %s"
+msgstr "Erreur : %s"
 
 #: src/API/NotificationType.vala:50
 #, c-format
@@ -132,13 +133,13 @@ msgid "<a href=\"%s\"><b>%s</b></a> wants to follow you"
 msgstr "<a href=\"%s\"><b>%s</b></a> demande à vous suivre"
 
 #: src/API/NotificationType.vala:60
-#, fuzzy, c-format
+#, c-format
 msgid "<a href=\"%s\"><b>%s</b></a> posted a toot"
 msgstr "<a href=\"%s\"><b>%s</b></a> a publié un pouet"
 
 #: src/API/Status.vala:174
 msgid "Boosted!"
-msgstr "Partagé!"
+msgstr "Partagé !"
 
 #: src/API/Status.vala:176
 msgid "Removed boost"
@@ -146,16 +147,15 @@ msgstr "Partage annulé"
 
 #: src/API/Status.vala:189
 msgid "Favorited!"
-msgstr "Ajouté aux favoris!"
+msgstr "Ajouté aux favoris !"
 
 #: src/API/Status.vala:191
 msgid "Removed from favorites"
 msgstr "Supprimé des favoris"
 
 #: src/API/Status.vala:204
-#, fuzzy
 msgid "Muted!"
-msgstr "Masqué!"
+msgstr "Masqué !"
 
 #: src/API/Status.vala:206
 msgid "Conversation unmuted"
@@ -163,16 +163,15 @@ msgstr "Discussion visible"
 
 #: src/API/Status.vala:219
 msgid "Pinned!"
-msgstr "Épinglé!"
+msgstr "Épinglé !"
 
 #: src/API/Status.vala:221
-#, fuzzy
 msgid "Unpinned from profile"
 msgstr "Désépinglé du profil"
 
 #: src/API/Status.vala:231
 msgid "Poof!"
-msgstr "Poof!"
+msgstr "Poof !"
 
 #: src/API/StatusVisibility.vala:40
 msgid "Post to public timelines"
@@ -204,7 +203,7 @@ msgstr "Messages directs"
 
 #: src/Widgets/AccountsButton.vala:79 src/Views/SearchView.vala:12
 msgid "Search"
-msgstr "Chercher"
+msgstr "Rechercher"
 
 #: src/Widgets/AccountsButton.vala:83
 msgid "Watchlist"
@@ -216,7 +215,7 @@ msgstr "Paramètres"
 
 #: src/Widgets/AccountsButton.vala:142
 msgid "<b>New Account</b>"
-msgstr "<b>Nouveau Compte</b>"
+msgstr "<b>Nouveau compte</b>"
 
 #: src/Widgets/AccountsButton.vala:143
 msgid "Click to add"
@@ -234,7 +233,7 @@ msgstr "Copier le lien"
 
 #: src/Widgets/AttachmentBox.vala:41
 msgid "Select media files to add"
-msgstr "Sélectionner les média à ajouter"
+msgstr "Sélectionner les médias à ajouter"
 
 #: src/Widgets/AttachmentBox.vala:44
 msgid "_Cancel"
@@ -251,7 +250,7 @@ msgstr "Cliquer pour ouvrir les médias %s"
 
 #: src/Widgets/AttachmentWidget.vala:84
 msgid "Uploading..."
-msgstr "Téléchargement en cours..."
+msgstr "Téléchargement en cours…"
 
 #: src/Widgets/AttachmentWidget.vala:105
 msgid "File read error"
@@ -260,7 +259,7 @@ msgstr "Erreur de lecture du fichier"
 #: src/Widgets/AttachmentWidget.vala:105
 #, c-format
 msgid "Can't read file %s: %s"
-msgstr "Impossible de lire le fichier %s: %s"
+msgstr "Impossible de lire le fichier %s : %s"
 
 #: src/Widgets/AttachmentWidget.vala:124
 msgid "Remove"
@@ -309,7 +308,7 @@ msgstr "Afficher le contenu"
 
 #: src/Widgets/StatusWidget.vala:165
 msgid "[ This post contains sensitive content ]"
-msgstr "[ Ce message comporte un contenu sensible ]"
+msgstr "[ Ce message comporte du contenu sensible ]"
 
 #: src/Widgets/StatusWidget.vala:234
 msgid "This post can't be boosted"
@@ -328,12 +327,10 @@ msgid "Copy Text"
 msgstr "Copier le texte"
 
 #: src/Widgets/StatusWidget.vala:300
-#, fuzzy
 msgid "Unpin from Profile"
 msgstr "Désépingler du profil"
 
 #: src/Widgets/StatusWidget.vala:300
-#, fuzzy
 msgid "Pin on Profile"
 msgstr "Épingler sur le profil"
 
@@ -351,11 +348,11 @@ msgstr "Nouveau compte"
 
 #: src/Dialogs/NewAccountDialog.vala:38
 msgid "What's an instance?"
-msgstr "Qu'est une instance?"
+msgstr "Qu'est-ce qu'une instance ?"
 
 #: src/Dialogs/NewAccountDialog.vala:42
 msgid "Code:"
-msgstr "Code:"
+msgstr "Code :"
 
 #: src/Dialogs/NewAccountDialog.vala:46
 msgid "Paste your instance authorization code here"
@@ -367,7 +364,7 @@ msgstr "Ajouter un compte"
 
 #: src/Dialogs/NewAccountDialog.vala:60
 msgid "Instance:"
-msgstr "Instance:"
+msgstr "Instance :"
 
 #: src/Dialogs/NewAccountDialog.vala:102
 msgid "Please paste valid instance authorization code"
@@ -395,7 +392,7 @@ msgstr "Annuler"
 
 #: src/Dialogs/PostDialog.vala:77
 msgid "Toot!"
-msgstr "Envoyer le message!"
+msgstr "Envoyer le message"
 
 #: src/Dialogs/PostDialog.vala:85
 msgid "Write your warning here"
@@ -407,7 +404,7 @@ msgstr "Apparence"
 
 #: src/Dialogs/SettingsDialog.vala:38
 msgid "Dark theme:"
-msgstr "Thème sombre:"
+msgstr "Thème sombre :"
 
 #: src/Dialogs/SettingsDialog.vala:41
 msgid "Timelines"
@@ -415,11 +412,11 @@ msgstr "Fils"
 
 #: src/Dialogs/SettingsDialog.vala:42
 msgid "Real-time updates:"
-msgstr "Mises à jour instantanées:"
+msgstr "Mises à jour instantanées :"
 
 #: src/Dialogs/SettingsDialog.vala:44
 msgid "Update public timelines:"
-msgstr "Mettre à jour le fil public:"
+msgstr "Mettre à jour le fil public :"
 
 #. grid.attach (new Granite.HeaderLabel (_("Caching")), 0, i++, 2, 1);
 #. grid.attach (new SettingsLabel (_("Use cache:")), 0, i);
@@ -438,7 +435,7 @@ msgstr "Afficher les notifications:"
 
 #: src/Dialogs/SettingsDialog.vala:58
 msgid "Always receive notifications:"
-msgstr "Toujours recevoir les notifications:"
+msgstr "Toujours recevoir les notifications :"
 
 #: src/Dialogs/SettingsDialog.vala:64
 msgid "_Close"
@@ -447,13 +444,17 @@ msgstr "_Fermer"
 #: src/Dialogs/WatchlistDialog.vala:20
 msgid ""
 "You'll be notified when toots from this user appear in your Home timeline."
-msgstr "Vous serez averti lorsque des messages de cet utilisateur apparaîtront sur votre fil d'actualité."
+msgstr ""
+"Vous serez averti lorsque des messages de cet utilisateur apparaitront sur "
+"votre fil d'actualité."
 
 #: src/Dialogs/WatchlistDialog.vala:21
 msgid ""
 "You'll be notified when toots with this hashtag appear in any public "
 "timelines."
-msgstr "Vous serez averti lorsque des toots contenant ce hashtag apparaîtront dans n'importe quel fil public."
+msgstr ""
+"Vous serez averti lorsque des pouets contenant ce hashtag apparaitront dans "
+"n'importe quel fil public."
 
 #: src/Dialogs/WatchlistDialog.vala:137
 msgid "Users"
@@ -473,7 +474,7 @@ msgstr "Rien à voir par ici"
 
 #: src/Views/AccountView.vala:79
 msgid "Edit Profile"
-msgstr "Éditer votre profil"
+msgstr "Modifier votre profil"
 
 #: src/Views/AccountView.vala:80
 msgid "Mention"
@@ -533,7 +534,7 @@ msgstr "Bloqué"
 
 #: src/Views/AccountView.vala:232
 msgid "Follows you"
-msgstr "Vous suis actuellement"
+msgstr "Vous suit actuellement"
 
 #: src/Views/AccountView.vala:234
 msgid "Blocking this instance"
