@@ -3,6 +3,9 @@ project('com.github.bleakgrey.tootle', 'vala', 'c')
 gnome = import('gnome')
 i18n = import('i18n')
 
+add_project_arguments(['--disable-warnings', '-g', '-X', '-rdynamic'], language: 'vala')
+add_project_arguments(['-g', '-rdynamic', '-export-dynamic'], language: 'c')
+
 add_global_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name())
     ],
@@ -18,6 +21,9 @@ asresources = gnome.compile_resources(
 executable(
     meson.project_name(),
     asresources,
+    
+    'src/Stacktrace.vala', #TODO: move into a separate lib
+    
     'src/Build.vala',
     'src/Application.vala',
     'src/Desktop.vala',
@@ -76,9 +82,11 @@ executable(
         dependency('granite', version: '>=5.2.0'),
         dependency('json-glib-1.0'),
         dependency('libsoup-2.4'),
-        meson.get_compiler('c').find_library('m', required: true), #Required by GLib.Math
+        
+        meson.get_compiler('vala').find_library('linux', required: true), #Required by Stacktrace.vala
     ],
-    install: true
+    install: true,
+    link_args: '-export-dynamic'
 )
 
 subdir('data')

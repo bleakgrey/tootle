@@ -3,10 +3,29 @@ using Gtk;
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/accounts_button.ui")]
 public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 
+    [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/accounts_button_item.ui")]
+    private class Item : Grid {
+
+        [GtkChild]
+        private Label name;
+        [GtkChild]
+        private Label handle;
+
+        public Item (InstanceAccount acc) {
+            name.label = acc.display_name;
+            handle.label = acc.handle;
+        }
+    }
+
+    private bool invalidated = true;
+
     [GtkChild]
     private Widgets.Avatar avatar;
     [GtkChild]
     private Spinner spinner;
+
+    [GtkChild]
+    private ListBox account_list;
 
     [GtkChild]
     private ModelButton item_prefs;
@@ -35,14 +54,33 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
         
         network.started.connect (() => spinner.show ());
         network.finished.connect (() => spinner.hide ());
+        
+        notify["active"].connect (() => {
+            if (active && invalidated)
+                rebuild ();
+        });
     }
 
-    public virtual void on_available_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {
-    	//TODO: account list
+    public virtual void on_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {
+    	invalidated = true;
+    	warning ("INVALIDATED");
+    	if (active)
+    	    rebuild ();
     }
 
     public virtual void on_account_changed (InstanceAccount? account) {
     	avatar.url = account == null ? null : account.avatar;
+    }
+
+    private void rebuild () {
+        account_list.@foreach (w => account_list.remove (w));
+        accounts.saved.@foreach (acc => {
+            var item = new Item (acc);
+            account_list.insert (item, -1);
+            return true;
+        });
+
+        invalidated = false;
     }
 
 }

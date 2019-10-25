@@ -35,8 +35,9 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
     public Soup.Message request () {
         var req = new Request.GET (@"/api/v1/statuses/$(root_status.id)/context")
             .with_account ()
-            .then ((sess, msg) => {
-                var root = network.parse (msg);
+            .then_parse_obj (root => {
+                if (scrolled == null) return;
+
                 var ancestors = root.get_array_member ("ancestors");
                 ancestors.foreach_element ((array, i, node) => {
                     var object = node.get_object ();
@@ -45,7 +46,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
                         prepend (status);
                     }
                 });
-                
+
                 var descendants = root.get_array_member ("descendants");
                 descendants.foreach_element ((array, i, node) => {
                     var object = node.get_object ();
@@ -54,7 +55,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
                         append (status);
                     }
                 });
-                
+
                 int x,y;
                 translate_coordinates (root_widget, 0, 0, out x, out y);
                 scrolled.vadjustment.value = (double)(y*-1); //TODO: Animate scrolling?

@@ -103,7 +103,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         if (accounts.active == null) // TODO: Add account reference to IAccountListener
             return;
 
-		append_params (new Request.GET (get_url ()))
+		var req = append_params (new Request.GET (get_url ()))
 		.with_account ()
 		.then_parse_array ((node, msg) => {
             var obj = node.get_object ();
