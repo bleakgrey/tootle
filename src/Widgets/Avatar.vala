@@ -56,8 +56,8 @@ public class Tootle.Widgets.Avatar : EventBox {
 		ctx.set_source_rgb (0,0,0);
 		Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
 		if (cached != null) {
-			if (cached.item != null) {
-				var pixbuf = cached.item.scale_simple (get_scaled_size (), get_scaled_size (), InterpType.BILINEAR);
+			if (!cached.loading) {
+				var pixbuf = cached.data.scale_simple (get_scaled_size (), get_scaled_size (), InterpType.BILINEAR);
 				Gdk.cairo_set_source_pixbuf (ctx, pixbuf, 0, 0);
 			}
 		}

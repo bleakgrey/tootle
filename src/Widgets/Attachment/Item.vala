@@ -62,16 +62,16 @@ public class Tootle.Widgets.Attachment.Item : EventBox {
 		var border_radius = style.get_property (Gtk.STYLE_PROPERTY_BORDER_RADIUS, style.get_state ()).get_int ();
 		
 		if (cached != null) {
-			if (cached.item != null) {
-				var thumb = Drawing.make_thumbnail (cached.item, w, h);
+			if (cached.loading) {
+				Drawing.center (ctx, w, h, 32, 32);
+				get_style_context ().render_activity (ctx, 0, 0, 32, 32);
+			}
+			else {
+				var thumb = Drawing.make_thumbnail (cached.data, w, h);
 				Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
 				Drawing.center (ctx, w, h, thumb.width, thumb.height);
 				Gdk.cairo_set_source_pixbuf (ctx, thumb, 0, 0);
 				ctx.fill ();
-			}
-			else {
-				Drawing.center (ctx, w, h, 32, 32);
-				get_style_context ().render_activity (ctx, 0, 0, 32, 32);
 			}
 		}
 		

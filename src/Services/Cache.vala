@@ -3,7 +3,7 @@ using Gdk;
 
 public class Tootle.Cache : GLib.Object {
 
-    protected HashTable<string, Pixbuf> items { get; set; }
+    protected HashTable<string, Item> items { get; set; }
     protected HashTable<string, Soup.Message> items_in_progress { get; set; }
     protected uint size {
         get {
@@ -12,7 +12,7 @@ public class Tootle.Cache : GLib.Object {
     }
 
     construct {
-        items = new HashTable<string, Pixbuf> (GLib.str_hash, GLib.str_equal);
+        items = new HashTable<string, Item> (GLib.str_hash, GLib.str_equal);
         items_in_progress = new HashTable<string, Soup.Message> (GLib.str_hash, GLib.str_equal);
     }
 
@@ -20,34 +20,57 @@ public class Tootle.Cache : GLib.Object {
 
     public struct Reference {
         public string key;
-        public weak Pixbuf item;
+        public weak Pixbuf? data;
         public bool loading;
     }
 
-    public void unload (Reference? item) {
-        // warning ("Unloading %s", item.key);
-        // if (item != null) {
-        //     info (@"X REMOVE $(item.key)");
-        //     items.remove (item.key);
-        // }
+    protected class Item : GLib.Object {
+        public Pixbuf data { get; construct set; }
+        public int references { get; construct set; }
+        
+        public Item (Pixbuf d, int r) {
+            Object (data: d, references: r);
+        }
+    }
+
+    public void unload (Reference? r) {
+        if (r == null)
+            return;
+
+        if (r.data == null)
+            return;
+
+        var item = items[r.key];
+        if (item == null)
+            return;
+
+        item.references--;
+        //info (@"DEREF $(r.key) $(item.references)");
+        if (item.references <= 0) {
+            //info ("REMOVE %s", r.key);
+            items.remove (r.key);
+            items_in_progress.remove (r.key);
+        }
     }
 
     public void load (string? url, owned CachedResultCallback cb) {
         if (url == null)
             return;
-        
-        var key = url + "@-1";
 
-        var item = items.@get (key);
-        if (item != null) {
-            //info (@"> LOAD $key");
+        var key = url;
+        if (items.contains (key)) {
+            //info (@"LOAD $key");
+            var item = items.@get (key);
+            item.references++;
             cb (Reference () {
-                item = item,
+                data = item.data,
                 key = key,
                 loading = false
             });
             return;
         }
+
+        var item = items.@get (key);
 
         var message = items_in_progress.@get (key);
         if (message == null) {
@@ -61,9 +84,12 @@ public class Tootle.Cache : GLib.Object {
                 pixbuf = new Pixbuf.from_stream (stream);
                 stream.close ();
 
-                store (key, pixbuf);
+                //info (@"< STORE $key");
+                items[key] = new Item (pixbuf, 1);
+                items_in_progress.remove (key);
+
                 cb (Reference () {
-                    item = items[key],
+                    data = items[key].data,
                     key = key,
                     loading = false
                 });
@@ -79,7 +105,7 @@ public class Tootle.Cache : GLib.Object {
             });
 
             cb (Reference () {
-                item = null,
+                data = null,
                 key = key,
                 loading = true
             });
@@ -87,27 +113,23 @@ public class Tootle.Cache : GLib.Object {
             items_in_progress.insert (key, message);
         }
         else {
-            //debug ("| AWAIT: %s", key);
+            //info ("AWAIT: %s", key);
             ulong id = 0;
             id = message.finished.connect_after (() => {
+                var it = items.@get (key);
                 cb (Reference () {
-                    item = items[key],
+                    data = it.data,
                     key = key,
                     loading = false
                 });
+                it.references++;
                 message.disconnect (id);
             });
         }
     }
 
-    private void store (string key, Pixbuf pixbuf) {
-        //info (@"< STORE $key");
-        items[key] = pixbuf;
-        items_in_progress.remove (key);
-    }
-
     public void clear () {
-        //info ("X BYE");
+        info ("PURGE");
         items.remove_all ();
         items_in_progress.remove_all ();
     }

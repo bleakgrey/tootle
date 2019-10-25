@@ -68,7 +68,7 @@ public class Tootle.Views.Search : Views.Base {
             return;
         }
 
-        new Request.GET ("/api/v1/search")
+        new Request.GET ("/api/v2/search")
         	.with_account ()
         	.with_param ("resolve", "true")
         	.with_param ("q", Soup.URI.encode (query, null))

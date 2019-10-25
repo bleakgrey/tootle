@@ -20,11 +20,6 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     [GtkChild]
     protected Widgets.AccountsButton accounts_button;
 
-    protected Views.Home home = new Views.Home ();
-    protected Views.Notifications notifications = new Views.Notifications ();
-    protected Views.Local local = new Views.Local ();
-    protected Views.Federated federated = new Views.Federated ();
-
     construct {
         var provider = new Gtk.CssProvider ();
         provider.load_from_resource (@"$(Build.RESOURCES)app.css");
@@ -38,10 +33,10 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
         timeline_switcher.mode_changed.connect (on_mode_changed);
 
-        add_header_view (home, app.ACCEL_TIMELINE_0, 0);
-        add_header_view (notifications, app.ACCEL_TIMELINE_1, 1);
-        add_header_view (local, app.ACCEL_TIMELINE_2, 2);
-        add_header_view (federated, app.ACCEL_TIMELINE_3, 3);
+        add_header_view (new Views.Home (), app.ACCEL_TIMELINE_0, 0);
+        add_header_view (new Views.Notifications (), app.ACCEL_TIMELINE_1, 1);
+        add_header_view (new Views.Local (), app.ACCEL_TIMELINE_2, 2);
+        add_header_view (new Views.Federated (), app.ACCEL_TIMELINE_3, 3);
         timeline_switcher.set_active (0);
 
         button_press_event.connect (on_button_press);

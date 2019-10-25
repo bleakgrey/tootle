@@ -58,7 +58,7 @@ public class Tootle.Widgets.RichLabel : Label {
         }
 
         if ("@" in url || "tags" in url) {
-            new Request.GET ("/api/v1/search")
+            new Request.GET ("/api/v2/search")
                 .with_account ()
                 .with_param ("resolve", "true")
                 .with_param ("q", Soup.URI.encode (url, null))
