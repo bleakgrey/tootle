@@ -26,6 +26,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 
 		var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/new_account.ui");
 		content.pack_start (builder.get_object ("wizard") as Grid);
+		state = "content";
 		next_button = builder.get_object ("next") as Button;
 		reset_label = builder.get_object ("reset") as Label;
 		instance_entry = builder.get_object ("instance_entry") as Entry;

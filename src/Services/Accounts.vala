@@ -9,8 +9,8 @@ public class Tootle.Accounts : GLib.Object {
     public InstanceAccount? active { get; set; }
 
     construct {
-        dir_path = "%s/%s".printf (GLib.Environment.get_user_config_dir (), app.application_id);
-        file_path = "%s/%s".printf (dir_path, "accounts.json");
+        dir_path = @"$(GLib.Environment.get_user_config_dir ())/$(app.application_id)";
+        file_path = @"$dir_path/accounts.json";
     }
 
     public void switch_account (int id) {
@@ -41,11 +41,11 @@ public class Tootle.Accounts : GLib.Object {
         account.start_notificator ();
     }
 
-    public void remove (int i) {
-        var account = saved.@get (i);
+    public void remove (InstanceAccount account) {
         account.close_notificator ();
+        saved.remove (account);
+        saved.notify_property ("size");
 
-        saved.remove_at (i);
         if (saved.size < 1)
             active = null;
         else {

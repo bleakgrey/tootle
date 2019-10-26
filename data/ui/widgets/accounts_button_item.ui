@@ -3,7 +3,6 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="TootleWidgetsAccountsButtonItem" parent="GtkGrid">
-    <property name="width_request">250</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="margin_left">8</property>
@@ -13,12 +12,9 @@
     <property name="row_spacing">3</property>
     <property name="column_spacing">8</property>
     <child>
-      <object class="GtkImage">
+      <object class="TootleWidgetsAvatar" id="avatar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="pixel_size">48</property>
-        <property name="icon_name">dfdf</property>
-        <property name="icon_size">0</property>
+        <property name="size">48</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
@@ -27,10 +23,11 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="remove">
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Remove</property>
         <property name="valign">center</property>
         <property name="relief">none</property>
         <child>
@@ -47,7 +44,7 @@
         </style>
       </object>
       <packing>
-        <property name="left_attach">2</property>
+        <property name="left_attach">3</property>
         <property name="top_attach">0</property>
         <property name="height">2</property>
       </packing>
@@ -83,6 +80,33 @@
       <packing>
         <property name="left_attach">1</property>
         <property name="top_attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="profile">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Open profile</property>
+        <property name="valign">center</property>
+        <property name="relief">none</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">avatar-default-symbolic</property>
+          </object>
+        </child>
+        <style>
+          <class name="circular"/>
+          <class name="image-button"/>
+          <class name="flat"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">0</property>
+        <property name="height">2</property>
       </packing>
     </child>
   </template>
