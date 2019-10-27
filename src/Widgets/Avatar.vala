@@ -52,17 +52,19 @@ public class Tootle.Widgets.Avatar : EventBox {
 		var h = get_allocated_height ();
 		var style = get_style_context ();
 		var border_radius = style.get_property (Gtk.STYLE_PROPERTY_BORDER_RADIUS, style.get_state ()).get_int ();
-	
-		ctx.set_source_rgb (0,0,0);
+		Pixbuf pixbuf;
+
 		Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
-		if (cached != null) {
-			if (!cached.loading) {
-				var pixbuf = cached.data.scale_simple (get_scaled_size (), get_scaled_size (), InterpType.BILINEAR);
-				Gdk.cairo_set_source_pixbuf (ctx, pixbuf, 0, 0);
-			}
+		if (cached != null && !cached.loading) {
+			pixbuf = cached.data.scale_simple (get_scaled_size (), get_scaled_size (), InterpType.BILINEAR);
 		}
+		else {
+			pixbuf = IconTheme.get_default ()
+				.load_icon_for_scale ("avatar-default", size, get_scale_factor (), IconLookupFlags.GENERIC_FALLBACK);
+		}
+		Gdk.cairo_set_source_pixbuf (ctx, pixbuf, 0, 0);
 		ctx.fill ();
-		
+
 		return Gdk.EVENT_STOP;
 	}
 
