@@ -12,8 +12,8 @@ public class Tootle.Views.Home : Views.Timeline {
         return _("Home");
     }
 
-    public override Soup.Message? get_stream () {
-        return accounts.active.get_stream ();
+    public override string? get_stream_url () {
+        return accounts.active.get_stream_url ();
     }
 
 }

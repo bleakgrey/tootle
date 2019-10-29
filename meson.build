@@ -3,7 +3,7 @@ project('com.github.bleakgrey.tootle', 'vala', 'c')
 gnome = import('gnome')
 i18n = import('i18n')
 
-add_project_arguments(['--disable-warnings', '-g', '-X', '-rdynamic'], language: 'vala')
+#add_project_arguments(['--disable-warnings', '-g', '-X', '-rdynamic'], language: 'vala')
 add_project_arguments(['-g', '-rdynamic', '-export-dynamic'], language: 'c')
 
 add_global_arguments([
@@ -32,13 +32,13 @@ executable(
     'src/Utils.vala',
     'src/Request.vala',
     'src/InstanceAccount.vala',
-    'src/Services/Notificator.vala',
+    'src/Services/Streams.vala',
     'src/Services/Settings.vala',
     'src/Services/Accounts.vala',
     'src/Services/IAccountListener.vala',
+    'src/Services/IStreamListener.vala',
     'src/Services/Cache.vala',
     'src/Services/Network.vala',
-    'src/Services/Watchlist.vala',
     'src/API/Account.vala',
     'src/API/Relationship.vala',
     'src/API/Mention.vala',
@@ -61,7 +61,6 @@ executable(
     'src/Dialogs/MainWindow.vala',
     'src/Dialogs/Compose.vala',
     'src/Dialogs/Preferences.vala',
-    'src/Dialogs/WatchlistEditor.vala',
     'src/Views/Base.vala',
     'src/Views/NewAccount.vala',
     'src/Views/Timeline.vala',

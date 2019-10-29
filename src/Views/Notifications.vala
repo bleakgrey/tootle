@@ -11,7 +11,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         connect_account_service ();
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
-        network.notification.connect (prepend);
+        streams.notification.connect (prepend);
 
         request ();
     }

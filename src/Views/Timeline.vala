@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Timeline : Views.Base, IAccountListener {
+public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListener {
 
     public string timeline { get; construct set; }
     public bool is_public { get; construct set; default = false; }
@@ -10,21 +10,17 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
     protected bool is_last_page = false;
     protected string? page_next;
     protected string? page_prev;
-
-    protected Notificator? notificator;
+    protected string? stream;
 
     construct {
         connect_account_service ();
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
 
-        setup_notificator ();
         request ();
     }
-
     ~Timeline () {
-        if (notificator != null)
-            notificator.close ();
+        streams.unsubscribe (stream, this);
     }
 
     public override string get_icon () {
@@ -35,7 +31,8 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         return _("Home");
     }
 
-    public virtual void on_status_added (API.Status status) {
+    public override void on_status_added (API.Status status) {
+        warning ("TIMELINE ON_STATUS_ADDED");
         prepend (status);
     }
 
@@ -103,7 +100,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         if (accounts.active == null) // TODO: Add account reference to IAccountListener
             return;
 
-		var req = append_params (new Request.GET (get_url ()))
+		append_params (new Request.GET (get_url ()))
 		.with_account ()
 		.then_parse_array ((node, msg) => {
             var obj = node.get_object ();
@@ -123,41 +120,19 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener {
         request ();
     }
 
-    public virtual Soup.Message? get_stream () {
+    public virtual string? get_stream_url () {
         return null;
     }
 
-    public virtual void on_account_changed (InstanceAccount? account) {
+    public override void on_account_changed (InstanceAccount? account) {
+		streams.unsubscribe (stream, this);
         if (account == null)
             return;
 
-        var stream = get_stream ();
-        if (notificator != null && stream != null) {
-            var old_url = notificator.get_url ();
-            var new_url = stream.get_uri ().to_string (false);
-            if (old_url != new_url) {
-                info ("Updating notificator %s", notificator.get_name ());
-                setup_notificator ();
-            }
-        }
+        if (can_stream ())
+            streams.subscribe (get_stream_url (), this, out stream);
 
         on_refresh ();
-    }
-
-    protected void setup_notificator () {
-        if (notificator != null)
-            notificator.close ();
-
-        var stream = get_stream ();
-        if (stream == null)
-            return;
-
-        notificator = new Notificator (stream);
-        notificator.status_added.connect ((status) => {
-            if (can_stream ())
-                on_status_added (status);
-        });
-        notificator.start ();
     }
 
     protected virtual bool can_stream () {

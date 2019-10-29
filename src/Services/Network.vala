@@ -7,8 +7,6 @@ public class Tootle.Network : GLib.Object {
 
     public signal void started ();
     public signal void finished ();
-    public signal void notification (API.Notification notification);
-    public signal void status_removed (int64 id);
 
 	public delegate void ErrorCallback (int32 code, string reason);
 	public delegate void SuccessCallback (Session session, Message msg) throws Error;
@@ -29,10 +27,6 @@ public class Tootle.Network : GLib.Object {
             if (requests_processing <= 0)
                 finished ();
         });
-    }
-
-    public async WebsocketConnection stream (Soup.Message msg) throws Error {
-        return yield session.websocket_connect_async (msg, null, null, null);
     }
 
     // public void cancel_request (Soup.Message? msg) {

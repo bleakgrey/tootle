@@ -38,11 +38,11 @@ public class Tootle.Accounts : GLib.Object {
         saved.add (account);
         save ();
         switch_account (saved.size - 1);
-        account.start_notificator ();
+        account.subscribe ();
     }
 
     public void remove (InstanceAccount account) {
-        account.close_notificator ();
+        account.unsubscribe ();
         saved.remove (account);
         saved.notify_property ("size");
 
@@ -128,7 +128,7 @@ public class Tootle.Accounts : GLib.Object {
                 var account = InstanceAccount.parse (obj);
                 if (account != null) {
                     saved.add (account);
-                    account.start_notificator ();
+                    account.subscribe ();
                 }
             });
             info (@"Loaded $(saved.size) accounts");

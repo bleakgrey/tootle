@@ -12,9 +12,8 @@ public class Tootle.Views.Federated : Views.Timeline {
         return _("Federated Timeline");
     }
 
-    public override Soup.Message? get_stream () {
-        var url = @"/api/v1/streaming/?stream=public&access_token=$(accounts.active.token)";
-        return new Soup.Message("GET", url);
+    public override string? get_stream_url () {
+        return @"/api/v1/streaming/?stream=public&access_token=$(accounts.active.token)";
     }
 
 }

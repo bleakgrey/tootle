@@ -74,7 +74,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
         item_favs.clicked.connect (() => window.open_view (new Views.Favorites ()));
         item_direct.clicked.connect (() => window.open_view (new Views.Direct ()));
         item_search.clicked.connect (() => window.open_view (new Views.Search ()));
-        item_watchlist.clicked.connect (() => Dialogs.WatchlistEditor.open ());
+        //item_watchlist.clicked.connect (() => Dialogs.WatchlistEditor.open ());
         item_prefs.clicked.connect (() => Dialogs.Preferences.open ());
 
         network.started.connect (() => spinner.show ());

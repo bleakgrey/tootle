@@ -17,7 +17,7 @@ namespace Tootle {
     public static Accounts accounts;
     public static Network network;
     public static Cache cache;
-    public static Watchlist watchlist;
+    public static Streams streams;
 
     public static bool start_hidden = false;
 
@@ -28,7 +28,7 @@ namespace Tootle {
         public Accounts app_accounts { get {return Tootle.accounts; } }
         public Network app_network { get {return Tootle.network; } }
         public Cache app_cache { get {return Tootle.cache; } }
-        public Watchlist app_watchlist { get {return Tootle.watchlist; } }
+        public Streams app_streams { get {return Tootle.streams; } }
 
         public signal void refresh ();
         public signal void toast (string title);
@@ -40,7 +40,7 @@ namespace Tootle {
         };
 
         public const GLib.ActionEntry[] app_entries = {
-            {"compose-toot",    compose_toot_activated          },
+            {"compose",    compose_activated          },
             {"back",            back_activated                  },
             {"refresh",         refresh_activated               },
             {"switch-timeline", switch_timeline_activated, "i"  }
@@ -85,10 +85,10 @@ namespace Tootle {
             Granite.Services.Logger.DisplayLevel = Granite.Services.LogLevel.INFO;
 
             settings = new Settings ();
+            streams = new Streams ();
             accounts = new Accounts ();
             network = new Network ();
             cache = new Cache ();
-            watchlist = new Watchlist ();
             accounts.init ();
 
             app.error.connect (app.on_error);
@@ -96,7 +96,7 @@ namespace Tootle {
             window_dummy = new Window ();
             add_window (window_dummy);
 
-            set_accels_for_action ("app.compose-toot", ACCEL_NEW_POST);
+            set_accels_for_action ("app.compose", ACCEL_NEW_POST);
             set_accels_for_action ("app.back", ACCEL_BACK);
             set_accels_for_action ("app.refresh", ACCEL_REFRESH);
             set_accels_for_action ("app.switch-timeline(0)", ACCEL_TIMELINE_0);
@@ -129,7 +129,7 @@ namespace Tootle {
             message_dialog.destroy ();
         }
 
-        private void compose_toot_activated () {
+        private void compose_activated () {
             new Dialogs.Compose ();
         }
 

@@ -1,7 +1,7 @@
 using GLib;
 using Gee;
 
-public class Tootle.InstanceAccount : API.Account {
+public class Tootle.InstanceAccount : API.Account, IStreamListener {
 
     public string instance { get; set; }
     public string client_id { get; set; }
@@ -11,10 +11,11 @@ public class Tootle.InstanceAccount : API.Account {
     public int64 last_seen_notification { get; set; default = 0; }
     public bool has_unread_notifications { get; set; default = false; }
     public ArrayList<API.Notification> cached_notifications { get; set; default = new ArrayList<API.Notification> (); }
-    private Notificator? notificator { get; set; }
+
+	protected string? stream;
 
     public string handle {
-        owned get { return @"$username@$short_instance"; }
+        owned get { return @"@$username@$short_instance"; }
     }
     public string short_instance {
         owned get {
@@ -27,6 +28,9 @@ public class Tootle.InstanceAccount : API.Account {
     public InstanceAccount (int64 _id){
         base (_id);
     }
+    ~InstanceAccount () {
+    	unsubscribe ();
+    }
 
     public InstanceAccount.from_account (API.Account account) {
         base (account.id);
@@ -38,29 +42,20 @@ public class Tootle.InstanceAccount : API.Account {
 	    return this;
 	}
 
-    public void start_notificator () {
-        if (notificator != null)
-            notificator.close ();
-
-        notificator = new Notificator (get_stream ());
-        notificator.status_added.connect (status_added);
-        notificator.status_removed.connect (status_removed);
-        notificator.notification.connect (notification);
-        notificator.start ();
-    }
-
     public bool is_current () {
     	return accounts.active.token == token;
     }
 
-    public Soup.Message get_stream () {
-        var url = "%s/api/v1/streaming/?stream=user&access_token=%s".printf (instance, token);
-        return new Soup.Message ("GET", url);
+    public string get_stream_url () {
+        return @"$instance/api/v1/streaming/?stream=user&access_token=$token";
     }
 
-    public void close_notificator () {
-        if (notificator != null)
-            notificator.close ();
+    public void subscribe () {
+        streams.subscribe (get_stream_url (), this, out stream);
+    }
+
+    public void unsubscribe () {
+        streams.unsubscribe (stream, this);
     }
 
     public override Json.Node? serialize () {
@@ -126,7 +121,7 @@ public class Tootle.InstanceAccount : API.Account {
         return acc;
     }
 
-    public void notification (API.Notification obj) {
+    public override void on_notification (API.Notification obj) {
         var title = Html.remove_tags (obj.kind.get_desc (obj.account));
         var notification = new GLib.Notification (title);
         if (obj.status != null) {
@@ -141,7 +136,7 @@ public class Tootle.InstanceAccount : API.Account {
             app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
 
         if (is_current ())
-            network.notification (obj);
+            streams.notification (obj);
 
         if (obj.kind == API.NotificationType.WATCHLIST) {
             cached_notifications.add (obj);
@@ -149,26 +144,26 @@ public class Tootle.InstanceAccount : API.Account {
         }
     }
 
-    private void status_removed (int64 id) {
+    public override void on_status_removed (int64 id) {
         if (is_current ())
-            network.status_removed (id);
+            streams.status_removed (id);
     }
 
-    private void status_added (API.Status status) {
+    public override void on_status_added (API.Status status) {
         if (!is_current ())
             return;
 
-        watchlist.users.@foreach (item => {
-        	var acct = status.account.acct;
-            if (item == acct || item == "@" + acct) {
-                var obj = new API.Notification (-1);
-                obj.kind = API.NotificationType.WATCHLIST;
-                obj.account = status.account;
-                obj.status = status;
-                notification (obj);
-            }
-            return true;
-        });
+        // watchlist.users.@foreach (item => {
+        // 	var acct = status.account.acct;
+        //     if (item == acct || item == "@" + acct) {
+        //         var obj = new API.Notification (-1);
+        //         obj.kind = API.NotificationType.WATCHLIST;
+        //         obj.account = status.account;
+        //         obj.status = status;
+        //         on_notification (obj);
+        //     }
+        //     return true;
+        // });
     }
 
 }

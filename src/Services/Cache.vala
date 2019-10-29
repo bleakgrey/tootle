@@ -26,9 +26,9 @@ public class Tootle.Cache : GLib.Object {
 
     protected class Item : GLib.Object {
         public Pixbuf data { get; construct set; }
-        public int references { get; construct set; }
+        public int64 references { get; construct set; }
         
-        public Item (Pixbuf d, int r) {
+        public Item (Pixbuf d, int64 r) {
             Object (data: d, references: r);
         }
     }
@@ -96,7 +96,7 @@ public class Tootle.Cache : GLib.Object {
 
                 message.disconnect (id);
             });
-            
+
             network.queue (message, (sess, msg) => {
                 // no one cares
             },

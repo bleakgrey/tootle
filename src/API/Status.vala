@@ -209,7 +209,7 @@ public class Tootle.API.Status : GLib.Object {
         new Request.DELETE (@"/api/v1/statuses/$id")
         	.with_account ()
         	.then ((sess, msg) => {
-        	    network.status_removed (id);
+        	    streams.status_removed (id);
         	    cb (sess, msg);
         	})
             .on_error ((status, reason) => err (status, reason))

@@ -85,7 +85,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     construct {
         button_press_event.connect (on_clicked);
-        network.status_removed.connect (on_status_removed);
+        streams.status_removed.connect (on_status_removed);
         content.activate_link.connect (on_toggle_spoiler);
         notify["kind"].connect (on_kind_changed);
         
@@ -157,7 +157,7 @@ public class Tootle.Widgets.Status : EventBox {
 
     ~Status () {
         button_press_event.disconnect (on_clicked);
-        network.status_removed.disconnect (on_status_removed);
+        streams.status_removed.disconnect (on_status_removed);
         notify["kind"].disconnect (on_kind_changed);
     }
 

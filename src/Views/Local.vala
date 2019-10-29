@@ -12,9 +12,8 @@ public class Tootle.Views.Local : Views.Federated {
         return req.with_param ("local", "true");
     }
 
-    public override Soup.Message? get_stream () {
-        var url = @"/api/v1/streaming/?stream=public:local&access_token=$(accounts.active.token)";
-        return new Soup.Message ("GET", url);
+    public override string? get_stream_url () {
+        return @"/api/v1/streaming/?stream=public:local&access_token=$(accounts.active.token)";
     }
 
 }
