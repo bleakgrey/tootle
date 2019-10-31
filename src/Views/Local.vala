@@ -13,7 +13,7 @@ public class Tootle.Views.Local : Views.Federated {
     }
 
     public override string? get_stream_url () {
-        return @"/api/v1/streaming/?stream=public:local&access_token=$(accounts.active.token)";
+        return account != null ? @"$(account.instance)/api/v1/streaming/?stream=public:local&access_token=$(account.token)" : null;
     }
 
 }

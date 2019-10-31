@@ -2,7 +2,7 @@ using Gtk;
 
 public class Tootle.Views.Profile : Views.Timeline {
 
-    public API.Account account { get; construct set; } 
+    public API.Account profile { get; construct set; } 
 
     protected RadioButton filter_all;
     protected RadioButton filter_replies;
@@ -21,29 +21,29 @@ public class Tootle.Views.Profile : Views.Timeline {
     protected RadioButton followers_tab;
 
     construct {
-    	account.notify["rs"].connect (on_rs_updated);
+    	profile.notify["rs"].connect (on_rs_updated);
     
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
 		view.pack_start (builder.get_object ("grid") as Grid, false, false, 0);
 		
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
-		avatar.url = account.avatar;
+		avatar.url = profile.avatar;
 		
 		var name = builder.get_object ("name") as Widgets.RichLabel;
-		account.bind_property ("display-name", name, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("display-name", name, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			var label = (string) src;
 			target.set_string (@"<span size='x-large' weight='bold'>$label</span>");
 			return true;
 		});
 		
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
-		account.bind_property ("acct", handle, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("acct", handle, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string ("@" + (string) src);
 			return true;
 		});
 		
 		var note = builder.get_object ("note") as Widgets.RichLabel;
-		account.bind_property ("note", note, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("note", note, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string (Html.simplify ((string) src));
 			return true;
 		});
@@ -55,19 +55,19 @@ public class Tootle.Views.Profile : Views.Timeline {
 		relationship = builder.get_object ("relationship") as Label;
 		
 		posts_label = builder.get_object ("posts_label") as Label;
-		account.bind_property ("posts_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("posts_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var val = (int64) src;
 			target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
 			return true;
 		});
 		following_label = builder.get_object ("following_label") as Label;
-		account.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var val = (int64) src;
 			target.set_string (_("%s Follows").printf (@"<b>$val</b>"));
 			return true;
 		});
 		followers_label = builder.get_object ("followers_label") as Label;
-		account.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var val = (int64) src;
 			target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
 			return true;
@@ -93,20 +93,20 @@ public class Tootle.Views.Profile : Views.Timeline {
 			if (followers_tab.active) on_refresh ();
 		});
 		
-		account.get_relationship ();
+		profile.get_relationship ();
     }
 
     public Profile (API.Account acc) {
-        Object (account: acc);
+        Object (profile: acc);
     }
 
 	protected void on_follow_button_clicked () {
 		actions.sensitive = false;
-		account.set_following (!account.rs.following);
+		profile.set_following (!profile.rs.following);
 	}
 
 	protected void on_rs_updated () {
-		var rs = account.rs;
+		var rs = profile.rs;
 		var label = "";
 		if (actions.sensitive = rs != null) {
 			if (rs.requested)
@@ -156,7 +156,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
     public override void request () {
-        if (accounts.active == null)
+        if (account == null)
             return;
 
 		append_params (new Request.GET (get_url ()))

@@ -15,7 +15,7 @@ public class Tootle.Streams : Object {
 
 	protected class Connection : Object {
 		public ArrayList<IStreamListener> subscribers;
-		protected WebsocketConnection? socket;
+		protected WebsocketConnection socket;
 		protected Message msg;
 
 		protected bool closing = false;
@@ -28,14 +28,13 @@ public class Tootle.Streams : Object {
 			}
 		}
 
-		public Connection (IStreamListener s, string url) {
+		public Connection (string url) {
 			this.subscribers = new ArrayList<IStreamListener> ();
-			this.subscribers.add (s);
 			this.msg = new Message ("GET", url);
 		}
 
 		public bool start () {
-			info (@"Connecting: $name");
+			//info (@"Opening stream: $name");
 			network.session.websocket_connect_async.begin (msg, null, null, null, (obj, res) => {
 				socket = network.session.websocket_connect_async.end (res);
 				socket.error.connect (on_error);
@@ -46,13 +45,13 @@ public class Tootle.Streams : Object {
 		}
 
 		public void add (IStreamListener s) {
-			info (@"Subscribing: $name");
+			info ("%s > %s", get_subscriber_name (s), name);
 			subscribers.add (s);
 		}
 
 		public void remove (IStreamListener s) {
 			if (subscribers.contains (s)) {
-				info (@"Unsubscribing: $name");
+				info ("%s X %s", get_subscriber_name (s), name);
 				subscribers.remove (s);
 			}
 
@@ -86,27 +85,33 @@ public class Tootle.Streams : Object {
 		}
 	}
 
-	public void subscribe (string? url, IStreamListener subscriber, out string stream) {
+	public void subscribe (string? url, IStreamListener s, out string cookie) {
 		if (url == null)
 			return;
 
 		if (connections.contains (url)) {
-			connections[url].add (subscriber);
+			connections[url].add (s);
 		}
 		else {
-			var con = new Connection (subscriber, url);
+			var con = new Connection (url);
 			connections[url] = con;
+			con.add (s);
 			con.start ();
 		}
-		stream = url;
+		cookie = url;
 	}
 
-	public void unsubscribe (string? url, IStreamListener subscriber) {
+	public void unsubscribe (string? cookie, IStreamListener s) {
+		var url = cookie;
 		if (url == null)
 			return;
 
 		if (connections.contains (url))
-			connections.@get (url).remove (subscriber);
+			connections.@get (url).remove (s);
+	}
+
+	static string get_subscriber_name (Object s) {
+		return s.get_type ().name ();
 	}
 
 	static void decode (Bytes bytes, out string event, out Json.Object root) throws Error {
@@ -131,27 +136,35 @@ public class Tootle.Streams : Object {
 
 		string event;
 		Json.Object root;
-		decode (bytes, out event, out root); warning (@"$event for $(c.name)");
+		decode (bytes, out event, out root);
+
+		// c.subscribers.@foreach (s => {
+		// 	warning ("%s: %s for %s", c.name, event, get_subscriber_name (s));
+		// 	return false;
+		// });
 
 		switch (event) {
 			case "update":
 				var entity = API.Status.parse (sanitize (root));
-				c.subscribers.@foreach (s => { 
-					s.on_status_added (entity);
+				c.subscribers.@foreach (s => {
+					if (s.accepts (ref event))
+						s.on_status_added (entity);
 					return false;
 				});
 				break;
 			case "delete":
 				var id = int64.parse (root.get_string_member ("payload"));
-				c.subscribers.@foreach (s => { 
-					s.on_status_removed (id);
+				c.subscribers.@foreach (s => {
+					if (s.accepts (ref event))
+						s.on_status_removed (id);
 					return false;
 				});
 				break;
 			case "notification":
 				var entity = API.Notification.parse (sanitize (root));
-				c.subscribers.@foreach (s => { 
-					s.on_notification (entity);
+				c.subscribers.@foreach (s => {
+					if (s.accepts (ref event))
+						s.on_notification (entity);
 					return false;
 				});
 				break;

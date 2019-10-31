@@ -13,7 +13,7 @@ public class Tootle.Views.Federated : Views.Timeline {
     }
 
     public override string? get_stream_url () {
-        return @"/api/v1/streaming/?stream=public&access_token=$(accounts.active.token)";
+        return account != null ? @"$(account.instance)/api/v1/streaming/?stream=public&access_token=$(account.token)" : null;
     }
 
 }

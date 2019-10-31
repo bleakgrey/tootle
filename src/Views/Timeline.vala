@@ -6,6 +6,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
     public string timeline { get; construct set; }
     public bool is_public { get; construct set; default = false; }
 
+    protected InstanceAccount? account = null;
     protected int limit = 25;
     protected bool is_last_page = false;
     protected string? page_next;
@@ -32,7 +33,6 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
     }
 
     public override void on_status_added (API.Status status) {
-        warning ("TIMELINE ON_STATUS_ADDED");
         prepend (status);
     }
 
@@ -124,18 +124,14 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
         return null;
     }
 
-    public override void on_account_changed (InstanceAccount? account) {
+    public override void on_account_changed (InstanceAccount? acc) {
+        account = acc;
 		streams.unsubscribe (stream, this);
-        if (account == null)
-            return;
-
-        if (can_stream ())
-            streams.subscribe (get_stream_url (), this, out stream);
-
+        streams.subscribe (get_stream_url (), this, out stream);
         on_refresh ();
     }
 
-    protected virtual bool can_stream () {
+    protected override bool accepts (ref string event) {
         var allowed_public = true;
         if (is_public)
             allowed_public = settings.live_updates_public;
