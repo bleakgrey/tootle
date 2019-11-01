@@ -11,7 +11,7 @@ public class Tootle.Views.Search : Views.Base {
         bar.search_mode_enabled = true;
         bar.show ();
         pack_start (bar, false, false, 0);
-        
+
         entry = new SearchEntry ();
         entry.width_chars = 25;
         entry.text = query;
@@ -69,7 +69,7 @@ public class Tootle.Views.Search : Views.Base {
         }
 
         new Request.GET ("/api/v2/search")
-        	.with_account ()
+        	.with_account (accounts.active)
         	.with_param ("resolve", "true")
         	.with_param ("q", Soup.URI.encode (query, null))
         	.then ((sess, msg) => {
@@ -83,7 +83,7 @@ public class Tootle.Views.Search : Views.Base {
                 if (hashtags.get_length () > 0) {
                     append_header (_("Hashtags"));
                     hashtags.foreach_element ((array, i, node) => {
-                        append_hashtag (node.get_string ());
+                        append_hashtag (node.get_object ().get_string_member ("name"));
                     });
                 }
 
