@@ -1,9 +1,10 @@
 using Gtk;
 
-public class Tootle.Views.ExpandedStatus : Views.Base {
+public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
 
     public API.Status root_status { get; construct set; }
-    private Widgets.Status root_widget;
+    protected InstanceAccount? account = null;
+    protected Widgets.Status root_widget;
 
     public ExpandedStatus (API.Status status) {
         Object (root_status: status, state: "content");
@@ -13,6 +14,11 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
         root_widget.get_style_context ().add_class ("card");
         root_widget.get_style_context ().add_class ("highlight");
 
+        connect_account ();
+    }
+
+   public override void on_account_changed (InstanceAccount? acc) {
+        account = acc;
         request ();
     }
 
@@ -32,9 +38,9 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
     	return prepend (status, true);
     }
 
-    public Soup.Message request () {
-        var req = new Request.GET (@"/api/v1/statuses/$(root_status.id)/context")
-            .with_account ()
+    public void request () {
+        new Request.GET (@"/api/v1/statuses/$(root_status.id)/context")
+            .with_account (account)
             .then_parse_obj (root => {
                 if (scrolled == null) return;
 
@@ -61,7 +67,6 @@ public class Tootle.Views.ExpandedStatus : Views.Base {
                 scrolled.vadjustment.value = (double)(y*-1); //TODO: Animate scrolling?
             })
             .exec ();
-        return req;
     }
 
     public static void open_from_link (string q) {
