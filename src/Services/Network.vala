@@ -66,7 +66,7 @@ public class Tootle.Network : GLib.Object {
 
 	public string describe_error (int32 code) {
 	    var reason = Soup.Status.get_phrase (code);
-		return @"$reason ($code)";
+		return @"$code: $reason";
 	}
 
     public void on_error (int32 code, string message) {

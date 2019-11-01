@@ -1,4 +1,4 @@
-public class Tootle.API.Tag{
+public class Tootle.API.Tag {
 
     public string name;
     public string url;

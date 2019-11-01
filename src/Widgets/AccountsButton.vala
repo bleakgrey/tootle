@@ -20,18 +20,18 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
             avatar.url = acc.avatar;
             name.label = acc.display_name;
             handle.label = acc.handle;
-            
+
             profile.clicked.connect (() => {
                 Views.Profile.open_from_id (acc.id);
                 _self.active = false;
             });
-            
+
             remove.clicked.connect (() => {
                 _self.active = false;
                 accounts.remove (acc);
             });
         }
-        
+
         public Item.add_new () {
             name.label = _("New Account");
             handle.label = _("Click to add");
@@ -66,7 +66,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
     private ModelButton item_watchlist;
 
     construct {
-        connect_account_service ();
+        connect_account ();
 
         item_refresh.clicked.connect (() => app.refresh ());
         Desktop.set_hotkey_tooltip (item_refresh, null, app.ACCEL_REFRESH);

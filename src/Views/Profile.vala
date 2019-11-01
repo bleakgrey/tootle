@@ -2,17 +2,17 @@ using Gtk;
 
 public class Tootle.Views.Profile : Views.Timeline {
 
-    public API.Account profile { get; construct set; } 
+    public API.Account profile { get; construct set; }
 
     protected RadioButton filter_all;
     protected RadioButton filter_replies;
     protected RadioButton filter_media;
-    
+
     protected Label relationship;
     protected Box actions;
     protected Button follow_button;
     protected MenuButton options_button;
-    
+
     protected Label posts_label;
     protected Label following_label;
     protected Label followers_label;
@@ -22,38 +22,38 @@ public class Tootle.Views.Profile : Views.Timeline {
 
     construct {
     	profile.notify["rs"].connect (on_rs_updated);
-    
+
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
 		view.pack_start (builder.get_object ("grid") as Grid, false, false, 0);
-		
+
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
 		avatar.url = profile.avatar;
-		
+
 		var name = builder.get_object ("name") as Widgets.RichLabel;
 		profile.bind_property ("display-name", name, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			var label = (string) src;
 			target.set_string (@"<span size='x-large' weight='bold'>$label</span>");
 			return true;
 		});
-		
+
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
 		profile.bind_property ("acct", handle, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string ("@" + (string) src);
 			return true;
 		});
-		
+
 		var note = builder.get_object ("note") as Widgets.RichLabel;
 		profile.bind_property ("note", note, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string (Html.simplify ((string) src));
 			return true;
 		});
-		
+
 		actions = builder.get_object ("actions") as Box;
 		follow_button = builder.get_object ("follow_button") as Button;
 		follow_button.clicked.connect (on_follow_button_clicked);
 		options_button = builder.get_object ("options_button") as MenuButton;
 		relationship = builder.get_object ("relationship") as Label;
-		
+
 		posts_label = builder.get_object ("posts_label") as Label;
 		profile.bind_property ("posts_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var val = (int64) src;
@@ -72,14 +72,14 @@ public class Tootle.Views.Profile : Views.Timeline {
 			target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
 			return true;
 		});
-		
+
 		filter_all = builder.get_object ("filter_all") as RadioButton;
 		filter_all.toggled.connect (on_refresh);
 		filter_replies = builder.get_object ("filter_replies") as RadioButton;
 		filter_replies.toggled.connect (on_refresh);
 		filter_media = builder.get_object ("filter_media") as RadioButton;
 		filter_media.toggled.connect (on_refresh);
-		
+
 		posts_tab = builder.get_object ("posts_tab") as RadioButton;
 		posts_tab.toggled.connect (() => {
 			if (posts_tab.active) on_refresh ();
@@ -92,12 +92,11 @@ public class Tootle.Views.Profile : Views.Timeline {
 		followers_tab.toggled.connect (() => {
 			if (followers_tab.active) on_refresh ();
 		});
-		
-		profile.get_relationship ();
     }
 
     public Profile (API.Account acc) {
         Object (profile: acc);
+        profile.get_relationship ();
     }
 
 	protected void on_follow_button_clicked () {
@@ -140,13 +139,13 @@ public class Tootle.Views.Profile : Views.Timeline {
     public override string get_url () {
         if (page_next != null)
             return page_next;
-    
+
     	if (following_tab.active)
-    		return @"/api/v1/accounts/$(account.id)/following";
+    		return @"/api/v1/accounts/$(profile.id)/following";
     	else if (followers_tab.active)
-    		return @"/api/v1/accounts/$(account.id)/followers";
+    		return @"/api/v1/accounts/$(profile.id)/followers";
     	else
-        	return @"/api/v1/accounts/$(account.id)/statuses";
+        	return @"/api/v1/accounts/$(profile.id)/statuses";
     }
 
 	public override Request append_params (Request req) {
@@ -156,11 +155,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
     public override void request () {
-        if (account == null)
-            return;
-
 		append_params (new Request.GET (get_url ()))
-		.with_account ()
+		.with_account (account)
 		.then_parse_array ((node, msg) => {
             var obj = node.get_object ();
             if (obj != null) {
@@ -176,7 +172,7 @@ public class Tootle.Views.Profile : Views.Timeline {
             }
             get_pages (msg.response_headers.get_one ("Link"));
         })
-		.on_error (network.on_error)
+		.on_error (on_error)
 		.exec ();
     }
 

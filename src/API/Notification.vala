@@ -70,7 +70,7 @@ public class Tootle.API.Notification : GLib.Object {
             return reject_follow_request ();
 
 		var req = new Request.POST ("/api/v1/notifications/dismiss")
-		    .with_account ()
+		    .with_account (accounts.active)
 			.with_param ("id", id.to_string ())
 			.exec ();
         return req;
@@ -78,14 +78,14 @@ public class Tootle.API.Notification : GLib.Object {
 
     public Soup.Message accept_follow_request () {
         var req = new Request.POST (@"/api/v1/follow_requests/$(account.id)/authorize")
-            .with_account ()
+            .with_account (accounts.active)
             .exec ();
         return req;
     }
 
     public Soup.Message reject_follow_request () {
         var req = new Request.POST (@"/api/v1/follow_requests/$(account.id)/reject")
-            .with_account ()
+            .with_account (accounts.active)
             .exec ();
         return req;
     }

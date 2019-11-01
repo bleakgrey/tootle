@@ -14,11 +14,9 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
     protected string? stream;
 
     construct {
-        connect_account_service ();
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
-
-        request ();
+        connect_account ();
     }
     ~Timeline () {
         streams.unsubscribe (stream, this);
@@ -97,11 +95,8 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
     }
 
     public virtual void request () {
-        if (accounts.active == null) // TODO: Add account reference to IAccountListener
-            return;
-
 		append_params (new Request.GET (get_url ()))
-		.with_account ()
+		.with_account (account)
 		.then_parse_array ((node, msg) => {
             var obj = node.get_object ();
             if (obj != null) {

@@ -193,7 +193,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void action (string action, owned Network.ErrorCallback? err = network.on_error) {
         new Request.POST (@"/api/v1/statuses/$(formal.id)/$action")
-        	.with_account ()
+        	.with_account (accounts.active)
         	.then_parse_obj (obj => {
         	    var status = API.Status.parse (obj).formal;
         	    formal.reblogged = status.reblogged;
@@ -207,7 +207,7 @@ public class Tootle.API.Status : GLib.Object {
 
     public void poof (owned Soup.SessionCallback? cb = null, owned Network.ErrorCallback? err = network.on_error) {
         new Request.DELETE (@"/api/v1/statuses/$id")
-        	.with_account ()
+        	.with_account (accounts.active)
         	.then ((sess, msg) => {
         	    streams.status_removed (id);
         	    cb (sess, msg);

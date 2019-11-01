@@ -19,12 +19,12 @@ public class Tootle.Request : Soup.Message {
 	public Request.DELETE (string url) {
 		Object (method: "DELETE", url: url);
 	}
-	
+
 	public Request then (owned Network.SuccessCallback cb) {
 		this.cb = (owned) cb;
 		return this;
 	}
-	
+
 	public Request then_parse_array (owned Network.NodeCallback _cb) {
 		this.cb = (sess, msg) => {
 			var parser = new Json.Parser ();
@@ -33,26 +33,26 @@ public class Tootle.Request : Soup.Message {
 		};
 		return this;
 	}
-	
+
 	public Request then_parse_obj (owned Network.ObjectCallback _cb) {
 		this.cb = (sess, msg) => {
 			_cb (network.parse (msg));
 		};
 		return this;
 	}
-	
+
 	public Request on_error (owned Network.ErrorCallback cb) {
 		this.error_cb = (owned) cb;
 		return this;
 	}
-	
+
 	public Request with_account (InstanceAccount? account = null) {
 		this.needs_token = true;
 		if (account != null)
 			this.account = account;
 		return this;
 	}
-	
+
 	public Request with_param (string name, string val) {
 		if (pars == null)
 			pars = new HashMap<string, string> ();
@@ -71,35 +71,32 @@ public class Tootle.Request : Soup.Message {
 				var key = (string) entry.key;
 				var val = (string) entry.value;
 				parameters += @"$key=$val";
-				
+
 				if (parameters_counter < pars.size)
 					parameters += "&";
-				
+
 				return true;
 			});
 		}
-		
+
 		if (needs_token) {
-			if (account == null)
-				account = accounts.active;
-			
 			if (account == null) {
-				warning (@"No token given or found for $method: $url$parameters");
+				warning (@"No account found for: $method: $url$parameters");
 				return this;
 			}
-			
+
 			request_headers.append ("Authorization", @"Bearer $(account.token)");
 		}
-		
+
 		if (!("://" in url)) {
 			url = account.instance + url;
 		}
-		
+
 		this.uri = new URI (url + "" + parameters);
-		
+
 		url = uri.to_string (false);
 		info (@"$method: $url");
-		
+
 		network.queue (this, (owned) cb, (owned) error_cb);
 		return this;
 	}

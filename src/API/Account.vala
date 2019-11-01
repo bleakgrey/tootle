@@ -95,7 +95,7 @@ public class Tootle.API.Account : GLib.Object {
 
     public Request get_relationship () {
     	return new Request.GET ("/api/v1/accounts/relationships")
-    		.with_account ()
+    		.with_account (accounts.active)
     		.with_param ("id", id.to_string ())
     		.then_parse_array (node => {
                 rs = Relationship.parse (node.get_object ());
@@ -107,7 +107,7 @@ public class Tootle.API.Account : GLib.Object {
     public Request set_following (bool state = true) {
         var action = state ? "follow" : "unfollow";
         return new Request.POST (@"/api/v1/accounts/$id/$action")
-            .with_account ()
+            .with_account (accounts.active)
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);
@@ -119,7 +119,7 @@ public class Tootle.API.Account : GLib.Object {
     public Request set_muted (bool state = true) {
         var action = state ? "mute" : "unmute";
         return new Request.POST (@"/api/v1/accounts/$id/$action")
-            .with_account ()
+            .with_account (accounts.active)
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);
@@ -131,7 +131,7 @@ public class Tootle.API.Account : GLib.Object {
     public Request set_blocked (bool state = true) {
         var action = state ? "block" : "unblock";
         return new Request.POST (@"/api/v1/accounts/$id/$action")
-            .with_account ()
+            .with_account (accounts.active)
             .then ((sess, msg) => {
                 var root = network.parse (msg);
                 rs = Relationship.parse (root);

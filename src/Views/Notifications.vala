@@ -3,23 +3,21 @@ using Gdk;
 
 public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 
-    private int64 last_id = 0;
-    private bool force_dot = false;
+    protected InstanceAccount? account = null;
+    protected int64 last_id = 0;
+    protected bool force_dot = false;
 
     public Notifications () {
-        base ();
-        connect_account_service ();
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
         streams.notification.connect (prepend);
-
-        request ();
+        connect_account ();
     }
 
     private bool has_unread () {
-        if (accounts.active == null)
+        if (account == null)
             return false;
-        return last_id > accounts.active.last_seen_notification || force_dot;
+        return last_id > account.last_seen_notification || force_dot;
     }
 
     public override string get_icon () {
@@ -62,7 +60,6 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
     }
 
     public override void on_set_current () {
-        var account = accounts.active;
         if (has_unread ()) {
             force_dot = false;
             account.has_unread_notifications = force_dot;
@@ -83,23 +80,26 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         request ();
     }
 
-    public virtual void on_account_changed (InstanceAccount? account) {
-        if (account == null)
-            return;
-
-        last_id = account.last_seen_notification;
-        force_dot = account.has_unread_notifications;
-        on_refresh ();
+    public virtual void on_account_changed (InstanceAccount? acc) {
+        account = acc;
+        if (account == null) {
+		    last_id = 0;
+		    force_dot = false;
+        }
+        else {
+		    last_id = account.last_seen_notification;
+		    force_dot = account.has_unread_notifications;
+		}
+		on_refresh ();
     }
 
     public void request () {
-        if (accounts.active == null)
-            return;
-
-        accounts.active.cached_notifications.@foreach (notification => {
-            append (notification);
-            return true;
-        });
+        if (account != null) {
+            account.cached_notifications.@foreach (notification => {
+                append (notification);
+                return true;
+            });
+        }
 
         // new Request.GET ("/api/v1/follow_requests")  //TODO: this
         // 	.with_account ()
@@ -111,7 +111,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         // 	.exec ();
 
         new Request.GET ("/api/v1/notifications")
-        	.with_account ()
+        	.with_account (account)
         	.with_param ("limit", "30")
         	.then_parse_array (node => {
 				var notification = API.Notification.parse (node.get_object ());
