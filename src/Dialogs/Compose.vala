@@ -14,7 +14,7 @@ public class Tootle.Dialogs.Compose : Window {
 
     [GtkChild]
     protected Box box;
-    
+
     [GtkChild]
     protected Revealer cw_revealer;
     [GtkChild]
@@ -23,7 +23,7 @@ public class Tootle.Dialogs.Compose : Window {
     protected Entry cw;
     [GtkChild]
     protected Label counter;
-    
+
     [GtkChild]
     protected MenuButton visibility_button;
     [GtkChild]
@@ -31,50 +31,50 @@ public class Tootle.Dialogs.Compose : Window {
     protected Widgets.VisibilityPopover visibility_popover;
     [GtkChild]
     protected Button post_button;
-    
+
     [GtkChild]
     protected TextView content;
 
     construct {
         transient_for = window;
-        
+
         post_button.label = label;
 		foreach (Widget w in new Widget[] { visibility_button, post_button })
 			w.get_style_context ().add_class (style_class);
-        
+
         visibility_popover = new Widgets.VisibilityPopover.with_button (visibility_button);
         visibility_popover.bind_property ("selected", visibility_icon, "icon-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string (((API.Visibility)src).get_icon ());
 			return true;
 		});
-        
+
         cw_button.bind_property ("active", cw_revealer, "reveal_child", BindingFlags.SYNC_CREATE);
-        
+
         cw_button.toggled.connect (validate);
         cw.buffer.deleted_text.connect (() => validate ());
         cw.buffer.inserted_text.connect (() => validate ());
         content.buffer.changed.connect (validate);
         post_button.clicked.connect (on_post_button_clicked);
-        
+
         if (status.spoiler_text != null) {
             cw.text = status.spoiler_text;
             cw_button.active = true;
         }
         content.buffer.text = Html.remove_tags (status.content);
-        
+
         show ();
     }
 
     public Compose () {
-        Object (status: new API.Status (-1), style_class: STYLE_CLASS_SUGGESTED_ACTION, label: _("Post"));
+        Object (status: new API.Status.empty (), style_class: STYLE_CLASS_SUGGESTED_ACTION, label: _("Post"));
     }
-    
+
     public Compose.redraft (API.Status status) {
         Object (status: status, style_class: STYLE_CLASS_DESTRUCTIVE_ACTION, label: _("Redraft"));
     }
 
 	public Compose.reply (API.Status status) {
-		var template = new API.Status (-1);
+		var template = new API.Status.empty ();
 		template.in_reply_to_id = status.in_reply_to_id;
 		template.in_reply_to_account_id = status.in_reply_to_account_id;
 		template.content = status.formal.get_reply_mentions ();
@@ -92,17 +92,17 @@ public class Tootle.Dialogs.Compose : Window {
         visibility_button.sensitive = true;
         box.sensitive = true;
     }
-    
+
     protected void on_error (int32 code, string reason) { //TODO: display errors
         warning (reason);
         validate ();
     }
-    
+
     protected void on_post_button_clicked () {
         post_button.sensitive = false;
         visibility_button.sensitive = false;
         box.sensitive = false;
-        
+
         if (status.id >= 0) {
             info ("Removing old status...");
             status.poof (publish, on_error);
@@ -111,7 +111,7 @@ public class Tootle.Dialogs.Compose : Window {
             publish ();
         }
     }
-    
+
     protected void publish () {
         info ("Publishing new status...");
         status.content = content.buffer.text;
@@ -121,7 +121,7 @@ public class Tootle.Dialogs.Compose : Window {
             .with_account ()
             .with_param ("visibility", visibility_popover.selected.to_string ())
             .with_param ("status", Html.uri_encode (status.content));
-            
+
         if (cw_button.active) {
             req.with_param ("sensitive", "true");
             req.with_param ("spoiler_text", Html.uri_encode (cw.text));
@@ -131,10 +131,10 @@ public class Tootle.Dialogs.Compose : Window {
             req.with_param ("in_reply_to_id", status.in_reply_to_id);
         if (status.in_reply_to_account_id != null)
             req.with_param ("in_reply_to_account_id", status.in_reply_to_account_id);
-        
+
         req.then ((sess, mess) => {
             var root = network.parse (mess);
-            var status = API.Status.parse (root);
+            var status = new API.Status (root);
             info ("OK: status id is %s", status.id.to_string ());
             destroy ();
         })

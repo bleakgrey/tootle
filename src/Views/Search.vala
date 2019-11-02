@@ -26,7 +26,7 @@ public class Tootle.Views.Search : Views.Base {
     }
 
     private void append_account (API.Account acc) {
-        var status = API.Status.from_account (acc);
+        var status = new API.Status.from_account (acc);
         var widget = new Widgets.Status (status);
         widget.button_press_event.connect (widget.on_avatar_clicked);
         content.pack_start (widget, false, false, 0);
@@ -91,7 +91,7 @@ public class Tootle.Views.Search : Views.Base {
                     append_header (_("Accounts"));
                     accounts.foreach_element ((array, i, node) => {
                         var obj = node.get_object ();
-                        var acc = API.Account.parse (obj);
+                        var acc = new API.Account (obj);
                         append_account (acc);
                     });
                 }
@@ -100,7 +100,7 @@ public class Tootle.Views.Search : Views.Base {
                     append_header (_("Statuses"));
                     statuses.foreach_element ((array, i, node) => {
                         var obj = node.get_object ();
-                        var status = API.Status.parse (obj);
+                        var status = new API.Status (obj);
                         append_status (status);
                     });
                 }

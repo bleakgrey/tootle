@@ -70,17 +70,17 @@ public class Tootle.Widgets.RichLabel : Label {
 
                     if (accounts.get_length () > 0) {
                         var item = accounts.get_object_element (0);
-                        var obj = API.Account.parse (item);
+                        var obj = new API.Account (item);
                         window.open_view (new Views.Profile (obj));
                     }
                     else if (statuses.get_length () > 0) {
                         var item = accounts.get_object_element (0);
-                        var obj = API.Status.parse (item);
+                        var obj = new API.Status (item);
                         window.open_view (new Views.ExpandedStatus (obj));
                     }
                     else if (hashtags.get_length () > 0) {
                         var item = accounts.get_object_element (0);
-                        var obj = API.Tag.parse (item);
+                        var obj = new API.Tag (item);
                         window.open_view (new Views.Hashtag (obj.name));
                     }
                     else {

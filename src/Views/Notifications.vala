@@ -114,7 +114,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         	.with_account (account)
         	.with_param ("limit", "30")
         	.then_parse_array (node => {
-				var notification = API.Notification.parse (node.get_object ());
+				var notification = new API.Notification (node.get_object ());
 				append (notification);
         	})
         	.on_error (on_error)

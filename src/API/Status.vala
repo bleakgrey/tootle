@@ -2,10 +2,9 @@ using Gee;
 
 public class Tootle.API.Status : GLib.Object {
 
-    public signal void updated (); //TODO: get rid of this
 
-    public API.Account account { get; set; }
-    public int64 id { get; set; }
+    public int64 id { get; construct set; }
+    public API.Account account { get; construct set; }
     public string uri { get; set; }
     public string? url { get; set; default = null; }
     public string? spoiler_text { get; set; default = null; }
@@ -36,83 +35,82 @@ public class Tootle.API.Status : GLib.Object {
         }
 	}
 
-    public Status (int64 id) {
-        Object (id: id);
-    }
+    public Status (Json.Object obj) {
+        Object (
+            id: int64.parse (obj.get_string_member ("id")),
+            account: new Account (obj.get_object_member ("account")),
+            uri: obj.get_string_member ("uri"),
+            created_at: obj.get_string_member ("created_at"),
+            content: Html.simplify ( obj.get_string_member ("content")),
+            sensitive: obj.get_boolean_member ("sensitive"),
+            visibility: Visibility.from_string (obj.get_string_member ("visibility")),
 
-	public static Status from_account (API.Account account) {
-        var status = new API.Status (-10);
-        status.account = account;
-        status.created_at = account.created_at;
+            in_reply_to_id: obj.get_string_member ("in_reply_to_id") ?? null,
+            in_reply_to_account_id: obj.get_string_member ("in_reply_to_account_id") ?? null,
 
-        if (account.note == "")
-            status.content = "";
-        else if ("\n" in account.note)
-            status.content = Html.remove_tags (account.note.split ("\n")[0]);
-        else
-            status.content = Html.remove_tags (account.note);
-
-        return status;
-	}
-
-    public static Status parse (Json.Object obj) {
-        var id = int64.parse (obj.get_string_member ("id"));
-        var status = new Status (id);
-
-        status.account = Account.parse (obj.get_object_member ("account"));
-        status.uri = obj.get_string_member ("uri");
-        status.created_at = obj.get_string_member ("created_at");
-        status.replies_count = obj.get_int_member ("replies_count");
-        status.reblogs_count = obj.get_int_member ("reblogs_count");
-        status.favourites_count = obj.get_int_member ("favourites_count");
-        status.content = Html.simplify ( obj.get_string_member ("content"));
-        status.sensitive = obj.get_boolean_member ("sensitive");
-        status.visibility = Visibility.from_string (obj.get_string_member ("visibility"));
-
-        status.in_reply_to_id = obj.get_string_member ("in_reply_to_id") ?? null;
-        status.in_reply_to_account_id = obj.get_string_member ("in_reply_to_account_id") ?? null;
+            replies_count: obj.get_int_member ("replies_count"),
+            reblogs_count: obj.get_int_member ("reblogs_count"),
+            favourites_count: obj.get_int_member ("favourites_count")
+        );
 
         if (obj.has_member ("url"))
-            status.url = obj.get_string_member ("url");
+            url = obj.get_string_member ("url");
         else
-            status.url = obj.get_string_member ("uri").replace ("/activity", "");
+            url = obj.get_string_member ("uri").replace ("/activity", "");
 
         var spoiler = obj.get_string_member ("spoiler_text");
         if (spoiler != "")
-            status.spoiler_text = Html.simplify (spoiler);
+            spoiler_text = Html.simplify (spoiler);
 
         if (obj.has_member ("reblogged"))
-            status.reblogged = obj.get_boolean_member ("reblogged");
+            reblogged = obj.get_boolean_member ("reblogged");
         if (obj.has_member ("favourited"))
-            status.favorited = obj.get_boolean_member ("favourited");
+            favorited = obj.get_boolean_member ("favourited");
         if (obj.has_member ("muted"))
-            status.muted = obj.get_boolean_member ("muted");
+            muted = obj.get_boolean_member ("muted");
         if (obj.has_member ("pinned"))
-            status.pinned = obj.get_boolean_member ("pinned");
+            pinned = obj.get_boolean_member ("pinned");
 
         if (obj.has_member ("reblog") && obj.get_null_member("reblog") != true)
-            status.reblog = Status.parse (obj.get_object_member ("reblog"));
+            reblog = new Status (obj.get_object_member ("reblog"));
 
         obj.get_array_member ("mentions").foreach_element ((array, i, node) => {
             var entity = node.get_object ();
             if (entity != null) {
-                if (status.mentions == null)
-                    status.mentions = new ArrayList<API.Mention> ();
-                status.mentions.add (API.Mention.parse (entity));
+                if (mentions == null)
+                    mentions = new ArrayList<API.Mention> ();
+                mentions.add (new API.Mention (entity));
             }
         });
 
         obj.get_array_member ("media_attachments").foreach_element ((array, i, node) => {
             var entity = node.get_object ();
             if (entity != null) {
-                if (status.attachments == null)
-                    status.attachments = new ArrayList<API.Attachment> ();
-                status.attachments.add (new API.Attachment.parse (entity));
+                if (attachments == null)
+                    attachments = new ArrayList<API.Attachment> ();
+                attachments.add (new API.Attachment (entity));
             }
         });
-
-        return status;
     }
+
+    public Status.empty () {
+        Object (id: -1);
+    }
+
+	public Status.from_account (API.Account account) {
+	    Object (
+	        id: 0,
+	        account: account,
+	        created_at: account.created_at
+	    );
+
+        if (account.note == "")
+            content = "";
+        else if ("\n" in account.note)
+            content = Html.remove_tags (account.note.split ("\n")[0]);
+        else
+            content = Html.remove_tags (account.note);
+	}
 
     public Json.Node? serialize () {
         var builder = new Json.Builder ();
@@ -195,7 +193,7 @@ public class Tootle.API.Status : GLib.Object {
         new Request.POST (@"/api/v1/statuses/$(formal.id)/$action")
         	.with_account (accounts.active)
         	.then_parse_obj (obj => {
-        	    var status = API.Status.parse (obj).formal;
+        	    var status = new API.Status (obj).formal;
         	    formal.reblogged = status.reblogged;
         	    formal.favorited = status.favorited;
         	    formal.muted = status.muted;

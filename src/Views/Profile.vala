@@ -162,10 +162,10 @@ public class Tootle.Views.Profile : Views.Timeline {
             if (obj != null) {
             	API.Status status;
             	if (posts_tab.active)
-                	status = API.Status.parse (obj);
+                	status = new API.Status (obj);
                 else {
-                	var account = API.Account.parse (obj);
-                	status = API.Status.from_account (account);
+                	var account = new API.Account (obj);
+                	status = new API.Status.from_account (account);
                 }
 
                 append (status);
@@ -182,7 +182,7 @@ public class Tootle.Views.Profile : Views.Timeline {
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
             var root = network.parse (mess);
-            var acc = API.Account.parse (root);
+            var acc = new API.Account (root);
             window.open_view (new Views.Profile (acc));
         }, (status, reason) => {
             network.on_error (status, reason);

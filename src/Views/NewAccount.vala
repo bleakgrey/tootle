@@ -94,10 +94,9 @@ public class Tootle.Views.NewAccount : Views.Base {
 	private void register_client () throws Error {
 		info ("Registering client");
 		instance_entry.sensitive = false;
-		
-		account = new InstanceAccount (-1);
-		account.instance = instance;
-		
+
+		account = new InstanceAccount.empty (instance);
+
 		new Request.POST (@"/api/v1/apps")
 			.with_param ("client_name", Build.NAME)
 			.with_param ("website", Build.WEBSITE)
@@ -158,7 +157,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 			.with_account (account)
 			.then ((sess, msg) => {
 				var root = network.parse (msg);
-				var account = API.Account.parse (root);
+				var account = new API.Account (root);
 				info ("OK: received user profile");
 				save (account);
 			})

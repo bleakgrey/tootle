@@ -11,12 +11,12 @@ public class Tootle.Widgets.Status : EventBox {
     protected Separator separator;
     [GtkChild]
     protected Grid grid;
-    
+
     [GtkChild]
     protected Image header_icon;
     [GtkChild]
     protected Widgets.RichLabel header_label;
-    
+
     [GtkChild]
     public Widgets.Avatar avatar;
     [GtkChild]
@@ -57,7 +57,7 @@ public class Tootle.Widgets.Status : EventBox {
                 return Html.simplify (status.formal.content);
         }
     }
-    
+
     protected string escaped_content {
         owned get {
             return status.formal.has_spoiler ? Html.simplify (status.formal.content) : "";
@@ -88,24 +88,24 @@ public class Tootle.Widgets.Status : EventBox {
         streams.status_removed.connect (on_status_removed);
         content.activate_link.connect (on_toggle_spoiler);
         notify["kind"].connect (on_kind_changed);
-        
+
         if (kind == null) {
             if (status.reblog != null)
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
-        
+
         status.formal.bind_property ("favorited", favorite_button, "active", BindingFlags.SYNC_CREATE);
         favorite_button.clicked.connect (() => {
             status.action (status.formal.favorited ? "unfavourite" : "favourite");
         });
-        
+
         status.formal.bind_property ("reblogged", reblog_button, "active", BindingFlags.SYNC_CREATE);
         reblog_button.clicked.connect (() => {
             status.action (status.formal.reblogged ? "unreblog" : "reblog");
         });
-        
+
         reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
-        
+
         bind_property ("escaped-spoiler", content, "label", BindingFlags.SYNC_CREATE);
         bind_property ("escaped-content", revealer_content, "label", BindingFlags.SYNC_CREATE);
         status.formal.account.bind_property ("avatar", avatar, "url", BindingFlags.SYNC_CREATE);
@@ -133,8 +133,8 @@ public class Tootle.Widgets.Status : EventBox {
             reblog_button.sensitive = false;
             reblog_button.tooltip_text = _("This post can't be boosted");
         }
-        
-        if (status.id <= -10) {
+
+        if (status.id <= 0) {
             actions.destroy ();
             date_label.destroy ();
             content.single_line_mode = true;
@@ -145,8 +145,8 @@ public class Tootle.Widgets.Status : EventBox {
         else {
             button_press_event.connect (open);
         }
-        
-        if (!attachments.populate (status.formal.attachments) || status.id <= -10) {
+
+        if (!attachments.populate (status.formal.attachments) || status.id <= 0) {
             attachments.destroy ();
         }
     }
@@ -178,7 +178,7 @@ public class Tootle.Widgets.Status : EventBox {
         header_icon.visible = header_label.visible = (kind != null);
         if (kind == null)
             return;
-        
+
         header_icon.icon_name = kind.get_icon ();
         header_label.label = kind.get_desc (status.account);
     }

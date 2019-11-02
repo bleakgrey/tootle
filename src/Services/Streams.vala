@@ -63,16 +63,16 @@ public class Tootle.Streams : Object {
 		}
 
 		void on_error (Error e) {
-			warning (@"Error in $name: $(e.message)");
+			if (!closing)
+				warning (@"Error in $name: $(e.message)");
 		}
 
 		void on_closed () {
-			if (closing)
-				return;
-
-			warning (@"CLOSED: $name. Reconnecting in $timeout seconds.");
-			GLib.Timeout.add_seconds (timeout, start);
-			timeout = int.min (timeout*2, 30);
+			if (!closing) {
+				warning (@"CLOSED: $name. Reconnecting in $timeout seconds.");
+				GLib.Timeout.add_seconds (timeout, start);
+				timeout = int.min (timeout*2, 30);
+			}
 		}
 
 		void on_message (int i, Bytes bytes) {
@@ -145,7 +145,7 @@ public class Tootle.Streams : Object {
 
 		switch (event) {
 			case "update":
-				var entity = API.Status.parse (sanitize (root));
+				var entity = new API.Status (sanitize (root));
 				c.subscribers.@foreach (s => {
 					if (s.accepts (ref event))
 						s.on_status_added (entity);
@@ -161,7 +161,7 @@ public class Tootle.Streams : Object {
 				});
 				break;
 			case "notification":
-				var entity = API.Notification.parse (sanitize (root));
+				var entity = new API.Notification (sanitize (root));
 				c.subscribers.@foreach (s => {
 					if (s.accepts (ref event))
 						s.on_notification (entity);

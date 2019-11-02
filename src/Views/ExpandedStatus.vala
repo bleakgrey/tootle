@@ -48,7 +48,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
                 ancestors.foreach_element ((array, i, node) => {
                     var object = node.get_object ();
                     if (object != null) {
-                        var status = API.Status.parse (object);
+                        var status = new API.Status (object);
                         prepend (status);
                     }
                 });
@@ -57,7 +57,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
                 descendants.foreach_element ((array, i, node) => {
                     var object = node.get_object ();
                     if (object != null) {
-                        var status = API.Status.parse (object);
+                        var status = new API.Status (object);
                         append (status);
                     }
                 });
@@ -79,7 +79,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
                 var statuses = root.get_array_member ("statuses");
                 var object = statuses.get_element (0).get_object ();
                 if (object != null){
-                    var status = API.Status.parse (object);
+                    var status = new API.Status (object);
                     window.open_view (new Views.ExpandedStatus (status));
                 }
                 else

@@ -20,7 +20,7 @@ public class Tootle.Accounts : GLib.Object {
             .with_account (acc)
             .then ((sess, mess) => {
                 var root = network.parse (mess);
-                var profile = API.Account.parse (root);
+                var profile = new API.Account (root);
                 acc.patch (profile);
                 info ("OK: Token is valid");
                 active = acc;
@@ -125,7 +125,7 @@ public class Tootle.Accounts : GLib.Object {
 
             array.foreach_element ((_arr, _i, node) => {
                 var obj = node.get_object ();
-                var account = InstanceAccount.parse (obj);
+                var account = new InstanceAccount (obj);
                 if (account != null) {
                     saved.add (account);
                     account.subscribe ();

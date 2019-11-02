@@ -25,15 +25,37 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
         }
     }
 
-    public InstanceAccount (int64 _id){
-        base (_id);
+    public InstanceAccount (Json.Object obj) {
+        Object (
+            username: obj.get_string_member ("username"),
+            instance: obj.get_string_member ("instance"),
+            client_id: obj.get_string_member ("id"),
+            client_secret: obj.get_string_member ("secret"),
+            token: obj.get_string_member ("access_token"),
+            last_seen_notification: obj.get_int_member ("last_seen_notification"),
+            has_unread_notifications: obj.get_boolean_member ("has_unread_notifications")
+        );
+
+        var cached = obj.get_object_member ("cached_profile");
+    	var account = new API.Account (cached);
+        patch (account);
+
+        var notifications = obj.get_array_member ("cached_notifications");
+        notifications.foreach_element ((arr, i, node) => {
+            var notification = new API.Notification (node.get_object ());
+            cached_notifications.add (notification);
+        });
     }
-    ~InstanceAccount () {
-    	unsubscribe ();
+	~InstanceAccount () {
+		unsubscribe ();
+	}
+
+    public InstanceAccount.empty (string instance){
+        Object (id: 0, instance: instance);
     }
 
     public InstanceAccount.from_account (API.Account account) {
-        base (account.id);
+        Object (id: account.id);
         patch (account);
     }
 
@@ -95,30 +117,6 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 
         builder.end_object ();
         return builder.get_root ();
-    }
-
-    public new static InstanceAccount parse (Json.Object obj) {
-        InstanceAccount acc = new InstanceAccount (-1);
-
-        acc.username = obj.get_string_member ("username");
-        acc.instance = obj.get_string_member ("instance");
-        acc.client_id = obj.get_string_member ("id");
-        acc.client_secret = obj.get_string_member ("secret");
-        acc.token = obj.get_string_member ("access_token");
-        acc.last_seen_notification = obj.get_int_member ("last_seen_notification");
-        acc.has_unread_notifications = obj.get_boolean_member ("has_unread_notifications");
-
-        var cached = obj.get_object_member ("cached_profile");
-    	var cached_account = API.Account.parse (cached);
-        acc.patch (cached_account);
-
-        var notifications = obj.get_array_member ("cached_notifications");
-        notifications.foreach_element ((arr, i, node) => {
-            var notification = API.Notification.parse (node.get_object ());
-            acc.cached_notifications.add (notification);
-        });
-
-        return acc;
     }
 
     public override void on_notification (API.Notification obj) {

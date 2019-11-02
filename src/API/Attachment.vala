@@ -11,7 +11,7 @@ public class Tootle.API.Attachment : GLib.Object {
     	get { return (_preview_url == null || _preview_url == "") ? url : _preview_url; }
     }
 
-    public Attachment.parse (Json.Object obj) {
+    public Attachment (Json.Object obj) {
         Object (
             id: int64.parse (obj.get_string_member ("id")),
             kind: obj.get_string_member ("type"),

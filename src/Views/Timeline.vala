@@ -100,7 +100,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
 		.then_parse_array ((node, msg) => {
             var obj = node.get_object ();
             if (obj != null) {
-                var status = API.Status.parse (obj);
+                var status = new API.Status (obj);
                 append (status);
             }
             get_pages (msg.response_headers.get_one ("Link"));

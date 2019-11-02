@@ -10,7 +10,7 @@ public class Tootle.Widgets.Notification : Widgets.Status {
         if (obj.status != null)
             status = obj.status;
         else
-            status = API.Status.from_account (obj.account);
+            status = new API.Status.from_account (obj.account);
 
         Object (notification: obj, status: status);
         this.kind = obj.kind;

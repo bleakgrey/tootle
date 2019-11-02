@@ -1,29 +1,30 @@
 public class Tootle.API.Notification : GLib.Object {
 
     public int64 id { get; construct set; }
+    public Account account { get; construct set; }
+
     public NotificationType kind { get; set; }
     public string created_at { get; set; }
-
     public Status? status { get; set; default = null; }
-    public Account account { get; set; }
 
-    public Notification (int64 id) {
-        Object (id: id);
-    }
-
-    public static Notification parse (Json.Object obj) throws Oopsie {
-        var id = int64.parse (obj.get_string_member ("id"));
-        var notification = new Notification (id);
-
-        notification.kind = NotificationType.from_string (obj.get_string_member ("type"));
-        notification.created_at = obj.get_string_member ("created_at");
+    public Notification (Json.Object obj) throws Oopsie {
+        Object (
+            id: int64.parse (obj.get_string_member ("id")),
+            kind: NotificationType.from_string (obj.get_string_member ("type")),
+            created_at: obj.get_string_member ("created_at"),
+            account: new Account (obj.get_object_member ("account"))
+        );
 
         if (obj.has_member ("status"))
-            notification.status = Status.parse (obj.get_object_member ("status"));
-        if (obj.has_member ("account"))
-            notification.account = Account.parse (obj.get_object_member ("account"));
+            status = new Status (obj.get_object_member ("status"));
+    }
 
-        return notification;
+    public Notification.follow_request (Json.Object obj) {
+        Object (
+            id: 0,
+            kind: NotificationType.FOLLOW_REQUEST,
+            account: new Account (obj)
+        );
     }
 
     public Json.Node? serialize () {
@@ -47,16 +48,6 @@ public class Tootle.API.Notification : GLib.Object {
 
         builder.end_object ();
         return builder.get_root ();
-    }
-
-    public static Notification parse_follow_request (Json.Object obj) {
-        var notification = new Notification (-1);
-        var account = Account.parse (obj);
-
-        notification.kind = NotificationType.FOLLOW_REQUEST;
-        notification.account = account;
-
-        return notification;
     }
 
     public Soup.Message? dismiss () {
