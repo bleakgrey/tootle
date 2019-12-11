@@ -1,0 +1,29 @@
+{
+    "app-id": "com.github.bleakgrey.tootle",
+    "runtime": "org.gnome.Platform",
+    "sdk": "org.gnome.Sdk",
+    "runtime-version": "3.34",
+    "command": "com.github.bleakgrey.tootle",
+    "finish-args": [
+        / * X11 + XShm * /
+        "--share=ipc", "--socket=x11",
+        / * Wayland * /
+        "--socket=wayland",
+        / * dconf * /
+        "--metadata=X-DConf=migrate-path=/com/github/bleakgrey/tootle/",
+        "--share=network"
+    ],
+    "modules": [
+        {
+            "name": "tootle",
+            "buildsystem": "meson",
+            "config-opts": ["--buildtype=release"],
+            "sources": [{
+                "type": "git",
+                "url": "https://github.com/bleakgrey/tootle",
+                "branch": "refactor"
+            }
+          ]
+        }
+    ]
+}

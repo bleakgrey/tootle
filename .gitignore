@@ -1,5 +1,8 @@
 _ignore
+_build
+.flatpak*
 build
+builds
 build.sh
 build-po.sh
 install.sh
