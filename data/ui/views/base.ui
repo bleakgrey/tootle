@@ -29,7 +29,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="vhomogeneous">False</property>
-                    <property name="transition_duration">100</property>
                     <property name="transition_type">crossfade</property>
                     <child>
                       <object class="GtkBox" id="status">
@@ -57,11 +56,36 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="status_message_label">
+                          <object class="GtkStack" id="status_stack">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="opacity">0.50196078431372548</property>
-                            <property name="use_markup">True</property>
+                            <property name="opacity">0.5</property>
+                            <property name="transition_type">crossfade</property>
+                            <child>
+                              <object class="GtkLabel" id="status_message_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="name">message</property>
+                                <property name="title" translatable="yes">page0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkSpinner" id="status_spinner">
+                                <property name="height_request">32</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="active">True</property>
+                              </object>
+                              <packing>
+                                <property name="name">spinner</property>
+                                <property name="title" translatable="yes">page1</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>

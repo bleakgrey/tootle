@@ -36,27 +36,30 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
     }
 
     public void append (API.Notification notification, bool reverse = false) {
-        var widget = new Widgets.Notification (notification);
-        content.pack_start (widget, false, false, 0);
+        GLib.Idle.add (() => {
+            var widget = new Widgets.Notification (notification);
+            content.pack_start (widget, false, false, 0);
 
-        if (reverse) {
-            content.reorder_child (widget, 0);
+            if (reverse) {
+                content.reorder_child (widget, 0);
 
-            if (!current) {
-                force_dot = true;
-                accounts.active.has_unread_notifications = force_dot;
+                if (!current) {
+                    force_dot = true;
+                    accounts.active.has_unread_notifications = force_dot;
+                }
             }
-        }
 
-        on_content_changed ();
+            on_content_changed ();
 
-        if (notification.id > last_id)
-            last_id = notification.id;
+            if (notification.id > last_id)
+                last_id = notification.id;
 
-        if (has_unread ()) {
-            accounts.save ();
-            image.icon_name = get_icon ();
-        }
+            if (has_unread ()) {
+                accounts.save ();
+                image.icon_name = get_icon ();
+            }
+            return GLib.Source.REMOVE;
+        });
     }
 
     public override void on_set_current () {
@@ -77,7 +80,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 
     public virtual void on_refresh () {
         clear ();
-        request ();
+        GLib.Idle.add (request);
     }
 
     public virtual void on_account_changed (InstanceAccount? acc) {
@@ -93,7 +96,7 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
 		on_refresh ();
     }
 
-    public void request () {
+    public bool request () {
         if (account != null) {
             account.cached_notifications.@foreach (notification => {
                 append (notification);
@@ -119,6 +122,8 @@ public class Tootle.Views.Notifications : Views.Base, IAccountListener {
         	})
         	.on_error (on_error)
         	.exec ();
+
+        return GLib.Source.REMOVE;
     }
 
 }

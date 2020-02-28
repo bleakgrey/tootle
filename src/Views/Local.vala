@@ -9,7 +9,9 @@ public class Tootle.Views.Local : Views.Federated {
     }
 
     public override Request append_params (Request req) {
-        return req.with_param ("local", "true");
+        req.with_param ("local", "true");
+        req.with_param ("limit", limit.to_string ());
+        return req;
     }
 
     public override string? get_stream_url () {

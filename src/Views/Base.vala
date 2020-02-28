@@ -4,6 +4,7 @@ using Gtk;
 public class Tootle.Views.Base : Box {
 
     public static string STATUS_EMPTY = _("Nothing to see here");
+    public static string STATUS_LOADING = " ";
 
     public bool current = false;
     public int stack_pos = -1;
@@ -18,9 +19,11 @@ public class Tootle.Views.Base : Box {
     [GtkChild]
     protected Box content;
     [GtkChild]
-    protected Label status_message_label;
+    private Label status_message_label;
     [GtkChild]
     protected Button status_button;
+    [GtkChild]
+    private Stack status_stack;
 
     public string state { get; set; default = "status"; }
     public string status_message { get; set; default = STATUS_EMPTY; }
@@ -35,16 +38,16 @@ public class Tootle.Views.Base : Box {
     construct {
         status_button.label = _("Reload");
         bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
-		bind_property ("status-message", status_message_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		    var label = (string) src;
-			target.set_string (@"<span size='large'>$label</span>");
-			return true;
-		});
         scrolled.edge_reached.connect (pos => {
             if (pos == PositionType.BOTTOM)
                 on_bottom_reached ();
         });
         content.remove.connect (() => on_content_changed ());
+
+        notify["status-message"].connect (() => {
+            status_message_label.label = @"<span size='large'>$status_message</span>";
+            status_stack.visible_child_name = status_message == STATUS_LOADING ? "spinner" : "message";
+        });
     }
 
     public virtual string get_icon () {
@@ -68,7 +71,6 @@ public class Tootle.Views.Base : Box {
     public virtual void on_content_changed () {
         if (empty) {
             status_message = STATUS_EMPTY;
-            status_button.visible = false;
             state = "status";
         }
         else {

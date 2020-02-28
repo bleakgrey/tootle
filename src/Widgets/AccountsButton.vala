@@ -77,8 +77,8 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
         //item_watchlist.clicked.connect (() => Dialogs.WatchlistEditor.open ());
         item_prefs.clicked.connect (() => Dialogs.Preferences.open ());
 
-        network.started.connect (() => spinner.show ());
-        network.finished.connect (() => spinner.hide ());
+        // network.started.connect (() => spinner.show ());
+        // network.finished.connect (() => spinner.hide ());
 
         on_account_changed (null);
 

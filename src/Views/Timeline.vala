@@ -43,16 +43,19 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
     }
 
     public void append (API.Status status, bool first = false) {
-        var widget = new Widgets.Status (status);
-        widget.button_press_event.connect (widget.open);
-        if (!is_status_owned (status))
-            widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
+        GLib.Idle.add (() => {
+            var w = new Widgets.Status (status);
+            w.button_press_event.connect (w.open);
+            if (!is_status_owned (status))
+                w.avatar.button_press_event.connect (w.on_avatar_clicked);
 
-        content.pack_start (widget, false, false, 0);
-        if (first || status.pinned)
-            content.reorder_child (widget, 0);
+            content.pack_start (w, false, false, 0);
+            if (first || status.pinned)
+                content.reorder_child (w, 0);
 
-        on_content_changed ();
+            on_content_changed ();
+            return GLib.Source.REMOVE;
+        });
     }
 
     public override void clear () {
@@ -94,7 +97,7 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
         return req.with_param ("limit", limit.to_string ());
     }
 
-    public virtual void request () {
+    public virtual bool request () {
 		append_params (new Request.GET (get_url ()))
 		.with_account (account)
 		.then_parse_array ((node, msg) => {
@@ -107,12 +110,15 @@ public class Tootle.Views.Timeline : Views.Base, IAccountListener, IStreamListen
         })
 		.on_error (on_error)
 		.exec ();
+
+		return GLib.Source.REMOVE;
     }
 
     public virtual void on_refresh () {
         status_button.sensitive = false;
         clear ();
-        request ();
+        status_message = STATUS_LOADING;
+        GLib.Idle.add (request);
     }
 
     public virtual string? get_stream_url () {

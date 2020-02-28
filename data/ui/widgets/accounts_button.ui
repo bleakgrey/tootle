@@ -224,7 +224,6 @@
         </child>
         <child type="overlay">
           <object class="GtkSpinner" id="spinner">
-            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>

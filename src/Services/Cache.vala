@@ -27,7 +27,7 @@ public class Tootle.Cache : GLib.Object {
     protected class Item : GLib.Object {
         public Pixbuf data { get; construct set; }
         public int64 references { get; construct set; }
-        
+
         public Item (Pixbuf d, int64 r) {
             Object (data: d, references: r);
         }

@@ -154,7 +154,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		return base.append_params (req);
 	}
 
-    public override void request () {
+    public override bool request () {
 		append_params (new Request.GET (get_url ()))
 		.with_account (account)
 		.then_parse_array ((node, msg) => {
@@ -174,6 +174,8 @@ public class Tootle.Views.Profile : Views.Timeline {
         })
 		.on_error (on_error)
 		.exec ();
+
+		return GLib.Source.REMOVE;
     }
 
     public static void open_from_id (int64 id){
