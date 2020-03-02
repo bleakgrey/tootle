@@ -3,7 +3,7 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkGrid" id="wizard">
-    <property name="width_request">300</property>
+    <property name="width_request">350</property>
     <property name="height_request">400</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -21,19 +21,30 @@
         <property name="margin_right">12</property>
         <property name="hexpand">True</property>
         <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkButton" id="next">
-            <property name="label" translatable="yes">Next</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="has_default">True</property>
             <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_left">8</property>
+                <property name="margin_right">8</property>
+                <property name="margin_top">8</property>
+                <property name="margin_bottom">8</property>
+                <property name="icon_name">go-next-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="image-button"/>
+              <class name="circular"/>
+            </style>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
+            <property name="expand">True</property>
+            <property name="fill">False</property>
             <property name="pack_type">end</property>
             <property name="position">1</property>
           </packing>
@@ -151,7 +162,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="secondary_icon_name">edit-paste</property>
+                <property name="secondary_icon_name">edit-paste-symbolic</property>
                 <property name="secondary_icon_tooltip_text" translatable="yes">Paste</property>
                 <property name="placeholder_text" translatable="yes">Paste your authorization code here</property>
                 <property name="input_purpose">url</property>
