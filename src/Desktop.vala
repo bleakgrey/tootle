@@ -1,20 +1,25 @@
 public class Tootle.Desktop {
 
     // Open URI in the user's default application associated with it
-    public static void open_uri (string uri) {
+    public static bool open_uri (string uri) {
         try {
             Gtk.show_uri (null, uri, Gdk.CURRENT_TIME);
         }
-        catch (Error e){
+        catch (GLib.Error e){
             try {
               string[] spawn_args = {"/usr/bin/xdg-open", uri};
               Process.spawn_sync (null, spawn_args, null, SpawnFlags.SEARCH_PATH, null, null, null);
             }
-            catch (Error e){
-                warning (@"Can't open URI $uri: $(e.message)");
-                app.error ("", _("Couldn't find an application for URI:\n\n" + uri));
+            catch (GLib.Error e){
+              warning ("Can't open %s: %s", uri, e.message);
+              if (e.message == "Operation not supported") {
+                  app.error (_("Open this in a web browser:\n\n"+uri),"");
+              } else {
+                  app.error (_("Error"), e.message);
+              }
             }
         }
+        return true;
     }
 
     // Copy a string to the clipboard
