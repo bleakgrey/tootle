@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <template class="TootleViewsBase" parent="GtkBox">
@@ -45,8 +45,9 @@
                             <property name="height_request">128</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="opacity">0.29999999999999999</property>
                             <property name="pixel_size">128</property>
-                            <property name="resource">/com/github/bleakgrey/tootle/empty_state</property>
+                            <property name="icon_name">com.github.bleakgrey.tootle-symbolic</property>
                             <property name="icon_size">0</property>
                           </object>
                           <packing>
