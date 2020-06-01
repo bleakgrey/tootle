@@ -8,7 +8,7 @@
 }
 
 .padded.app-view {
-	margin: 64px 0 64px 0;
+	margin: 32px 0 32px 0;
 }
 .app-view:not(.padded) .preferences row {
 	border-radius: 0px;
