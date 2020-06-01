@@ -62,6 +62,8 @@ public class Tootle.Views.Base : Box {
             else
                 on_hidden ();
         });
+
+        get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
     }
 
     public virtual void clear (){
