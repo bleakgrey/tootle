@@ -17,9 +17,13 @@ public class Tootle.Views.Base : Box {
     [GtkChild]
     protected Box view;
     [GtkChild]
+    protected Box column_view;
+    [GtkChild]
     protected Stack states;
     [GtkChild]
     protected Box content;
+    [GtkChild]
+    protected ListBox content_list;
     [GtkChild]
     protected Button status_button;
     [GtkChild]
@@ -31,9 +35,9 @@ public class Tootle.Views.Base : Box {
     public string status_message { get; set; default = STATUS_EMPTY; }
     public bool allow_closing { get; set; default = true; }
 
-    public bool empty {
+    public bool empty { //
         get {
-            return content.get_children ().length () <= 0;
+            return content_list.get_children ().length () <= 0;
         }
     }
 
@@ -45,6 +49,7 @@ public class Tootle.Views.Base : Box {
                 on_bottom_reached ();
         });
         content.remove.connect (() => on_content_changed ());
+        content_list.remove.connect (() => on_content_changed ());
 
         notify["status-message"].connect (() => {
             status_message_label.label = @"<span size='large'>$status_message</span>";
@@ -60,7 +65,7 @@ public class Tootle.Views.Base : Box {
     }
 
     public virtual void clear (){
-        content.forall (widget => {
+        content_list.forall (widget => {
             widget.destroy ();
         });
         state = "status";
