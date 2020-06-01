@@ -23,16 +23,17 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
     }
 
     private Widgets.Status prepend (API.Status status, bool to_end = false){
-        var widget = new Widgets.Status (status);
-        widget.avatar.button_press_event.connect (widget.on_avatar_clicked);
-        widget.revealer.reveal_child = true;
+        var w = new Widgets.Status (status);
+        w.avatar.button_press_event.connect (w.on_avatar_clicked);
+        w.revealer.reveal_child = true;
 
-        content.pack_start (widget, false, false, 0);
-        if (!to_end)
-            content.reorder_child (widget, 0);
+		if (to_end)
+			content_list.insert (w, -1);
+		else
+			content_list.prepend (w);
 
         check_resize ();
-        return widget;
+        return w;
     }
     private Widgets.Status append (API.Status status) {
     	return prepend (status, true);
@@ -65,6 +66,7 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
                 int x,y;
                 translate_coordinates (root_widget, 0, 0, out x, out y);
                 scrolled.vadjustment.value = (double)(y*-1); //TODO: Animate scrolling?
+                //content_list.select_row (root_widget);
             })
             .exec ();
     }
