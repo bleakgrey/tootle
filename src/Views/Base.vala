@@ -17,6 +17,8 @@ public class Tootle.Views.Base : Box {
     [GtkChild]
     protected Box view;
     [GtkChild]
+    protected Hdy.Column column;
+    [GtkChild]
     protected Box column_view;
     [GtkChild]
     protected Stack states;
@@ -35,7 +37,7 @@ public class Tootle.Views.Base : Box {
     public string status_message { get; set; default = STATUS_EMPTY; }
     public bool allow_closing { get; set; default = true; }
 
-    public bool empty { //
+    public bool empty {
         get {
             return content_list.get_children ().length () <= 0;
         }
@@ -63,6 +65,7 @@ public class Tootle.Views.Base : Box {
                 on_hidden ();
         });
 
+        size_allocate.connect (on_resized);
         get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
     }
 
@@ -93,6 +96,20 @@ public class Tootle.Views.Base : Box {
         status_button.visible = true;
         status_button.sensitive = true;
         state = "status";
+    }
+
+    protected void on_resized () {
+        Allocation alloc;
+        get_allocation (out alloc);
+
+        var target_w = column.maximum_width;
+        var view_w = alloc.width;
+
+        var ctx = view.get_style_context ();
+        if (view_w <= target_w && ctx.has_class ("padded"))
+            ctx.remove_class ("padded");
+        if (view_w > target_w && !ctx.has_class ("padded"))
+            ctx.add_class ("padded");
     }
 
 }

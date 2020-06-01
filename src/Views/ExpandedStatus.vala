@@ -11,9 +11,6 @@ public class Tootle.Views.ExpandedStatus : Views.Base, IAccountListener {
 
         root_widget = append (status);
         root_widget.avatar.button_press_event.connect (root_widget.on_avatar_clicked);
-        root_widget.get_style_context ().add_class ("card");
-        root_widget.get_style_context ().add_class ("highlight");
-
         connect_account ();
     }
 

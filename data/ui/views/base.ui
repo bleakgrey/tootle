@@ -170,6 +170,9 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <style>
+                  <class name="app-view"/>
+                </style>
               </object>
             </child>
           </object>
