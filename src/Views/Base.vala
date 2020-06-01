@@ -15,8 +15,6 @@ public class Tootle.Views.Base : Box {
     [GtkChild]
     protected ScrolledWindow scrolled;
     [GtkChild]
-    protected Box view;
-    [GtkChild]
     protected Stack states;
     [GtkChild]
     protected Box content;
