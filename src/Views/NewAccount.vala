@@ -143,7 +143,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 		    	var root = network.parse (msg);
 		    	access_token = root.get_string_member ("access_token");
 		    	account.token = access_token;
-		    	account.id = 0;
+		    	account.id = "";
 		    	info ("OK: received access token");
 		    	request_profile ();
         	})

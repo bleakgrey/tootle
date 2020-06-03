@@ -122,7 +122,7 @@ public class Tootle.Dialogs.Compose : Window {
         visibility_button.sensitive = false;
         box.sensitive = false;
 
-        if (status.id > 0) {
+        if (status.id != "") {
             info ("Removing old status...");
             status.poof (publish, on_error);
         }

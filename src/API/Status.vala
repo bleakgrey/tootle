@@ -2,7 +2,7 @@ using Gee;
 
 public class Tootle.API.Status : GLib.Object, Widgetizable {
 
-    public int64 id { get; construct set; } //TODO: IDs are no longer guaranteed to be numbers. Replace with strings.
+    public string id { get; construct set; }
     public API.Account account { get; construct set; }
     public string uri { get; set; }
     public string? url { get; set; default = null; }
@@ -28,15 +28,16 @@ public class Tootle.API.Status : GLib.Object, Widgetizable {
         get { return reblog ?? this; }
     }
 
-	public bool has_spoiler {
+    public bool has_spoiler {
         get {
-            return formal.spoiler_text != null || formal.sensitive;
+            return formal.sensitive ||
+                !(formal.spoiler_text == null || formal.spoiler_text == "");
         }
-	}
+    }
 
     public Status (Json.Object obj) {
         Object (
-            id: int64.parse (obj.get_string_member ("id")),
+            id: obj.get_string_member ("id"),
             account: new Account (obj.get_object_member ("account")),
             uri: obj.get_string_member ("uri"),
             created_at: obj.get_string_member ("created_at"),
@@ -94,14 +95,14 @@ public class Tootle.API.Status : GLib.Object, Widgetizable {
 
     public Status.empty () {
         Object (
-        	id: 0,
+        	id: "",
         	visibility: settings.default_post_visibility
         );
     }
 
 	public Status.from_account (API.Account account) {
 	    Object (
-	        id: 0,
+	        id: "",
 	        account: account,
 	        created_at: account.created_at
 	    );

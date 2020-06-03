@@ -53,7 +53,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 	}
 
     public InstanceAccount.empty (string instance){
-        Object (id: 0, instance: instance);
+        Object (id: "", instance: instance);
     }
 
     public InstanceAccount.from_account (API.Account account) {

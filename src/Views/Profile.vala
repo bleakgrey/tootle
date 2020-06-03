@@ -166,8 +166,8 @@ public class Tootle.Views.Profile : Views.Timeline {
         }
     }
 
-    public static void open_from_id (int64 id){
-        var url = "%s/api/v1/accounts/%lld".printf (accounts.active.instance, id);
+    public static void open_from_id (string id){
+        var url = @"$(accounts.active.instance)/api/v1/accounts/$id";
         var msg = new Soup.Message ("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {

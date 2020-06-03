@@ -38,7 +38,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
         if (obj == null)
             throw new Oopsie.PARSING ("Received Json.Node is not a Json.Object!");
 
-        return new API.Status (obj);
+        return Json.gobject_deserialize (accepts, node);
     }
 
     public void prepend (Widget? w) {
@@ -152,7 +152,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
             prepend (status.to_widget ());
     }
 
-    protected virtual void remove_status (int64 id) {
+    protected virtual void remove_status (string id) {
         if (settings.live_updates) {
             content.get_children ().@foreach (w => {
                 var sw = w as Widgets.Status;

@@ -1,6 +1,6 @@
 public class Tootle.API.Account : GLib.Object {
 
-    public int64 id { get; set; }
+    public string id { get; construct set; }
     public string username { get; set; }
     public string acct { get; set; }
     public string? _display_name = null;
@@ -24,7 +24,7 @@ public class Tootle.API.Account : GLib.Object {
 
     public Account (Json.Object obj) {
         Object (
-            id: int64.parse (obj.get_string_member ("id")),
+            id: obj.get_string_member ("id"),
             username: obj.get_string_member ("username"),
             acct: obj.get_string_member ("acct"),
             display_name: obj.get_string_member ("display_name"),

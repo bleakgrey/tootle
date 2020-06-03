@@ -149,7 +149,7 @@ public class Tootle.Streams : Object {
 				});
 				break;
 			case "delete":
-				var id = int64.parse (root.get_string_member ("payload"));
+				var id = root.get_string_member ("payload");
 				c.subscribers.@foreach (s => {
 					s.on_status_removed (id);
 					return true;
@@ -168,7 +168,7 @@ public class Tootle.Streams : Object {
 		}
 	}
 
-	public void force_delete (int64 id) {
+	public void force_delete (string id) {
 		warning (@"Force removing status id $id");
 		connections.get_values ().@foreach (c => {
 			c.subscribers.@foreach (s => {
