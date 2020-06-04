@@ -22,7 +22,7 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
     public API.Visibility visibility { get; set; default = API.Visibility.PUBLIC; }
     public API.Status? reblog { get; set; default = null; }
     public ArrayList<API.Mention>? mentions { get; set; default = null; }
-    public ArrayList<API.Attachment>? attachments { get; set; default = null; }
+    public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
 
     public Status formal {
         get { return reblog ?? this; }
@@ -71,26 +71,26 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
         if (obj.has_member ("pinned"))
             pinned = obj.get_boolean_member ("pinned");
 
-        if (obj.has_member ("reblog") && obj.get_null_member("reblog") != true)
-            reblog = new Status (obj.get_object_member ("reblog"));
+        // if (obj.has_member ("reblog") && obj.get_null_member("reblog") != true)
+        //     reblog = new Status (obj.get_object_member ("reblog"));
 
-        obj.get_array_member ("mentions").foreach_element ((array, i, node) => {
-            var entity = node.get_object ();
-            if (entity != null) {
-                if (mentions == null)
-                    mentions = new ArrayList<API.Mention> ();
-                mentions.add (new API.Mention (entity));
-            }
-        });
+        // obj.get_array_member ("mentions").foreach_element ((array, i, node) => {
+        //     var entity = node.get_object ();
+        //     if (entity != null) {
+        //         if (mentions == null)
+        //             mentions = new ArrayList<API.Mention> ();
+        //         mentions.add (new API.Mention (entity));
+        //     }
+        // });
 
-        obj.get_array_member ("media_attachments").foreach_element ((array, i, node) => {
-            var entity = node.get_object ();
-            if (entity != null) {
-                if (attachments == null)
-                    attachments = new ArrayList<API.Attachment> ();
-                attachments.add (new API.Attachment (entity));
-            }
-        });
+        // obj.get_array_member ("media_attachments").foreach_element ((array, i, node) => {
+        //     var entity = node.get_object ();
+        //     if (entity != null) {
+        //         if (attachments == null)
+        //             attachments = new ArrayList<API.Attachment> ();
+        //         attachments.add (new API.Attachment (entity));
+        //     }
+        // });
     }
 
     public Status.empty () {
@@ -158,20 +158,20 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
             builder.set_member_name ("reblog");
             builder.add_value (reblog.serialize ());
         }
-        if (attachments != null) {
-            builder.set_member_name ("media_attachments");
-            builder.begin_array ();
-            foreach (API.Attachment attachment in attachments)
-                builder.add_value (attachment.serialize ());
-            builder.end_array ();
-        }
-        if (mentions != null) {
-            builder.set_member_name ("mentions");
-            builder.begin_array ();
-            foreach (API.Mention mention in mentions)
-                builder.add_value (mention.serialize ());
-            builder.end_array ();
-        }
+        // if (attachments != null) {
+        //     builder.set_member_name ("media_attachments");
+        //     builder.begin_array ();
+        //     foreach (API.Attachment attachment in attachments)
+        //         builder.add_value (attachment.serialize ());
+        //     builder.end_array ();
+        // }
+        // if (mentions != null) {
+        //     builder.set_member_name ("mentions");
+        //     builder.begin_array ();
+        //     foreach (API.Mention mention in mentions)
+        //         builder.add_value (mention.serialize ());
+        //     builder.end_array ();
+        // }
 
         builder.end_object ();
         return builder.get_root ();

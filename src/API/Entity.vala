@@ -27,8 +27,21 @@ public class Tootle.Entity : GLib.Object, Json.Serializable {
 			type = spec.value_type;
 		}
 
-		if (type.is_a (typeof (Gee.ArrayList)))
-			return des_list (out val, node);
+		if (type.is_a (typeof (Gee.ArrayList))) {
+			Type contains;
+			switch (prop) {
+				case "media-attachments":
+					contains = typeof (API.Attachment);
+					break;
+				case "mentions":
+					contains = typeof (API.Mention);
+					break;
+				default:
+					contains = typeof (Entity);
+					break;
+			}
+			return des_list (out val, node, contains);
+		}
 		else if (type.is_a (typeof (API.NotificationType)))
 			return des_notification_type (out val, node);
 
@@ -41,9 +54,15 @@ public class Tootle.Entity : GLib.Object, Json.Serializable {
 		return true;
 	}
 
-	bool des_list (out Value val, Json.Node node) {
-		val = new Gee.ArrayList<Entity>();
-		//TODO: this
+	bool des_list (out Value val, Json.Node node, Type type) {
+		if (!node.is_null ()) {
+			var arr = new Gee.ArrayList<Entity> ();
+			node.get_array ().foreach_element ((array, i, elem) => {
+				var obj = Entity.from_json (type, elem);
+				arr.add (obj);
+			});
+			val = arr;
+		}
 		return true;
 	}
 

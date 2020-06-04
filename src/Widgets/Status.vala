@@ -130,7 +130,7 @@ public class Tootle.Widgets.Status : EventBox {
             button_press_event.connect (open);
         }
 
-        if (!attachments.populate (status.formal.attachments) || status.id == "") {
+        if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
             attachments.destroy ();
         }
 
