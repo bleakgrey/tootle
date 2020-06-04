@@ -2,11 +2,11 @@ public class Tootle.Entity : GLib.Object, Json.Serializable {
 
 	public static Entity from_json (Type type, Json.Node? node) throws Oopsie {
         if (node == null)
-            throw new Oopsie.PARSING ("Received Json.Node is null!");
+            throw new Oopsie.PARSING (@"Received Json.Node for $(type.name ()) is null!");
 
         var obj = node.get_object ();
         if (obj == null)
-            throw new Oopsie.PARSING ("Received Json.Node is not a Json.Object!");
+            throw new Oopsie.PARSING (@"Received Json.Node for $(type.name ()) is not a Json.Object!");
 
         var kind = obj.get_member ("type");
         if (kind != null) {
