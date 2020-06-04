@@ -90,9 +90,9 @@ public class Tootle.Widgets.Status : EventBox {
                 kind = API.NotificationType.REBLOG_REMOTE_USER;
         }
 
-        status.formal.bind_property ("favorited", favorite_button, "active", BindingFlags.SYNC_CREATE);
+        status.formal.bind_property ("favourited", favorite_button, "active", BindingFlags.SYNC_CREATE);
         favorite_button.clicked.connect (() => {
-            status.action (status.formal.favorited ? "unfavourite" : "favourite");
+            status.action (status.formal.favourited ? "unfavourite" : "favourite");
         });
 
         status.formal.bind_property ("reblogged", reblog_button, "active", BindingFlags.SYNC_CREATE);

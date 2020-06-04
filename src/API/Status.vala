@@ -15,7 +15,7 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
     public int64 favourites_count { get; set; default = 0; }
     public string created_at { get; set; default = "0"; }
     public bool reblogged { get; set; default = false; }
-    public bool favorited { get; set; default = false; }
+    public bool favourited { get; set; default = false; }
     public bool sensitive { get; set; default = false; }
     public bool muted { get; set; default = false; }
     public bool pinned { get; set; default = false; }
@@ -65,7 +65,7 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
         if (obj.has_member ("reblogged"))
             reblogged = obj.get_boolean_member ("reblogged");
         if (obj.has_member ("favourited"))
-            favorited = obj.get_boolean_member ("favourited");
+            favourited = obj.get_boolean_member ("favourited");
         if (obj.has_member ("muted"))
             muted = obj.get_boolean_member ("muted");
         if (obj.has_member ("pinned"))
@@ -205,7 +205,7 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
         	.then_parse_obj (obj => {
         	    var status = new API.Status (obj).formal;
         	    formal.reblogged = status.reblogged;
-        	    formal.favorited = status.favorited;
+        	    formal.favourited = status.favourited;
         	    formal.muted = status.muted;
         	    formal.pinned = status.pinned;
             })
