@@ -92,7 +92,7 @@ public class Tootle.API.Account : GLib.Object {
     		.with_account (accounts.active)
     		.with_param ("id", id.to_string ())
     		.then_parse_array (node => {
-                rs = new Relationship (node.get_object ());
+    		    rs = API.Relationship.from (node);
     		})
     		.on_error (network.on_error)
     		.exec ();
@@ -103,8 +103,8 @@ public class Tootle.API.Account : GLib.Object {
         return new Request.POST (@"/api/v1/accounts/$id/$action")
             .with_account (accounts.active)
             .then ((sess, msg) => {
-                var root = network.parse (msg);
-                rs = new Relationship (root);
+                var node = network.parse_node (msg);
+                rs = API.Relationship.from (node);
             })
     		.on_error (network.on_error)
     		.exec ();
@@ -115,8 +115,8 @@ public class Tootle.API.Account : GLib.Object {
         return new Request.POST (@"/api/v1/accounts/$id/$action")
             .with_account (accounts.active)
             .then ((sess, msg) => {
-                var root = network.parse (msg);
-                rs = new Relationship (root);
+                var node = network.parse_node (msg);
+                rs = API.Relationship.from (node);
             })
     		.on_error (network.on_error)
     		.exec ();
@@ -127,8 +127,8 @@ public class Tootle.API.Account : GLib.Object {
         return new Request.POST (@"/api/v1/accounts/$id/$action")
             .with_account (accounts.active)
             .then ((sess, msg) => {
-                var root = network.parse (msg);
-                rs = new Relationship (root);
+                var node = network.parse_node (msg);
+                rs = API.Relationship.from (node);
             })
     		.on_error (network.on_error)
     		.exec ();
