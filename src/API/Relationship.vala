@@ -1,4 +1,4 @@
-public class Tootle.API.Relationship : GLib.Object {
+public class Tootle.API.Relationship : Entity {
 
     public int64 id { get; construct set; }
     public bool following { get; set; default = false; }

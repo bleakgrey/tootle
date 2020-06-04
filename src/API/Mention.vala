@@ -1,4 +1,4 @@
-public class Tootle.API.Mention : GLib.Object {
+public class Tootle.API.Mention : Entity {
 
     public string id { get; construct set; }
     public string username { get; construct set; }

@@ -57,7 +57,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		relationship = builder.get_object ("relationship") as Label;
 
 		posts_label = builder.get_object ("posts_label") as Label;
-		profile.bind_property ("posts_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("statuses_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		    var val = (int64) src;
 			target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
 			return true;
@@ -156,15 +156,16 @@ public class Tootle.Views.Profile : Views.Timeline {
 		return base.append_params (req);
 	}
 
-    public override GLib.Object to_entity (Json.Node node) {
-    	var obj = node.get_object ();
-    	if (posts_tab.active)
-        	return new API.Status (obj);
-        else {
-        	var account = new API.Account (obj);
-        	return new API.Status.from_account (account);
-        }
-    }
+	//TODO: switch "accepts param"
+    // public override GLib.Object to_entity (Json.Node node) {
+    // 	var obj = node.get_object ();
+    // 	if (posts_tab.active)
+    //     	return new API.Status (obj);
+    //     else {
+    //     	var account = new API.Account (obj);
+    //     	return new API.Status.from_account (account);
+    //     }
+    // }
 
     public static void open_from_id (string id){
         var url = @"$(accounts.active.instance)/api/v1/accounts/$id";

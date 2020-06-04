@@ -30,17 +30,6 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
         return status.is_owned ();
     }
 
-    public virtual GLib.Object to_entity (Json.Node node) throws Oopsie {
-        if (node == null)
-            throw new Oopsie.PARSING ("Received null Json.Node");
-
-        var obj = node.get_object ();
-        if (obj == null)
-            throw new Oopsie.PARSING ("Received Json.Node is not a Json.Object!");
-
-        return Json.gobject_deserialize (accepts, node);
-    }
-
     public void prepend (Widget? w) {
         append (w, true);
     }
@@ -103,7 +92,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		.with_account (account)
 		.then_parse_array ((node, msg) => {
 		    try {
-                var e = to_entity (node);
+                var e = Entity.from_json (accepts, node);
                 var w = e as Widgetizable;
                 append (w.to_widget ());
 		    }

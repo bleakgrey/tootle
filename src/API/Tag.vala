@@ -1,4 +1,4 @@
-public class Tootle.API.Tag : GLib.Object {
+public class Tootle.API.Tag : Entity {
 
     public string name { get; construct set; }
     public string url { get; construct set; }

@@ -1,6 +1,6 @@
 public class Tootle.API.Account : GLib.Object {
 
-    public string id { get; construct set; }
+    public string id { get; set; }
     public string username { get; set; }
     public string acct { get; set; }
     public string? _display_name = null;
@@ -19,7 +19,7 @@ public class Tootle.API.Account : GLib.Object {
     public string created_at { get; set; }
     public int64 followers_count { get; set; }
     public int64 following_count { get; set; }
-    public int64 posts_count { get; set; }
+    public int64 statuses_count { get; set; }
     public Relationship? rs { get; set; default = null; }
 
     public Account (Json.Object obj) {
@@ -36,7 +36,7 @@ public class Tootle.API.Account : GLib.Object {
 
             followers_count: obj.get_int_member ("followers_count"),
             following_count: obj.get_int_member ("following_count"),
-            posts_count: obj.get_int_member ("statuses_count")
+            statuses_count: obj.get_int_member ("statuses_count")
         );
 
         if (obj.has_member ("fields")) {
@@ -63,7 +63,7 @@ public class Tootle.API.Account : GLib.Object {
         builder.set_member_name ("followers_count");
         builder.add_int_value (followers_count);
         builder.set_member_name ("statuses_count");
-        builder.add_int_value (posts_count);
+        builder.add_int_value (statuses_count);
         builder.set_member_name ("display_name");
         builder.add_string_value (display_name);
         builder.set_member_name ("username");

@@ -1,4 +1,4 @@
-public class Tootle.API.Attachment : GLib.Object {
+public class Tootle.API.Attachment : Entity {
 
     public int64 id { get; construct set; }
     public string kind { get; set; }

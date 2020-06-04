@@ -1,9 +1,9 @@
 using Gee;
 
-public class Tootle.API.Status : GLib.Object, Widgetizable {
+public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
 
-    public string id { get; construct set; }
-    public API.Account account { get; construct set; }
+    public string id { get; set; }
+    public API.Account account { get; set; }
     public string uri { get; set; }
     public string? url { get; set; default = null; }
     public string? spoiler_text { get; set; default = null; }

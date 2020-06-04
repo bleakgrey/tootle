@@ -1,15 +1,14 @@
-public class Tootle.API.Notification : GLib.Object, Widgetizable {
+public class Tootle.API.Notification : Entity, Widgetizable {
 
-    public int64 id { get; construct set; }
-    public Account account { get; construct set; }
-
-    public NotificationType kind { get; set; }
+    public string id { get; set; }
+    public API.Account account { get; set; }
+    public API.NotificationType kind { get; set; }
     public string created_at { get; set; }
-    public Status? status { get; set; default = null; }
+    public API.Status? status { get; set; default = null; }
 
     public Notification (Json.Object obj) throws Oopsie {
         Object (
-            id: int64.parse (obj.get_string_member ("id")),
+            id: obj.get_string_member ("id"),
             kind: NotificationType.from_string (obj.get_string_member ("type")),
             created_at: obj.get_string_member ("created_at"),
             account: new Account (obj.get_object_member ("account"))
@@ -21,7 +20,7 @@ public class Tootle.API.Notification : GLib.Object, Widgetizable {
 
     public Notification.follow_request (Json.Object obj) {
         Object (
-            id: 0,
+            id: "",
             kind: NotificationType.FOLLOW_REQUEST,
             account: new Account (obj)
         );
@@ -66,7 +65,7 @@ public class Tootle.API.Notification : GLib.Object, Widgetizable {
 
 		var req = new Request.POST ("/api/v1/notifications/dismiss")
 		    .with_account (accounts.active)
-			.with_param ("id", id.to_string ())
+			.with_param ("id", id)
 			.exec ();
         return req;
     }
