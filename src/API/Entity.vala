@@ -2,7 +2,7 @@ using Json;
 
 public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 
-	public static string[] ignore_props = {"formal", "handle", "short-instance"};
+	public static string[] ignore_props = {"formal", "handle", "short-instance", "has-spoiler"};
 
 	public new ParamSpec[] list_properties () {
 		ParamSpec[] specs = {};
