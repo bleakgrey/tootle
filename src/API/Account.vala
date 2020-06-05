@@ -22,66 +22,9 @@ public class Tootle.API.Account : Entity {
     public int64 statuses_count { get; set; }
     public Relationship? rs { get; set; default = null; }
 
-    public Account (Json.Object obj) {
-        Object (
-            id: obj.get_string_member ("id"),
-            username: obj.get_string_member ("username"),
-            acct: obj.get_string_member ("acct"),
-            display_name: obj.get_string_member ("display_name"),
-            note: obj.get_string_member ("note"),
-            avatar: obj.get_string_member ("avatar"),
-            header: obj.get_string_member ("header"),
-            url: obj.get_string_member ("url"),
-            created_at: obj.get_string_member ("created_at"),
-
-            followers_count: obj.get_int_member ("followers_count"),
-            following_count: obj.get_int_member ("following_count"),
-            statuses_count: obj.get_int_member ("statuses_count")
-        );
-
-        if (obj.has_member ("fields")) {
-            obj.get_array_member ("fields").foreach_element ((array, i, node) => {
-                var field_obj = node.get_object ();
-                var field_name = field_obj.get_string_member ("name");
-                var field_val = field_obj.get_string_member ("value");
-                note += "\n";
-                note += field_name + ": ";
-                note += field_val;
-            });
-        }
-    }
-
-    public virtual Json.Node? serialize () {
-        var builder = new Json.Builder ();
-        builder.begin_object ();
-        builder.set_member_name ("id");
-        builder.add_string_value (id.to_string ());
-        builder.set_member_name ("created_at");
-        builder.add_string_value (created_at);
-        builder.set_member_name ("following_count");
-        builder.add_int_value (following_count);
-        builder.set_member_name ("followers_count");
-        builder.add_int_value (followers_count);
-        builder.set_member_name ("statuses_count");
-        builder.add_int_value (statuses_count);
-        builder.set_member_name ("display_name");
-        builder.add_string_value (display_name);
-        builder.set_member_name ("username");
-        builder.add_string_value (username);
-        builder.set_member_name ("acct");
-        builder.add_string_value (acct);
-        builder.set_member_name ("note");
-        builder.add_string_value (note);
-        builder.set_member_name ("header");
-        builder.add_string_value (header);
-        builder.set_member_name ("avatar");
-        builder.add_string_value (avatar);
-        builder.set_member_name ("url");
-        builder.add_string_value (url);
-
-        builder.end_object ();
-        return builder.get_root ();
-    }
+	public static Account from (Json.Node node) throws Error {
+		return Entity.from_json (typeof (API.Account), node) as API.Account;
+	}
 
     public bool is_self () {
         return id == accounts.active.id;

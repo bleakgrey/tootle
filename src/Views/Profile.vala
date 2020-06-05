@@ -156,24 +156,13 @@ public class Tootle.Views.Profile : Views.Timeline {
 		return base.append_params (req);
 	}
 
-	//TODO: switch "accepts param"
-    // public override GLib.Object to_entity (Json.Node node) {
-    // 	var obj = node.get_object ();
-    // 	if (posts_tab.active)
-    //     	return new API.Status (obj);
-    //     else {
-    //     	var account = new API.Account (obj);
-    //     	return new API.Status.from_account (account);
-    //     }
-    // }
-
     public static void open_from_id (string id){
         var url = @"$(accounts.active.instance)/api/v1/accounts/$id";
         var msg = new Soup.Message ("GET", url);
         msg.priority = Soup.MessagePriority.HIGH;
         network.queue (msg, (sess, mess) => {
-            var root = network.parse (mess);
-            var acc = new API.Account (root);
+            var node = network.parse_node (mess);
+            var acc = API.Account.from (node);
             window.open_view (new Views.Profile (acc));
         }, (status, reason) => {
             network.on_error (status, reason);

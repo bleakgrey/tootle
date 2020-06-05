@@ -2,7 +2,7 @@ using Json;
 
 public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 
-	public static string[] ignore_props = {"formal"};
+	public static string[] ignore_props = {"formal", "handle", "short-instance"};
 
 	public new ParamSpec[] list_properties () {
 		ParamSpec[] specs = {};
@@ -11,6 +11,21 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 				specs += spec;
 		}
 		return specs;
+	}
+
+
+	public void patch (GLib.Object with) {
+		var props = with.get_class ().list_properties ();
+		foreach (var prop in props) {
+			var name = prop.get_name ();
+			var defined = get_class ().find_property (name) != null;
+			var forbidden = name in ignore_props;
+			if (defined && !forbidden) {
+				var val = Value (prop.value_type);
+				with.get_property (name, ref val);
+				base.set_property (name, val);
+			}
+		}
 	}
 
 	public static Entity from_json (Type type, Json.Node? node) throws Oopsie {

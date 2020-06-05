@@ -38,7 +38,6 @@ executable(
     'src/Desktop.vala',
     'src/Drawing.vala',
     'src/Html.vala',
-    'src/Utils.vala',
     'src/Request.vala',
     'src/InstanceAccount.vala',
     'src/Services/Streams.vala',

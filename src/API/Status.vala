@@ -1,11 +1,15 @@
 using Gee;
 
-public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
+public class Tootle.API.Status : Entity, Widgetizable {
 
     public string id { get; set; }
     public API.Account account { get; set; }
     public string uri { get; set; }
-    public string? url { get; set; default = null; }
+    public string _url { get; set; }
+    public string? url {
+        owned get { return this._url != null ? this.url : this.uri.replace ("/activity", ""); }
+        set { this._url = value; }
+    }
     public string? spoiler_text { get; set; default = null; }
     public string? in_reply_to_id { get; set; default = null; }
     public string? in_reply_to_account_id { get; set; default = null; }
@@ -19,7 +23,7 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
     public bool sensitive { get; set; default = false; }
     public bool muted { get; set; default = false; }
     public bool pinned { get; set; default = false; }
-    public API.Visibility visibility { get; set; default = API.Visibility.PUBLIC; }
+    public API.Visibility visibility { get; set; default = settings.default_post_visibility; }
     public API.Status? reblog { get; set; default = null; }
     public ArrayList<API.Mention>? mentions { get; set; default = null; }
     public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
@@ -35,46 +39,9 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
         }
     }
 
-    public Status (Json.Object obj) {
-        if (obj.has_member ("url"))
-            url = obj.get_string_member ("url");
-        else
-            url = obj.get_string_member ("uri").replace ("/activity", "");
-
-        var spoiler = obj.get_string_member ("spoiler_text");
-        if (spoiler != "")
-            spoiler_text = Html.simplify (spoiler);
-
-        if (obj.has_member ("reblogged"))
-            reblogged = obj.get_boolean_member ("reblogged");
-        if (obj.has_member ("favourited"))
-            favourited = obj.get_boolean_member ("favourited");
-        if (obj.has_member ("muted"))
-            muted = obj.get_boolean_member ("muted");
-        if (obj.has_member ("pinned"))
-            pinned = obj.get_boolean_member ("pinned");
-
-        // if (obj.has_member ("reblog") && obj.get_null_member("reblog") != true)
-        //     reblog = new Status (obj.get_object_member ("reblog"));
-
-        // obj.get_array_member ("mentions").foreach_element ((array, i, node) => {
-        //     var entity = node.get_object ();
-        //     if (entity != null) {
-        //         if (mentions == null)
-        //             mentions = new ArrayList<API.Mention> ();
-        //         mentions.add (new API.Mention (entity));
-        //     }
-        // });
-
-        // obj.get_array_member ("media_attachments").foreach_element ((array, i, node) => {
-        //     var entity = node.get_object ();
-        //     if (entity != null) {
-        //         if (attachments == null)
-        //             attachments = new ArrayList<API.Attachment> ();
-        //         attachments.add (new API.Attachment (entity));
-        //     }
-        // });
-    }
+	public static Status from (Json.Node node) throws Error {
+		return Entity.from_json (typeof (API.Status), node) as API.Status;
+	}
 
     public Status.empty () {
         Object (
@@ -105,61 +72,6 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
         return w;
     }
 
-    public Json.Node? serialize () {
-        var builder = new Json.Builder ();
-        builder.begin_object ();
-        builder.set_member_name ("id");
-        builder.add_string_value (id.to_string ());
-        builder.set_member_name ("uri");
-        builder.add_string_value (uri);
-        builder.set_member_name ("url");
-        builder.add_string_value (url);
-        builder.set_member_name ("content");
-        builder.add_string_value (content);
-        builder.set_member_name ("created_at");
-        builder.add_string_value (created_at);
-        builder.set_member_name ("visibility");
-        builder.add_string_value (visibility.to_string ());
-        builder.set_member_name ("sensitive");
-        builder.add_boolean_value (sensitive);
-        builder.set_member_name ("sensitive");
-        builder.add_boolean_value (sensitive);
-        builder.set_member_name ("replies_count");
-        builder.add_int_value (replies_count);
-        builder.set_member_name ("favourites_count");
-        builder.add_int_value (favourites_count);
-        builder.set_member_name ("reblogs_count");
-        builder.add_int_value (reblogs_count);
-        builder.set_member_name ("account");
-        builder.add_value (account.serialize ());
-
-        if (spoiler_text != null) {
-            builder.set_member_name ("spoiler_text");
-            builder.add_string_value (spoiler_text);
-        }
-        if (reblog != null) {
-            builder.set_member_name ("reblog");
-            builder.add_value (reblog.serialize ());
-        }
-        // if (attachments != null) {
-        //     builder.set_member_name ("media_attachments");
-        //     builder.begin_array ();
-        //     foreach (API.Attachment attachment in attachments)
-        //         builder.add_value (attachment.serialize ());
-        //     builder.end_array ();
-        // }
-        // if (mentions != null) {
-        //     builder.set_member_name ("mentions");
-        //     builder.begin_array ();
-        //     foreach (API.Mention mention in mentions)
-        //         builder.add_value (mention.serialize ());
-        //     builder.end_array ();
-        // }
-
-        builder.end_object ();
-        return builder.get_root ();
-    }
-
     public bool is_owned (){
         return formal.account.id == accounts.active.id;
     }
@@ -185,12 +97,10 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
     public void action (string action, owned Network.ErrorCallback? err = network.on_error) {
         new Request.POST (@"/api/v1/statuses/$(formal.id)/$action")
         	.with_account (accounts.active)
-        	.then_parse_obj (obj => {
-        	    var status = new API.Status (obj).formal;
-        	    formal.reblogged = status.reblogged;
-        	    formal.favourited = status.favourited;
-        	    formal.muted = status.muted;
-        	    formal.pinned = status.pinned;
+        	.then ((sess, msg) => {
+        	    var node = network.parse_node (msg);
+        	    var upd = API.Status.from (node).formal;
+        	    patch (upd);
             })
             .on_error ((status, reason) => err (status, reason))
         	.exec ();

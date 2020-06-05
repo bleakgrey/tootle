@@ -152,8 +152,8 @@ public class Tootle.Dialogs.Compose : Window {
             req.with_param ("in_reply_to_account_id", status.in_reply_to_account_id);
 
         req.then ((sess, mess) => {
-            var root = network.parse (mess);
-            var status = new API.Status (root);
+            var node = network.parse_node (mess);
+            var status = API.Status.from (node);
             info ("OK: status id is %s", status.id.to_string ());
             destroy ();
         })

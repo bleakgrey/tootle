@@ -10,29 +10,6 @@ public class Tootle.API.Notification : Entity, Widgetizable {
         return new Widgets.Notification (this);
     }
 
-    public Json.Node? serialize () {
-        var builder = new Json.Builder ();
-        builder.begin_object ();
-        builder.set_member_name ("id");
-        builder.add_string_value (id.to_string ());
-        builder.set_member_name ("type");
-        builder.add_string_value (kind.to_string ());
-        builder.set_member_name ("created_at");
-        builder.add_string_value (created_at);
-
-        if (status != null) {
-            builder.set_member_name ("status");
-            builder.add_value (status.serialize ());
-        }
-        if (account != null) {
-            builder.set_member_name ("account");
-            builder.add_value (account.serialize ());
-        }
-
-        builder.end_object ();
-        return builder.get_root ();
-    }
-
     public Soup.Message? dismiss () {
         if (kind == NotificationType.WATCHLIST) {
             if (accounts.active.cached_notifications.remove (this))
