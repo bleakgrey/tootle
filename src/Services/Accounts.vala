@@ -20,8 +20,8 @@ public class Tootle.Accounts : GLib.Object {
             .with_account (acc)
             .then ((sess, mess) => {
                 var node = network.parse_node (mess);
-                var updated_acc = InstanceAccount.from (node);
-                updated_acc.patch (acc);
+                var updated = API.Account.from (node);
+                acc.patch (updated);
                 info ("OK: Token is valid");
                 active = acc;
                 settings.current_account = id;
