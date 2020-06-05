@@ -42,7 +42,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 
         var notifications = obj.get_array_member ("cached_notifications");
         notifications.foreach_element ((arr, i, node) => {
-            var notification = new API.Notification (node.get_object ());
+        	var notification = Entity.from_json (typeof (API.Notification), node) as API.Notification;
             cached_notifications.add (notification);
         });
 

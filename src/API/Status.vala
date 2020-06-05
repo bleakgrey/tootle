@@ -36,23 +36,6 @@ public class Tootle.API.Status : Entity, Widgetizable, Json.Serializable {
     }
 
     public Status (Json.Object obj) {
-        Object (
-            id: obj.get_string_member ("id"),
-            account: new Account (obj.get_object_member ("account")),
-            uri: obj.get_string_member ("uri"),
-            created_at: obj.get_string_member ("created_at"),
-            content: Html.simplify ( obj.get_string_member ("content")),
-            sensitive: obj.get_boolean_member ("sensitive"),
-            visibility: Visibility.from_string (obj.get_string_member ("visibility")),
-
-            in_reply_to_id: obj.get_string_member ("in_reply_to_id") ?? null,
-            in_reply_to_account_id: obj.get_string_member ("in_reply_to_account_id") ?? null,
-
-            replies_count: obj.get_int_member ("replies_count"),
-            reblogs_count: obj.get_int_member ("reblogs_count"),
-            favourites_count: obj.get_int_member ("favourites_count")
-        );
-
         if (obj.has_member ("url"))
             url = obj.get_string_member ("url");
         else

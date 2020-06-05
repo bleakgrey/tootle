@@ -1,4 +1,4 @@
-public class Tootle.API.Account : GLib.Object {
+public class Tootle.API.Account : Entity {
 
     public string id { get; set; }
     public string username { get; set; }

@@ -6,26 +6,6 @@ public class Tootle.API.Notification : Entity, Widgetizable {
     public string created_at { get; set; }
     public API.Status? status { get; set; default = null; }
 
-    public Notification (Json.Object obj) throws Oopsie {
-        Object (
-            id: obj.get_string_member ("id"),
-            kind: NotificationType.from_string (obj.get_string_member ("type")),
-            created_at: obj.get_string_member ("created_at"),
-            account: new Account (obj.get_object_member ("account"))
-        );
-
-        if (obj.has_member ("status"))
-            status = new Status (obj.get_object_member ("status"));
-    }
-
-    public Notification.follow_request (Json.Object obj) {
-        Object (
-            id: "",
-            kind: NotificationType.FOLLOW_REQUEST,
-            account: new Account (obj)
-        );
-    }
-
     public override Gtk.Widget to_widget () {
         return new Widgets.Notification (this);
     }
