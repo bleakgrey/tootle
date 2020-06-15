@@ -151,9 +151,13 @@ public class Tootle.Views.Profile : Views.Timeline {
     }
 
 	public override Request append_params (Request req) {
-		req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
-		req.with_param ("only_media", filter_media.active.to_string ());
-		return base.append_params (req);
+		if (page_next == null) {
+			req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
+			req.with_param ("only_media", filter_media.active.to_string ());
+			return base.append_params (req);
+		}
+		else
+			return req;
 	}
 
     public static void open_from_id (string id){

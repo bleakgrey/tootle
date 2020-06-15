@@ -79,16 +79,18 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
     public virtual string get_req_url () {
         if (page_next != null)
             return page_next;
-
         return url;
     }
 
     public virtual Request append_params (Request req) {
-        return req.with_param ("limit", @"$(settings.timeline_page_size)");
+        if (page_next == null)
+            return req.with_param ("limit", @"$(settings.timeline_page_size)");
+        else
+            return req;
     }
 
     public virtual bool request () {
-		append_params (new Request.GET (get_req_url ()))
+		var req = append_params (new Request.GET (get_req_url ()))
 		.with_account (account)
 		.then_parse_array ((node, msg) => {
 		    try {
@@ -99,10 +101,12 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		    catch (Error e) {
 		        warning (@"Timeline item parse error: $(e.message)");
 		    }
-            get_pages (msg.response_headers.get_one ("Link"));
         })
-		.on_error (on_error)
-		.exec ();
+		.on_error (on_error);
+		req.finished.connect (() => {
+		    get_pages (req.response_headers.get_one ("Link"));
+		});
+		req.exec ();
 		return GLib.Source.REMOVE;
     }
 
