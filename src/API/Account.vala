@@ -21,6 +21,7 @@ public class Tootle.API.Account : Entity {
     public int64 following_count { get; set; }
     public int64 statuses_count { get; set; }
     public Relationship? rs { get; set; default = null; }
+    public Gee.ArrayList<API.AccountField>? fields { get; set; default = null; }
 
 	public static Account from (Json.Node node) throws Error {
 		return Entity.from_json (typeof (API.Account), node) as API.Account;

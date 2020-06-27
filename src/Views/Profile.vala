@@ -4,26 +4,30 @@ public class Tootle.Views.Profile : Views.Timeline {
 
     public API.Account profile { get; construct set; }
 
-    protected RadioButton filter_all;
-    protected RadioButton filter_replies;
-    protected RadioButton filter_media;
+	ListBox profile_list;
 
-    protected Label relationship;
-    protected Box actions;
-    protected Button follow_button;
-    protected MenuButton options_button;
+    RadioButton filter_all;
+    RadioButton filter_replies;
+    RadioButton filter_media;
 
-    protected Label posts_label;
-    protected Label following_label;
-    protected Label followers_label;
-    protected RadioButton posts_tab;
-    protected RadioButton following_tab;
-    protected RadioButton followers_tab;
+    Label relationship;
+    Box actions;
+	Button follow_button;
+    MenuButton options_button;
+
+    Label posts_label;
+    Label following_label;
+    Label followers_label;
+    RadioButton posts_tab;
+    RadioButton following_tab;
+    RadioButton followers_tab;
 
     construct {
     	profile.notify["rs"].connect (on_rs_updated);
 
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
+        profile_list = builder.get_object ("profile_list") as ListBox;
+
         var hdr = builder.get_object ("grid") as Grid;
 		column_view.pack_start (hdr, false, false, 0);
 		column_view.reorder_child (hdr, 0);
@@ -94,6 +98,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 		followers_tab.toggled.connect (() => {
 			if (followers_tab.active) on_refresh ();
 		});
+
+		rebuild_fields ();
     }
 
     public Profile (API.Account acc) {
@@ -172,5 +178,29 @@ public class Tootle.Views.Profile : Views.Timeline {
             network.on_error (status, reason);
         });
     }
+
+	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/profile_field_row.ui")]
+	protected class Field : ListBoxRow {
+
+		[GtkChild]
+		Widgets.RichLabel name_label;
+		[GtkChild]
+		Widgets.RichLabel value_label;
+
+		public Field (API.AccountField field) {
+			name_label.text = field.name;
+			value_label.text = field.val;
+		}
+
+	}
+
+	void rebuild_fields () {
+		if (profile.fields != null) {
+			foreach (Entity e in profile.fields) {
+				var w = new Field (e as API.AccountField);
+				profile_list.insert (w, 2);
+			}
+		}
+	}
 
 }

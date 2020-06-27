@@ -58,6 +58,7 @@ executable(
     'src/Services/Cache.vala',
     'src/Services/Network.vala',
     'src/API/Account.vala',
+    'src/API/AccountField.vala',
     'src/API/Relationship.vala',
     'src/API/Mention.vala',
     'src/API/Tag.vala',
