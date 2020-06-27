@@ -12,7 +12,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     protected Stack timeline_stack;
 
     [GtkChild]
-    protected HeaderBar header;
+    public HeaderBar header;
     [GtkChild]
     protected Revealer view_navigation;
     [GtkChild]
@@ -77,6 +77,10 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     }
 
     public bool open_view (Views.Base widget) {
+        var curr = view_stack.visible_child as Views.Base;
+        if (curr != null)
+            curr.current = false;
+
         var i = get_visible_id ();
         i++;
         widget.stack_pos = i;
@@ -84,6 +88,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         view_stack.add_named (widget, i.to_string ());
         view_stack.set_visible_child_name (i.to_string ());
         update_header ();
+        widget.current = true;
         return true;
     }
 
@@ -94,8 +99,13 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
 
         var child = view_stack.get_child_by_name (i.to_string ());
         view_stack.set_visible_child_name ((i-1).to_string ());
+        (child as Views.Base).current = false;
         child.destroy ();
         update_header ();
+
+        var curr = view_stack.visible_child as Views.Base;
+        if (curr != null)
+            curr.current = true;
         return true;
     }
 
@@ -139,6 +149,9 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         switcher_navbar.visible = timeline_switcher.sensitive = primary_mode;
         timeline_switcher.opacity = primary_mode ? 1 : 0; //Prevent HeaderBar height jitter
         view_navigation.reveal_child = !primary_mode;
+
+        if (primary_mode)
+        	header.custom_title = timeline_switcher;
     }
 
     void on_timeline_changed (ParamSpec spec) {

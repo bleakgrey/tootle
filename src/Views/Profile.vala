@@ -22,8 +22,12 @@ public class Tootle.Views.Profile : Views.Timeline {
     RadioButton following_tab;
     RadioButton followers_tab;
 
+	Widgets.TimelineFilter filter;
+
     construct {
     	profile.notify["rs"].connect (on_rs_updated);
+
+		filter = new Widgets.TimelineFilter ();
 
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
         profile_list = builder.get_object ("profile_list") as ListBox;
@@ -36,20 +40,21 @@ public class Tootle.Views.Profile : Views.Timeline {
 		avatar.url = profile.avatar;
 
 		var name = builder.get_object ("name") as Widgets.RichLabel;
-		profile.bind_property ("display-name", name, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("display-name", name, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			var label = (string) src;
-			target.set_string (@"<span size='x-large' weight='bold'>$label</span>");
+			filter.title.label = Html.remove_tags (label);
+			target.set_string (@"<span size=\"x-large\" weight=\"bold\">$label</span>");
 			return true;
 		});
 
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
-		profile.bind_property ("acct", handle, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("acct", handle, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string ("@" + (string) src);
 			return true;
 		});
 
 		var note = builder.get_object ("note") as Widgets.RichLabel;
-		profile.bind_property ("note", note, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		profile.bind_property ("note", note, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_string (Html.simplify ((string) src));
 			return true;
 		});
@@ -107,12 +112,19 @@ public class Tootle.Views.Profile : Views.Timeline {
         profile.get_relationship ();
     }
 
-	protected void on_follow_button_clicked () {
+	public override void on_shown () {
+		window.header.custom_title = filter;
+	}
+	public override void on_hidden () {
+		window.header.custom_title = null;
+	}
+
+	void on_follow_button_clicked () {
 		actions.sensitive = false;
 		profile.set_following (!profile.rs.following);
 	}
 
-	protected void on_rs_updated () {
+	 void on_rs_updated () {
 		var rs = profile.rs;
 		var label = "";
 		if (actions.sensitive = rs != null) {
