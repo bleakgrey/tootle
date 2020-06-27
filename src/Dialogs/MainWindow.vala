@@ -14,6 +14,8 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     [GtkChild]
     protected HeaderBar header;
     [GtkChild]
+    protected Revealer view_navigation;
+    [GtkChild]
     protected Button back_button;
     [GtkChild]
     protected Button compose_button;
@@ -136,8 +138,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         bool primary_mode = get_visible_id () == 0;
         switcher_navbar.visible = timeline_switcher.sensitive = primary_mode;
         timeline_switcher.opacity = primary_mode ? 1 : 0; //Prevent HeaderBar height jitter
-        compose_button.visible = primary_mode;
-        back_button.visible = !primary_mode;
+        view_navigation.reveal_child = !primary_mode;
     }
 
     void on_timeline_changed (ParamSpec spec) {
