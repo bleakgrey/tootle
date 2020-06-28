@@ -26,18 +26,24 @@ asresources = gnome.compile_resources(
   c_name: 'as'
 )
 
-libhandy_dep = dependency('libhandy-1', version: '>= 0.80.0')
+libhandy_dep = dependency('libhandy-1', version: '>= 0.80.0', required: false)
 if not libhandy_dep.found()
   libhandy = subproject(
     'libhandy',
-    install: false,
     default_options: [
       'examples=false',
+      'glade_catalog=disabled',
       'package_subdir=' + meson.project_name(),
       'tests=false',
     ]
   )
-  libhandy_dep = libhandy.get_variable('libhandy_dep')
+
+  libhandy_dep = declare_dependency(
+    dependencies: [
+      libhandy.get_variable('libhandy_dep'),
+      libhandy.get_variable('libhandy_vapi'),
+    ]
+  )
 endif
 
 executable(
