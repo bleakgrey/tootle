@@ -1,5 +1,5 @@
 clear
-meson build --prefix=/usr
+meson build
 cd build
 ninja
 sudo ninja install

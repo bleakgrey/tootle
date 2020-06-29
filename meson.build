@@ -30,11 +30,9 @@ libhandy_dep = dependency('libhandy-1', version: '>= 0.80.0', required: false)
 if not libhandy_dep.found()
   libhandy = subproject(
     'libhandy',
-    install: false,
     default_options: [
       'examples=false',
       'glade_catalog=disabled',
-      # 'package_subdir=' + meson.project_name(),
       'tests=false',
     ]
   )
