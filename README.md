@@ -31,6 +31,7 @@ If the options above are not available to you, you can build the app from source
 
 ### Contributing
 Please consider donating with [LiberaPay](https://liberapay.com/bleakgrey/) to keep the developer happy.
+
 <a href="https://liberapay.com/bleakgrey/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a>
 
 You can always help by reporting bugs, submitting pull requests, and suggesting ideas. 
