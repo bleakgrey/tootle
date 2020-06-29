@@ -1,4 +1,4 @@
-public class Tootle.API.Account : Entity {
+public class Tootle.API.Account : Entity, Widgetizable {
 
     public string id { get; set; }
     public string username { get; set; }
@@ -29,6 +29,13 @@ public class Tootle.API.Account : Entity {
 
     public bool is_self () {
         return id == accounts.active.id;
+    }
+
+    public override Gtk.Widget to_widget () {
+        var status = new API.Status.from_account (this);
+        var w = new Widgets.Status (status);
+        w.button_press_event.connect (w.open);
+        return w;
     }
 
     public Request get_relationship () {

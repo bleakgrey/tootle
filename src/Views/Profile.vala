@@ -6,10 +6,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 	ListBox profile_list;
 
-    RadioButton filter_all;
-    RadioButton filter_replies;
-    RadioButton filter_media;
-
     Label relationship;
     Box actions;
 	Button follow_button;
@@ -18,16 +14,13 @@ public class Tootle.Views.Profile : Views.Timeline {
     Label posts_label;
     Label following_label;
     Label followers_label;
-    RadioButton posts_tab;
-    RadioButton following_tab;
-    RadioButton followers_tab;
 
 	Widgets.TimelineFilter filter;
 
     construct {
     	profile.notify["rs"].connect (on_rs_updated);
 
-		filter = new Widgets.TimelineFilter ();
+		filter = new Widgets.TimelineFilter.with_profile (this);
 
         var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
         profile_list = builder.get_object ("profile_list") as ListBox;
@@ -84,31 +77,14 @@ public class Tootle.Views.Profile : Views.Timeline {
 			return true;
 		});
 
-		filter_all = builder.get_object ("filter_all") as RadioButton;
-		filter_all.toggled.connect (on_refresh);
-		filter_replies = builder.get_object ("filter_replies") as RadioButton;
-		filter_replies.toggled.connect (on_refresh);
-		filter_media = builder.get_object ("filter_media") as RadioButton;
-		filter_media.toggled.connect (on_refresh);
-
-		posts_tab = builder.get_object ("posts_tab") as RadioButton;
-		posts_tab.toggled.connect (() => {
-			if (posts_tab.active) on_refresh ();
-		});
-		following_tab = builder.get_object ("following_tab") as RadioButton;
-		following_tab.toggled.connect (() => {
-			if (following_tab.active) on_refresh ();
-		});
-		followers_tab = builder.get_object ("followers_tab") as RadioButton;
-		followers_tab.toggled.connect (() => {
-			if (followers_tab.active) on_refresh ();
-		});
-
 		rebuild_fields ();
     }
 
     public Profile (API.Account acc) {
-        Object (profile: acc);
+        Object (
+        	profile: acc,
+        	url: @"/api/v1/accounts/$(acc.id)/statuses"
+        );
         profile.get_relationship ();
     }
 
@@ -156,22 +132,10 @@ public class Tootle.Views.Profile : Views.Timeline {
 		relationship.label = label;
 	}
 
-    public override string get_req_url () {
-        if (page_next != null)
-            return page_next;
-
-    	if (following_tab.active)
-    		return @"/api/v1/accounts/$(profile.id)/following";
-    	else if (followers_tab.active)
-    		return @"/api/v1/accounts/$(profile.id)/followers";
-    	else
-        	return @"/api/v1/accounts/$(profile.id)/statuses";
-    }
-
 	public override Request append_params (Request req) {
 		if (page_next == null) {
-			req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
-			req.with_param ("only_media", filter_media.active.to_string ());
+			//req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
+			//req.with_param ("only_media", filter_media.active.to_string ());
 			return base.append_params (req);
 		}
 		else
