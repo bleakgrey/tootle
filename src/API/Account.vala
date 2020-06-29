@@ -23,6 +23,12 @@ public class Tootle.API.Account : Entity, Widgetizable {
     public Relationship? rs { get; set; default = null; }
     public Gee.ArrayList<API.AccountField>? fields { get; set; default = null; }
 
+    public string handle {
+        owned get {
+            return "@" + acct;
+        }
+    }
+
 	public static Account from (Json.Node node) throws Error {
 		return Entity.from_json (typeof (API.Account), node) as API.Account;
 	}

@@ -18,9 +18,11 @@ public class Tootle.Widgets.Status : EventBox {
     [GtkChild]
     public Widgets.Avatar avatar;
     [GtkChild]
+    protected Widgets.RichLabel name_label;
+    [GtkChild]
     protected Widgets.RichLabel handle_label;
     [GtkChild]
-    protected Label date_label;
+    protected Widgets.RichLabel date_label;
     [GtkChild]
     protected Image pin_indicator;
     [GtkChild]
@@ -66,11 +68,10 @@ public class Tootle.Widgets.Status : EventBox {
         }
     }
 
-    protected string handle {
+    protected string display_name {
 		owned get {
 			var name = Html.simplify (status.formal.account.display_name);
-			var handle = Html.simplify (status.formal.account.acct);
-			return @"<b>$name</b>\n@$handle";
+			return @"<b>$name</b>";
 		}
 	}
 
@@ -105,7 +106,8 @@ public class Tootle.Widgets.Status : EventBox {
         bind_property ("escaped-spoiler", content, "text", BindingFlags.SYNC_CREATE);
         bind_property ("escaped-content", revealer_content, "text", BindingFlags.SYNC_CREATE);
         status.formal.account.bind_property ("avatar", avatar, "url", BindingFlags.SYNC_CREATE);
-		bind_property ("handle", handle_label, "label", BindingFlags.SYNC_CREATE);
+		status.account.bind_property ("handle", handle_label, "label", BindingFlags.SYNC_CREATE);
+		bind_property ("display_name", name_label, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 
