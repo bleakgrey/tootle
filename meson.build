@@ -34,7 +34,7 @@ if not libhandy_dep.found()
     default_options: [
       'examples=false',
       'glade_catalog=disabled',
-      'package_subdir=' + meson.project_name(),
+      # 'package_subdir=' + meson.project_name(),
       'tests=false',
     ]
   )
