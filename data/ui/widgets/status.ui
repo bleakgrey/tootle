@@ -258,6 +258,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes">Name</property>
+                <property name="ellipsize">end</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -271,6 +272,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="no">Handle</property>
                 <property name="opacity">0.5</property>
+                <property name="ellipsize">end</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -301,6 +303,7 @@
                 <property name="margin_start">8</property>
                 <property name="label" translatable="no">Yesterday</property>
                 <property name="halign">end</property>
+                <property name="valign">start</property>
               </object>
               <packing>
                 <property name="left_attach">3</property>
