@@ -11,11 +11,10 @@ public class Tootle.Views.Profile : Views.Timeline {
 	Button follow_button;
     MenuButton options_button;
 
-    Label posts_label;
-    Label following_label;
-    Label followers_label;
-
 	Widgets.TimelineFilter filter;
+
+	public bool exclude_replies { get; set; default = true; }
+	public bool only_media { get; set; default = false; }
 
     construct {
     	profile.notify["rs"].connect (on_rs_updated);
@@ -32,17 +31,12 @@ public class Tootle.Views.Profile : Views.Timeline {
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
 		avatar.url = profile.avatar;
 
-		var name = builder.get_object ("name") as Widgets.RichLabel;
-		profile.bind_property ("display-name", name, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			var label = (string) src;
-			filter.title.label = Html.remove_tags (label);
-			target.set_string (@"<span size=\"x-large\" weight=\"bold\">$label</span>");
-			return true;
-		});
+		profile.bind_property ("display-name", filter.title, "label", BindingFlags.SYNC_CREATE);
 
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
 		profile.bind_property ("acct", handle, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			target.set_string ("@" + (string) src);
+			var text = "@" + (string) src;
+			target.set_string (@"<span size=\"x-large\" weight=\"bold\">$text</span>");
 			return true;
 		});
 
@@ -58,24 +52,24 @@ public class Tootle.Views.Profile : Views.Timeline {
 		options_button = builder.get_object ("options_button") as MenuButton;
 		relationship = builder.get_object ("relationship") as Label;
 
-		posts_label = builder.get_object ("posts_label") as Label;
-		profile.bind_property ("statuses_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		    var val = (int64) src;
-			target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
-			return true;
-		});
-		following_label = builder.get_object ("following_label") as Label;
-		profile.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		    var val = (int64) src;
-			target.set_string (_("%s Follows").printf (@"<b>$val</b>"));
-			return true;
-		});
-		followers_label = builder.get_object ("followers_label") as Label;
-		profile.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		    var val = (int64) src;
-			target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
-			return true;
-		});
+		// posts_label = builder.get_object ("posts_label") as Label;
+		// profile.bind_property ("statuses_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		//     var val = (int64) src;
+		// 	target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
+		// 	return true;
+		// });
+		// following_label = builder.get_object ("following_label") as Label;
+		// profile.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		//     var val = (int64) src;
+		// 	target.set_string (_("%s Follows").printf (@"<b>$val</b>"));
+		// 	return true;
+		// });
+		// followers_label = builder.get_object ("followers_label") as Label;
+		// profile.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		//     var val = (int64) src;
+		// 	target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
+		// 	return true;
+		// });
 
 		rebuild_fields ();
     }
@@ -130,12 +124,15 @@ public class Tootle.Views.Profile : Views.Timeline {
 		}
 
 		relationship.label = label;
+		relationship.visible = label != "";
 	}
 
 	public override Request append_params (Request req) {
 		if (page_next == null) {
-			//req.with_param ("exclude_replies", (!filter_replies.active).to_string ());
-			//req.with_param ("only_media", filter_media.active.to_string ());
+			if (exclude_replies)
+				req.with_param ("exclude_replies", "true");
+			if (only_media)
+				req.with_param ("only_media", "true");
 			return base.append_params (req);
 		}
 		else

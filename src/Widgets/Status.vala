@@ -70,7 +70,7 @@ public class Tootle.Widgets.Status : EventBox {
 		owned get {
 			var name = Html.simplify (status.formal.account.display_name);
 			var handle = Html.simplify (status.formal.account.acct);
-			return @"<b>$name</b> @$handle";
+			return @"<b>$name</b>\n@$handle";
 		}
 	}
 

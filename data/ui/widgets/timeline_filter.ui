@@ -198,7 +198,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton">
+                          <object class="GtkRadioButton" id="radio_post_filter_with_replies">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -220,7 +220,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkRadioButton">
+                          <object class="GtkRadioButton" id="radio_post_only_media">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -275,18 +275,71 @@
     <property name="draw_indicator">True</property>
     <property name="popover">popover</property>
     <child>
-      <object class="GtkLabel" id="title">
+      <object class="GtkStack">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="ellipsize">start</property>
-        <property name="single_line_mode">True</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-        </attributes>
+        <property name="transition_duration">100</property>
+        <property name="transition_type">crossfade</property>
+        <child>
+          <object class="GtkLabel" id="title">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="single_line_mode">True</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="name">title</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="spacing">8</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="icon_name">mail-send-symbolic</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="title_scrolled">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label">1K</property>
+                <property name="ellipsize">end</property>
+                <property name="single_line_mode">True</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">title_scrolled</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
     </child>
     <style>
       <class name="flat"/>
+      <class name="header-title-buttonx"/>
     </style>
   </template>
 </interface>
