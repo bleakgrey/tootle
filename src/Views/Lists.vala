@@ -1,3 +1,5 @@
+using Gtk;
+
 public class Tootle.Views.Lists : Views.Timeline {
 
     public Lists () {
@@ -7,6 +9,11 @@ public class Tootle.Views.Lists : Views.Timeline {
             icon: "view-list-symbolic"
         );
         accepts = typeof (API.List);
+    }
+
+    public override void on_request_finish () {
+        var add_row = new API.List.ListItemRow (null);
+        append (add_row);
     }
 
 }

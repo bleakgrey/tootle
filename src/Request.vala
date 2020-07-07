@@ -27,9 +27,7 @@ public class Tootle.Request : Soup.Message {
 
 	public Request then_parse_array (owned Network.NodeCallback _cb) {
 		this.cb = (sess, msg) => {
-			var parser = new Json.Parser ();
-			parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
-			parser.get_root ().get_array ().foreach_element ((array, i, node) => _cb (node, msg));
+			Network.parse_array (msg, (owned) _cb);
 		};
 		return this;
 	}

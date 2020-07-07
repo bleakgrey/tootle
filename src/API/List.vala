@@ -3,8 +3,12 @@ using Gtk;
 public class Tootle.API.List : Entity, Widgetizable {
 
     [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/lists.ui")]
-    class ListItemRow : ListBoxRow {
+    public class ListItemRow : ListBoxRow {
 
+		List list;
+
+		[GtkChild]
+		Stack stack;
 		[GtkChild]
 		Label title;
 		[GtkChild]
@@ -12,14 +16,21 @@ public class Tootle.API.List : Entity, Widgetizable {
 		[GtkChild]
 		Button remove_button;
 
-		public ListItemRow (List list) {
-			this.title.label = list.title;
-			this.remove_button.clicked.connect (() => {
+		public ListItemRow (List? list) {
+			this.list = list;
 
-			});
-			this.edit_button.clicked.connect (() => {
+			if (list == null) {
+				stack.visible_child_name = "add";
+			}
+			else {
+				this.title.label = list.title;
+				this.remove_button.clicked.connect (() => {
 
-			});
+				});
+				this.edit_button.clicked.connect (() => {
+
+				});
+			}
 		}
 
 		public virtual signal void open () {

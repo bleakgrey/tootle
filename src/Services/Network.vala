@@ -89,4 +89,12 @@ public class Tootle.Network : GLib.Object {
         return parse_node (msg).get_object ();
     }
 
+    public static void parse_array (Soup.Message msg, owned NodeCallback cb) throws Error {
+		var parser = new Json.Parser ();
+		parser.load_from_data ((string) msg.response_body.flatten ().data, -1);
+		parser.get_root ().get_array ().foreach_element ((array, i, node) => {
+		    cb (node, msg);
+		});
+    }
+
 }

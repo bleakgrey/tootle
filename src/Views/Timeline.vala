@@ -89,23 +89,27 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
             return req;
     }
 
+	public virtual void on_request_finish () {}
+
     public virtual bool request () {
 		var req = append_params (new Request.GET (get_req_url ()))
 		.with_account (account)
-		.then_parse_array ((node, msg) => {
-		    try {
-                var e = Entity.from_json (accepts, node);
-                var w = e as Widgetizable;
-                append (w.to_widget ());
-		    }
-		    catch (Error e) {
-		        warning (@"Timeline item parse error: $(e.message)");
-		    }
+		.then ((sess, mess) => {
+		    Network.parse_array (mess, (node) => {
+		        try {
+                    var e = Entity.from_json (accepts, node);
+                    var w = e as Widgetizable;
+                    append (w.to_widget ());
+		        }
+		        catch (Error e) {
+		            warning (@"Timeline item parse error: $(e.message)");
+		        }
+		    });
+
+		    get_pages (mess.response_headers.get_one ("Link"));
+		    on_request_finish ();
         })
 		.on_error (on_error);
-		req.finished.connect (() => {
-		    get_pages (req.response_headers.get_one ("Link"));
-		});
 		req.exec ();
 		return GLib.Source.REMOVE;
     }
