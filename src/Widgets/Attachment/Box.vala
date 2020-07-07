@@ -9,6 +9,7 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
 	construct {
 	    hexpand = true;
 	    can_focus = false;
+	    column_spacing = row_spacing = 8;
 	    selection_mode = SelectionMode.NONE;
 	}
 
@@ -49,20 +50,26 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
     public bool populate (ArrayList<API.Attachment>? list) {
         if (list == null)
             return false;
-        
-        var max = 6;
-        if (list.size % 2 == 0)
+
+        var max = 4;
+        if (list.size == 1)
+            max = 1;
+        else if (list.size % 2 == 0)
             max = 2;
-        
-        //max_children_per_line = (int)Math.fmin (list.size, 5);
+        else if (list.size % 3 == 0)
+            max = 3;
+
+        //max_children_per_line = (int)Math.fmin (list.size, 4);
         max_children_per_line = max;
         list.@foreach (obj => pack (obj));
+
         return true;
     }
 
     public bool pack (API.Attachment obj) {
-        var w = new Widgets.Attachment.Item (obj);
+        var w = new Widgets.Attachment.Slot (obj);
         insert (w, -1);
+
         return true;
     }
 
