@@ -69,6 +69,7 @@ executable(
     'src/API/NotificationType.vala',
     'src/API/Attachment.vala',
     'src/API/Conversation.vala',
+    'src/API/List.vala',
     'src/API/Entity.vala',
     'src/Widgets/Widgetizable.vala',
     'src/Widgets/Avatar.vala',
@@ -98,6 +99,7 @@ executable(
     'src/Views/Favorites.vala',
     'src/Views/Search.vala',
     'src/Views/Hashtag.vala',
+    'src/Views/Lists.vala',
     dependencies: [
         dependency('gtk+-3.0', version: '>=3.22.0'),
         dependency('glib-2.0', version: '>=2.30.0'),
