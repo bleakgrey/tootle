@@ -44,8 +44,6 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
             content_list.prepend (w);
         else
             content_list.insert (w, -1);
-
-        on_content_changed ();
     }
 
     public override void clear () {
@@ -107,6 +105,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		    });
 
 		    get_pages (mess.response_headers.get_one ("Link"));
+		    on_content_changed ();
 		    on_request_finish ();
         })
 		.on_error (on_error);
@@ -127,9 +126,13 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 
     public virtual void on_account_changed (InstanceAccount? acc) {
         account = acc;
+        reconnect_stream ();
+        on_refresh ();
+    }
+
+    public void reconnect_stream () {
 		streams.unsubscribe (stream, this);
         streams.subscribe (get_stream_url (), this, out stream);
-        on_refresh ();
     }
 
     protected override void on_bottom_reached () {

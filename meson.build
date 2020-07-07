@@ -100,6 +100,7 @@ executable(
     'src/Views/Search.vala',
     'src/Views/Hashtag.vala',
     'src/Views/Lists.vala',
+    'src/Views/List.vala',
     dependencies: [
         dependency('gtk+-3.0', version: '>=3.22.0'),
         dependency('glib-2.0', version: '>=2.30.0'),

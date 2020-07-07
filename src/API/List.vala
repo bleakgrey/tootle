@@ -5,7 +5,7 @@ public class Tootle.API.List : Entity, Widgetizable {
     [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/lists.ui")]
     public class ListItemRow : ListBoxRow {
 
-		List list;
+		API.List? list;
 
 		[GtkChild]
 		Stack stack;
@@ -34,7 +34,11 @@ public class Tootle.API.List : Entity, Widgetizable {
 		}
 
 		public virtual signal void open () {
+			if (this.list == null)
+				return;
 
+			var view = new Views.List (list);
+			window.open_view (view);
 		}
     }
 
