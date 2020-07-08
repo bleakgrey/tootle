@@ -81,7 +81,15 @@ public class Tootle.Cache : GLib.Object {
 
                 var data = message.response_body.flatten ().data;
                 var stream = new MemoryInputStream.from_data (data);
-                pixbuf = new Pixbuf.from_stream (stream);
+
+                try {
+                    pixbuf = new Pixbuf.from_stream (stream);
+                }
+                catch (Error e) {
+                    warning (@"Can't convert \"$url\" to Pixbuf:\n$(e.message)");
+                    pixbuf = Desktop.icon_to_pixbuf ("image-x-generic-symbolic");
+                }
+
                 stream.close ();
 
                 //info (@"< STORE $key");

@@ -51,16 +51,18 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
         if (list == null)
             return false;
 
-        var max = 4;
+        var max = 2;
+        var min = 1;
         if (list.size == 1)
             max = 1;
         else if (list.size % 2 == 0)
-            max = 2;
+            max = min = 2;
         else if (list.size % 3 == 0)
-            max = 3;
+            max = min = 3;
 
         //max_children_per_line = (int)Math.fmin (list.size, 4);
         max_children_per_line = max;
+        min_children_per_line = min;
         list.@foreach (obj => pack (obj));
 
         return true;

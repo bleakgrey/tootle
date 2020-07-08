@@ -5,9 +5,13 @@ using Gdk;
 public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 
 	[GtkChild]
-	Overlay overlay;
-	[GtkChild]
 	EventBox event_box;
+	[GtkChild]
+	Label chip;
+	[GtkChild]
+	Image play_icon;
+	[GtkChild]
+	Stack stack;
 
 	public API.Attachment attachment { get; construct set; }
 
@@ -16,8 +20,24 @@ public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 
 		if (attachment.preview_url != null) {
 			var img = new Widgets.Attachment.Picture (attachment.preview_url);
-			overlay.add_overlay (img);
-			img.show ();
+			img.notify["visible"].connect (() => {
+				stack.visible_child_name = img.visible ? "content" : "loading";
+			});
+			stack.add_named (img, "content");
+			img.on_request ();
+		}
+
+		if (attachment.kind != "image") {
+			chip.label = attachment.kind;
+			chip.show ();
+		}
+
+		switch (attachment.kind) {
+			case "audio":
+			case "video":
+			case "gifv":
+				play_icon.show ();
+				break;
 		}
 	}
 

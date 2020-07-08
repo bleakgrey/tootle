@@ -11,6 +11,10 @@
 .attachment .pic {
 	border-radius: 6px;
 }
+.attachment .chip {
+	padding: 6px;
+	border-radius:6px;
+}
 /*.attachment box button:nth-child(1) {*/
 /*	border-radius:0 0 0 8px;*/
 /*}*/

@@ -14,13 +14,12 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 
 	public class Picture (string url) {
 		Object (url: url);
-		on_request ();
 	}
 	~Picture () {
 		cache.unload (cached);
 	}
 
-	void on_request () {
+	public void on_request () {
 		cached = null;
 		on_redraw ();
 		cache.load (url, on_cache_result);
@@ -46,27 +45,31 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 
 		if (cached != null) {
 			if (!cached.loading) {
-				//var thumb = Drawing.make_thumbnail (cached.data, w, h);
-				// Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
-				//Drawing.center (ctx, w, h, thumb.width, thumb.height);
-				//Gdk.cairo_set_source_pixbuf (ctx, thumb, 0, 0);
-				// Gdk.cairo_set_source_pixbuf (ctx, cached.data, 0, 0);
-				// ctx.fill ();
-
 				Cairo.Surface surface = Gdk.cairo_surface_create_from_pixbuf (cached.data, 1, null);
 
 				ctx.save ();
-				var xscale = (float) w / cached.data.get_width ();
-				var yscale = (float) h / cached.data.get_height ();
+				var ow = cached.data.get_width ();
+				var oh = cached.data.get_height ();
+				var xscale = (float) w / ow;
+				var yscale = (float) h / oh;
 				Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
-				ctx.scale (xscale, yscale);
+
+				float ratio = yscale;
+				if (xscale > yscale) {
+					ratio = xscale;
+				}
+
+				ctx.scale (ratio, ratio);
+				// height_request = (int) (oh*ratio);
+				// get_parent ().height_request = height_request;
+
 				ctx.set_source_surface (surface, 0, 0);
 				ctx.fill ();
 				ctx.restore ();
 			}
 		}
 
-		return Gdk.EVENT_STOP;
+		return false;
 	}
 
 }

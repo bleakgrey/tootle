@@ -40,7 +40,6 @@ public class Tootle.Widgets.Avatar : EventBox {
 
 	public int get_scaled_size () {
 		return size;
-		//return size * get_scale_factor ();
 	}
 
 	private void on_redraw () {
@@ -61,7 +60,7 @@ public class Tootle.Widgets.Avatar : EventBox {
 		}
 		else {
 			pixbuf = IconTheme.get_default ()
-				.load_icon_for_scale ("avatar-default", size, get_scale_factor (), IconLookupFlags.GENERIC_FALLBACK);
+				.load_icon_for_scale ("avatar-default", get_scaled_size (), get_scale_factor (), IconLookupFlags.GENERIC_FALLBACK);
 		}
 		Gdk.cairo_set_source_pixbuf (ctx, pixbuf, 0, 0);
 		ctx.fill ();
