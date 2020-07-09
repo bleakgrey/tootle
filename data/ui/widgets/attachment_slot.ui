@@ -3,8 +3,8 @@
 <interface>
   <requires lib="gtk+" version="3.22"/>
   <template class="TootleWidgetsAttachmentSlot" parent="GtkFlowBoxChild">
-    <property name="width_request">200</property>
-    <property name="height_request">200</property>
+    <property name="width_request">60</property>
+    <property name="height_request">60</property>
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="hexpand">True</property>
@@ -23,6 +23,10 @@
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
+                <property name="margin_start">16</property>
+                <property name="margin_end">16</property>
+                <property name="margin_top">16</property>
+                <property name="margin_bottom">16</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
                 <property name="pixel_size">48</property>
@@ -137,9 +141,13 @@
                 <property name="interpolate_size">True</property>
                 <child>
                   <object class="GtkSpinner" id="loading">
+                    <property name="width_request">32</property>
+                    <property name="height_request">32</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="opacity">0.5019607843137255</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="active">True</property>
@@ -148,9 +156,6 @@
                     <property name="name">loading</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -158,17 +163,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkStack">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
         </child>

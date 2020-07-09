@@ -33,7 +33,8 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 
 	void on_cache_result (Cache.Reference? result) {
 		cached = result;
-		visible = !cached.loading;
+		if (cached != null)
+			visible = !cached.loading;
 		on_redraw ();
 	}
 
@@ -60,8 +61,9 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 				}
 
 				ctx.scale (ratio, ratio);
-				// height_request = (int) (oh*ratio);
-				// get_parent ().height_request = height_request;
+
+				// Maybe this is not the right place to resize the widget
+				height_request = get_parent ().height_request = (int) (oh*ratio);
 
 				ctx.set_source_surface (surface, 0, 0);
 				ctx.fill ();

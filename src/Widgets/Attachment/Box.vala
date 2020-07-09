@@ -17,6 +17,7 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
 		Object (editing: editing);
 	}
 
+    //TODO: Upload attachments in Compose dialog
     public void select () {
         var filter = new Gtk.FileFilter ();
         filter.add_mime_type ("image/jpeg");
@@ -60,7 +61,6 @@ public class Tootle.Widgets.Attachment.Box : FlowBox {
         else if (list.size % 3 == 0)
             max = min = 3;
 
-        //max_children_per_line = (int)Math.fmin (list.size, 4);
         max_children_per_line = max;
         min_children_per_line = min;
         list.@foreach (obj => pack (obj));
