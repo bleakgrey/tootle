@@ -22,7 +22,14 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 	public void on_request () {
 		cached = null;
 		on_redraw ();
-		cache.load (url, on_cache_result);
+		cache.load (url, on_cache_update);
+	}
+
+	void on_cache_update (Cache.Reference? result) {
+		cached = result;
+		if (cached != null)
+			visible = !cached.loading;
+		on_redraw ();
 	}
 
 	void on_redraw () {
@@ -31,11 +38,16 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 		queue_draw_area (0, 0, w, h);
 	}
 
-	void on_cache_result (Cache.Reference? result) {
-		cached = result;
-		if (cached != null)
-			visible = !cached.loading;
-		on_redraw ();
+	float get_ratio (int w, int h) {
+		var ow = cached.data.get_width ();
+		var oh = cached.data.get_height ();
+		var xscale = (float) w / ow;
+		var yscale = (float) h / oh;
+
+		if (xscale > yscale)
+			return xscale;
+		else
+			return yscale;
 	}
 
 	public override bool draw (Cairo.Context ctx) {
@@ -49,22 +61,24 @@ public class Tootle.Widgets.Attachment.Picture : DrawingArea {
 				Cairo.Surface surface = Gdk.cairo_surface_create_from_pixbuf (cached.data, 1, null);
 
 				ctx.save ();
-				var ow = cached.data.get_width ();
-				var oh = cached.data.get_height ();
-				var xscale = (float) w / ow;
-				var yscale = (float) h / oh;
 				Drawing.draw_rounded_rect (ctx, 0, 0, w, h, border_radius);
 
-				float ratio = yscale;
-				if (xscale > yscale) {
-					ratio = xscale;
-				}
-
+				//Proportionally scale to fit into the allocated container
+				var ratio = get_ratio (w, h);
 				ctx.scale (ratio, ratio);
 
-				// Maybe this is not the right place to resize the widget
-				height_request = get_parent ().height_request = (int) (oh*ratio);
+				//Center the result
+				var oh = cached.data.get_height ();
+				var result_h = oh*ratio;
+				var offset_y = (h - result_h) / 2;
 
+				var ow = cached.data.get_width ();
+				var result_w = ow*ratio;
+				var offset_x = (w - result_w) / 2;
+
+				ctx.translate (offset_x, offset_y);
+
+				//Draw it
 				ctx.set_source_surface (surface, 0, 0);
 				ctx.fill ();
 				ctx.restore ();
