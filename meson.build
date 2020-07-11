@@ -85,6 +85,7 @@ executable(
     'src/Dialogs/MainWindow.vala',
     'src/Dialogs/Compose.vala',
     'src/Dialogs/Preferences.vala',
+    'src/Dialogs/ListEditor.vala',
     'src/Views/Base.vala',
     'src/Views/NewAccount.vala',
     'src/Views/Timeline.vala',

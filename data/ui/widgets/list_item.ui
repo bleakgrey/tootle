@@ -2,7 +2,7 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <template class="TootleAPIListListItemRow" parent="GtkListBoxRow">
+  <template class="TootleViewsListsRow" parent="GtkListBoxRow">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
     <property name="selectable">False</property>
@@ -35,12 +35,13 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="rename_button">
+              <object class="GtkButton" id="edit_button">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Rename</property>
                 <property name="relief">none</property>
+                <signal name="clicked" handler="on_edit_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -72,6 +73,7 @@
                 <property name="receives_default">True</property>
                 <property name="tooltip_text" translatable="yes">Remove</property>
                 <property name="relief">none</property>
+                <signal name="clicked" handler="on_remove_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -116,28 +118,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkPopover" id="edit_popover">
-    <property name="can_focus">False</property>
-    <child>
-      <placeholder/>
-    </child>
-  </object>
-  <object class="GtkMenuButton" id="edit_button">
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="focus_on_click">False</property>
-    <property name="receives_default">True</property>
-    <property name="tooltip_text" translatable="yes">Edit</property>
-    <property name="popover">edit_popover</property>
-    <child>
-      <object class="GtkImage">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="icon_name">document-edit-symbolic</property>
-      </object>
-    </child>
-    <style>
-      <class name="image-button"/>
-    </style>
-  </object>
 </interface>
