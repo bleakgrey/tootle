@@ -26,6 +26,7 @@
             <property name="wrap_mode">word-char</property>
             <property name="xalign">1</property>
             <property name="max-width-chars">1</property>
+            <property name="justify">right</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
