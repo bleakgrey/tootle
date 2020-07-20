@@ -143,6 +143,7 @@
             <property name="primary_icon_sensitive">False</property>
             <property name="placeholder_text" translatable="yes">Search among people you follow</property>
             <property name="completion">completion</property>
+            <signal name="search-changed" handler="on_search_changed" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

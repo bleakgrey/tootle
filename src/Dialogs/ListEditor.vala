@@ -56,6 +56,8 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 		warning (@"code $code, $msg");
 	}
 
+	//https://mastodon.social/api/v1/accounts/search?q=QUERY&resolve=false&limit=8&following=true
+
 	void request_accounts () {
 		new Request.GET (@"/api/v1/lists/$(list.id)/accounts")
 			.with_account (accounts.active)
@@ -107,6 +109,11 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 	[GtkCallback]
 	void on_save_clicked () {
 
+	}
+
+	[GtkCallback]
+	void on_search_changed () {
+		warning ("CHANGED");
 	}
 
 }
