@@ -24,6 +24,7 @@
   <url type="homepage">https://github.com/bleakgrey</url>
   <url type="bugtracker">https://github.com/bleakgrey/tootle/issues</url>
   <url type="donation">https://liberapay.com/bleakgrey/donate</url>
+  <update_contact>bleakgrey@gmail.com</update_contact>
 
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">none</content_attribute>
