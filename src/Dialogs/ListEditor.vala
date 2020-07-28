@@ -24,15 +24,21 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 			acc.bind_property ("display-name", label, "text", BindingFlags.SYNC_CREATE);
 			acc.bind_property ("handle", handle, "text", BindingFlags.SYNC_CREATE);
 			status.active = committed;
+			status.sensitive = true;
 		}
 
 		[GtkCallback]
 		void on_toggled () {
+			if (!status.sensitive)
+				return;
+
 			if (status.active) {
+				debug (@"To add: $(acc.id)");
 				editor.to_add.add (acc.id);
 				editor.to_remove.remove (acc.id);
 			}
 			else {
+				debug (@"To remove: $(acc.id)");
 				editor.to_add.remove (acc.id);
 				editor.to_remove.add (acc.id);
 			}
@@ -44,7 +50,8 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 	}
 
 	public API.List list { get; set; }
-	public bool working { get; set; }
+	public bool working { get; set; default = false; }
+	public bool exists { get; set; default = false; }
 	public bool dirty { get; set; default = false; }
 
 	Soup.Message? search_req = null;
@@ -55,11 +62,18 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 	[GtkChild]
 	Button save_btn;
 	[GtkChild]
+	Stack save_btn_stack;
+	[GtkChild]
 	Entry name_entry;
 	[GtkChild]
 	SearchEntry search_entry;
 	[GtkChild]
 	ListBox listbox;
+
+	[GtkChild]
+	InfoBar infobar;
+	[GtkChild]
+	Label infobar_label;
 
 	public signal void done ();
 
@@ -72,17 +86,17 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 		var obj = new API.List () {
 			title = _("Untitled")
 		};
-		Object (list: obj, working: false);
+		Object (list: obj);
 		init ();
 	}
 
 	public ListEditor (API.List list) {
-		Object (list: list, working: true);
+		Object (list: list, working: true, exists: true);
 		init ();
 
 		new Request.GET (@"/api/v1/lists/$(list.id)/accounts")
 			.with_account (accounts.active)
-			// .with_context (this)
+			// .with_context (this) //FIXME this
 			.on_error (on_error)
 			.then ((sess, msg) => {
 				Network.parse_array (msg, node => {
@@ -95,6 +109,7 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 	}
 
 	void init () {
+		notify["working"].connect (on_state_changed);
 		list.bind_property ("title", name_entry, "text", BindingFlags.SYNC_CREATE);
 
 		ulong dirty_sigid = 0;
@@ -102,10 +117,24 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 			dirty = true;
 			name_entry.disconnect (dirty_sigid);
 		});
+
+		on_state_changed (null);
+	}
+
+	void on_state_changed (ParamSpec? p) {
+		save_btn_stack.visible_child_name = working ? "working" : "done";
+		save_btn.sensitive = search_entry.sensitive = name_entry.sensitive = !working;
 	}
 
 	void on_error (int32 code, string msg) {
-		warning (@"Error code $code: \"$msg\"");
+		warning (msg);
+		infobar_label.label = msg;
+		infobar.revealed = true;
+	}
+
+	[GtkCallback]
+	void infobar_response (int i) {
+		infobar.revealed = false;
 	}
 
 	void request_search (string q) {
@@ -117,7 +146,7 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 
 		search_req = new Request.GET ("/api/v1/accounts/search")
 			.with_account (accounts.active)
-			// .with_context (this)
+			// .with_context (this) //FIXME this
 			.with_param ("resolve", "false")
 			.with_param ("limit", "8")
 			.with_param ("following", "true")
@@ -132,7 +161,7 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 			.exec ();
 	}
 
-	void add_account (API.Account acc, bool committed, int order = -1) {
+	void add_account (API.Account acc, bool added, int order = -1) {
 		var exists = false;
 		listbox.@foreach (w => {
 			var i = w as Item;
@@ -143,7 +172,7 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 		});
 
 		if (!exists) {
-			var item = new Item (this, acc, committed);
+			var item = new Item (this, acc, added);
 			listbox.insert (item, order);
 		}
 	}
@@ -181,15 +210,8 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 	}
 
 	[GtkCallback]
-	void on_save_clicked () {
-
-	}
-
-	[GtkCallback]
 	void on_search_changed () {
-		var q = search_entry.text
-			.chug ()
-			.chomp ();
+		var q = search_entry.text.chug ().chomp ();
 
 		if (q.char_count () < 3)
 			invalidate ();
@@ -197,6 +219,63 @@ public class Tootle.Dialogs.ListEditor: Gtk.Window {
 			invalidate ();
 			request_search (q);
 		}
+	}
+
+	[GtkCallback]
+	void on_save_clicked () {
+		working = true;
+		exec_save_chain.begin ((obj, res) => {
+			try {
+				exec_save_chain.end (res);
+
+				done ();
+				destroy ();
+			}
+			catch (Error e) {
+				working = false;
+				on_error (0, e.message);
+			}
+		});
+	}
+
+	async void exec_save_chain () throws Error {
+		if (!exists) {
+			message ("Creating list...");
+			var req = new Request.POST ("/api/v1/lists")
+				.with_account (accounts.active)
+				.with_param ("title", name_entry.text);
+			yield req.await ();
+
+			message ("Received new List entity");
+			var node = network.parse_node (req);
+			list = API.List.from (node);
+		}
+		else {
+			message ("Updating list title...");
+			yield new Request.PUT (@"/api/v1/lists/$(list.id)")
+				.with_account (accounts.active)
+				.with_param ("title", name_entry.text)
+				.await ();
+		}
+
+		if (!to_add.is_empty) {
+			message ("Adding accounts to list...");
+			var id_array = Request.array2string (to_add, "account_ids");
+		 	yield new Request.POST (@"/api/v1/lists/$(list.id)/accounts/?$id_array")
+		 		.with_account (accounts.active)
+		 		.await ();
+		}
+
+		if (!to_remove.is_empty) {
+			message ("Removing accounts from list...");
+			var id_array = Request.array2string (to_remove, "account_ids");
+		 	yield new Request.DELETE (@"/api/v1/lists/$(list.id)/accounts/?$id_array")
+		 		.with_account (accounts.active)
+		 		.await ();
+		}
+
+		message ("OK: List updated");
+		list.title = name_entry.text;
 	}
 
 }

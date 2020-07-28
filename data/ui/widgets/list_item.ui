@@ -107,7 +107,6 @@
           <object class="GtkImage">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Create</property>
             <property name="icon_name">list-add-symbolic</property>
           </object>
           <packing>

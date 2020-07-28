@@ -18,11 +18,13 @@
         <property name="vexpand">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkInfoBar">
+          <object class="GtkInfoBar" id="infobar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="message_type">warning</property>
+            <property name="message_type">error</property>
+            <property name="show_close_button">True</property>
             <property name="revealed">False</property>
+            <signal name="response" handler="infobar_response" swapped="no"/>
             <child internal-child="action_area">
               <object class="GtkButtonBox">
                 <property name="can_focus">False</property>
@@ -52,7 +54,7 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="infobar_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_start">6</property>
@@ -60,7 +62,8 @@
                     <property name="margin_top">6</property>
                     <property name="margin_bottom">6</property>
                     <property name="hexpand">True</property>
-                    <property name="label">Error</property>
+                    <property name="wrap">True</property>
+                    <property name="wrap_mode">word-char</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -79,9 +82,6 @@
                 <property name="position">0</property>
               </packing>
             </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -92,6 +92,7 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="can_default">True</property>
             <property name="has_default">True</property>
@@ -220,6 +221,7 @@
             <child>
               <object class="GtkEntry" id="name_entry">
                 <property name="visible">True</property>
+                <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="width_chars">20</property>
                 <signal name="changed" handler="validate" swapped="no"/>
@@ -246,11 +248,12 @@
           <object class="GtkButton" id="save_btn">
             <property name="width_request">80</property>
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <signal name="clicked" handler="on_save_clicked" swapped="no"/>
             <child>
-              <object class="GtkStack">
+              <object class="GtkStack" id="save_btn_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -260,7 +263,7 @@
                     <property name="label" translatable="yes">Save</property>
                   </object>
                   <packing>
-                    <property name="name">ready</property>
+                    <property name="name">done</property>
                   </packing>
                 </child>
                 <child>
@@ -272,7 +275,7 @@
                     <property name="active">True</property>
                   </object>
                   <packing>
-                    <property name="name">loading</property>
+                    <property name="name">working</property>
                     <property name="position">1</property>
                   </packing>
                 </child>

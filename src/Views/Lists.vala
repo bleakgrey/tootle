@@ -18,7 +18,7 @@ public class Tootle.Views.Lists : Views.Timeline {
 			if (list == null)
 				stack.visible_child_name = "add";
 			else
-				this.title.label = list.title;
+				list.bind_property ("title", title, "label", BindingFlags.SYNC_CREATE);
 		}
 
 		[GtkCallback]
@@ -32,8 +32,12 @@ public class Tootle.Views.Lists : Views.Timeline {
 				_("Delete \"%s\"?").printf (list.title),
 				_("This action cannot be reverted.")
 			);
-			if (yes)
-				destroy ();
+			if (yes) {
+				new Request.DELETE (@"/api/v1/lists/$(list.id)")
+					.with_account (accounts.active)
+					.then (() => { this.destroy (); })
+					.exec ();
+			}
 		}
 
 		public virtual signal void open () {
@@ -44,6 +48,10 @@ public class Tootle.Views.Lists : Views.Timeline {
 			window.open_view (view);
 		}
     }
+
+	public new bool empty {
+		get { return false; }
+	}
 
     public Lists () {
         Object (
@@ -61,6 +69,7 @@ public class Tootle.Views.Lists : Views.Timeline {
             dlg.done.connect (on_refresh);
         });
         append (add_row);
+        on_content_changed ();
     }
 
 }

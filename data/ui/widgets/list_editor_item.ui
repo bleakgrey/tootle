@@ -51,6 +51,7 @@
             <property name="width_request">32</property>
             <property name="height_request">32</property>
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <signal name="toggled" handler="on_toggled" swapped="no"/>

@@ -16,6 +16,9 @@ public class Tootle.Request : Soup.Message {
 	public Request.POST (string url) {
 		Object (method: "POST", url: url);
 	}
+	public Request.PUT (string url) {
+		Object (method: "PUT", url: url);
+	}
 	public Request.DELETE (string url) {
 		Object (method: "DELETE", url: url);
 	}
@@ -62,7 +65,11 @@ public class Tootle.Request : Soup.Message {
 	public Request queue () {
 		var parameters = "";
 		if (pars != null) {
-			parameters = "?";
+			if ("?" in url)
+				parameters = "";
+			else
+				parameters = "?";
+
 			var parameters_counter = 0;
 			pars.@foreach (entry => {
 				parameters_counter++;
@@ -85,14 +92,12 @@ public class Tootle.Request : Soup.Message {
 			request_headers.append ("Authorization", @"Bearer $(account.access_token)");
 		}
 
-		if (!("://" in url)) {
+		if (!("://" in url))
 			url = account.instance + url;
-		}
 
-		this.uri = new URI (url + "" + parameters);
-
+		uri = new URI (url + parameters);
 		url = uri.to_string (false);
-		debug (@"$method: $url");
+		message (@"$method: $url");
 
 		network.queue (this, (owned) cb, (owned) error_cb);
 		return this;
@@ -102,6 +107,35 @@ public class Tootle.Request : Soup.Message {
 	public Request exec () {
 		this.priority = MessagePriority.HIGH;
 		return this.queue ();
+	}
+
+	public async Request await () throws Error {
+		string? error = null;
+		this.error_cb = (code, reason) => {
+			error = reason;
+			await.callback ();
+		};
+		this.cb = (sess, msg) => {
+			await.callback ();
+		};
+		this.queue ();
+		yield;
+
+		if (error != null)
+			throw new Oopsie.INSTANCE (error);
+		else
+		return this;
+	}
+
+	public static string array2string (Gee.ArrayList<string> array, string key) {
+		var result = "";
+		array.@foreach (i => {
+			result += @"$key[]=$i";
+			if (array.index_of (i)+1 != array.size)
+				result += "&";
+			return true;
+		});
+		return result;
 	}
 
 }
