@@ -29,7 +29,7 @@ public class Tootle.Views.Lists : Views.Timeline {
 		[GtkCallback]
 		void on_remove_clicked () {
 			var yes = app.question (
-				_("Delete this list?"),
+				_("Delete \"%s\"?").printf (list.title),
 				_("This action cannot be reverted.")
 			);
 			if (yes)

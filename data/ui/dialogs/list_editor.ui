@@ -2,41 +2,6 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="completion_model">
-    <columns>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name handle -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">fd</col>
-        <col id="1" translatable="yes">aaaa</col>
-        <col id="2" translatable="yes">@fdsfs</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkEntryCompletion" id="completion">
-    <property name="model">completion_model</property>
-    <property name="minimum_key_length">3</property>
-    <property name="text_column">2</property>
-    <signal name="match-selected" handler="on_match_selected" swapped="no"/>
-    <child>
-      <object class="GtkCellRendererText"/>
-      <attributes>
-        <attribute name="markup">1</attribute>
-      </attributes>
-    </child>
-    <child>
-      <object class="GtkCellRendererText"/>
-      <attributes>
-        <attribute name="markup">2</attribute>
-      </attributes>
-    </child>
-  </object>
   <template class="TootleDialogsListEditor" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
@@ -142,7 +107,6 @@
             <property name="primary_icon_activatable">False</property>
             <property name="primary_icon_sensitive">False</property>
             <property name="placeholder_text" translatable="yes">Search among people you follow</property>
-            <property name="completion">completion</property>
             <signal name="search-changed" handler="on_search_changed" swapped="no"/>
           </object>
           <packing>
@@ -163,12 +127,13 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkListBox">
+                  <object class="GtkListBox" id="listbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-                    <property name="selection_mode">multiple</property>
+                    <property name="selection_mode">none</property>
+                    <property name="activate_on_single_click">False</property>
                     <child type="placeholder">
                       <object class="GtkBox">
                         <property name="visible">True</property>
