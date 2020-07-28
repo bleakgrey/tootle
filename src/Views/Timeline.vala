@@ -17,7 +17,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
     construct {
         app.refresh.connect (on_refresh);
         status_button.clicked.connect (on_refresh);
-        connect_account ();
+        account_listener_init ();
 
         on_status_added.connect (add_status);
         on_status_removed.connect (remove_status);
@@ -92,8 +92,9 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
     public virtual bool request () {
 		var req = append_params (new Request.GET (get_req_url ()))
 		.with_account (account)
-		.then ((sess, mess) => {
-		    Network.parse_array (mess, (node) => {
+		.with_ctx (this)
+		.then ((sess, msg) => {
+		    Network.parse_array (msg, node => {
 		        try {
                     var e = Entity.from_json (accepts, node);
                     var w = e as Widgetizable;
@@ -107,7 +108,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		    get_pages (mess.response_headers.get_one ("Link"));
 		    on_content_changed ();
 		    on_request_finish ();
-        })
+    })
 		.on_error (on_error);
 		req.exec ();
 		return GLib.Source.REMOVE;

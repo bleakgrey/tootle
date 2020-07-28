@@ -8,7 +8,7 @@ public class Tootle.Dialogs.Compose : Window {
     public string label { get; construct set; }
     public int char_limit {
         get {
-            return 250;
+            return 500;
         }
     }
 
@@ -62,6 +62,7 @@ public class Tootle.Dialogs.Compose : Window {
         }
         content.buffer.text = Html.remove_tags (status.content);
 
+		validate ();
         show ();
     }
 
@@ -104,7 +105,7 @@ public class Tootle.Dialogs.Compose : Window {
     void validate () {
         var remain = char_limit - content.buffer.get_char_count ();
         if (cw_button.active)
-            remain -= (int)cw.buffer.length;
+            remain -= (int) cw.buffer.get_length ();
 
         counter.label = remain.to_string ();
         post_button.sensitive = remain >= 0;

@@ -4,11 +4,14 @@ using Gee;
 public class Tootle.Request : Soup.Message {
 
 	public string url { set; get; }
-	private Network.SuccessCallback? cb;
-	private Network.ErrorCallback? error_cb;
-	private HashMap<string, string>? pars;
-	private weak InstanceAccount? account;
-	private bool needs_token = false;
+	Network.SuccessCallback? cb;
+	Network.ErrorCallback? error_cb;
+	HashMap<string, string>? pars;
+	weak InstanceAccount? account;
+	bool needs_token = false;
+
+	weak Gtk.Widget? ctx;
+	bool has_ctx = false;
 
 	public Request.GET (string url) {
 		Object (method: "GET", url: url);
@@ -32,12 +35,25 @@ public class Tootle.Request : Soup.Message {
 		this.cb = (sess, msg) => {
 			Network.parse_array (msg, (owned) _cb);
 		};
+    return this;
+}
+
+	public Request with_ctx (Gtk.Widget ctx) {
+		this.has_ctx = true;
+		this.ctx = ctx;
+		this.ctx.destroy.connect (() => {
+			network.cancel (this);
+			this.ctx = null;
+		});
 		return this;
 	}
 
-	public Request then_parse_obj (owned Network.ObjectCallback _cb) {
-		this.cb = (sess, msg) => {
-			_cb (network.parse (msg));
+	public Request then (owned Network.SuccessCallback cb) {
+		this.cb = (s, m) => {
+			Idle.add (() => {
+				cb (s, m);
+				return false;
+			});
 		};
 		return this;
 	}
@@ -61,8 +77,7 @@ public class Tootle.Request : Soup.Message {
 		return this;
 	}
 
-	// Should be used for requests with default priority
-	public Request queue () {
+	public Request exec () {
 		var parameters = "";
 		if (pars != null) {
 			if ("?" in url)
@@ -103,7 +118,6 @@ public class Tootle.Request : Soup.Message {
 		return this;
 	}
 
-	// Should be used for real-time user interactions (liking, removing and browsing posts)
 	public Request exec () {
 		this.priority = MessagePriority.HIGH;
 		return this.queue ();
