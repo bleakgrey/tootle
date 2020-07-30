@@ -164,15 +164,9 @@ public class Tootle.Dialogs.Compose : Window {
 		commit.sensitive = remain >= 0;
 	}
 
-	void on_error (int32 code, string reason) { //TODO: display errors
-		warning (reason);
-		working = false;
-	}
-
 	void on_state_change (ParamSpec? p) {
-		commit.sensitive = !working;
 		commit_stack.visible_child_name = working ? "working" : "ready";
-		validate ();
+		commit.sensitive = !working;
 	}
 
 	[GtkCallback]
@@ -207,24 +201,36 @@ public class Tootle.Dialogs.Compose : Window {
 	}
 
 	[GtkCallback]
-	void on_post () {
-		working = true;
-
-		if (status.id != "") {
-			message ("Removing old status...");
-			status.poof (publish, on_error);
-		}
-		else {
-			publish ();
-		}
-	}
-
-	[GtkCallback]
 	void on_close () {
 		destroy ();
 	}
 
-	void publish () {
+	void on_error (int32 code, string reason) { //TODO: display errors
+		warning (reason);
+		working = false;
+	}
+
+	[GtkCallback]
+	void on_commit () {
+		working = true;
+		transaction.begin ((obj, res) => {
+			try {
+				transaction.end (res);
+				on_close ();
+			}
+			catch (Error e) {
+				working = false;
+				on_error (0, e.message);
+			}
+		});
+	}
+
+	async void transaction () throws Error {
+		if (status.id != "") {
+			message ("Removing old status...");
+			yield status.annihilate ().await ();
+		}
+
 		message ("Publishing new status...");
 		status.content = content.buffer.text;
 		status.spoiler_text = cw.text;
@@ -238,20 +244,18 @@ public class Tootle.Dialogs.Compose : Window {
 			req.with_param ("sensitive", "true");
 			req.with_param ("spoiler_text", Html.uri_encode (cw.text));
 		}
-
 		if (status.in_reply_to_id != null)
 			req.with_param ("in_reply_to_id", status.in_reply_to_id);
 		if (status.in_reply_to_account_id != null)
 			req.with_param ("in_reply_to_account_id", status.in_reply_to_account_id);
 
-		req.then ((sess, mess) => {
-			var node = network.parse_node (mess);
-			var status = API.Status.from (node);
-			message (@"OK: Published status $(status.id)");
-			on_close ();
-		})
-		.on_error (on_error)
-		.exec ();
+		yield req.await ();
+
+		var node = network.parse_node (req);
+		var status = API.Status.from (node);
+		message (@"OK: Published with ID $(status.id)");
+
+		on_close ();
 	}
 
 }

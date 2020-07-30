@@ -115,15 +115,9 @@ public class Tootle.API.Status : Entity, Widgetizable {
         	.exec ();
     }
 
-    public void poof (owned Soup.SessionCallback? cb = null, owned Network.ErrorCallback? err = network.on_error) {
-        new Request.DELETE (@"/api/v1/statuses/$id")
-        	.with_account (accounts.active)
-        	.then ((sess, msg) => {
-        	    streams.force_delete (id);
-        	    cb (sess, msg);
-        	})
-            .on_error ((status, reason) => err (status, reason))
-        	.exec ();
+    public Request annihilate () {
+        return new Request.DELETE (@"/api/v1/statuses/$id")
+        	.with_account (accounts.active);
     }
 
 }

@@ -349,7 +349,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <signal name="clicked" handler="on_post" swapped="no"/>
+            <signal name="clicked" handler="on_commit" swapped="no"/>
             <child>
               <object class="GtkStack" id="commit_stack">
                 <property name="visible">True</property>
