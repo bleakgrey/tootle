@@ -43,14 +43,16 @@ public class Tootle.Dialogs.Compose : Window {
 	ListBox media_list;
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/compose_attachment.ui")]
-	class MediaItem : Gtk.ListBoxRow {
+	protected class MediaItem : Gtk.ListBoxRow {
 
 		Compose dialog;
 		public API.Attachment? entity { get; set; }
 		public string? source { get; set; }
 
 		[GtkChild]
-		Label title_label;
+		public Label title_label;
+		[GtkChild]
+		public Entry description;
 
 		public MediaItem (Compose dialog, string? source, API.Attachment? entity) {
 			this.dialog = dialog;
@@ -61,9 +63,6 @@ public class Tootle.Dialogs.Compose : Window {
 				message (@"Attached uri: $source");
 			else
 				message (@"Reattached $(entity.id)");
-
-			if (!dialog.status.has_media ())
-				dialog.status.media_attachments = new ArrayList<API.Attachment>();
 
 			dialog.set_media_mode (true);
 
@@ -231,11 +230,46 @@ public class Tootle.Dialogs.Compose : Window {
 			yield status.annihilate ().await ();
 		}
 
-		message ("Publishing new status...");
+		Gee.ArrayList<MediaItem> pending_media = new Gee.ArrayList<MediaItem>();
+		Gee.ArrayList<string> media_ids = new Gee.ArrayList<string>();
+		media_list.@foreach (w => {
+			var item = w as MediaItem;
+			if (item != null)
+				pending_media.add (item);
+		});
+
+		var media_param = "";
+		if (!pending_media.is_empty) {
+			message ("Processing attachments...");
+
+			if (!status.has_media ())
+				status.media_attachments = new ArrayList<API.Attachment>();
+
+			foreach (MediaItem item in pending_media) {
+				if (item.entity != null) {
+					message (@"Adding existing media: $(item.entity.url)");
+					media_ids.add (item.entity.id);
+					return;
+				}
+				else {
+					var entity = yield upload_media (
+						item.source,
+						item.title_label.label,
+						item.description.text);
+
+					media_ids.add (entity.id);
+				}
+			}
+
+			media_param = Request.array2string (media_ids, "media_ids");
+			media_param += "&";
+		}
+
+		message ("Publishing status...");
 		status.content = content.buffer.text;
 		status.spoiler_text = cw.text;
 
-		var req = new Request.POST ("/api/v1/statuses")
+		var req = new Request.POST (@"/api/v1/statuses?$media_param")
 			.with_account (accounts.active)
 			.with_param ("visibility", visibility_popover.selected.to_string ())
 			.with_param ("status", Html.uri_encode (status.content));
@@ -256,6 +290,59 @@ public class Tootle.Dialogs.Compose : Window {
 		message (@"OK: Published with ID $(status.id)");
 
 		on_close ();
+	}
+
+	async API.Attachment upload_media (string uri, string title, string? descr) throws Error {
+		message (@"Uploading new media: $(uri)...");
+
+		uint8[] contents;
+		string mime;
+		GLib.FileInfo type;
+		try {
+			GLib.File file = File.new_for_uri (uri);
+			file.load_contents (null, out contents, null);
+			type = file.query_info (GLib.FileAttribute.STANDARD_CONTENT_TYPE, 0);
+			mime = type.get_content_type ();
+		}
+		catch (Error e) {
+			throw new Oopsie.USER (_("Can't open file $file:\n$reason")
+				.replace ("$file", title)
+				.replace ("$reason", e.message)
+			);
+		}
+
+		var descr_param = "";
+		if (descr != null && descr.replace (" ", "") != "") {
+			descr_param = "?description=" + Html.uri_encode (descr);
+		}
+
+		var buffer = new Soup.Buffer.take (contents);
+		var multipart = new Soup.Multipart (Soup.FORM_MIME_TYPE_MULTIPART);
+		multipart.append_form_file ("file", mime.replace ("/", "."), mime, buffer);
+		var url = @"$(accounts.active.instance)/api/v1/media$descr_param";
+		var msg = Soup.Form.request_new_from_multipart (url, multipart);
+		msg.request_headers.append ("Authorization", @"Bearer $(accounts.active.access_token)");
+
+		string? error = null;
+		network.queue (msg,
+		(sess, mess) => {
+			upload_media.callback ();
+		},
+		(code, reason) => {
+			error = reason;
+			upload_media.callback ();
+		});
+
+		yield;
+
+		if (error != null)
+			throw new Oopsie.INSTANCE (error);
+		else {
+			var node = network.parse_node (msg);
+			var entity = API.Attachment.from (node);
+			message (@"OK! ID $(entity.id)");
+			return entity;
+		}
 	}
 
 }
