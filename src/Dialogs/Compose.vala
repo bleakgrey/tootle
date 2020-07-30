@@ -61,8 +61,11 @@ public class Tootle.Dialogs.Compose : Window {
 
 			if (source != null)
 				message (@"Attached uri: $source");
-			else
-				message (@"Reattached $(entity.id)");
+			else {
+				message (@"Attached immutable $(entity.id)");
+				description.text = entity.description ?? " ";
+				description.sensitive = false;
+			}
 
 			dialog.set_media_mode (true);
 
@@ -118,6 +121,7 @@ public class Tootle.Dialogs.Compose : Window {
 			style_class: STYLE_CLASS_SUGGESTED_ACTION,
 			label: _("Publish")
 		);
+		message ("Editing empty status");
 		set_visibility (status.visibility);
 	}
 
@@ -128,6 +132,11 @@ public class Tootle.Dialogs.Compose : Window {
 			label: _("Redraft")
 		);
 		set_visibility (status.visibility);
+		message (@"Redrafting status $(status.id)");
+		status.media_attachments.@foreach (a => {
+			media_list.insert (new MediaItem (this, null, a), 0);
+			return true;
+		});
 	}
 
 	public Compose.reply (API.Status to) {
@@ -141,6 +150,7 @@ public class Tootle.Dialogs.Compose : Window {
 			label: _("Reply")
 		);
 		set_visibility (to.visibility);
+		message (@"Replying to status $(status.in_reply_to_id)");
 	}
 
 	void set_visibility (API.Visibility v) {
@@ -240,19 +250,18 @@ public class Tootle.Dialogs.Compose : Window {
 
 		var media_param = "";
 		if (!pending_media.is_empty) {
-			message ("Processing attachments...");
+			message (@"Processing $(pending_media.size) attachments...");
 
 			if (!status.has_media ())
 				status.media_attachments = new ArrayList<API.Attachment>();
 
 			foreach (MediaItem item in pending_media) {
 				if (item.entity != null) {
-					message (@"Adding existing media: $(item.entity.url)");
+					message (@"Adding existing media: $(item.entity.id)");
 					media_ids.add (item.entity.id);
-					return;
 				}
 				else {
-					var entity = yield upload_media (
+					var entity = yield API.Attachment.upload (
 						item.source,
 						item.title_label.label,
 						item.description.text);
@@ -290,59 +299,6 @@ public class Tootle.Dialogs.Compose : Window {
 		message (@"OK: Published with ID $(status.id)");
 
 		on_close ();
-	}
-
-	async API.Attachment upload_media (string uri, string title, string? descr) throws Error {
-		message (@"Uploading new media: $(uri)...");
-
-		uint8[] contents;
-		string mime;
-		GLib.FileInfo type;
-		try {
-			GLib.File file = File.new_for_uri (uri);
-			file.load_contents (null, out contents, null);
-			type = file.query_info (GLib.FileAttribute.STANDARD_CONTENT_TYPE, 0);
-			mime = type.get_content_type ();
-		}
-		catch (Error e) {
-			throw new Oopsie.USER (_("Can't open file $file:\n$reason")
-				.replace ("$file", title)
-				.replace ("$reason", e.message)
-			);
-		}
-
-		var descr_param = "";
-		if (descr != null && descr.replace (" ", "") != "") {
-			descr_param = "?description=" + Html.uri_encode (descr);
-		}
-
-		var buffer = new Soup.Buffer.take (contents);
-		var multipart = new Soup.Multipart (Soup.FORM_MIME_TYPE_MULTIPART);
-		multipart.append_form_file ("file", mime.replace ("/", "."), mime, buffer);
-		var url = @"$(accounts.active.instance)/api/v1/media$descr_param";
-		var msg = Soup.Form.request_new_from_multipart (url, multipart);
-		msg.request_headers.append ("Authorization", @"Bearer $(accounts.active.access_token)");
-
-		string? error = null;
-		network.queue (msg,
-		(sess, mess) => {
-			upload_media.callback ();
-		},
-		(code, reason) => {
-			error = reason;
-			upload_media.callback ();
-		});
-
-		yield;
-
-		if (error != null)
-			throw new Oopsie.INSTANCE (error);
-		else {
-			var node = network.parse_node (msg);
-			var entity = API.Attachment.from (node);
-			message (@"OK! ID $(entity.id)");
-			return entity;
-		}
 	}
 
 }
