@@ -5,6 +5,8 @@
   <template class="TootleDialogsCompose" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
+    <property name="default_width">500</property>
+    <property name="default_height">250</property>
     <property name="type_hint">dialog</property>
     <child>
       <object class="GtkBox">
@@ -21,9 +23,7 @@
             <property name="transition_duration">100</property>
             <property name="transition_type">crossfade</property>
             <child>
-              <object class="GtkBox" id="text">
-                <property name="width_request">500</property>
-                <property name="height_request">250</property>
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="vexpand">True</property>
@@ -256,12 +256,13 @@
                 </child>
               </object>
               <packing>
+                <property name="name">text</property>
                 <property name="title" translatable="yes">Text</property>
                 <property name="icon_name">edit</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="media">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -315,6 +316,7 @@
                 </child>
               </object>
               <packing>
+                <property name="name">media</property>
                 <property name="title" translatable="yes">Media</property>
                 <property name="icon_name">mail-attachment-symbolic</property>
                 <property name="position">1</property>

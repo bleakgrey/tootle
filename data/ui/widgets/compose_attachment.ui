@@ -35,19 +35,35 @@
           </packing>
         </child>
         <child>
-          <object class="GtkStack" id="icon_stack">
+          <object class="GtkStack" id="icon">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
-              <object class="GtkImage" id="icon">
+              <object class="GtkImage">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="icon_name">folder-documents-symbolic</property>
               </object>
+              <packing>
+                <property name="name">new</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="icon_name">emblem-ok-symbolic</property>
+              </object>
+              <packing>
+                <property name="name">ok</property>
+              </packing>
             </child>
             <child>
               <object class="GtkSpinner">
@@ -56,8 +72,7 @@
                 <property name="active">True</property>
               </object>
               <packing>
-                <property name="name">page0</property>
-                <property name="title" translatable="yes">page0</property>
+                <property name="name">upload</property>
                 <property name="position">1</property>
               </packing>
             </child>

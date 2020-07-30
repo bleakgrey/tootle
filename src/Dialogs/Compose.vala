@@ -40,6 +40,8 @@ public class Tootle.Dialogs.Compose : Window {
 	TextView content;
 
 	[GtkChild]
+	Stack mode;
+	[GtkChild]
 	ListBox media_list;
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/compose_attachment.ui")]
@@ -53,6 +55,8 @@ public class Tootle.Dialogs.Compose : Window {
 		public Label title_label;
 		[GtkChild]
 		public Entry description;
+		[GtkChild]
+		public Stack icon;
 
 		public MediaItem (Compose dialog, string? source, API.Attachment? entity) {
 			this.dialog = dialog;
@@ -159,8 +163,7 @@ public class Tootle.Dialogs.Compose : Window {
 	}
 
 	void set_media_mode (bool has_media) {
-		mode_switcher.sensitive = has_media;
-		mode_switcher.opacity = has_media ? 1 : 0;
+		mode_switcher.view_switcher_enabled = has_media;
 	}
 
 	[GtkCallback]
@@ -176,6 +179,12 @@ public class Tootle.Dialogs.Compose : Window {
 	void on_state_change (ParamSpec? p) {
 		commit_stack.visible_child_name = working ? "working" : "ready";
 		commit.sensitive = !working;
+
+		media_list.@foreach (w => {
+			var item = w as MediaItem;
+			if (item != null)
+				item.icon.visible_child_name = working ? "upload" : "new";
+		});
 	}
 
 	[GtkCallback]
@@ -200,6 +209,8 @@ public class Tootle.Dialogs.Compose : Window {
 		if (chooser.run () == Gtk.ResponseType.ACCEPT) {
 			foreach (unowned string uri in chooser.get_uris ())
 				media_list.insert (new MediaItem (this, uri, null), 0);
+
+			mode.visible_child_name = "media";
 		}
 	}
 
@@ -257,10 +268,11 @@ public class Tootle.Dialogs.Compose : Window {
 
 			foreach (MediaItem item in pending_media) {
 				if (item.entity != null) {
-					message (@"Adding existing media: $(item.entity.id)");
+					message (@"Adding immutable media: $(item.entity.id)...");
 					media_ids.add (item.entity.id);
 				}
 				else {
+					mode.visible_child_name = "media";
 					var entity = yield API.Attachment.upload (
 						item.source,
 						item.title_label.label,
@@ -268,6 +280,7 @@ public class Tootle.Dialogs.Compose : Window {
 
 					media_ids.add (entity.id);
 				}
+				item.icon.visible_child_name = "ok";
 			}
 
 			media_param = Request.array2string (media_ids, "media_ids");
