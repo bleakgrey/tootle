@@ -1,5 +1,33 @@
 public class Tootle.API.Attachment : Entity {
 
+	// https://github.com/tootsuite/mastodon/blob/master/app/models/media_attachment.rb
+	public const string[] SUPPORTED_MIMES = {
+		"image/jpeg",
+		"image/png",
+		"image/gif",
+		"video/webm",
+		"video/mp4",
+		"video/quicktime",
+		"video/ogg",
+		"video/webm",
+		"video/quicktime",
+		"audio/wave",
+		"audio/wav",
+		"audio/x-wav",
+		"audio/x-pn-wave",
+		"audio/ogg",
+		"audio/mpeg",
+		"audio/mp3",
+		"audio/webm",
+		"audio/flac",
+		"audio/aac",
+		"audio/m4a",
+		"audio/x-m4a",
+		"audio/mp4",
+		"audio/3gpp",
+		"video/x-ms-asf"
+	};
+
 	public string id { get; set; }
 	public string kind { get; set; }
 	public string url { get; set; }

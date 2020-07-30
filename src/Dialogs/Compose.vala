@@ -190,11 +190,8 @@ public class Tootle.Dialogs.Compose : Window {
 	[GtkCallback]
 	void on_select_media () {
 		var filter = new Gtk.FileFilter ();
-		filter.add_mime_type ("image/jpeg");
-		filter.add_mime_type ("image/png");
-		filter.add_mime_type ("image/gif");
-		filter.add_mime_type ("video/webm");
-		filter.add_mime_type ("video/mp4");
+		foreach (string mime in API.Attachment.SUPPORTED_MIMES)
+			filter.add_mime_type (mime);
 
 		var chooser = new Gtk.FileChooserNative (
 			 _("Select media"),
