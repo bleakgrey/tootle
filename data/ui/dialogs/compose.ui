@@ -2,7 +2,6 @@
 <!-- Generated with glade 3.36.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <requires lib="libhandy" version="0.0"/>
   <template class="TootleDialogsCompose" parent="GtkWindow">
     <property name="can_focus">False</property>
     <property name="modal">True</property>
@@ -114,6 +113,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Visibility</property>
                         <child>
                           <object class="GtkBox">
                             <property name="visible">True</property>
@@ -122,6 +122,7 @@
                               <object class="GtkImage" id="visibility_icon">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="margin_end">6</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -143,9 +144,67 @@
                             </child>
                           </object>
                         </child>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="attach_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="tooltip_text" translatable="yes">Attach Media</property>
+                        <signal name="clicked" handler="on_select_media" swapped="no"/>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">mail-attachment-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="image-button"/>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="emoji_button">
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Instance Emojis</property>
+                        <property name="relief">none</property>
+                        <property name="always_show_image">True</property>
+                        <child>
+                          <object class="GtkImage" id="image4">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">face-smile-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="image-button"/>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                      <packing>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -153,6 +212,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">Spoiler Warning</property>
                         <property name="relief">none</property>
                         <property name="always_show_image">True</property>
                         <signal name="toggled" handler="validate" swapped="no"/>
@@ -163,31 +223,14 @@
                             <property name="icon_name">dialog-warning-symbolic</property>
                           </object>
                         </child>
+                        <style>
+                          <class name="image-button"/>
+                          <class name="flat"/>
+                        </style>
                       </object>
                       <packing>
-                        <property name="position">2</property>
+                        <property name="position">4</property>
                       </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="emoji_button">
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="relief">none</property>
-                        <property name="always_show_image">True</property>
-                        <child>
-                          <object class="GtkImage" id="image4">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">face-smile-symbolic</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <placeholder/>
                     </child>
                     <child>
                       <object class="GtkLabel" id="counter">
@@ -218,12 +261,57 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="attachments">
+              <object class="GtkBox" id="media">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkScrolledWindow">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkViewport">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkListBox" id="media_list">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="valign">start</property>
+                            <property name="hexpand">True</property>
+                            <property name="selection_mode">none</property>
+                            <signal name="row-activated" handler="on_media_list_row_activated" swapped="no"/>
+                            <child>
+                              <object class="GtkListBoxRow" id="attach_item">
+                                <property name="height_request">64</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <property name="icon_name">list-add-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <style>
+                              <class name="preferences"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -239,6 +327,9 @@
             <property name="position">1</property>
           </packing>
         </child>
+        <style>
+          <class name="app-view"/>
+        </style>
       </object>
     </child>
     <child type="titlebar">
@@ -246,22 +337,21 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child type="title">
-          <object class="HdyViewSwitcherBar" id="mode_switcher">
+          <object class="HdyViewSwitcherTitle" id="mode_switcher">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="policy">wide</property>
+            <property name="policy">auto</property>
             <property name="stack">mode</property>
-            <property name="reveal">True</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="post_button">
+          <object class="GtkButton" id="commit">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
             <signal name="clicked" handler="on_post" swapped="no"/>
             <child>
-              <object class="GtkStack" id="post_button_stack">
+              <object class="GtkStack" id="commit_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -270,8 +360,7 @@
                     <property name="can_focus">False</property>
                   </object>
                   <packing>
-                    <property name="name">page0</property>
-                    <property name="title" translatable="yes">page0</property>
+                    <property name="name">ready</property>
                   </packing>
                 </child>
                 <child>
@@ -283,8 +372,7 @@
                     <property name="active">True</property>
                   </object>
                   <packing>
-                    <property name="name">page1</property>
-                    <property name="title" translatable="yes">page1</property>
+                    <property name="name">working</property>
                     <property name="position">1</property>
                   </packing>
                 </child>

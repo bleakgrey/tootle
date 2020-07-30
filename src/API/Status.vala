@@ -81,6 +81,10 @@ public class Tootle.API.Status : Entity, Widgetizable {
         return formal.account.id == accounts.active.id;
     }
 
+	public bool has_media () {
+		return media_attachments != null && media_attachments.size > 0;
+	}
+
     public string get_reply_mentions () {
         var result = "";
         if (account.acct != accounts.active.acct)
