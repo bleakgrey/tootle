@@ -108,7 +108,7 @@ public class Tootle.Dialogs.Compose : Window {
 		cw.buffer.inserted_text.connect (() => validate ());
 		content.buffer.changed.connect (validate);
 
-		if (status.spoiler_text != null) {
+		if (status.has_spoiler) {
 			cw.text = status.spoiler_text;
 			cw_button.active = true;
 		}

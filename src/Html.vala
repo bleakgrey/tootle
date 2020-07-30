@@ -4,7 +4,7 @@ public class Tootle.Html {
 
 	public static string remove_tags (string content) {
 		try {
-			var fixed_paragraphs = content.replace ("</p>", "\n\n");
+			var fixed_paragraphs = simplify (content);
 			var all_tags = new Regex ("<(.|\n)*?>", RegexCompileFlags.CASELESS);
 			return Widgets.RichLabel.restore_entities (all_tags.replace (fixed_paragraphs, -1, 0, ""));
 		}
