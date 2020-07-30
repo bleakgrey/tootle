@@ -13,34 +13,41 @@ public class Tootle.Dialogs.Compose : Window {
     }
 
     [GtkChild]
-    protected Box box;
+    Box text;
 
     [GtkChild]
-    protected Revealer cw_revealer;
+    ActionBar actions;
     [GtkChild]
-    protected ToggleButton cw_button;
+    Revealer cw_revealer;
     [GtkChild]
-    protected Entry cw;
+    ToggleButton cw_button;
     [GtkChild]
-    protected Label counter;
+    Entry cw;
+    [GtkChild]
+    Label counter;
 
     [GtkChild]
-    protected MenuButton visibility_button;
+    MenuButton visibility_button;
     [GtkChild]
-    protected Image visibility_icon;
-    protected Widgets.VisibilityPopover visibility_popover;
+    Image visibility_icon;
+    Widgets.VisibilityPopover visibility_popover;
     [GtkChild]
-    protected Button post_button;
+    Button post_button;
+    [GtkChild]
+    Label commit_label;
 
     [GtkChild]
-    protected TextView content;
+    TextView content;
 
     construct {
         transient_for = window;
 
-        post_button.label = label;
-		foreach (Widget w in new Widget[] { visibility_button, post_button })
-			w.get_style_context ().add_class (style_class);
+        commit_label.label = label;
+		post_button.get_style_context ().add_class (style_class);
+
+        actions.@foreach (w => {
+            w.get_style_context ().remove_class ("flat");
+        });
 
         visibility_popover = new Widgets.VisibilityPopover.with_button (visibility_button);
         visibility_popover.bind_property ("selected", visibility_icon, "icon-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
@@ -50,11 +57,9 @@ public class Tootle.Dialogs.Compose : Window {
 
         cw_button.bind_property ("active", cw_revealer, "reveal_child", BindingFlags.SYNC_CREATE);
 
-        cw_button.toggled.connect (validate);
         cw.buffer.deleted_text.connect (() => validate ());
         cw.buffer.inserted_text.connect (() => validate ());
         content.buffer.changed.connect (validate);
-        post_button.clicked.connect (on_post_button_clicked);
 
         if (status.spoiler_text != null) {
             cw.text = status.spoiler_text;
@@ -70,7 +75,7 @@ public class Tootle.Dialogs.Compose : Window {
         Object (
             status: new API.Status.empty (),
             style_class: STYLE_CLASS_SUGGESTED_ACTION,
-            label: _("Post")
+            label: _("Publish")
         );
         set_visibility (status.visibility);
     }
@@ -102,6 +107,7 @@ public class Tootle.Dialogs.Compose : Window {
         visibility_popover.invalidate ();
     }
 
+    [GtkCallback]
     void validate () {
         var remain = char_limit - content.buffer.get_char_count ();
         if (cw_button.active)
@@ -110,7 +116,7 @@ public class Tootle.Dialogs.Compose : Window {
         counter.label = remain.to_string ();
         post_button.sensitive = remain >= 0;
         visibility_button.sensitive = true;
-        box.sensitive = true;
+        text.sensitive = true;
     }
 
     void on_error (int32 code, string reason) { //TODO: display errors
@@ -118,10 +124,11 @@ public class Tootle.Dialogs.Compose : Window {
         validate ();
     }
 
-    void on_post_button_clicked () {
+    [GtkCallback]
+    void on_post () {
         post_button.sensitive = false;
         visibility_button.sensitive = false;
-        box.sensitive = false;
+        text.sensitive = false;
 
         if (status.id != "") {
             info ("Removing old status...");
@@ -130,6 +137,11 @@ public class Tootle.Dialogs.Compose : Window {
         else {
             publish ();
         }
+    }
+
+    [GtkCallback]
+    void on_close () {
+        destroy ();
     }
 
     void publish () {
