@@ -9,8 +9,9 @@ public class Tootle.Views.Conversations : Views.Timeline {
         accepts = typeof (API.Conversation);
     }
 
-    public override string? get_stream_url () {
-        return @"/api/v1/streaming/?stream=direct&access_token=$(account.access_token)";
-    }
+	// TODO: Reload when an update is received
+    // public override string? get_stream_url () {
+    //     return @"/api/v1/streaming/?stream=direct&access_token=$(account.access_token)";
+    // }
 
 }
