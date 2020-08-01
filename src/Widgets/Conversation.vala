@@ -6,6 +6,12 @@ public class Tootle.Widgets.Conversation : Widgets.Status {
 
 	public Conversation (API.Conversation entity) {
 		Object (conversation: entity, status: entity.last_status);
+		conversation.bind_property ("unread", this.indicator, "visible", BindingFlags.SYNC_CREATE);
+		this.indicators.child_set_property (this.indicator, "position", 2);
+		this.indicator.opacity = 1;
+		this.indicator.icon_name = Desktop.fallback_icon (
+			"software-update-urgent-symbolic",
+			"dialog-warning-symbolic");
 		this.actions.destroy ();
 	}
 

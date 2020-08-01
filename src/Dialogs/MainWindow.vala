@@ -43,7 +43,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
         timeline_switcher.valign = Align.FILL;
         timeline_stack.notify["visible-child"].connect (on_timeline_changed);
 
-        add_timeline_view (new Views.Conversations (), app.ACCEL_TIMELINE_0, 0);
+        add_timeline_view (new Views.Home (), app.ACCEL_TIMELINE_0, 0);
         add_timeline_view (new Views.Notifications (), app.ACCEL_TIMELINE_1, 1);
         add_timeline_view (new Views.Local (), app.ACCEL_TIMELINE_2, 2);
         add_timeline_view (new Views.Federated (), app.ACCEL_TIMELINE_3, 3);

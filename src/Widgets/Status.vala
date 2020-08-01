@@ -22,9 +22,13 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild]
 	protected Widgets.RichLabel handle_label;
 	[GtkChild]
+	protected Box indicators;
+	[GtkChild]
 	protected Widgets.RichLabel date_label;
 	[GtkChild]
 	protected Image pin_indicator;
+	[GtkChild]
+	protected Image indicator;
 	[GtkChild]
 	public Revealer revealer;
 	[GtkChild]

@@ -18,12 +18,12 @@ public class Tootle.API.Conversation : Entity, Widgetizable {
 	}
 
 	public void mark_read () {
-		new Request.POST (@"/api/v1/conversations/$id/read000")
+		new Request.POST (@"/api/v1/conversations/$id/read")
 			.with_account (Tootle.accounts.active)
 			.then (() => {
 				unread = false;
 			})
-			.on_error (() => {warning ("REMOVE ME");}) //TODO: this
+			.on_error (() => {})
 			.exec ();
 	}
 
