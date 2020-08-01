@@ -4,9 +4,9 @@ public class Tootle.Views.Conversations : Views.Timeline {
         Object (
             url: "/api/v1/conversations",
             label: _("Conversations"),
-            icon: API.Visibility.DIRECT.get_icon (),
-            accepts: typeof (API.Conversation)
+            icon: API.Visibility.DIRECT.get_icon ()
         );
+        accepts = typeof (API.Conversation);
     }
 
     public override string? get_stream_url () {
