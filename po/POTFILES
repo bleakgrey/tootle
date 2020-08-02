@@ -28,6 +28,7 @@ src/Drawing.vala
 src/Html.vala
 src/InstanceAccount.vala
 src/Request.vala
+src/Time.vala
 
 src/Dialogs/Compose.vala
 src/Dialogs/ListEditor.vala

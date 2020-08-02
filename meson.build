@@ -50,6 +50,7 @@ executable(
     'src/Drawing.vala',
     'src/Html.vala',
     'src/Request.vala',
+    'src/Time.vala',
     'src/InstanceAccount.vala',
     'src/Services/Streams.vala',
     'src/Services/Settings.vala',

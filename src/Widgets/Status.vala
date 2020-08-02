@@ -74,12 +74,8 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	protected string date {
 		owned get {
-			//var date = new GLib.DateTime.from_iso8601 (status.formal.created_at, null);
-			//var humanized = Dazzle.g_date_time_format_for_display (date);
-			// var time = date.difference (new GLib.DateTime.now ());
-			// var humanized = Dazzle.g_time_span_to_label (time);
-			var humanized = "";
-			return @"<small>$humanized</small>";
+			var date = status.formal.created_at;
+			return @"<small>$(Time.humanize_iso8601 (date))</small>";
 		}
 	}
 
