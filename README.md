@@ -22,7 +22,9 @@ If the options above are not available to you, you can build the app from source
     - [x] libsoup2.4-dev
     - [x] libgranite-dev
     - [x] libjson-glib-dev
+    - [x] libgee-0.8-dev
     - [ ] libhandy-1.0-dev (>= 0.83.0)
+         - [x] libgirepository1.0-dev
 
     *Note: Unchecked items will be installed automatically if not present in the system.*
 
