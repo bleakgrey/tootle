@@ -2,7 +2,7 @@ using Gtk;
 using Gdk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/main.ui")]
-public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
+public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 
     public const string ZOOM_CLASS = "app-scalable";
 
