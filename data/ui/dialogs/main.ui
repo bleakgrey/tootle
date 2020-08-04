@@ -21,7 +21,7 @@
               <object class="GtkStack" id="timeline_stack">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="transition_type">slide-left-right</property>
+                <property name="transition_type">crossfade</property>
                 <child>
                   <placeholder/>
                 </child>
