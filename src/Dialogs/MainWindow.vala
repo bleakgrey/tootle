@@ -12,7 +12,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     protected Stack timeline_stack;
 
     [GtkChild]
-    public HeaderBar header;
+    public Hdy.HeaderBar header;
     [GtkChild]
     protected Revealer view_navigation;
     [GtkChild]
