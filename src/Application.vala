@@ -40,10 +40,11 @@ namespace Tootle {
 		};
 
 		public const GLib.ActionEntry[] app_entries = {
-			{"compose",	compose_activated		  },
-			{"back",			back_activated				  },
-			{"refresh",		 refresh_activated			   },
-			{"switch-timeline", switch_timeline_activated, "i"  }
+			{ "about", about_activated },
+			{ "compose", compose_activated },
+			{ "back", back_activated },
+			{ "refresh", refresh_activated },
+			{ "switch-timeline", switch_timeline_activated, "i" }
 		};
 
 		construct {
@@ -51,6 +52,7 @@ namespace Tootle {
 			flags = ApplicationFlags.FLAGS_NONE;
 		}
 
+		public string[] ACCEL_ABOUT = {"F1"};
 		public string[] ACCEL_NEW_POST = {"<Ctrl>T"};
 		public string[] ACCEL_BACK = {"<Alt>BackSpace", "<Alt>Left"};
 		public string[] ACCEL_REFRESH = {"<Ctrl>R", "F5"};
@@ -91,6 +93,7 @@ namespace Tootle {
 			window_dummy = new Window ();
 			add_window (window_dummy);
 
+			set_accels_for_action ("app.about", ACCEL_ABOUT);
 			set_accels_for_action ("app.compose", ACCEL_NEW_POST);
 			set_accels_for_action ("app.back", ACCEL_BACK);
 			set_accels_for_action ("app.refresh", ACCEL_REFRESH);
@@ -132,6 +135,10 @@ namespace Tootle {
 		void switch_timeline_activated (SimpleAction a, Variant? v) {
 			int32 num = v.get_int32 ();
 			window.switch_timeline (num);
+		}
+
+		void about_activated () {
+			new Dialogs.About ();
 		}
 
 		public void on_error (string title, string msg){

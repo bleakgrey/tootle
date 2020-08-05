@@ -30,6 +30,7 @@ src/InstanceAccount.vala
 src/Request.vala
 src/Time.vala
 
+src/Dialogs/About.vala
 src/Dialogs/Compose.vala
 src/Dialogs/ListEditor.vala
 src/Dialogs/MainWindow.vala
