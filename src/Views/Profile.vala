@@ -2,37 +2,39 @@ using Gtk;
 
 public class Tootle.Views.Profile : Views.Timeline {
 
-    public API.Account profile { get; construct set; }
+	public API.Account profile { get; construct set; }
+	public bool include_replies { get; set; default = false; }
+	public bool only_media { get; set; default = false; }
+	public string source { get; set; default = "statuses"; }
+
+	SimpleActionGroup? actions;
 
 	ListBox profile_list;
-
-    Label relationship;
-	Widgets.TimelineFilter filter;
-
+	Label relationship;
+	Widgets.TimelineMenu menu_button;
 	Button rs_button;
 	Label rs_button_label;
 
 	weak ListBoxRow note_row;
 
-	public bool exclude_replies { get; set; default = true; }
-	public bool only_media { get; set; default = false; }
+	construct {
+		rebuild_actions ();
 
-    construct {
-    	profile.notify["rs"].connect (on_rs_updated);
+		profile.notify["rs"].connect (on_rs_updated);
 
-		filter = new Widgets.TimelineFilter.with_profile (this);
+		menu_button = new Widgets.TimelineMenu ("profile-menu");
 
-        var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
-        profile_list = builder.get_object ("profile_list") as ListBox;
+		var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
+		profile_list = builder.get_object ("profile_list") as ListBox;
 
-        var hdr = builder.get_object ("grid") as Grid;
+		var hdr = builder.get_object ("grid") as Grid;
 		column_view.pack_start (hdr, false, false, 0);
 		column_view.reorder_child (hdr, 0);
 
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
 		avatar.url = profile.avatar;
 
-		profile.bind_property ("display-name", filter.title, "label", BindingFlags.SYNC_CREATE);
+		profile.bind_property ("display-name", menu_button.title, "label", BindingFlags.SYNC_CREATE);
 
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
 		profile.bind_property ("acct", handle, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
@@ -54,19 +56,19 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		// posts_label = builder.get_object ("posts_label") as Label;
 		// profile.bind_property ("statuses_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//     var val = (int64) src;
+		//	 var val = (int64) src;
 		// 	target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
 		// 	return true;
 		// });
 		// following_label = builder.get_object ("following_label") as Label;
 		// profile.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//     var val = (int64) src;
+		//	 var val = (int64) src;
 		// 	target.set_string (_("%s Follows").printf (@"<b>$val</b>"));
 		// 	return true;
 		// });
 		// followers_label = builder.get_object ("followers_label") as Label;
 		// profile.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//     var val = (int64) src;
+		//	 var val = (int64) src;
 		// 	target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
 		// 	return true;
 		// });
@@ -76,28 +78,69 @@ public class Tootle.Views.Profile : Views.Timeline {
 		rs_button_label = builder.get_object ("rs_button_label") as Label;
 
 		rebuild_fields ();
-    }
+	}
 
-    public Profile (API.Account acc) {
-        Object (
-        	profile: acc,
-        	label: acc.acct,
-        	url: @"/api/v1/accounts/$(acc.id)/statuses"
-        );
-        profile.get_relationship ();
-    }
-    ~Profile () {
-    	filter.destroy ();
-    }
+	public Profile (API.Account acc) {
+		Object (
+			profile: acc,
+			label: acc.acct,
+			url: @"/api/v1/accounts/$(acc.id)/statuses"
+		);
+		profile.get_relationship ();
+	}
+	~Profile () {
+		menu_button.destroy ();
+	}
+
+	void rebuild_actions () {
+		actions = new SimpleActionGroup ();
+
+		var media_action = new SimpleAction.stateful ("only-media", null, only_media);
+		media_action.change_state.connect (v => {
+			only_media = v.get_boolean ();
+			media_action.set_state (only_media);
+
+			on_refresh ();
+		});
+		actions.add_action (media_action);
+
+		var replies_action = new SimpleAction.stateful ("include-replies", null, include_replies);
+		replies_action.change_state.connect (v => {
+			include_replies = v.get_boolean ();
+			replies_action.set_state (include_replies);
+
+			on_refresh ();
+		});
+		actions.add_action (replies_action);
+
+		var source_action = new SimpleAction.stateful ("source", VariantType.STRING, source);
+		source_action.change_state.connect (v => {
+			source = v.get_string ();
+			source_action.set_state (source);
+
+			accepts = source == "statuses" ? typeof (API.Status) : typeof (API.Account);
+			replies_action.set_enabled (source == "statuses");
+			media_action.set_enabled (source == "statuses");
+
+			url = @"/api/v1/accounts/$(profile.id)/$source";
+			on_refresh ();
+		});
+		actions.add_action (source_action);
+	}
 
 	public override void on_shown () {
-		window.header.custom_title = filter;
-		filter.valign = Align.FILL;
+		window.header.custom_title = menu_button;
+		menu_button.valign = Align.FILL;
 		window.set_header_controls (rs_button);
+
+		window.insert_action_group ("view", actions);
 	}
+
 	public override void on_hidden () {
 		window.header.custom_title = null;
 		window.reset_header_controls ();
+
+		window.insert_action_group ("view", null);
 	}
 
 	void on_rs_button_clicked () {
@@ -131,27 +174,24 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
 	public override Request append_params (Request req) {
-		if (page_next == null) {
-			if (exclude_replies)
-				req.with_param ("exclude_replies", "true");
-			if (only_media)
-				req.with_param ("only_media", "true");
+		if (page_next == null && source == "statuses") {
+			req.with_param ("exclude_replies", @"$(!include_replies)");
+			req.with_param ("only_media", @"$(only_media)");
 			return base.append_params (req);
 		}
-		else
-			return req;
+		else return req;
 	}
 
-    public static void open_from_id (string id) {
-        var msg = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/accounts/$id");
-        network.queue (msg, (sess, mess) => {
-            var node = network.parse_node (mess);
-            var acc = API.Account.from (node);
-            window.open_view (new Views.Profile (acc));
-        }, (status, reason) => {
-            network.on_error (status, reason);
-        });
-    }
+	public static void open_from_id (string id) {
+		var msg = new Soup.Message ("GET", @"$(accounts.active.instance)/api/v1/accounts/$id");
+		network.queue (msg, (sess, mess) => {
+			var node = network.parse_node (mess);
+			var acc = API.Account.from (node);
+			window.open_view (new Views.Profile (acc));
+		}, (status, reason) => {
+			network.on_error (status, reason);
+		});
+	}
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/profile_field_row.ui")]
 	protected class Field : ListBoxRow {

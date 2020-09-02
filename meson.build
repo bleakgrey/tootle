@@ -93,7 +93,7 @@ executable(
     'src/Widgets/Widgetizable.vala',
     'src/Widgets/Avatar.vala',
     'src/Widgets/AccountsButton.vala',
-    'src/Widgets/TimelineFilter.vala',
+    'src/Widgets/TimelineMenu.vala',
     'src/Widgets/RichLabel.vala',
     'src/Widgets/Status.vala',
     'src/Widgets/Notification.vala',
