@@ -21,7 +21,10 @@ public class Tootle.Widgets.TimelineFilter : MenuButton {
 	public string source { get; set; }
 
 	construct {
-		radio_source.bind_property ("active", post_filter, "reveal-child", BindingFlags.SYNC_CREATE);
+		//radio_source.bind_property ("active", post_filter, "reveal-child", BindingFlags.SYNC_CREATE);
+
+		//var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/menus.ui");
+		//menu_model = builder.get_object ("profile-menu") as MenuModel;
 	}
 
 	public TimelineFilter.with_profile (Views.Profile profile) {

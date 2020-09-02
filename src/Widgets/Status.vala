@@ -75,7 +75,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	protected string date {
 		owned get {
 			var date = status.formal.created_at;
-			return @"<small>$(Time.humanize_iso8601 (date))</small>";
+			return @"<small>$(DateTime.humanize (date))</small>";
 		}
 	}
 

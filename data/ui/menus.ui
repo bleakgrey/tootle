@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+
+
+
+  <menu id="profile-menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Mention…</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Direct Message…</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Hide Boosts</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Mute</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Report</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Block</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Block Domain</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu id="profile-filter-menu">
+        <attribute name="label" translatable="yes">Filter</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Posts</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Follows</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Followers</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+
+  </menu>
+
+</interface>
+

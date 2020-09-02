@@ -20,9 +20,7 @@ If the options above are not available to you, you can build the app from source
     - [x] valac
     - [x] libgtk-3-dev
     - [x] libsoup2.4-dev
-    - [x] libgranite-dev
     - [x] libjson-glib-dev
-    - [x] libdazzle-1.0-dev
     - [ ] libhandy-1.0-dev (>= 0.83.0)
 
     *Note: Unchecked items will be installed automatically if not present in the system.*

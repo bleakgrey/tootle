@@ -9,7 +9,7 @@ config.set('PREFIX', get_option('prefix'))
 config.set('NAME', 'Tootle')
 config.set('WEBSITE', 'https://github.com/bleakgrey/tootle')
 config.set('SUPPORT_WEBSITE', 'https://github.com/bleakgrey/tootle/issues')
-config.set('COPYRIGHT', '© 2018-2020 The Tootle Authors')
+config.set('COPYRIGHT', '© 2018-2020 bleak_grey')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -67,7 +67,7 @@ executable(
     'src/Drawing.vala',
     'src/Html.vala',
     'src/Request.vala',
-    'src/Time.vala',
+    'src/DateTime.vala',
     'src/InstanceAccount.vala',
     'src/Services/Streams.vala',
     'src/Services/Settings.vala',
@@ -130,7 +130,6 @@ executable(
         dependency('gee-0.8', version: '>=0.8.5'),
         dependency('libsoup-2.4'),
         dependency('json-glib-1.0', version: '>=1.4.4'),
-        dependency('libdazzle-1.0'),
         libhandy_dep,
     ],
     install: true,

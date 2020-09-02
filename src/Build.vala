@@ -9,7 +9,6 @@ public class Build {
 	public const string COPYRIGHT = "@COPYRIGHT@";
 	public const string PREFIX = "@PREFIX@";
 
-	// FORK MAINTAINERS:
 	// Please do not remove the credits below. You may add your own, but keep the existing ones intact.
 
 	// TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
