@@ -56,24 +56,28 @@
         <!-- <attribute name="label" translatable="yes">Moderation</attribute> -->
         <item>
           <attribute name="label" translatable="yes">Hide Boosts</attribute>
-          <attribute name="action">view.missing</attribute>
+          <attribute name="action">view.hiding_reblogs</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Mute</attribute>
-          <attribute name="action">view.missing</attribute>
+          <attribute name="action">view.muting</attribute>
         </item>
         <section>
           <item>
             <attribute name="label" translatable="yes">Report</attribute>
-            <attribute name="action">view.missing</attribute>
+            <attribute name="action">view.report</attribute>
+            <!-- TODO: Reporting users -->
+            <attribute name="hidden-when">action-missing</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Block</attribute>
-            <attribute name="action">view.missing</attribute>
+            <attribute name="action">view.blocking</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Block Domain</attribute>
-            <attribute name="action">view.missing</attribute>
+            <attribute name="action">view.domain_blocking</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
           </item>
         </section>
       <!-- </submenu> -->
