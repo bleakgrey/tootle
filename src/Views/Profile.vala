@@ -7,7 +7,9 @@ public class Tootle.Views.Profile : Views.Timeline {
 	public bool only_media { get; set; default = false; }
 	public string source { get; set; default = "statuses"; }
 
-	SimpleActionGroup? actions;
+	SimpleActionGroup actions;
+	SimpleAction media_action;
+	SimpleAction replies_action;
 
 	ListBox profile_list;
 	Label relationship;
@@ -18,9 +20,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 	weak ListBoxRow note_row;
 
 	construct {
-		rebuild_actions ();
-
-		profile.notify["rs"].connect (on_rs_updated);
+		build_actions ();
 
 		menu_button = new Widgets.TimelineMenu ("profile-menu");
 
@@ -53,29 +53,10 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 
 		relationship = builder.get_object ("relationship") as Label;
-
-		// posts_label = builder.get_object ("posts_label") as Label;
-		// profile.bind_property ("statuses_count", posts_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//	 var val = (int64) src;
-		// 	target.set_string (_("%s Posts").printf (@"<b>$val</b>"));
-		// 	return true;
-		// });
-		// following_label = builder.get_object ("following_label") as Label;
-		// profile.bind_property ("following_count", following_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//	 var val = (int64) src;
-		// 	target.set_string (_("%s Follows").printf (@"<b>$val</b>"));
-		// 	return true;
-		// });
-		// followers_label = builder.get_object ("followers_label") as Label;
-		// profile.bind_property ("followers_count", followers_label, "label", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-		//	 var val = (int64) src;
-		// 	target.set_string (_("%s Followers").printf (@"<b>$val</b>"));
-		// 	return true;
-		// });
-
 		rs_button = builder.get_object ("rs_button") as Button;
 		rs_button.clicked.connect (on_rs_button_clicked);
 		rs_button_label = builder.get_object ("rs_button_label") as Label;
+		profile.notify["rs"].connect (on_rs_updated);
 
 		rebuild_fields ();
 	}
@@ -92,24 +73,20 @@ public class Tootle.Views.Profile : Views.Timeline {
 		menu_button.destroy ();
 	}
 
-	void rebuild_actions () {
+	void build_actions () {
 		actions = new SimpleActionGroup ();
 
-		var media_action = new SimpleAction.stateful ("only-media", null, only_media);
+		media_action = new SimpleAction.stateful ("only-media", null, only_media);
 		media_action.change_state.connect (v => {
-			only_media = v.get_boolean ();
-			media_action.set_state (only_media);
-
-			on_refresh ();
+			media_action.set_state (only_media = v.get_boolean ());
+			invalidate_actions (true);
 		});
 		actions.add_action (media_action);
 
-		var replies_action = new SimpleAction.stateful ("include-replies", null, include_replies);
+		replies_action = new SimpleAction.stateful ("include-replies", null, include_replies);
 		replies_action.change_state.connect (v => {
-			include_replies = v.get_boolean ();
-			replies_action.set_state (include_replies);
-
-			on_refresh ();
+			replies_action.set_state (include_replies = v.get_boolean ());
+			invalidate_actions (true);
 		});
 		actions.add_action (replies_action);
 
@@ -117,30 +94,44 @@ public class Tootle.Views.Profile : Views.Timeline {
 		source_action.change_state.connect (v => {
 			source = v.get_string ();
 			source_action.set_state (source);
-
 			accepts = source == "statuses" ? typeof (API.Status) : typeof (API.Account);
-			replies_action.set_enabled (source == "statuses");
-			media_action.set_enabled (source == "statuses");
 
 			url = @"/api/v1/accounts/$(profile.id)/$source";
-			on_refresh ();
+			invalidate_actions (true);
 		});
 		actions.add_action (source_action);
+
+		var mention_action = new SimpleAction ("mention", VariantType.STRING);
+		mention_action.activate.connect (v => {
+			var status = new API.Status.empty ();
+			status.visibility = API.Visibility.from_string (v.get_string ());
+			status.content = @"$(profile.handle) ";
+			new Dialogs.Compose (status);
+		});
+		actions.add_action (mention_action);
+	}
+
+	void invalidate_actions (bool refresh) {
+		replies_action.set_enabled (accepts == typeof (API.Status));
+		media_action.set_enabled (accepts == typeof (API.Status));
+
+		if (refresh) {
+			page_next = null;
+			on_refresh ();
+		}
 	}
 
 	public override void on_shown () {
+		window.insert_action_group ("view", actions);
 		window.header.custom_title = menu_button;
 		menu_button.valign = Align.FILL;
 		window.set_header_controls (rs_button);
-
-		window.insert_action_group ("view", actions);
 	}
 
 	public override void on_hidden () {
+		window.insert_action_group ("view", null);
 		window.header.custom_title = null;
 		window.reset_header_controls ();
-
-		window.insert_action_group ("view", null);
 	}
 
 	void on_rs_button_clicked () {
@@ -171,6 +162,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		relationship.label = label;
 		relationship.visible = label != "";
+
+		invalidate_actions (false);
 	}
 
 	public override Request append_params (Request req) {

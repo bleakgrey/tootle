@@ -4,90 +4,81 @@
   <menu id="profile-menu">
 
     <section>
-     <!-- <attribute name="label" translatable="yes">Display</attribute> -->
-      <item>
-        <attribute name="label" translatable="yes">Posts</attribute>
-        <attribute name="action">view.source</attribute>
-        <attribute name="target">statuses</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Following</attribute>
-        <attribute name="action">view.source</attribute>
-        <attribute name="target">following</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Followers</attribute>
-        <attribute name="action">view.source</attribute>
-        <attribute name="target">followers</attribute>
-      </item>
-    <!-- </section> -->
+      <submenu id="profile-filter-menu">
+        <attribute name="label" translatable="yes">Filter</attribute>
+        <item>
+          <attribute name="label" translatable="yes">Posts</attribute>
+          <attribute name="action">view.source</attribute>
+          <attribute name="target">statuses</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Following</attribute>
+          <attribute name="action">view.source</attribute>
+          <attribute name="target">following</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Followers</attribute>
+          <attribute name="action">view.source</attribute>
+          <attribute name="target">followers</attribute>
+        </item>
 
-    <!-- <section> -->
-     <!-- <attribute name="label" translatable="yes">Filter</attribute> -->
-      <item>
-        <attribute name="label" translatable="yes">With Replies</attribute>
-        <attribute name="action">view.include-replies</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">With Media</attribute>
-        <attribute name="action">view.only-media</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-      </item>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">With Replies</attribute>
+            <attribute name="action">view.include-replies</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">With Media</attribute>
+            <attribute name="action">view.only-media</attribute>
+            <attribute name="hidden-when">action-disabled</attribute>
+          </item>
+        </section>
+
+      </submenu>
     </section>
 
     <section>
-      <!-- <attribute name="label" translatable="yes">Message</attribute> -->
       <item>
         <attribute name="label" translatable="yes">Mention…</attribute>
+        <attribute name="action">view.mention</attribute>
+        <attribute name="target">public</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Direct Message…</attribute>
+        <attribute name="action">view.mention</attribute>
+        <attribute name="target">direct</attribute>
       </item>
     </section>
 
     <section>
-      <!-- <attribute name="label" translatable="yes">Actions</attribute> -->
-      <item>
-        <attribute name="label" translatable="yes">Hide Boosts</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Mute</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Report</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Block</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Block Domain</attribute>
-      </item>
-    </section>
-
-
-
-    <!-- <section> -->
-      <!-- <submenu id="profile-filter-menu"> -->
-    <!--     <attribute name="label" translatable="yes">Filter</attribute> -->
-        <!-- <section> -->
-    <!--       <item> -->
-    <!--         <attribute name="label" translatable="yes">Posts</attribute> -->
-    <!--         <attribute name="verb-icon">media-playback-start-symbolic</attribute> -->
-    <!--       </item> -->
-    <!--       <item> -->
-    <!--         <attribute name="label" translatable="yes">Follows</attribute> -->
-    <!--         <attribute name="verb-icon">media-playback-start-symbolic</attribute> -->
-    <!--       </item> -->
-    <!--       <item> -->
-    <!--         <attribute name="label" translatable="yes">Followers</attribute> -->
-    <!--         <attribute name="verb-icon">media-playback-start-symbolic</attribute> -->
-    <!--       </item> -->
-        <!-- </section> -->
+      <!-- <submenu> -->
+        <!-- <attribute name="label" translatable="yes">Moderation</attribute> -->
+        <item>
+          <attribute name="label" translatable="yes">Hide Boosts</attribute>
+          <attribute name="action">view.missing</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Mute</attribute>
+          <attribute name="action">view.missing</attribute>
+        </item>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Report</attribute>
+            <attribute name="action">view.missing</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Block</attribute>
+            <attribute name="action">view.missing</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Block Domain</attribute>
+            <attribute name="action">view.missing</attribute>
+          </item>
+        </section>
       <!-- </submenu> -->
-    <!-- </section> -->
+    </section>
 
   </menu>
 
 </interface>
-
