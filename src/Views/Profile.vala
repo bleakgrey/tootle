@@ -94,7 +94,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		actions.add_action (replies_action);
 
-		var source_action = new SimpleAction.stateful ("source", VariantType.STRING, "");
+		var source_action = new SimpleAction.stateful ("source", VariantType.STRING, source);
 		source_action.change_state.connect (v => {
 			source = v.get_string ();
 			source_action.set_state (source);
