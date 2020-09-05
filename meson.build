@@ -21,12 +21,6 @@ add_global_arguments([
     language: 'c',
 )
 
-# FIXME Disable --disable-since-check after libhandy 1.0 is released
-add_project_arguments (
-  '--disable-since-check',
-  language: 'vala'
-)
-
 asresources = gnome.compile_resources(
   'as-resources', 'data/gresource.xml',
   source_dir: 'data',
@@ -39,7 +33,7 @@ build_file = configure_file(
 	configuration: config
 )
 
-libhandy_dep = dependency('libhandy-1', version: '>= 0.83.0', required: false)
+libhandy_dep = dependency('libhandy-1', version: '>= 0.91.0', required: false)
 if not libhandy_dep.found()
   libhandy = subproject(
     'libhandy',
