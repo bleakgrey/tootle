@@ -2,24 +2,24 @@ using Gtk;
 
 public class Tootle.Views.NewAccount : Views.Base {
 
-	private string? instance { get; set; }
-	private string? code { get; set; }
-	private string scopes = "read%20write%20follow";
+	string? instance { get; set; }
+	string? code { get; set; }
+	string scopes = "read%20write%20follow";
 
-	private string? client_id { get; set; }
-	private string? client_secret { get; set; }
-	private string? access_token { get; set; }
-	private string redirect_uri { get; set; default = "urn:ietf:wg:oauth:2.0:oob"; } //TODO: Investigate URI handling for automatic token getting
-	private InstanceAccount account;
+	string? client_id { get; set; }
+	string? client_secret { get; set; }
+	string? access_token { get; set; }
+	string redirect_uri { get; set; default = "urn:ietf:wg:oauth:2.0:oob"; } //TODO: Investigate URI handling for automatic token getting
+	InstanceAccount account;
 
-	private Button next_button;
-	private Entry instance_entry;
-	private Entry code_entry;
-	private Label reset_label;
+	Button next_button;
+	Entry instance_entry;
+	Entry code_entry;
+	Label reset_label;
 
-	private Stack stack;
-	private Widget step1;
-	private Widget step2;
+	Stack stack;
+	Widget step1;
+	Widget step2;
 
 	public NewAccount (bool allow_closing = true) {
 		Object (
@@ -42,11 +42,11 @@ public class Tootle.Views.NewAccount : Views.Base {
 		next_button.clicked.connect (on_next_clicked);
 		reset_label.activate_link.connect (reset);
 		instance_entry.text = "https://mastodon.social/"; //TODO: REMOVE ME
-		info ("New account view was requested");
+		message ("New account view was requested");
 	}
 
 	bool reset () {
-		info ("State invalidated");
+		message ("State invalidated");
 		instance = code = client_id = client_secret = access_token = null;
 		instance_entry.sensitive = true;
 		stack.visible_child = step1;
@@ -80,7 +80,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 	}
 
 	void setup_instance () throws Error {
-		info ("Checking instance URL");
+		message ("Checking instance URL");
 
 		var str = instance_entry.text
 			.replace ("/", "")
@@ -95,7 +95,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 	}
 
 	void register_client () throws Error {
-		info ("Registering client");
+		message ("Registering client");
 		instance_entry.sensitive = false;
 
 		account = new InstanceAccount.empty (instance);
@@ -110,7 +110,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 				var root = network.parse (msg);
 				client_id = root.get_string_member ("client_id");
 				client_secret = root.get_string_member ("client_secret");
-				info ("OK: instance registered client");
+				message ("OK: instance registered client");
 				stack.visible_child = step2;
 
 				open_confirmation_page ();
@@ -123,7 +123,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 	}
 
 	void open_confirmation_page () {
-		info ("Opening permission request page");
+		message ("Opening permission request page");
 
 		var pars = @"scope=$scopes&response_type=code&redirect_uri=$redirect_uri&client_id=$client_id";
 		var url = @"$instance/oauth/authorize?$pars";
@@ -134,7 +134,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 		if (code.char_count () <= 10)
 			throw new Oopsie.USER (_("Please paste a valid authorization code"));
 
-		info ("Requesting access token");
+		message ("Requesting access token");
         new Request.POST (@"/oauth/token")
         	.with_account (account)
         	.with_param ("client_id", client_id)
@@ -147,7 +147,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 		    	access_token = root.get_string_member ("access_token");
 		    	account.access_token = access_token;
 		    	account.id = "";
-		    	info ("OK: received access token");
+		    	message ("OK: received access token");
 		    	request_profile ();
         	})
         	.on_error ((code, reason) => oopsie (reason))
@@ -155,13 +155,13 @@ public class Tootle.Views.NewAccount : Views.Base {
 	}
 
 	void request_profile () throws Error {
-		info ("Testing received access token");
+		message ("Testing received access token");
 		new Request.GET ("/api/v1/accounts/verify_credentials")
 			.with_account (account)
 			.then ((sess, msg) => {
 				var node = network.parse_node (msg);
 				var account = API.Account.from (node);
-				info ("OK: received user profile");
+				message ("OK: received user profile");
 				save (account);
 			})
 			.on_error ((status, reason) => {
@@ -172,7 +172,7 @@ public class Tootle.Views.NewAccount : Views.Base {
 	}
 
 	void save (API.Account profile) {
-		info ("Account validated. Saving...");
+		message ("Account validated. Saving...");
 		account.patch (profile);
 		account.instance = instance;
 		account.client_id = client_id;

@@ -103,6 +103,7 @@ executable(
     'src/Widgets/Attachment/Slot.vala',
     'src/Widgets/Attachment/Picture.vala',
     'src/Dialogs/ISavedWindow.vala',
+    'src/Dialogs/NewAccount.vala',
     'src/Dialogs/MainWindow.vala',
     'src/Dialogs/About.vala',
     'src/Dialogs/Compose.vala',
