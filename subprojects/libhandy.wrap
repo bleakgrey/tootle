@@ -1,5 +1,5 @@
 [wrap-file]
-directory=libhandy-0.91.0
-source_url=https://gitlab.gnome.org/GNOME/libhandy/-/archive/0.91.0/libhandy-0.91.0.tar
-source_filename=libhandy-0.91.0.tar
-source_hash=40a558b228d8869bd97e617f53968f43214d47179cdc2f5d70d597ec1fe384fc
+directory=libhandy-e3fb7400c88136b866ae4a63457c6fd76d0a75b6
+source_url=https://gitlab.gnome.org/GNOME/libhandy/-/archive/e3fb7400c88136b866ae4a63457c6fd76d0a75b6/libhandy-e3fb7400c88136b866ae4a63457c6fd76d0a75b6.tar
+source_filename=libhandy-e3fb7400c88136b866ae4a63457c6fd76d0a75b6.tar
+source_hash=cbf34b9b2201ed25a41c9fa0ccfa132d4f87e0ce01a163ab3ad6c3701bec7d31

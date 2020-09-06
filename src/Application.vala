@@ -11,6 +11,7 @@ namespace Tootle {
 
 	public static Application app;
 	public static Dialogs.MainWindow? window;
+	public static Dialogs.NewAccount? new_account_window;
 	public static Window window_dummy;
 
 	public static Settings settings;
@@ -33,6 +34,9 @@ namespace Tootle {
 		public signal void refresh ();
 		public signal void toast (string title);
 		public signal void error (string title, string text);
+
+		public CssProvider css_provider = new CssProvider ();
+		public CssProvider zoom_css_provider = new CssProvider ();
 
 		public const GLib.OptionEntry[] app_options = {
 			{ "hidden", 0, 0, OptionArg.NONE, ref start_hidden, "Do not show main window on start", null },
@@ -93,6 +97,10 @@ namespace Tootle {
 			window_dummy = new Window ();
 			add_window (window_dummy);
 
+			css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
+			StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+			StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
 			set_accels_for_action ("app.about", ACCEL_ABOUT);
 			set_accels_for_action ("app.compose", ACCEL_NEW_POST);
 			set_accels_for_action ("app.back", ACCEL_BACK);
@@ -105,19 +113,33 @@ namespace Tootle {
 		}
 
 		protected override void activate () {
-			if (window != null) {
-				window.present ();
-				return;
-			}
+			present_window ();
 
 			if (start_hidden) {
 				start_hidden = false;
 				return;
 			}
+		}
 
-			info ("Creating new window");
-			window = new Dialogs.MainWindow (this);
-			window.present ();
+		public void present_window () {
+			if (accounts.is_empty ()) {
+				message ("Presenting NewAccount dialog");
+				if (new_account_window == null)
+					new_account_window = new Dialogs.NewAccount ();
+				new_account_window.present ();
+			}
+			else {
+				message ("Presenting MainWindow");
+				if (window == null)
+					window = new Dialogs.MainWindow (this);
+				window.present ();
+			}
+		}
+
+		public bool on_window_closed () {
+			if (!settings.work_in_background || accounts.is_empty ())
+				app.remove_window (window_dummy);
+				return false;
 		}
 
 		void compose_activated () {

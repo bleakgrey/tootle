@@ -16,7 +16,7 @@ i18n = import('i18n')
 
 add_global_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
-        '-DHANDY_USE_UNSTABLE_API',
+        # '-DHANDY_USE_UNSTABLE_API',
     ],
     language: 'c',
 )
@@ -33,7 +33,7 @@ build_file = configure_file(
 	configuration: config
 )
 
-libhandy_dep = dependency('libhandy-1', version: '>= 0.91.0', required: false)
+libhandy_dep = dependency('libhandy-1', version: '>= 1.0', required: false)
 if not libhandy_dep.found()
   libhandy = subproject(
     'libhandy',
