@@ -104,7 +104,6 @@ executable(
     'src/Dialogs/Preferences.vala',
     'src/Dialogs/ListEditor.vala',
     'src/Views/Base.vala',
-    'src/Views/NewAccount.vala',
     'src/Views/Timeline.vala',
     'src/Views/Home.vala',
     'src/Views/Local.vala',

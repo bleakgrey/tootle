@@ -33,7 +33,7 @@ namespace Tootle {
 
 		public signal void refresh ();
 		public signal void toast (string title);
-		public signal void error (string title, string text);
+		public signal void error (string title, string? text);
 
 		public CssProvider css_provider = new CssProvider ();
 		public CssProvider zoom_css_provider = new CssProvider ();
@@ -53,7 +53,7 @@ namespace Tootle {
 
 		construct {
 			application_id = Build.DOMAIN;
-			flags = ApplicationFlags.FLAGS_NONE;
+			flags = ApplicationFlags.HANDLES_OPEN;
 		}
 
 		public string[] ACCEL_ABOUT = {"F1"};
@@ -92,7 +92,9 @@ namespace Tootle {
 			cache = new Cache ();
 			accounts.init ();
 
-			app.error.connect (app.on_error);
+			app.error.connect ((title, msg) => {
+				oopsie (title, msg);
+			});
 
 			window_dummy = new Window ();
 			add_window (window_dummy);
@@ -121,12 +123,22 @@ namespace Tootle {
 			}
 		}
 
+		public override void open (File[] files, string hint) {
+			foreach (File file in files) {
+				string uri = file.get_uri ();
+				if (new_account_window != null)
+					new_account_window.redirect (uri);
+				else
+					warning (@"Received an unexpected uri to open: $uri");
+				return;
+			}
+		}
+
 		public void present_window () {
 			if (accounts.is_empty ()) {
 				message ("Presenting NewAccount dialog");
 				if (new_account_window == null)
-					new_account_window = new Dialogs.NewAccount ();
-				new_account_window.present ();
+					new Dialogs.NewAccount ();
 			}
 			else {
 				message ("Presenting MainWindow");
@@ -163,31 +175,31 @@ namespace Tootle {
 			new Dialogs.About ();
 		}
 
-		public void on_error (string title, string msg){
+		public void oopsie (string text, string? msg = null, Gtk.Window? win = window){
 			var dlg = new Gtk.MessageDialog (
-				window,
+				win,
 				Gtk.DialogFlags.MODAL,
 				Gtk.MessageType.ERROR,
 				Gtk.ButtonsType.OK,
 				null
 			);
-			dlg.text = title;
+			dlg.text = text;
 			dlg.secondary_text = msg;
-			dlg.transient_for = window;
+			dlg.transient_for = win;
 			dlg.run ();
 			dlg.destroy ();
 		}
 
-		public bool question (string text, string? secondary = null, Gtk.Window? win = window) {
+		public bool question (string text, string? msg = null, Gtk.Window? win = window) {
 			var dlg = new Gtk.MessageDialog (
-				window,
+				win,
 				Gtk.DialogFlags.MODAL,
 				Gtk.MessageType.QUESTION,
 				Gtk.ButtonsType.YES_NO,
 				null
 			);
 			dlg.text = text;
-			dlg.secondary_text = secondary;
+			dlg.secondary_text = msg;
 			dlg.transient_for = win;
 			var i = dlg.run ();
 			dlg.destroy ();

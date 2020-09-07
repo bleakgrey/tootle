@@ -129,7 +129,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		var i = r.get_index ();
 		if (i >= accounts.saved.size) {
 			active = false;
-			window.open_view (new Views.NewAccount (true));
+			new Dialogs.NewAccount ();
 			popover.popdown ();
 			return;
 		}

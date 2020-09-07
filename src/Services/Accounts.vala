@@ -62,7 +62,7 @@ public class Tootle.Accounts : GLib.Object {
         save ();
 
         if (is_empty ())
-            window.open_view (new Views.NewAccount (false));
+            new Dialogs.NewAccount ();
     }
 
     public bool is_empty () {
@@ -74,7 +74,7 @@ public class Tootle.Accounts : GLib.Object {
         load ();
 
         if (saved.size < 1)
-            window.open_view (new Views.NewAccount (false));
+            new Dialogs.NewAccount ();
         else
             switch_account (settings.current_account);
     }
