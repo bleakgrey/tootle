@@ -112,8 +112,6 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 			popover.popdown ();
 		});
 
-		on_account_changed (null);
-
 		notify["active"].connect (() => {
 			if (active && invalidated)
 				rebuild ();
