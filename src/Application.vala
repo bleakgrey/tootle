@@ -93,7 +93,7 @@ namespace Tootle {
 			accounts.init ();
 
 			app.error.connect ((title, msg) => {
-				oopsie (title, msg);
+				inform (Gtk.MessageType.ERROR, title, msg);
 			});
 
 			window_dummy = new Window ();
@@ -175,11 +175,11 @@ namespace Tootle {
 			new Dialogs.About ();
 		}
 
-		public void oopsie (string text, string? msg = null, Gtk.Window? win = window){
+		public void inform (Gtk.MessageType type, string text, string? msg = null, Gtk.Window? win = window){
 			var dlg = new Gtk.MessageDialog (
 				win,
 				Gtk.DialogFlags.MODAL,
-				Gtk.MessageType.ERROR,
+				type,
 				Gtk.ButtonsType.OK,
 				null
 			);

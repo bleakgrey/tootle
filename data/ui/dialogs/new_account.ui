@@ -261,13 +261,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel">
+                      <object class="GtkLabel" id="code_label">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">&lt;a href="tootle://manual_auth"&gt;Didn't receive the code?&lt;/a&gt;</property>
+                        <property name="label" translatable="yes">&lt;a href="tootle://manual_auth"&gt;Try manual authorization&lt;/a&gt;</property>
                         <property name="use_markup">True</property>
                         <property name="track_visited_links">False</property>
                         <property name="xalign">1</property>
+                        <signal name="activate-link" handler="on_activate_code_label_link" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>

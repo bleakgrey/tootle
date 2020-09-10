@@ -29,6 +29,8 @@ public class Tootle.Dialogs.NewAccount: Gtk.Window {
 	[GtkChild]
 	Entry code_entry;
 	[GtkChild]
+	Label code_label;
+	[GtkChild]
 	Label hello_label;
 
 	public NewAccount () {
@@ -37,6 +39,8 @@ public class Tootle.Dialogs.NewAccount: Gtk.Window {
 		reset ();
 		present ();
 		new_account_window = this;
+
+		bind_property ("use-auto-auth", code_label, "visible", BindingFlags.SYNC_CREATE);
 	}
 
 	public override bool delete_event (Gdk.EventAny event) {
@@ -61,6 +65,13 @@ public class Tootle.Dialogs.NewAccount: Gtk.Window {
 		}
 	}
 
+	[GtkCallback]
+	bool on_activate_code_label_link (string uri) {
+		use_auto_auth = false;
+		reset ();
+		return true;
+	}
+
 	void reset () {
 		message ("Reset state");
 		account = new InstanceAccount.empty (account.instance);
@@ -77,7 +88,7 @@ public class Tootle.Dialogs.NewAccount: Gtk.Window {
 
 	void oopsie (string title, string msg = "") {
 		warning (@"$title   $msg");
-		app.oopsie (title, msg, this);
+		app.inform (Gtk.MessageType.ERROR, title, msg, this);
 	}
 
 	async void step () throws Error {
