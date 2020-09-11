@@ -10,7 +10,7 @@ public class Tootle.Widgets.RichLabel : Label {
 			return this.label;
 		}
 		set {
-			this.label = escape_entities (Html.simplify (value));
+			this.label = escape_entities (Html.replace_with_pango_markup (Html.simplify (value)));
 		}
 	}
 

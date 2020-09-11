@@ -19,11 +19,14 @@ public class Tootle.Html {
 			var divided = str
 			.replace("<br>", "\n")
 			.replace("</br>", "")
+			.replace("<br/>", "\n")
 			.replace("<br />", "\n")
 			.replace("<p>", "")
-			.replace("</p>", "\n\n");
+			.replace("</p>", "\n\n")
+			.replace("<pre>", "")
+			.replace("</pre>", "");
 
-			var html_params = new Regex ("(class|target|rel)=\"(.|\n)*?\"", RegexCompileFlags.CASELESS);
+			var html_params = new Regex ("(class|target|rel|data-user|data-tag)=\"(.|\n)*?\"", RegexCompileFlags.CASELESS);
 			var simplified = html_params.replace (divided, -1, 0, "");
 
 			while (simplified.has_suffix ("\n"))
@@ -35,6 +38,16 @@ public class Tootle.Html {
 			warning (e.message);
 			return FALLBACK_TEXT;
 		}
+	}
+
+	public static string replace_with_pango_markup (string str) {
+		return str
+			.replace("<strong>", "<b>")
+			.replace("</strong>", "</b>")
+			.replace("<em>", "<i>")
+			.replace("</em>", "</i>")
+			.replace("<code>", "<span font_family=\"monospace\">")
+			.replace("</code>", "</span>\n");
 	}
 
 	public static string uri_encode (string str) {
