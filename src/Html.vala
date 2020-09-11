@@ -47,7 +47,9 @@ public class Tootle.Html {
 			.replace("<em>", "<i>")
 			.replace("</em>", "</i>")
 			.replace("<code>", "<span font_family=\"monospace\">")
-			.replace("</code>", "</span>\n");
+			.replace("</code>", "</span>\n")
+			.replace("<del>", "<s>")
+			.replace("</del>", "</s>");
 	}
 
 	public static string uri_encode (string str) {
