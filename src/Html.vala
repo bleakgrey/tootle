@@ -32,14 +32,6 @@ public class Tootle.Html {
 			while (simplified.has_suffix ("\n"))
 				simplified = simplified.slice (0, simplified.last_index_of ("\n"));
 
-			var html_img_src = new Regex ("<img[ ]+(src)=\"([^\"]*)\"(.|\n)*?\\/>", RegexCompileFlags.CASELESS);
-			simplified = html_img_src.replace_eval(simplified, simplified.length, 0, 0, (match_info, result) => {
-				var src = match_info.fetch(2);
-				// TODO: Show image in-line instead of a link to the image
-				result.append_printf("<a href=\"%s\">%s</a>", src, src);
-				return false;
-			});
-
 			return simplified;
 		}
 		catch (Error e) {
@@ -58,6 +50,19 @@ public class Tootle.Html {
 			.replace("</code>", "</span>\n")
 			.replace("<del>", "<s>")
 			.replace("</del>", "</s>");
+
+		try {
+			var html_img_src = new Regex ("<img[ ]+(src)=\"([^\"]*)\"(.|\n)*?\\/>", RegexCompileFlags.CASELESS);
+			result = html_img_src.replace_eval(result, result.length, 0, 0, (match_info, result) => {
+				var src = match_info.fetch(2);
+				// TODO: Show image in-line instead of a link to the image
+				result.append_printf("<a href=\"%s\">%s</a>", src, src);
+				return false;
+			});
+		} catch (Error e) {
+			warning (e.message);
+		}
+
 		return list_tags_to_text(result);
 	}
 
