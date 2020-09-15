@@ -131,7 +131,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
 
 		bind_property ("spoiler-text", spoiler_label, "text", BindingFlags.SYNC_CREATE);
-		status.bind_property ("content", content, "text", BindingFlags.SYNC_CREATE);
+		status.formal.bind_property ("content", content, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("title_text", name_label, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("subtitle_text", handle_label, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
