@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-02 17:48+0300\n"
-"PO-Revision-Date: 2020-08-02 15:03+0300\n"
+"POT-Creation-Date: 2020-09-10 21:58+0300\n"
+"PO-Revision-Date: 2020-09-10 20:20+0300\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
 "Language: zh_CN\n"
@@ -40,72 +40,72 @@ msgstr ""
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:11
 msgid ""
-"Tootle is a client for the world’s largest free, open-source, decentralized "
-"microblogging network with real-time notifications and support for multiple "
-"accounts."
+"Tootle is a GTK client for the world's largest, decentralized, microblogging "
+"platform, Mastodon. With the user experience in mind, it provides a clean, "
+"native interface that allows you to integrate Mastodon's social experience "
+"seamlessly with your desktop environment."
 msgstr ""
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:14
 msgid ""
-"Mastodon is lovingly crafted with power and speed in mind, resulting in a "
-"free, independent, and popular alternative to the centralized social "
-"networks."
+"Mastodon is a free and open source microblogging platform similar to "
+"Twitter, but with user privacy and decentralization in mind. It is one of "
+"many protocols that interacts with the Fediverse of protocols like Pleroma, "
+"GNU Social, and others. The power of federated microblogging that Mastodon "
+"brings and the agility of Tootle creates a fantastic duo for all of your "
+"social media needs."
 msgstr ""
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:17
-msgid ""
-"Anyone can run a Mastodon server. Each server hosts individual user "
-"accounts, the content they produce, and the content to which they are "
-"subscribed. Every user can follow each other and share their posts "
-"regardless of their server."
-msgstr ""
-
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:26
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:23
 msgid "bleak_grey"
 msgstr ""
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:74
-msgid "New app icon (kudos to Tobias Bernard!)"
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:71
+msgid "New app icon (Kudos to Tobias Bernard!)"
 msgstr ""
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:75
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:72
 msgid "New interface design"
 msgstr ""
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:76
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:73
 msgid "Fixed bugs"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:50
+#: data/ui/dialogs/compose.ui:18 data/ui/dialogs/list_editor.ui:239
+msgid "Cancel"
+msgstr ""
+
+#: data/ui/dialogs/compose.ui:49
+msgid "Publish"
+msgstr ""
+
+#: data/ui/dialogs/compose.ui:117
 msgid "Write your warning here"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:116
+#: data/ui/dialogs/compose.ui:183
 msgid "Visibility"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:169
+#: data/ui/dialogs/compose.ui:236
 msgid "Attach Media"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:191
+#: data/ui/dialogs/compose.ui:258
 msgid "Instance Emojis"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:215
+#: data/ui/dialogs/compose.ui:282
 msgid "Spoiler Warning"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:260
+#: data/ui/dialogs/compose.ui:327
 msgid "Text"
 msgstr ""
 
-#: data/ui/dialogs/compose.ui:320
+#: data/ui/dialogs/compose.ui:387
 msgid "Media"
-msgstr ""
-
-#: data/ui/dialogs/compose.ui:391 data/ui/dialogs/list_editor.ui:239
-msgid "Cancel"
 msgstr ""
 
 #: data/ui/dialogs/list_editor.ui:110
@@ -122,6 +122,10 @@ msgstr ""
 
 #: data/ui/dialogs/list_editor.ui:263
 msgid "Save"
+msgstr ""
+
+#: data/ui/dialogs/main.ui:148 src/Dialogs/Compose.vala:125
+msgid "Compose"
 msgstr ""
 
 #: data/ui/dialogs/preferences.ui:16
@@ -188,35 +192,35 @@ msgstr ""
 msgid "Warning: This will use more resources on crowded instances"
 msgstr ""
 
-#: data/ui/views/new_account.ui:80
-msgid "Which Instance?\n"
+#: data/ui/dialogs/new_account.ui:15
+msgid "Add Account"
 msgstr ""
 
-#: data/ui/views/new_account.ui:100
-msgid "<a href=\"https://joinmastodon.org/\">What's an instance?</a>"
+#: data/ui/dialogs/new_account.ui:19 src/Dialogs/NewAccount.vala:85
+msgid "Back"
 msgstr ""
 
-#: data/ui/views/new_account.ui:117
-msgid "instance.domain"
+#: data/ui/dialogs/new_account.ui:42 src/Dialogs/NewAccount.vala:84
+msgid "Next"
 msgstr ""
 
-#: data/ui/views/new_account.ui:146
-msgid "Grant Account Access\n"
+#: data/ui/dialogs/new_account.ui:118
+msgid "What is your instance?"
 msgstr ""
 
-#: data/ui/views/new_account.ui:166
-msgid "Paste"
+#: data/ui/dialogs/new_account.ui:181
+msgid "<a href=\"https://joinmastodon.org/\">Don't have one yet?</a>"
 msgstr ""
 
-#: data/ui/views/new_account.ui:167
-msgid "Paste your authorization code here"
+#: data/ui/dialogs/new_account.ui:232
+msgid "Enter Authorization Code"
 msgstr ""
 
-#: data/ui/views/new_account.ui:182
-msgid "<a href=\"\">Try another instance?</a>"
+#: data/ui/dialogs/new_account.ui:267
+msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
 msgstr ""
 
-#: data/ui/views/profile_header.ui:142 src/Views/Profile.vala:126
+#: data/ui/views/profile_header.ui:142 src/Views/Profile.vala:217
 msgid "Follow"
 msgstr ""
 
@@ -248,7 +252,11 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#: data/ui/widgets/accounts_button.ui:248
+#: data/ui/widgets/accounts_button.ui:236
+msgid "About"
+msgstr ""
+
+#: data/ui/widgets/accounts_button.ui:262
 msgid "Accounts"
 msgstr ""
 
@@ -273,7 +281,7 @@ msgid "Unknown"
 msgstr ""
 
 #: data/ui/widgets/compose_attachment.ui:113 data/ui/widgets/list_item.ui:74
-#: src/Widgets/Status.vala:232
+#: src/Widgets/Status.vala:231
 msgid "Delete"
 msgstr ""
 
@@ -285,36 +293,10 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: data/ui/widgets/timeline_filter.ui:26
-msgid "Show:"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:56
-msgid "0 Posts"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:79
-msgid "0 Follows"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:102
-msgid "0 Followers"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:159
-msgid "Filter:"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:189
-msgid "None"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:211
-msgid "Include Replies"
-msgstr ""
-
-#: data/ui/widgets/timeline_filter.ui:233
-msgid "Only Media"
+#. Please do not remove the credits below. You may add your own, but keep the existing ones intact.
+#. TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
+#: src/Build.vala:15
+msgid " "
 msgstr ""
 
 #: src/Desktop.vala:18
@@ -329,15 +311,31 @@ msgstr ""
 msgid "[ There was an error parsing this text :c ]"
 msgstr ""
 
-#: src/Dialogs/Compose.vala:83 src/Views/Lists.vala:33
+#: src/DateTime.vala:11
+msgid "Just now"
+msgstr ""
+
+#: src/DateTime.vala:21
+msgid "Yesterday"
+msgstr ""
+
+#: src/DateTime.vala:24
+msgid "%b %e"
+msgstr ""
+
+#: src/DateTime.vala:27
+msgid "%b %e, %Y"
+msgstr ""
+
+#: src/Dialogs/About.vala:14
+msgid "Report an issue"
+msgstr ""
+
+#: src/Dialogs/Compose.vala:81 src/Views/Lists.vala:33
 msgid "This action cannot be reverted."
 msgstr ""
 
-#: src/Dialogs/Compose.vala:126
-msgid "Publish"
-msgstr ""
-
-#: src/Dialogs/Compose.vala:136 src/Widgets/Status.vala:242
+#: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:241
 msgid "Redraft"
 msgstr ""
 
@@ -365,12 +363,33 @@ msgstr ""
 msgid "You need to save the list if you want to keep them."
 msgstr ""
 
-#: src/Dialogs/MainWindow.vala:37
-msgid "Back"
+#: src/Dialogs/NewAccount.vala:84
+msgid "Close"
 msgstr ""
 
-#: src/Dialogs/MainWindow.vala:40
-msgid "Compose"
+#: src/Dialogs/NewAccount.vala:85
+msgid "Add Another"
+msgstr ""
+
+#: src/Dialogs/NewAccount.vala:127
+msgid "Please enter a valid instance URL"
+msgstr ""
+
+#: src/Dialogs/NewAccount.vala:160
+msgid "Please enter a valid authorization code"
+msgstr ""
+
+#: src/Dialogs/NewAccount.vala:176
+msgid "Instance failed to authorize the access token"
+msgstr ""
+
+#: src/Dialogs/NewAccount.vala:190
+#, c-format
+msgid "Hello, %s!"
+msgstr ""
+
+#: src/Dialogs/NewAccount.vala:218
+msgid "Server returned an error"
 msgstr ""
 
 #: src/Services/Accounts.vala:32
@@ -389,7 +408,7 @@ msgstr ""
 msgid "Nothing to see here"
 msgstr ""
 
-#: src/Views/Base.vala:47
+#: src/Views/Base.vala:46
 msgid "Reload"
 msgstr ""
 
@@ -410,35 +429,52 @@ msgstr ""
 msgid "Local"
 msgstr ""
 
-#: src/Views/NewAccount.vala:27
-msgid "New Account"
-msgstr ""
-
-#: src/Views/NewAccount.vala:94
-msgid "Instance URL is invalid"
-msgstr ""
-
-#: src/Views/NewAccount.vala:135
-msgid "Please paste a valid authorization code"
-msgstr ""
-
 #: src/Views/Notifications.vala:11
 msgid "Notifications"
 msgstr ""
 
-#: src/Views/Profile.vala:113
+#: src/Views/Profile.vala:134
+#, c-format
+msgid "Block \"%s\"?"
+msgstr ""
+
+#: src/Views/Profile.vala:134
+#, c-format
+msgid "Unblock \"%s\"?"
+msgstr ""
+
+#: src/Views/Profile.vala:145
+#, c-format
+msgid "Block Entire \"%s\"?"
+msgstr ""
+
+#: src/Views/Profile.vala:145
+#, c-format
+msgid "Unblock Entire \"%s\"?"
+msgstr ""
+
+#: src/Views/Profile.vala:148
+msgid ""
+"Blocking a domain will:\n"
+"\n"
+"• Remove its public posts and notifications from your timelines\n"
+"• Remove its followers from your account\n"
+"• Prevent you from following its users"
+msgstr ""
+
+#: src/Views/Profile.vala:206
 msgid "Sent follow request"
 msgstr ""
 
-#: src/Views/Profile.vala:115
+#: src/Views/Profile.vala:208
 msgid "Mutually follows you"
 msgstr ""
 
-#: src/Views/Profile.vala:117
+#: src/Views/Profile.vala:210
 msgid "Follows you"
 msgstr ""
 
-#: src/Views/Profile.vala:126
+#: src/Views/Profile.vala:217
 msgid "Unfollow"
 msgstr ""
 
@@ -467,11 +503,11 @@ msgstr ""
 msgid "This account will be removed from the application."
 msgstr ""
 
-#: src/Widgets/AccountsButton.vala:156
+#: src/Widgets/AccountsButton.vala:153
 msgid "Anonymous"
 msgstr ""
 
-#: src/Widgets/AccountsButton.vala:157
+#: src/Widgets/AccountsButton.vala:154
 msgid "No active account"
 msgstr ""
 
@@ -479,26 +515,26 @@ msgstr ""
 msgid "[ Toggle content ]"
 msgstr ""
 
-#: src/Widgets/Status.vala:152
+#: src/Widgets/Status.vala:151
 msgid "This post can't be boosted"
 msgstr ""
 
-#: src/Widgets/Status.vala:202
+#: src/Widgets/Status.vala:201
 msgid "Open in Browser"
 msgstr ""
 
-#: src/Widgets/Status.vala:204
+#: src/Widgets/Status.vala:203
 msgid "Copy Link"
 msgstr ""
 
-#: src/Widgets/Status.vala:206
+#: src/Widgets/Status.vala:205
 msgid "Copy Text"
 msgstr ""
 
-#: src/Widgets/Status.vala:226
+#: src/Widgets/Status.vala:225
 msgid "Unpin from Profile"
 msgstr ""
 
-#: src/Widgets/Status.vala:226
+#: src/Widgets/Status.vala:225
 msgid "Pin on Profile"
 msgstr ""

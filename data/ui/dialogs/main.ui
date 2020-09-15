@@ -26,6 +26,8 @@
               </object>
               <packing>
                 <property name="position">2</property>
+                <property name="name">0</property>
+                <property name="title">0</property>
               </packing>
             </child>
             <child>

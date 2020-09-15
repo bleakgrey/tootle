@@ -3,10 +3,10 @@ using Gee;
 
 public class Tootle.InstanceAccount : API.Account, IStreamListener {
 
-	public string instance { get; set; }
-	public string client_id { get; set; }
-	public string client_secret { get; set; }
-	public string access_token { get; set; }
+	public string? instance { get; set; }
+	public string? client_id { get; set; }
+	public string? client_secret { get; set; }
+	public string? access_token { get; set; }
 
 	public int64 last_seen_notification { get; set; default = 0; }
 	public bool has_unread_notifications { get; set; default = false; }
@@ -15,17 +15,10 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 	protected string? stream;
 
 	public new string handle {
-		owned get { return @"@$username@$short_instance"; }
-	}
-	public string short_instance {
-		owned get {
-			return instance
-				.replace ("https://", "")
-				.replace ("/","");
-		}
+		owned get { return @"@$username@$domain"; }
 	}
 
-	public static InstanceAccount from (Json.Node node) throws Error {
+	public new static InstanceAccount from (Json.Node node) throws Error {
 		return Entity.from_json (typeof (InstanceAccount), node) as InstanceAccount;
 	}
 
@@ -74,7 +67,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		var notification = new GLib.Notification (title);
 		if (obj.status != null) {
 			var body = "";
-			body += short_instance;
+			body += domain;
 			body += "\n";
 			body += Html.remove_tags (obj.status.content);
 			notification.set_body (body);

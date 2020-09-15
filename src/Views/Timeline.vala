@@ -8,6 +8,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 	public Type accepts { get; set; default = typeof (API.Status); }
 
 	protected InstanceAccount? account = null;
+	protected ulong on_status_added_sigig;
 
 	public bool is_last_page { get; set; default = false; }
 	public string? page_next { get; set; }
@@ -19,7 +20,7 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		status_button.clicked.connect (on_refresh);
 		account_listener_init ();
 
-		on_status_added.connect (add_status);
+		on_status_added_sigig = on_status_added.connect (add_status);
 		on_status_removed.connect (remove_status);
 	}
 	~Timeline () {
@@ -111,10 +112,12 @@ public class Tootle.Views.Timeline : IAccountListener, IStreamListener, Views.Ba
 		})
 		.on_error (on_error);
 		req.exec ();
+
 		return GLib.Source.REMOVE;
 	}
 
 	public virtual void on_refresh () {
+		scrolled.vadjustment.value = 0;
 		status_button.sensitive = false;
 		clear ();
 		status_message = STATUS_LOADING;

@@ -30,14 +30,9 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 
     Views.Base? last_view = null;
 
-    CssProvider zoom_css_provider = new CssProvider ();
-
     construct {
         back_button.clicked.connect (() => back ());
-        Desktop.set_hotkey_tooltip (back_button, _("Back"), app.ACCEL_BACK);
-
         compose_button.clicked.connect (() => new Dialogs.Compose ());
-        Desktop.set_hotkey_tooltip (compose_button, _("Compose"), app.ACCEL_NEW_POST);
 
         timeline_switcher.stack = timeline_stack;
         timeline_switcher.valign = Align.FILL;
@@ -51,10 +46,6 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
         settings.bind_property ("dark-theme", Gtk.Settings.get_default (), "gtk-application-prefer-dark-theme", BindingFlags.SYNC_CREATE);
         settings.notify["post-text-size"].connect (() => on_zoom_level_changed ());
 
-        var provider = new Gtk.CssProvider ();
-        provider.load_from_resource (@"$(Build.RESOURCES)app.css");
-        StyleContext.add_provider_for_screen (Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-        StyleContext.add_provider_for_screen (Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
         on_zoom_level_changed ();
 
         button_press_event.connect (on_button_press);
@@ -70,9 +61,6 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
             resizable: true,
             window_position: WindowPosition.CENTER
         );
-
-        if (accounts.is_empty ())
-            open_view (new Views.NewAccount (false));
     }
 
     public int get_visible_id () {
@@ -120,14 +108,10 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
         }
     }
 
-    public override bool delete_event (EventAny event) {
-        destroy.connect (() => {
-            if (!settings.work_in_background || accounts.is_empty ())
-                app.remove_window (window_dummy);
-            window = null;
-        });
-        return false;
-    }
+	public override bool delete_event (Gdk.EventAny event) {
+		window = null;
+		return app.on_window_closed ();
+	}
 
     public void switch_timeline (int32 num) {
         timeline_stack.visible_child_name = num.to_string ();
@@ -189,7 +173,7 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
         """.printf (ZOOM_CLASS, settings.post_text_size);
 
         try {
-            zoom_css_provider.load_from_data (css);
+            app.zoom_css_provider.load_from_data (css);
         }
         catch (Error e) {
             warning (@"Can't set zoom level: $(e.message)");

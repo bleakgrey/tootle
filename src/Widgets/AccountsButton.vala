@@ -86,7 +86,6 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		item_refresh.clicked.connect (() => {
 			app.refresh ();
 		});
-		Desktop.set_hotkey_tooltip (item_refresh, null, app.ACCEL_REFRESH);
 
 		item_favs.clicked.connect (() => {
 			window.open_view (new Views.Favorites ());
@@ -113,8 +112,6 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 			popover.popdown ();
 		});
 
-		on_account_changed (null);
-
 		notify["active"].connect (() => {
 			if (active && invalidated)
 				rebuild ();
@@ -130,7 +127,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		var i = r.get_index ();
 		if (i >= accounts.saved.size) {
 			active = false;
-			window.open_view (new Views.NewAccount (true));
+			new Dialogs.NewAccount ();
 			popover.popdown ();
 			return;
 		}
