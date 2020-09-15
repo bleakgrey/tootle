@@ -2,7 +2,7 @@ using Gtk;
 using Gdk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/main.ui")]
-public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
+public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 
     public const string ZOOM_CLASS = "app-scalable";
 
@@ -12,7 +12,7 @@ public class Tootle.Dialogs.MainWindow: Gtk.Window, ISavedWindow {
     protected Stack timeline_stack;
 
     [GtkChild]
-    public HeaderBar header;
+    public Hdy.HeaderBar header;
     [GtkChild]
     protected Revealer view_navigation;
     [GtkChild]
