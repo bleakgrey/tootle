@@ -7,6 +7,7 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
+    <signal name="size-allocate" handler="on_resized" swapped="no"/>
     <child>
       <object class="GtkScrolledWindow" id="scrolled">
         <property name="visible">True</property>
