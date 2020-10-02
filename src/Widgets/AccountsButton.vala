@@ -82,6 +82,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 
 	construct {
 		account_listener_init ();
+		get_style_context ().add_class ("image-button");
 
 		item_refresh.clicked.connect (() => {
 			app.refresh ();

@@ -6,11 +6,18 @@ public class Tootle.Views.Base : Box {
 	public static string STATUS_EMPTY = _("Nothing to see here");
 	public static string STATUS_LOADING = " ";
 
-	public int stack_pos { get; set; default = -1; }
 	public string? icon { get; set; default = null; }
 	public string label { get; set; default = ""; }
 	public bool needs_attention { get; set; default = false; }
 	public bool current { get; set; default = false; }
+	public bool unused { get; set; default = false; }
+
+	public Container content { get; set; }
+
+	[GtkChild]
+	protected Hdy.HeaderBar header;
+	[GtkChild]
+	protected Button back_button;
 
 	[GtkChild]
 	protected ScrolledWindow scrolled;
@@ -23,7 +30,7 @@ public class Tootle.Views.Base : Box {
 	[GtkChild]
 	protected Stack states;
 	[GtkChild]
-	protected Box content;
+	protected Box content_box;
 	[GtkChild]
 	protected ListBox content_list;
 	[GtkChild]
@@ -38,11 +45,14 @@ public class Tootle.Views.Base : Box {
 
 	public bool empty {
 		get {
-			return content_list.get_children ().length () <= 0;
+			return content.get_children ().length () <= 0;
 		}
 	}
 
 	construct {
+		bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
+		content = content_list;
+
 		status_button.label = _("Reload");
 		bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
 		scrolled.edge_reached.connect (pos => {
@@ -65,11 +75,11 @@ public class Tootle.Views.Base : Box {
 				on_hidden ();
 		});
 
-		get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
+		scrolled.get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
 	}
 
 	public virtual void clear (){
-		content_list.forall (w => {
+		content.forall (w => {
 			w.destroy ();
 		});
 		state = "status";
@@ -114,6 +124,11 @@ public class Tootle.Views.Base : Box {
 
 	public virtual void on_content_item_activated (ListBoxRow row) {
 		Signal.emit_by_name (row, "open");
+	}
+
+	[GtkCallback]
+	void on_close () {
+		window.back ();
 	}
 
 }

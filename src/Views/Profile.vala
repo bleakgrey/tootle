@@ -26,7 +26,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 	construct {
 		build_actions ();
-		menu_button = new Widgets.TimelineMenu ("profile-menu");
+		header.custom_title = menu_button = new Widgets.TimelineMenu ("profile-menu");
 
 		var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
 		profile_list = builder.get_object ("profile_list") as ListBox;
@@ -38,11 +38,11 @@ public class Tootle.Views.Profile : Views.Timeline {
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
 		avatar.url = profile.avatar;
 
-		profile.bind_property ("display-name", menu_button.title, "label", BindingFlags.SYNC_CREATE);
+		profile.bind_property ("handle", menu_button.title, "label", BindingFlags.SYNC_CREATE);
 
 		var handle = builder.get_object ("handle") as Widgets.RichLabel;
-		profile.bind_property ("acct", handle, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			var text = "@" + (string) src;
+		profile.bind_property ("display-name", handle, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+			var text = (string) src;
 			target.set_string (@"<span size=\"x-large\" weight=\"bold\">$text</span>");
 			return true;
 		});
@@ -183,15 +183,13 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 	public override void on_shown () {
 		window.insert_action_group ("view", actions);
-		window.header.custom_title = menu_button;
 		menu_button.valign = Align.FILL;
-		window.set_header_controls (rs_button);
+		// window.set_header_controls (rs_button);
 	}
 
 	public override void on_hidden () {
 		window.insert_action_group ("view", null);
-		window.header.custom_title = null;
-		window.reset_header_controls ();
+		// window.reset_header_controls ();
 	}
 
 	void on_rs_button_clicked () {
