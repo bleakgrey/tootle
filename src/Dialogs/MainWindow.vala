@@ -9,38 +9,14 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 	[GtkChild]
 	Hdy.Deck deck;
 
-	// [GtkChild]
-	// protected Stack view_stack;
-	// [GtkChild]
-	// protected Stack timeline_stack;
-
-	// [GtkChild]
-	// public Hdy.HeaderBar header;
-	// [GtkChild]
-	// protected Revealer view_navigation;
-	// [GtkChild]
-	// protected Revealer view_controls;
-	// [GtkChild]
-	// protected Button back_button;
-	// [GtkChild]
-	// protected Button compose_button;
-	// [GtkChild]
-	// protected Hdy.ViewSwitcherTitle timeline_switcher;
-	// [GtkChild]
-	// protected Hdy.ViewSwitcherBar switcher_navbar;
-	// [GtkChild]
-	// protected Widgets.AccountsButton accounts_button;
-
-	// Views.Base? last_view = null;
+	Views.Base? last_view = null;
 
 	construct {
-		open_view (new Views.Main ());
-
 		settings.bind_property ("dark-theme", Gtk.Settings.get_default (), "gtk-application-prefer-dark-theme", BindingFlags.SYNC_CREATE);
 		settings.notify["post-text-size"].connect (() => on_zoom_level_changed ());
 
 		on_zoom_level_changed ();
-
+		deck.notify["visible-child"].connect (on_view_changed);
 		button_press_event.connect (on_button_press);
 		restore_state ();
 	}
@@ -53,6 +29,7 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 			resizable: true,
 			window_position: WindowPosition.CENTER
 		);
+		open_view (new Views.Main ());
 	}
 
 	public bool open_view (Views.Base view) {
@@ -83,6 +60,7 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 		});
 		return Source.REMOVE;
 	}
+
 	public override bool delete_event (Gdk.EventAny event) {
 		window = null;
 		return app.on_window_closed ();
@@ -118,6 +96,22 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 		catch (Error e) {
 			warning (@"Can't set zoom level: $(e.message)");
 		}
+	}
+
+	void on_view_changed () {
+		var view = deck.visible_child as Views.Base;
+
+		if (last_view != null) {
+			last_view.current = false;
+			last_view.on_hidden ();
+		}
+
+		if (view != null) {
+			view.current = true;
+			view.on_shown ();
+		}
+
+		last_view = view;
 	}
 
 }

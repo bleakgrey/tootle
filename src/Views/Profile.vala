@@ -8,7 +8,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 	public bool only_media { get; set; default = false; }
 	public string source { get; set; default = "statuses"; }
 
-	SimpleActionGroup actions;
 	SimpleAction media_action;
 	SimpleAction replies_action;
 	SimpleAction muting_action;
@@ -179,17 +178,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 			page_next = null;
 			on_refresh ();
 		}
-	}
-
-	public override void on_shown () {
-		window.insert_action_group ("view", actions);
-		menu_button.valign = Align.FILL;
-		// window.set_header_controls (rs_button);
-	}
-
-	public override void on_hidden () {
-		window.insert_action_group ("view", null);
-		// window.reset_header_controls ();
 	}
 
 	void on_rs_button_clicked () {

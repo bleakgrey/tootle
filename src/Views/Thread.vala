@@ -10,7 +10,7 @@ public class Tootle.Views.Thread : Views.Base, IAccountListener {
         Object (
             root_status: status,
             status_message: STATUS_LOADING,
-            label: _("Thread")
+            label: _("Conversation")
         );
         account_listener_init ();
     }

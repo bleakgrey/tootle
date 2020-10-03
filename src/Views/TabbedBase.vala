@@ -8,6 +8,8 @@ public class Tootle.Views.TabbedBase : Views.Base {
 	protected Hdy.ViewSwitcherBar switcher_bar;
 	protected Stack stack;
 
+	Views.Base? last_view = null;
+
 	construct {
 		content = content_box;
 		content_list.destroy ();
@@ -42,14 +44,27 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		ID_COUNTER++;
 		stack.add_titled (view, ID_COUNTER.to_string (), view.label);
 		stack.child_set_property (view, "icon-name", view.icon);
+		view.notify["needs-attention"].connect (() => {
+			stack.child_set_property (view, "needs-attention", view.needs_attention);
+		});
 		view.header.hide ();
 	}
 
-	void on_view_switched (ParamSpec? spec = null) {
+	void on_view_switched () {
 		var view = stack.visible_child as Views.Base;
+
+		if (last_view != null) {
+			last_view.current = false;
+			last_view.on_hidden ();
+		}
+
 		if (view != null) {
 			header.title = view.label;
+			view.current = true;
+			view.on_shown ();
 		}
+
+		last_view = view;
 	}
 
 }

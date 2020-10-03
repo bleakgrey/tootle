@@ -11,6 +11,7 @@ public class Tootle.Views.Base : Box {
 	public bool needs_attention { get; set; default = false; }
 	public bool current { get; set; default = false; }
 	public bool unused { get; set; default = false; }
+	public SimpleActionGroup? actions { get; set; }
 
 	public Container content { get; set; }
 
@@ -86,8 +87,15 @@ public class Tootle.Views.Base : Box {
 	}
 
 	public virtual void on_bottom_reached () {}
-	public virtual void on_shown () {}
-	public virtual void on_hidden () {}
+
+	public virtual void on_shown () {
+		if (actions != null)
+			window.insert_action_group ("view", actions);
+	}
+	public virtual void on_hidden () {
+		if (actions != null)
+			window.insert_action_group ("view", null);
+	}
 
 	public virtual void on_content_changed () {
 		if (empty) {
