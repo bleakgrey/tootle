@@ -52,6 +52,7 @@ public class Tootle.Views.Base : Box {
 
 	construct {
 		bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
+
 		content = content_list;
 
 		status_button.label = _("Reload");
@@ -77,7 +78,11 @@ public class Tootle.Views.Base : Box {
 		});
 
 		scrolled.get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
+
+		build_header ();
 	}
+
+	public virtual void build_header () {}
 
 	public virtual void clear (){
 		content.forall (w => {

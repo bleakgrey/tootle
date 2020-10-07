@@ -15,12 +15,6 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		content_list.destroy ();
 		state = "content";
 
-		switcher_title = new Hdy.ViewSwitcherTitle ();
-		switcher_title.show ();
-		header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
-		header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
-		header.custom_title = switcher_title;
-
 		states.get_parent ().remove (states);
 		view.get_style_context ().remove_class ("app-view");
 		scrolled.destroy ();
@@ -33,9 +27,18 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		stack.show ();
 		content_box.pack_start (stack);
 
+		switcher_bar.stack = switcher_title.stack = stack;
+	}
+
+	public override void build_header () {
+		switcher_title = new Hdy.ViewSwitcherTitle ();
+		switcher_title.show ();
+		header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
+		header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
+		header.custom_title = switcher_title;
+
 		switcher_bar = new Hdy.ViewSwitcherBar ();
 		switcher_bar.show ();
-		switcher_bar.stack = switcher_title.stack = stack;
 		switcher_title.bind_property ("title-visible", switcher_bar, "reveal", BindingFlags.SYNC_CREATE);
 		pack_end (switcher_bar, false, false, 0);
 	}
