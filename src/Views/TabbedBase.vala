@@ -53,6 +53,49 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		view.header.hide ();
 	}
 
+	public Views.Base add_list_tab (string label, string icon) {
+		var tab = new Views.Base ();
+		tab.label = label;
+		tab.icon = icon;
+
+		add_tab (tab);
+
+		return tab;
+	}
+
+	public delegate void TabCB (Views.Base tab);
+	public void foreach_tab (TabCB cb) {
+		stack.@foreach (child => {
+			var tab = child as Views.Base;
+			if (tab != null)
+				cb (tab);
+		});
+	}
+
+	public override void clear () {
+		foreach_tab (tab => tab.clear ());
+		on_content_changed ();
+	}
+
+	public override void on_content_changed () {
+		var empty = true;
+		foreach_tab (tab => {
+			tab.visible = !tab.empty;
+			if (tab.visible)
+				empty = false;
+
+			tab.on_content_changed ();
+		});
+
+		if (empty) {
+			state = "status";
+			status_message = STATUS_EMPTY;
+		}
+		else {
+			state = "content";
+		}
+	}
+
 	void on_view_switched () {
 		var view = stack.visible_child as Views.Base;
 

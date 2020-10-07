@@ -70,13 +70,6 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 	public void switch_timeline (int32 num) {
 	}
 
-	[Deprecated]
-	public void set_header_controls (Widget w) {
-	}
-	[Deprecated]
-	public void reset_header_controls () {
-	}
-
 	bool on_button_press (EventButton ev) {
 		if (ev.button == 8)
 			return back ();
