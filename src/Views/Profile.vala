@@ -128,6 +128,12 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		actions.add_action (mention_action);
 
+		var copy_handle_action = new SimpleAction ("copy_handle", null);
+		copy_handle_action.activate.connect (v => {
+			Desktop.copy (profile.handle);
+		});
+		actions.add_action (copy_handle_action);
+
 		muting_action = new SimpleAction.stateful ("muting", null, false);
 		muting_action.change_state.connect (v => {
 			var state = v.get_boolean ();
