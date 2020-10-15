@@ -32,10 +32,10 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 		open_view (new Views.Main ());
 	}
 
-	public bool open_view (Views.Base view) {
+	public Views.Base open_view (Views.Base view) {
 		deck.add (view);
 		deck.visible_child = view;
-		return true;
+		return view;
 	}
 
 	public bool back () {
