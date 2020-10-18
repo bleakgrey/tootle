@@ -18,9 +18,6 @@ public class Tootle.Widgets.Avatar : Bin {
 
 	public API.Account? account { get; set; }
 
-	[Deprecated]
-	public signal void clicked ();
-
 	construct {
 		avatar = new Hdy.Avatar (48, null, true);
 		add (avatar);
