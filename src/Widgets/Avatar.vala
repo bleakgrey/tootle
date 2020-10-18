@@ -47,10 +47,16 @@ public class Tootle.Widgets.Avatar : Bin {
 	void on_cache_result (Cache.Reference? result) {
 		cached = result;
 		if (account == null) {
-			avatar.text = null;
+			// This exact string makes the avatar grey.
+			//
+			// If left null, *each* blank Hdy.Avatar receives
+			// a random color and hurts my eyes. No bueno.
+			avatar.text = "abc";
+			avatar.show_initials = false;
 		}
 		else if (cached != null) {
 			avatar.text = account.display_name;
+			avatar.show_initials = true;
 		}
 		avatar.set_image_load_func (avatar_set_pixbuf);
 	}
