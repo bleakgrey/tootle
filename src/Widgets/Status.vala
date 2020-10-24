@@ -262,6 +262,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	public void expand_root () {
 		activatable = false;
         content.selectable = true;
+        content.get_style_context ().add_class ("ttl-large-body");
 
         var parent = content_column.get_parent () as Container;
         var left_attach = parent.find_child_property ("left-attach");
