@@ -11,7 +11,6 @@
       <object class="HdyDeck" id="deck">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="transition_type">slide</property>
         <property name="can_swipe_back">True</property>
         <child>
           <placeholder/>
