@@ -13,7 +13,6 @@
         <property name="can_focus">False</property>
         <property name="transition_type">slide</property>
         <property name="can_swipe_back">True</property>
-        <property name="can_swipe_forward">True</property>
         <child>
           <placeholder/>
         </child>
