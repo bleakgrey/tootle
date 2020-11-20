@@ -1,4 +1,4 @@
-public class Tootle.Html {
+public class Tootle.HtmlUtils {
 
 	public const string FALLBACK_TEXT = _("[ There was an error parsing this text :c ]");
 

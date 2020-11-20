@@ -84,7 +84,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	public string title_text {
 		owned get {
-			return Html.simplify (status.formal.account.display_name);
+			return HtmlUtils.simplify (status.formal.account.display_name);
 		}
 	}
 
@@ -218,7 +218,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
 		var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
 		item_copy.activate.connect (() => {
-			var sanitized = Html.remove_tags (status.formal.content);
+			var sanitized = HtmlUtils.remove_tags (status.formal.content);
 			Desktop.copy (sanitized);
 		});
 

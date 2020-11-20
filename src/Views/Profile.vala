@@ -49,7 +49,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		note_row = builder.get_object ("note_row") as ListBoxRow;
 		var note = builder.get_object ("note") as Widgets.RichLabel;
 		profile.bind_property ("note", note, "text", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			var text = Html.simplify ((string) src);
+			var text = HtmlUtils.simplify ((string) src);
 			target.set_string (text);
 			note_row.visible = text != "";
 			return true;
