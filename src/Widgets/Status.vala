@@ -51,7 +51,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected Box content_column;
 	[GtkChild] protected Stack spoiler_stack;
 	[GtkChild] protected Box content_box;
-	[GtkChild] protected Widgets.RichLabel content;
+	[GtkChild] protected Widgets.MarkupView content;
 	[GtkChild] protected Widgets.Attachment.Box attachments;
 	[GtkChild] protected Button spoiler_button;
 	[GtkChild] protected Widgets.RichLabel spoiler_label;
@@ -140,7 +140,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			reply_button_icon.icon_name = "mail-reply-sender-symbolic";
 
 		bind_property ("spoiler-text", spoiler_label, "text", BindingFlags.SYNC_CREATE);
-		status.formal.bind_property ("content", content, "text", BindingFlags.SYNC_CREATE);
+		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
 		bind_property ("title_text", name_label, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("subtitle_text", handle_label, "text", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
@@ -166,9 +166,11 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		if (status.id == "") {
 			actions.destroy ();
 			date_label.destroy ();
-			content.single_line_mode = true;
-			content.lines = 2;
-			content.ellipsize = Pango.EllipsizeMode.END;
+
+			//TODO: this
+			// content.single_line_mode = true;
+			// content.lines = 2;
+			// content.ellipsize = Pango.EllipsizeMode.END;
 		}
 
 		if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
@@ -261,7 +263,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	public void expand_root () {
 		activatable = false;
-        content.selectable = true;
+        // content.selectable = true; //TODO: this
         content.get_style_context ().add_class ("ttl-large-body");
 
         var parent = content_column.get_parent () as Container;
