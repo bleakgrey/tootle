@@ -21,6 +21,7 @@ public class Tootle.Widgets.MarkupView : Box {
 
 	construct {
 		orientation = Orientation.VERTICAL;
+		spacing = 12;
 	}
 
 	void update_content (string content) {
@@ -80,6 +81,11 @@ public class Tootle.Widgets.MarkupView : Box {
 	public static void default_handler (MarkupView v, Xml.Node* root) {
 		switch (root->name) {
 			case "html":
+			case "span":
+			case "markup":
+			case "pre":
+			case "ul":
+			case "ol":
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
@@ -90,12 +96,6 @@ public class Tootle.Widgets.MarkupView : Box {
 				});
 				v.commit_chunk ();
 				break;
-			case "br":
-				v.write_chunk ("\n");
-				break;
-			case "text":
-				v.write_chunk (GLib.Markup.escape_text (root->content));
-				break;
 			case "p":
 				// Don't add spacing if this is the first paragraph
 				if (v.current_chunk != "" && v.current_chunk != null)
@@ -104,6 +104,28 @@ public class Tootle.Widgets.MarkupView : Box {
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
+				break;
+			case "code":
+			case "blockquote":
+				v.commit_chunk ();
+
+				var text = "";
+				traverse (root, (node) => {
+					switch (node->name) {
+						case "text":
+							text += node->content;
+							break;
+						default:
+							break;
+					}
+				});
+
+				var label = new RichLabel (text) {
+					visible = true,
+					markup = MarkupPolicy.DISALLOW
+				};
+				label.get_style_context ().add_class ("ttl-code");
+				v.pack_start (label);
 				break;
 			case "a":
 				var href = root->get_prop ("href");
@@ -115,11 +137,17 @@ public class Tootle.Widgets.MarkupView : Box {
 					v.write_chunk ("</a>");
 				}
 				break;
-			case "span":
-			case "markup":
+			case "li":
+				v.write_chunk ("\n• ");
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
+				break;
+			case "br":
+				v.write_chunk ("\n");
+				break;
+			case "text":
+				v.write_chunk (GLib.Markup.escape_text (root->content));
 				break;
 			default:
 				warning ("Unknown HTML tag: "+root->name);
