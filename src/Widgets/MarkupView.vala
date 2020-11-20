@@ -1,6 +1,9 @@
 using Gtk;
+using Gee;
 
 public class Tootle.Widgets.MarkupView : Box {
+
+	public delegate void NodeHandlerFn (MarkupView view, Xml.Node* node);
 
 	string? current_chunk = null;
 
@@ -34,23 +37,16 @@ public class Tootle.Widgets.MarkupView : Box {
 			return;
 		}
 
-		handle_node (root);
+		default_handler (this, root);
 
 		delete doc;
 	}
 
-	public delegate void NodeCB (Xml.Node* node);
-	void traverse (Xml.Node* root, owned NodeCB cb) {
+	public delegate void NodeFn (Xml.Node* node);
+
+	static void traverse (Xml.Node* root, owned NodeFn cb) {
 		Xml.Node* iter;
 		for (iter = root->children; iter != null; iter = iter->next) {
-			//warning (iter->name);
-
-			// if (iter->content != null)
-			// 	warning (iter->content);
-
-			//handle_node (iter);
-			//traverse_node (iter);
-
 			cb (iter);
 		}
 	}
@@ -72,33 +68,36 @@ public class Tootle.Widgets.MarkupView : Box {
 			current_chunk += chunk;
 	}
 
-	void handle_node (Xml.Node* root) {
-		switch (root->name) {
+
+
+	public static void default_handler (MarkupView v, Xml.Node* root) {
+		var name = root->name;
+		switch (name) {
 			case "html":
 				message ("===START DOC===");
 				traverse (root, (node) => {
-					handle_node (node);
+					default_handler (v, node);
 				});
 				message ("=== END DOC ===");
 				break;
 			case "body":
-				message (content);
+				message (root->content);
 				traverse (root, (node) => {
-					handle_node (node);
+					default_handler (v, node);
 				});
-				commit_chunk ();
+				v.commit_chunk ();
 				break;
 			case "br":
-				write_chunk ("\n");
+				v.write_chunk ("\n");
 				break;
 			case "text":
 				message (root->content);
-				write_chunk (root->content);
+				v.write_chunk (root->content);
 				break;
 			case "p":
-				commit_chunk ();
+				v.commit_chunk ();
 				traverse (root, (node) => {
-					handle_node (node);
+					default_handler (v, node);
 				});
 				break;
 			default:
