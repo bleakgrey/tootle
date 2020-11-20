@@ -76,11 +76,9 @@ public class Tootle.Widgets.MarkupView : Box {
 	public static void default_handler (MarkupView v, Xml.Node* root) {
 		switch (root->name) {
 			case "html":
-				// message ("===START DOC===");
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
-				// message ("=== END DOC ===");
 				break;
 			case "body":
 				traverse (root, (node) => {
@@ -92,11 +90,12 @@ public class Tootle.Widgets.MarkupView : Box {
 				v.write_chunk ("\n");
 				break;
 			case "text":
-				message (root->content);
-				v.write_chunk (root->content);
+				v.write_chunk (GLib.Markup.escape_text (root->content));
 				break;
 			case "p":
-				v.commit_chunk ();
+				if (v.current_chunk != "" && v.current_chunk != null)
+					v.write_chunk ("\n\n");
+
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
