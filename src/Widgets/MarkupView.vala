@@ -3,6 +3,7 @@ using Gee;
 
 public class Tootle.Widgets.MarkupView : Box {
 
+	public delegate void NodeFn (Xml.Node* node);
 	public delegate void NodeHandlerFn (MarkupView view, Xml.Node* node);
 
 	string? current_chunk = null;
@@ -15,6 +16,7 @@ public class Tootle.Widgets.MarkupView : Box {
 		set {
 			_content = value;
 			update_content (_content);
+			visible = get_children ().length () > 0;
 		}
 	}
 
@@ -37,12 +39,11 @@ public class Tootle.Widgets.MarkupView : Box {
 			return;
 		}
 
+		message (content);
 		default_handler (this, root);
 
 		delete doc;
 	}
-
-	public delegate void NodeFn (Xml.Node* node);
 
 	static void traverse (Xml.Node* root, owned NodeFn cb) {
 		Xml.Node* iter;
@@ -61,7 +62,9 @@ public class Tootle.Widgets.MarkupView : Box {
 		current_chunk = null;
 	}
 
-	void write_chunk (string chunk) {
+	void write_chunk (string? chunk) {
+		if (chunk == null) return;
+
 		if (current_chunk == null)
 			current_chunk = chunk;
 		else
@@ -71,17 +74,15 @@ public class Tootle.Widgets.MarkupView : Box {
 
 
 	public static void default_handler (MarkupView v, Xml.Node* root) {
-		var name = root->name;
-		switch (name) {
+		switch (root->name) {
 			case "html":
-				message ("===START DOC===");
+				// message ("===START DOC===");
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
-				message ("=== END DOC ===");
+				// message ("=== END DOC ===");
 				break;
 			case "body":
-				message (root->content);
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
@@ -96,6 +97,21 @@ public class Tootle.Widgets.MarkupView : Box {
 				break;
 			case "p":
 				v.commit_chunk ();
+				traverse (root, (node) => {
+					default_handler (v, node);
+				});
+				break;
+			case "a":
+				var href = root->get_prop ("href");
+				if (href != null) {
+					v.write_chunk ("<a href='"+href+"'>");
+					traverse (root, (node) => {
+						default_handler (v, node);
+					});
+					v.write_chunk ("</a>");
+				}
+				break;
+			case "span":
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});
