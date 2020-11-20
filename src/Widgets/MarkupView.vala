@@ -16,7 +16,6 @@ public class Tootle.Widgets.MarkupView : Box {
 		set {
 			_content = value;
 			update_content (_content);
-			visible = get_children ().length () > 0;
 		}
 	}
 
@@ -25,24 +24,28 @@ public class Tootle.Widgets.MarkupView : Box {
 	}
 
 	void update_content (string content) {
+		get_children ().foreach (w => {
+			w.destroy ();
+		});
+
 		var doc = Html.Doc.read_doc (content, "", "utf8");
 		if (doc == null) {
 			//warning ("No document found!");
-			delete doc;
 			return;
 		}
 
 		var root = doc->get_root_element ();
 		if (root == null) {
 			//warning ("No root node found!");
-			delete doc;
 			return;
 		}
 
-		message (content);
+		//message (content);
 		default_handler (this, root);
 
-		delete doc;
+		//delete doc;
+
+		visible = get_children ().length () > 0;
 	}
 
 	static void traverse (Xml.Node* root, owned NodeFn cb) {
@@ -55,7 +58,8 @@ public class Tootle.Widgets.MarkupView : Box {
 	void commit_chunk () {
 		if (current_chunk != null && current_chunk != "") {
 			var label = new RichLabel (current_chunk) {
-				visible = true
+				visible = true,
+				markup = MarkupPolicy.TRUST
 			};
 			pack_start (label);
 		}
@@ -93,6 +97,7 @@ public class Tootle.Widgets.MarkupView : Box {
 				v.write_chunk (GLib.Markup.escape_text (root->content));
 				break;
 			case "p":
+				// Don't add spacing if this is the first paragraph
 				if (v.current_chunk != "" && v.current_chunk != null)
 					v.write_chunk ("\n\n");
 
@@ -111,6 +116,7 @@ public class Tootle.Widgets.MarkupView : Box {
 				}
 				break;
 			case "span":
+			case "markup":
 				traverse (root, (node) => {
 					default_handler (v, node);
 				});

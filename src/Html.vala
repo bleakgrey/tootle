@@ -4,7 +4,9 @@ public class Tootle.HtmlUtils {
 
 	public static string remove_tags (string content) {
 		try {
+			//TODO: remove this when simplify() uses the HTML parsing class
 			var fixed_paragraphs = simplify (content);
+
 			var all_tags = new Regex ("<(.|\n)*?>", RegexCompileFlags.CASELESS);
 			return Widgets.RichLabel.restore_entities (all_tags.replace (fixed_paragraphs, -1, 0, ""));
 		}
@@ -14,6 +16,8 @@ public class Tootle.HtmlUtils {
 		}
 	}
 
+	//TODO: Perhaps this should use the HTML parser class
+	//      since we depend on it anyway
 	public static string simplify (string str) {
 		try {
 			var divided = str
@@ -32,8 +36,8 @@ public class Tootle.HtmlUtils {
 			return simplified;
 		}
 		catch (Error e) {
-			warning (e.message);
-			return FALLBACK_TEXT;
+			warning (@"Can't simplify string \"$str\":\n$(e.message)");
+			return remove_tags (str);
 		}
 	}
 
