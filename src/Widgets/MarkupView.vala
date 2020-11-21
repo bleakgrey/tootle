@@ -1,5 +1,4 @@
 using Gtk;
-using Gee;
 
 public class Tootle.Widgets.MarkupView : Box {
 
@@ -30,28 +29,20 @@ public class Tootle.Widgets.MarkupView : Box {
 		});
 
 		var doc = Html.Doc.read_doc (content, "", "utf8");
-		if (doc == null) {
-			//warning ("No document found!");
-			return;
+		if (doc != null) {
+			var root = doc->get_root_element ();
+			if (root != null) {
+				default_handler (this, root);
+			}
 		}
 
-		var root = doc->get_root_element ();
-		if (root == null) {
-			//warning ("No root node found!");
-			return;
-		}
-
-		//message (content);
-		default_handler (this, root);
-
-		//delete doc;
+		delete doc;
 
 		visible = get_children ().length () > 0;
 	}
 
 	static void traverse (Xml.Node* root, owned NodeFn cb) {
-		Xml.Node* iter;
-		for (iter = root->children; iter != null; iter = iter->next) {
+		for (var iter = root->children; iter != null; iter = iter->next) {
 			cb (iter);
 		}
 	}
@@ -75,8 +66,6 @@ public class Tootle.Widgets.MarkupView : Box {
 		else
 			current_chunk += chunk;
 	}
-
-
 
 	public static void default_handler (MarkupView v, Xml.Node* root) {
 		switch (root->name) {
