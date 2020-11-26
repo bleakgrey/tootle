@@ -295,6 +295,10 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
+#: src/Widgets/Status.vala:187
+msgid "Vote"
+msgstr ""
+
 #: data/ui/widgets/list_item.ui:26 src/Dialogs/ListEditor.vala:87
 msgid "Untitled"
 msgstr ""

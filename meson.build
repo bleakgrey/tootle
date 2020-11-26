@@ -73,6 +73,8 @@ executable(
     'src/API/AccountField.vala',
     'src/API/Relationship.vala',
     'src/API/Mention.vala',
+    'src/API/Poll.vala',
+    'src/API/PollOption.vala',
     'src/API/Tag.vala',
     'src/API/Status.vala',
     'src/API/Visibility.vala',

@@ -1,53 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
+<!-- Generated with glade 3.38.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">user-bookmarks-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">user-bookmarks-symbolic</property>
   </object>
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">non-starred-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">non-starred-symbolic</property>
   </object>
   <object class="GtkImage" id="reblog_icon">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">media-playlist-repeat-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">media-playlist-repeat-symbolic</property>
   </object>
   <object class="GtkImage" id="reply_button_icon">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">mail-reply-sender-symbolic</property>
+    <property name="can-focus">False</property>
+    <property name="icon-name">mail-reply-sender-symbolic</property>
   </object>
   <template class="TootleWidgetsStatus" parent="GtkListBoxRow">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
+    <property name="can-focus">False</property>
     <child>
+      <!-- n-columns=3 n-rows=3 -->
       <object class="GtkGrid" id="grid">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_left">8</property>
-        <property name="margin_right">8</property>
-        <property name="margin_top">8</property>
-        <property name="margin_bottom">8</property>
+        <property name="can-focus">False</property>
+        <property name="margin-left">8</property>
+        <property name="margin-right">8</property>
+        <property name="margin-top">8</property>
+        <property name="margin-bottom">8</property>
         <property name="hexpand">True</property>
         <property name="orientation">vertical</property>
-        <property name="column_spacing">8</property>
+        <property name="column-spacing">8</property>
         <child>
           <object class="GtkImage" id="header_icon">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="halign">end</property>
-            <property name="margin_bottom">8</property>
-            <property name="icon_name">oops</property>
+            <property name="margin-bottom">8</property>
+            <property name="icon-name">oops</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
@@ -62,16 +63,17 @@
             </style>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
           </packing>
         </child>
         <child>
+          <!-- n-columns=4 n-rows=3 -->
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="vexpand">True</property>
-            <property name="row_homogeneous">True</property>
+            <property name="row-homogeneous">True</property>
             <child>
               <object class="TootleWidgetsRichLabel" id="name_label">
                 <property name="visible">True</property>
@@ -85,8 +87,8 @@
                 </style>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
                 <property name="width">3</property>
               </packing>
             </child>
@@ -103,24 +105,24 @@
                 </style>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
                 <property name="width">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="indicators">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="margin_start">8</property>
+                <property name="margin-start">8</property>
                 <property name="spacing">8</property>
                 <child>
                   <object class="GtkImage" id="pin_indicator">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="opacity">0.5</property>
-                    <property name="icon_name">view-pin-symbolic</property>
+                    <property name="icon-name">view-pin-symbolic</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -131,9 +133,9 @@
                 </child>
                 <child>
                   <object class="GtkImage" id="indicator">
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="opacity">0.5</property>
-                    <property name="icon_name">unknown</property>
+                    <property name="icon-name">unknown</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -160,51 +162,63 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
                 <property name="width">2</property>
               </packing>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="content_column">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">8</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">8</property>
             <property name="orientation">vertical</property>
             <property name="spacing">8</property>
             <child>
               <object class="GtkStack" id="spoiler_stack">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="vhomogeneous">False</property>
-                <property name="transition_type">crossfade</property>
-                <property name="interpolate_size">True</property>
+                <property name="transition-type">crossfade</property>
+                <property name="interpolate-size">True</property>
                 <child>
                   <object class="GtkButton" id="spoiler_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <signal name="clicked" handler="toggle_spoiler" swapped="no"/>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="margin_left">12</property>
-                        <property name="margin_right">12</property>
-                        <property name="margin_top">12</property>
-                        <property name="margin_bottom">12</property>
+                        <property name="can-focus">False</property>
+                        <property name="margin-left">12</property>
+                        <property name="margin-right">12</property>
+                        <property name="margin-top">12</property>
+                        <property name="margin-bottom">12</property>
                         <property name="spacing">6</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">dialog-warning-symbolic</property>
+                            <property name="can-focus">False</property>
+                            <property name="icon-name">dialog-warning-symbolic</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -237,7 +251,7 @@
                 <child>
                   <object class="GtkBox" id="content_box">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can-focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
                     <child>
@@ -280,17 +294,30 @@
               </packing>
             </child>
             <child>
+              <object class="GtkBox" id="poll">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">8</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkBox" id="actions">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="spacing">8</property>
                 <child>
                   <object class="GtkButton" id="reply_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
                     <property name="image">reply_button_icon</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                     <style>
                       <class name="flat"/>
                     </style>
@@ -304,10 +331,10 @@
                 <child>
                   <object class="GtkToggleButton" id="reblog_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">reblog_icon</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                     <style>
                       <class name="flat"/>
                     </style>
@@ -321,10 +348,10 @@
                 <child>
                   <object class="GtkToggleButton" id="favorite_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image2</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                     <style>
                       <class name="flat"/>
                     </style>
@@ -338,11 +365,11 @@
                 <child>
                   <object class="GtkToggleButton" id="bookmark_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <property name="image">image1</property>
                     <property name="relief">none</property>
-                    <property name="always_show_image">True</property>
+                    <property name="always-show-image">True</property>
                     <style>
                       <class name="flat"/>
                     </style>
@@ -356,13 +383,13 @@
                 <child>
                   <object class="GtkButton" id="menu_button">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
                     <child>
                       <object class="GtkImage">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="icon_name">view-more-symbolic</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">view-more-symbolic</property>
                       </object>
                     </child>
                     <style>
@@ -379,20 +406,20 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkButton" id="avatar_button">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
             <signal name="clicked" handler="on_avatar_clicked" swapped="no"/>
@@ -411,15 +438,15 @@
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkImage" id="thread_line">
-            <property name="width_request">4</property>
-            <property name="height_request">32</property>
-            <property name="can_focus">False</property>
+            <property name="width-request">4</property>
+            <property name="height-request">32</property>
+            <property name="can-focus">False</property>
             <property name="halign">center</property>
             <property name="icon_size">0</property>
             <style>
@@ -427,10 +454,19 @@
             </style>
           </object>
           <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
             <property name="height">3</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>

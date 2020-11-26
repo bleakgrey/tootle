@@ -104,11 +104,19 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 			}
 			return des_list (out val, node, contains);
 		}
+		else if (type.is_a (typeof (API.Poll)))
+			return des_poll_type (out val, node);
 		else if (type.is_a (typeof (API.NotificationType)))
 			return des_notification_type (out val, node);
 
 		return success;
 	}
+	static bool des_poll_type (out Value val, Json.Node node) {
+		var str = node.get_string ();
+		val = API.Poll.from_json (node);
+		return true;
+	}
+
 
 	static bool des_notification_type (out Value val, Json.Node node) {
 		var str = node.get_string ();
