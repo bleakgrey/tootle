@@ -93,21 +93,12 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 			}
 			return des_list (out val, node, contains);
 		}
-		else if (type.is_a (typeof (API.Poll)))
-			return des_poll_type (out val, node);
-		else if (type.is_a (typeof (API.NotificationType)))
-			return des_notification_type (out val, node);
 
 		return success;
 	}
-	static bool des_poll_type (out Value val, Json.Node node) {
-		var str = node.get_string ();
-		val = API.Poll.from_json (node);
-		return true;
-	}
 
-
-	static bool des_list (out Value val, Json.Node node, Type type) {
+	public static bool des_list (out Value val, Json.Node node, Type type) {
+	    var tipo=node.type_name();
 		if (!node.is_null ()) {
 			var arr = new Gee.ArrayList<Entity> ();
 			node.get_array ().foreach_element ((array, i, elem) => {
@@ -147,3 +138,4 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 	}
 
 }
+

@@ -294,11 +294,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="poll">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">8</property>
+              <object class="TootleWidgetsVoteBox" id="poll">
               </object>
               <packing>
                 <property name="expand">False</property>

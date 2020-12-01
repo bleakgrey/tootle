@@ -1,7 +1,5 @@
 using Gtk;
 using Gdk;
-using Gee;
-using GLib;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/status.ui")]
 public class Tootle.Widgets.Status : ListBoxRow {
@@ -49,7 +47,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected Widgets.RichLabel date_label;
 	[GtkChild] protected Image pin_indicator;
 	[GtkChild] protected Image indicator;
-	[GtkChild] protected Box poll;
 
 	[GtkChild] protected Box content_column;
 	[GtkChild] protected Stack spoiler_stack;
@@ -68,7 +65,8 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected ToggleButton bookmark_button;
 	[GtkChild] protected Button menu_button;
 
-	protected Button vote_button;
+	[GtkChild] protected Widgets.VoteBox poll;
+
 
 	protected string spoiler_text {
 		owned get {
@@ -103,116 +101,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		owned get {
 			return status.formal.account.avatar;
 		}
-	}
-	public void get_poll(){
-        if (status.poll!=null){
-            var row_number=0;
-            Gtk.RadioButton[] radios={};
-            Gtk.CheckButton[] checks={};
-            ArrayList<string> selectedIndex=new ArrayList<string>();
-            if (status.poll.own_votes.length==0 && !status.poll.multiple){
-                selectedIndex.add(status.poll.options[0].title);
-            }
-            foreach (API.PollOption p in status.poll.options){
-                //if it is own poll
-                if(status.account.id==accounts.active.username){
-                    // If multiple, Checkbox else radioButton
-                    var option = new Widgets.RichLabel (p.title);
-                    var counts = new Widgets.RichLabel ("Votes: "+p.votes_count.to_string()+" %");
-                }
-                else{
-                     // If multiple, Checkbox else radioButton
-                    if (status.poll.multiple){
-                        var button_vote = new Gtk.CheckButton ();
-                        button_vote.set_label(p.title);
-                        button_vote.toggled.connect((radio)=>{
-                            if (selectedIndex.contains(radio.get_label())){
-                                selectedIndex.remove(radio.get_label());
-                            }
-                            else{
-                                selectedIndex.add(radio.get_label());
-                            }
-                        });
-                        foreach (int64 own_vote in status.poll.own_votes){
-                            if (own_vote==row_number){
-                                 button_vote.set_active(true);
-                                 selectedIndex.add(p.title);
-                            }
-                        }
-                        if(status.poll.expired || status.poll.voted){
-                            button_vote.set_sensitive(false);
-                        }
-                        poll.add(button_vote);
-                        checks+=button_vote;
-                    }else{
-                        Gtk.RadioButton button_vote = null;
-                        if (radios.length==0){
-                            button_vote=new Gtk.RadioButton (null);
-                        }
-                        else{
-                            button_vote=new Gtk.RadioButton (radios[0].get_group());
-                        }
-                        button_vote.set_label(p.title);
-                        button_vote.toggled.connect((radiobutton)=>{
-                            if (selectedIndex.contains(radiobutton.get_label()))
-                            {
-                                selectedIndex.remove(radiobutton.get_label());
-                            }
-                            else{
-                                selectedIndex.add(radiobutton.get_label());
-                            }
-                        });
-
-                        foreach (int64 own_vote in status.poll.own_votes){
-                            if (own_vote==row_number){
-                                 button_vote.set_active(true);
-                                 selectedIndex=new ArrayList<string>();
-                                 selectedIndex.add(p.title);
-                            }
-                        }
-                        if(status.poll.expired || status.poll.voted){
-                            button_vote.set_sensitive(false);
-                        }
-                        poll.add(button_vote);
-                        radios+=button_vote;
-                    }
-                }
-                row_number++;
-            }
-            if(row_number>0 && !status.poll.expired && !status.poll.voted &&
-                status.account.id!=accounts.active.id &&
-                status.poll.own_votes.length==0){
-                Gtk.Box buttonsPoll=new Box (Orientation.HORIZONTAL, 6);
-                vote_button = new Gtk.Button();
-                vote_button.set_label (_("Vote"));
-	            vote_button.clicked.connect ((button) =>{
-                    Request voting=API.Poll.vote(accounts.active,status.poll.options,selectedIndex,status.poll.id);
-                    voting.then ((sess, mess) => {
-				        var node = network.parse_node (mess);
-                        status.poll=API.Poll.from_json(node);
-				        message ("OK: Voting correctly");
-				        GLib.List<weak Gtk.Widget> children=this.poll.get_children();
-				        foreach (Widget child in children){
-				            this.poll.remove(child);
-				        }
-				        get_poll();
-			        })
-			        .on_error ((code, reason) => {
-				        warning ("Voting invalid!");
-				        app.error (
-					        _("Network Error"),
-					        _("The instance has invalidated this session. Please sign in again.\n\n%s").printf (reason)
-				        );
-			        })
-			        .exec ();
-
-	            });
-	            buttonsPoll.add(vote_button);
-	            buttonsPoll.show_all();
-                poll.add(buttonsPoll);
-            }
-        }
-        poll.show_all();
 	}
 
 	public signal void open ();
@@ -262,10 +150,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
 
-		// is it a poll?
-		get_poll();
-
-
 		status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 			target.set_boolean (!src.get_boolean ());
 			return true;
@@ -295,6 +179,10 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		}
 
 		menu_button.clicked.connect (open_menu);
+
+		status.bind_property ("poll", poll, "poll", BindingFlags.SYNC_CREATE);
+		status.bind_property ("account", poll, "account", BindingFlags.SYNC_CREATE);
+
 	}
 
 	public Status (API.Status status, API.NotificationType? kind = null) {
@@ -415,3 +303,4 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 }
+

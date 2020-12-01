@@ -98,6 +98,7 @@ executable(
     'src/Widgets/Attachment/Slot.vala',
     'src/Widgets/Attachment/Picture.vala',
     'src/Widgets/AdaptiveButton.vala',
+    'src/Widgets/VoteBox.vala',
     'src/Dialogs/ISavedWindow.vala',
     'src/Dialogs/NewAccount.vala',
     'src/Dialogs/MainWindow.vala',

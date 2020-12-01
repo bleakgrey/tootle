@@ -25,6 +25,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
     public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
     public API.Poll? poll { get; set; default = null; }
 
+
     public string? _url { get; set; }
     public string url {
         owned get { return this.get_modified_url (); }
@@ -127,3 +128,4 @@ public class Tootle.API.Status : Entity, Widgetizable {
     }
 
 }
+

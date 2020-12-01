@@ -1,50 +1,60 @@
 using Gee;
-public class Tootle.API.Poll {
+using Json;
+public class Tootle.API.Poll :   GLib.Object, Json.Serializable{
     public string id { get; set; }
     public string expires_at{ get; set; }
     public bool expired { get; set; }
     public bool multiple { get; set; }
     public int64 votes_count { get; set; }
     public int64 voters_count { get; set; }
-    public bool voted { get; set; }
-    public int64[] own_votes { get; set; }
-    public PollOption[]? options{ get; set; default = null; }
+    public bool voted { get; set; default = true;}
+    public ArrayList<int> own_votes { get; set; }
+    public ArrayList<PollOption>? options{ get; set; default = null; }
 
     public Poll (string _id) {
         id = _id;
     }
-    public static Poll from_json (Json.Node node){
-        Json.Object obj=node.get_object();
-        var id = obj.get_string_member("id");
-        var poll = new Poll (id);
 
-        poll.expires_at = obj.get_string_member ("expires_at");
-        poll.expired = obj.get_boolean_member ("expired");
-        poll.multiple = obj.get_boolean_member ("multiple");
-        poll.votes_count = obj.get_int_member ("votes_count");
-        poll.voters_count = obj.get_int_member ("voters_count");
-        poll.voted = obj.get_boolean_member ("voted");
+	public override bool deserialize_property (string prop, out Value val, ParamSpec spec, Json.Node node) {
+		var success = default_deserialize_property (prop, out val, spec, node);
 
-        var votes = obj.get_array_member ("own_votes");
-        int64[] array_votes={};
-        votes.foreach_element((array, i, node) => {
-            array_votes+=node.get_int();
-        });
-        poll.own_votes=array_votes;
+		var type = spec.value_type;
+		if (prop=="options"){
+		    return Entity.des_list (out val, node, typeof (API.PollOption));
+		}
+		if (prop=="own-votes"){
+		    return Poll.des_list_int (out val, node);
+		}
 
-        PollOption[]? _options = {};
-        obj.get_array_member ("options").foreach_element ((array, i, node) => {
-            var object = node.get_object ();
-            if (object != null)
-                _options += API.PollOption.parse (object);
-        });
-        if (_options.length > 0)
-            poll.options = _options;
-        return poll;
-    }
-    /**
-    */
-    public static Request vote (InstanceAccount acc,PollOption[] options,ArrayList<string> selection, string id) {
+        if (val.type () == Type.INVALID) { // Fix for glib-json < 1.5.1
+			val.init (type);
+			spec.set_value_default (ref val);
+			type = spec.value_type;
+		}
+
+		return success;
+	}
+	public static bool des_list_int (out Value val, Json.Node node) {
+		if (!node.is_null ()) {
+			var arr = new Gee.ArrayList<int> ();
+			node.get_array ().foreach_element ((array, i, elem) => {
+				arr.add ((int)elem.get_int());
+			});
+			val = arr;
+		}
+		return true;
+	}
+	public static Poll from_json (Type type, Json.Node? node) throws Oopsie {
+        if (node == null)
+            throw new Oopsie.PARSING (@"Received Json.Node for $(type.name ()) is null!");
+
+        var obj = node.get_object ();
+        if (obj == null)
+            throw new Oopsie.PARSING (@"Received Json.Node for $(type.name ()) is not a Json.Object!");
+
+        return Json.gobject_deserialize (type, node) as Poll;
+	}
+    public static Request vote (InstanceAccount acc,ArrayList<PollOption> options,ArrayList<string> selection, string id) {
  		message (@"Voting poll $(id)...");
  		  //Creating json to send
         var builder = new Json.Builder ();
@@ -70,6 +80,6 @@ public class Tootle.API.Poll {
 			.with_account (acc);
 		voting.set_request("application/json",Soup.MemoryUse.COPY,json.data);
 		return voting;
-
     }
+
 }
