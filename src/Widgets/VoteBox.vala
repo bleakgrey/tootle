@@ -63,7 +63,7 @@ public class Tootle.Widgets.VoteBox: Box {
             //if it is own poll
             if(account.id==accounts.active.id){
                 // If multiple, Checkbox else radioButton
-                var option = new Widgets.RichLabel (p.title+" "+"Votes: "+(p.votes_count*100).to_string()+" %");
+                var option = new Widgets.RichLabel (p.title+" "+_("Votes:  %s percent".printf ((p.votes_count*100).to_string())));
                 pollBox.add(option);
            }
             else{
