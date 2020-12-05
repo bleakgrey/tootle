@@ -97,7 +97,8 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 		return success;
 	}
 
-	static bool des_list (out Value val, Json.Node node, Type type) {
+	public static bool des_list (out Value val, Json.Node node, Type type) {
+	    var tipo=node.type_name();
 		if (!node.is_null ()) {
 			var arr = new Gee.ArrayList<Entity> ();
 			node.get_array ().foreach_element ((array, i, elem) => {
@@ -137,3 +138,4 @@ public class Tootle.Entity : GLib.Object, Widgetizable, Json.Serializable {
 	}
 
 }
+

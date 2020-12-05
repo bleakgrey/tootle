@@ -65,6 +65,9 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected ToggleButton bookmark_button;
 	[GtkChild] protected Button menu_button;
 
+	[GtkChild] protected Widgets.VoteBox poll;
+
+
 	protected string spoiler_text {
 		owned get {
 			var text = status.formal.spoiler_text;
@@ -176,6 +179,10 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		}
 
 		menu_button.clicked.connect (open_menu);
+
+		status.bind_property ("poll", poll, "poll", BindingFlags.SYNC_CREATE);
+		status.bind_property ("account", poll, "account", BindingFlags.SYNC_CREATE);
+
 	}
 
 	public Status (API.Status status, API.NotificationType? kind = null) {
@@ -296,3 +303,4 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 }
+

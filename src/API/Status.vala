@@ -23,6 +23,8 @@ public class Tootle.API.Status : Entity, Widgetizable {
     public API.Status? reblog { get; set; default = null; }
     public ArrayList<API.Mention>? mentions { get; set; default = null; }
     public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
+    public API.Poll? poll { get; set; default = null; }
+
 
     public string? _url { get; set; }
     public string url {
@@ -126,3 +128,4 @@ public class Tootle.API.Status : Entity, Widgetizable {
     }
 
 }
+
