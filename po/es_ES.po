@@ -1,22 +1,22 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Spanish translations for com.github.bleakgrey.tootle package.
+# Copyright (C) 2021 THE com.github.bleakgrey.tootle'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the com.github.bleakgrey.tootle package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Óscar Fernández Díaz <oscfdezdz@tuta.io>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-30 16:21+0300\n"
-"PO-Revision-Date: 2020-12-12 11:25+0100\n"
-"Language-Team: \n"
+"POT-Creation-Date: 2021-01-25 16:06+0100\n"
+"PO-Revision-Date: 2021-01-25 16:19+0100\n"
+"Last-Translator: Óscar Fernández Díaz <oscfdezdz@tuta.io>\n"
+"Language-Team: Spanish; Castilian <oscfdezdz@tuta.io>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
-"Last-Translator: Óscar Fernández Díaz <oscfdezdz@tuta.io>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: es_ES\n"
+"X-Generator: Gtranslator 3.38.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:7
@@ -27,10 +27,6 @@ msgstr "Tootle"
 #: data/com.github.bleakgrey.tootle.desktop.in:6
 msgid "Mastodon Client"
 msgstr "Cliente de Mastodon"
-
-#: data/com.github.bleakgrey.tootle.desktop.in:8
-msgid "com.github.bleakgrey.tootle"
-msgstr "com.github.bleakgrey.tootle"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:11
 msgid "toot;mastodon;social;network;post;"
@@ -72,15 +68,19 @@ msgstr ""
 msgid "bleak_grey"
 msgstr "bleak_grey"
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:71
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:82
 msgid "New app icon (Kudos to Tobias Bernard!)"
 msgstr "Nuevo icono de la aplicación (¡Gracias a Tobias Bernard!)"
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:72
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:83
 msgid "New interface design"
 msgstr "Nuevo diseño de la interfaz"
 
-#: data/com.github.bleakgrey.tootle.appdata.xml.in:73
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:84
+msgid "Added Lists and Conversations"
+msgstr "Añadidas Listas y Conversaciones"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:85
 msgid "Fixed bugs"
 msgstr "Corregidos los errores"
 
@@ -94,7 +94,7 @@ msgstr "Cancelar"
 
 #: data/ui/dialogs/compose.ui:119
 msgid "Write your warning here"
-msgstr "Escriba su advertencia aquí"
+msgstr "Escribe tu advertencia aquí"
 
 #: data/ui/dialogs/compose.ui:185
 msgid "Visibility"
@@ -130,7 +130,7 @@ msgstr "Guardar"
 
 #: data/ui/dialogs/list_editor.ui:200
 msgid "Search among people you follow"
-msgstr "Busque entre la gente a la que sigue"
+msgstr "Busca entre la gente a la que sigues"
 
 #: data/ui/dialogs/list_editor.ui:256
 msgid "Nobody here"
@@ -227,7 +227,7 @@ msgstr "Siguiente"
 
 #: data/ui/dialogs/new_account.ui:129
 msgid "What is your instance?"
-msgstr "¿Cuál es su instancia?"
+msgstr "¿Cuál es tu instancia?"
 
 #: data/ui/dialogs/new_account.ui:191
 msgid "<a href=\"https://joinmastodon.org/\">Don't have one yet?</a>"
@@ -235,7 +235,7 @@ msgstr "<a href=\"https://joinmastodon.org/\">¿No tiene una todavía?</a>"
 
 #: data/ui/dialogs/new_account.ui:242
 msgid "Enter authorization code"
-msgstr "Introduzca el código de autorización"
+msgstr "Introduce el código de autorización"
 
 #: data/ui/dialogs/new_account.ui:276
 msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
@@ -361,11 +361,11 @@ msgstr "Esta acción no puede ser revertida."
 
 #: src/Dialogs/Compose.vala:125 src/Views/Main.vala:25
 msgid "Compose"
-msgstr "Escribir"
+msgstr "Redactar"
 
 #: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:253
 msgid "Redraft"
-msgstr "Volver al borrador"
+msgstr "Redactar de nuevo"
 
 #: src/Dialogs/Compose.vala:154
 msgid "Reply"
@@ -389,7 +389,7 @@ msgstr "¿Descartar los cambios?"
 
 #: src/Dialogs/ListEditor.vala:202
 msgid "You need to save the list if you want to keep them."
-msgstr "Tiene que guardar la lista si quiere conservarlos."
+msgstr "Tienes que guardar la lista si quieres conservarlos."
 
 #: src/Dialogs/NewAccount.vala:84
 msgid "Close"
@@ -401,11 +401,11 @@ msgstr "Añadir otra"
 
 #: src/Dialogs/NewAccount.vala:127
 msgid "Please enter a valid instance URL"
-msgstr "Por favor, introduzca una URL de una instancia válida"
+msgstr "Por favor, introduce una URL de una instancia válida"
 
 #: src/Dialogs/NewAccount.vala:160
 msgid "Please enter a valid authorization code"
-msgstr "Por favor, introduzca un código de autorización válido"
+msgstr "Por favor, introduce un código de autorización válido"
 
 #: src/Dialogs/NewAccount.vala:176
 msgid "Instance failed to authorize the access token"
@@ -439,7 +439,7 @@ msgstr ""
 msgid "Nothing to see here"
 msgstr "No hay nada que ver aquí"
 
-#: src/Views/Base.vala:58
+#: src/Views/Base.vala:57
 msgid "Reload"
 msgstr "Recargar"
 
@@ -541,11 +541,11 @@ msgstr "Hashtags"
 
 #: src/Views/Search.vala:61
 msgid "Enter query"
-msgstr "Introduzca la consulta"
+msgstr "Introduce la consulta"
 
-#: src/Widgets/Attachment/Slot.vala:46
-msgid "File saved to Downloads"
-msgstr "Archivo guardado en Descargas"
+#: src/Widgets/Attachment/Slot.vala:51
+msgid "Error"
+msgstr "Error"
 
 #: src/Widgets/AccountsButton.vala:40
 #, c-format
@@ -566,7 +566,7 @@ msgstr "No hay una cuenta activa"
 
 #: src/Widgets/Status.vala:72
 msgid "Click to show sensitive content"
-msgstr "Haga clic para mostrar el contenido sensible"
+msgstr "Haz clic para mostrar el contenido sensible"
 
 #: src/Widgets/Status.vala:163
 msgid "This post can't be boosted"
