@@ -18,6 +18,20 @@ public class Tootle.Widgets.MarkupView : Box {
 		}
 	}
 
+	private bool _selectable = false;
+	public bool selectable {
+		get { return _selectable; }
+		set {
+			_selectable = value;
+			get_children ().foreach (w => {
+				var label = w as Label;
+				if (label != null) {
+					label.selectable = _selectable;
+				}
+			});
+		}
+	}
+
 	construct {
 		orientation = Orientation.VERTICAL;
 		spacing = 12;
@@ -59,7 +73,8 @@ public class Tootle.Widgets.MarkupView : Box {
 		if (current_chunk != null && current_chunk != "") {
 			var label = new RichLabel (current_chunk) {
 				visible = true,
-				markup = MarkupPolicy.TRUST
+				markup = MarkupPolicy.TRUST,
+				selectable = _selectable
 			};
 			pack_start (label);
 		}
