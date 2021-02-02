@@ -263,14 +263,14 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	public void expand_root () {
 		activatable = false;
-        content.selectable = true;
-        content.get_style_context ().add_class ("ttl-large-body");
+		content.selectable = true;
+		content.get_style_context ().add_class ("ttl-large-body");
 
-        var parent = content_column.get_parent () as Container;
-        var left_attach = parent.find_child_property ("left-attach");
-        var width = parent.find_child_property ("width");
-        parent.set_child_property (content_column, 1, 0, left_attach);
-        parent.set_child_property (content_column, 3, 2, width);
+		var parent = content_column.get_parent () as Container;
+		var left_attach = parent.find_child_property ("left-attach");
+		var width = parent.find_child_property ("width");
+		parent.set_child_property (content_column, 1, 0, left_attach);
+		parent.set_child_property (content_column, 3, 2, width);
 	}
 
 	public void install_thread_line () {
