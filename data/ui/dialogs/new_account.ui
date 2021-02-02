@@ -255,7 +255,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="icon_name">emblem-default-symbolic</property>
-                <property name="title" translatable="yes">Hello, @user@instance.com!</property>
+                <property name="title">Hello, @user@instance.com!</property>
               </object>
               <packing>
                 <property name="expand">True</property>
