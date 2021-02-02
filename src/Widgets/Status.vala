@@ -42,9 +42,9 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	[GtkChild] public Widgets.Avatar avatar;
 	[GtkChild] protected Widgets.RichLabel name_label;
-	[GtkChild] protected Widgets.RichLabel handle_label;
+	[GtkChild] protected Label handle_label;
 	[GtkChild] protected Box indicators;
-	[GtkChild] protected Widgets.RichLabel date_label;
+	[GtkChild] protected Label date_label;
 	[GtkChild] protected Image pin_indicator;
 	[GtkChild] protected Image indicator;
 
@@ -84,7 +84,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	public string title_text {
 		owned get {
-			return HtmlUtils.simplify (status.formal.account.display_name);
+			return status.formal.account.display_name;
 		}
 	}
 
@@ -142,7 +142,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		bind_property ("spoiler-text", spoiler_label, "text", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
 		bind_property ("title_text", name_label, "text", BindingFlags.SYNC_CREATE);
-		bind_property ("subtitle_text", handle_label, "text", BindingFlags.SYNC_CREATE);
+		bind_property ("subtitle_text", handle_label, "label", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
@@ -180,7 +180,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		menu_button.clicked.connect (open_menu);
 	}
 
-	public Status (API.Status status, API.NotificationType? kind = null) {
+	public Status (owned API.Status status, API.NotificationType? kind = null) {
 		Object (
 			status: status,
 			kind: kind

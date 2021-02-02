@@ -92,13 +92,14 @@
               </packing>
             </child>
             <child>
-              <object class="TootleWidgetsRichLabel" id="handle_label">
+              <object class="GtkLabel" id="handle_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="no">Handle</property>
                 <property name="opacity">0.5</property>
                 <property name="ellipsize">end</property>
                 <property name="single_line_mode">True</property>
+                <property name="xalign">0</property>
                 <style>
                   <class name="body"/>
                 </style>
@@ -144,11 +145,12 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="TootleWidgetsRichLabel" id="date_label">
+                  <object class="GtkLabel" id="date_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="no">Yesterday</property>
                     <property name="opacity">0.5</property>
+                    <property name="xalign">0</property>
                     <style>
                       <class name="body"/>
                     </style>

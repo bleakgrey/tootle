@@ -24,6 +24,8 @@ public class Tootle.Widgets.MarkupView : Box {
 	}
 
 	void update_content (string content) {
+		current_chunk = null;
+
 		get_children ().foreach (w => {
 			w.destroy ();
 		});
@@ -45,6 +47,12 @@ public class Tootle.Widgets.MarkupView : Box {
 		for (var iter = root->children; iter != null; iter = iter->next) {
 			cb (iter);
 		}
+	}
+
+	static void traverse_and_handle (MarkupView v, Xml.Node* root, owned NodeHandlerFn handler) {
+		traverse (root, node => {
+			handler (v, node);
+		});
 	}
 
 	void commit_chunk () {
@@ -75,14 +83,10 @@ public class Tootle.Widgets.MarkupView : Box {
 			case "pre":
 			case "ul":
 			case "ol":
-				traverse (root, (node) => {
-					default_handler (v, node);
-				});
+				traverse_and_handle (v, root, default_handler);
 				break;
 			case "body":
-				traverse (root, (node) => {
-					default_handler (v, node);
-				});
+				traverse_and_handle (v, root, default_handler);
 				v.commit_chunk ();
 				break;
 			case "p":
@@ -90,9 +94,7 @@ public class Tootle.Widgets.MarkupView : Box {
 				if (v.current_chunk != "" && v.current_chunk != null)
 					v.write_chunk ("\n\n");
 
-				traverse (root, (node) => {
-					default_handler (v, node);
-				});
+				traverse_and_handle (v, root, default_handler);
 				break;
 			case "code":
 			case "blockquote":
@@ -119,27 +121,37 @@ public class Tootle.Widgets.MarkupView : Box {
 			case "a":
 				var href = root->get_prop ("href");
 				if (href != null) {
-					v.write_chunk ("<a href='"+href+"'>");
-					traverse (root, (node) => {
-						default_handler (v, node);
-					});
+					v.write_chunk ("<a href='" + GLib.Markup.escape_text (href) + "'>");
+					traverse_and_handle (v, root, default_handler);
 					v.write_chunk ("</a>");
 				}
 				break;
+
+			case "b":
+			case "i":
+			case "u":
+			case "s":
+			case "sup":
+			case "sub":
+				v.write_chunk (@"<$(root->name)>");
+				traverse_and_handle (v, root, default_handler);
+				v.write_chunk (@"</$(root->name)>");
+			break;
+
 			case "li":
 				v.write_chunk ("\n• ");
-				traverse (root, (node) => {
-					default_handler (v, node);
-				});
+				traverse_and_handle (v, root, default_handler);
 				break;
 			case "br":
 				v.write_chunk ("\n");
 				break;
 			case "text":
-				v.write_chunk (GLib.Markup.escape_text (root->content));
+				if (root->content != null)
+					v.write_chunk (GLib.Markup.escape_text (root->content));
 				break;
 			default:
-				warning ("Unknown HTML tag: "+root->name);
+				warning (@"Unknown HTML tag: \"$(root->name)\"");
+				traverse_and_handle (v, root, default_handler);
 				break;
 		}
 	}
