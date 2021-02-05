@@ -1,6 +1,6 @@
 using Gee;
 
-public class Tootle.Accounts : GLib.Object {
+public class Tootle.AccountStore : GLib.Object {
 
 	private string dir_path;
 	private string file_path;
