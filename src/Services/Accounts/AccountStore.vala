@@ -19,13 +19,12 @@ public abstract class Tootle.AccountStore : GLib.Object {
 	}
 
 	public virtual void init () throws Error {
-		save (false);
 		load ();
 		ensure_active_account ();
 	}
 
 	public abstract void load ();
-	public abstract void save (bool overwrite = true);
+	public abstract void save ();
 
 	public virtual void add (InstanceAccount account) {
 		message (@"Adding new account: $(account.handle)");
@@ -56,7 +55,7 @@ public abstract class Tootle.AccountStore : GLib.Object {
 		ensure_active_account ();
 	}
 
-	public virtual void activate (InstanceAccount account) {
+	public void activate (InstanceAccount account) {
 		message (@"Activating $(account.handle)...");
 		account.probe.begin ((obj, res) => {
 			try {

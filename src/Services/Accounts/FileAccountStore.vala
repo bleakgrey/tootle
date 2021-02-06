@@ -31,22 +31,20 @@ public class Tootle.FileAccountStore : AccountStore {
 					warning (@"Couldn't load account $i: $(e.message)");
 				}
 			});
-			message (@"Loaded $(saved.size) accounts");
 		}
 		catch (Error e){
 			warning (e.message);
 		}
+		message (@"Loaded $(saved.size) accounts");
 	}
 
-	public override void save (bool overwrite = true) {
+	public override void save () {
 		try {
 			var dir = File.new_for_path (dir_path);
 			if (!dir.query_exists ())
-				dir.make_directory ();
+				dir.make_directory_with_parents ();
 
 			var file = File.new_for_path (file_path);
-			if (file.query_exists () && !overwrite)
-				return;
 
 			var builder = new Json.Builder ();
 			builder.begin_array ();
