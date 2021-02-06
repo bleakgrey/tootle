@@ -1,5 +1,11 @@
 project('com.github.bleakgrey.tootle', 'vala', 'c', version: '1.0.0')
 
+add_global_arguments([
+        '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
+    ],
+    language: 'c',
+)
+
 libhandy_dep = dependency('libhandy-1', version: '>= 1.0', required: false)
 if not libhandy_dep.found()
   libhandy = subproject(
@@ -33,12 +39,6 @@ config.set('ACCOUNT_STORE', 'SecretAccountStore')
 
 gnome = import('gnome')
 i18n = import('i18n')
-
-add_global_arguments([
-        '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
-    ],
-    language: 'c',
-)
 
 asresources = gnome.compile_resources(
   'as-resources', 'data/gresource.xml',
