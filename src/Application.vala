@@ -91,7 +91,7 @@ namespace Tootle {
 				streams = new Streams ();
 				network = new Network ();
 				cache = new Cache ();
-				accounts = new FileAccountStore ();
+				accounts = Build.get_account_store ();
 				accounts.init ();
 
 				css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
@@ -102,8 +102,9 @@ namespace Tootle {
 				add_window (window_dummy);
 			}
 			catch (Error e) {
-				inform (Gtk.MessageType.ERROR, _("Error"), e.message);
-				error (@"Couldn't initialize application:\n$(e.message)");
+				var msg = _("Could not start application: %s").printf (e.message);
+				inform (Gtk.MessageType.ERROR, _("Error"), msg);
+				error (msg);
 			}
 
 			set_accels_for_action ("app.about", ACCEL_ABOUT);
@@ -111,7 +112,7 @@ namespace Tootle {
 			set_accels_for_action ("app.back", ACCEL_BACK);
 			set_accels_for_action ("app.refresh", ACCEL_REFRESH);
 			set_accels_for_action ("app.search", ACCEL_SEARCH);
-			set_accels_for_action ("app.switch-timeline(0)", ACCEL_TIMELINE_0);
+			set_accels_for_action ("app.switch-timeline(0)", ACCEL_TIMELINE_0); //TODO: There's no action for handling these
 			set_accels_for_action ("app.switch-timeline(1)", ACCEL_TIMELINE_1);
 			set_accels_for_action ("app.switch-timeline(2)", ACCEL_TIMELINE_2);
 			set_accels_for_action ("app.switch-timeline(3)", ACCEL_TIMELINE_3);
