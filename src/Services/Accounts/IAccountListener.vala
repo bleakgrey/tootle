@@ -1,3 +1,4 @@
+[Deprecated]
 public interface Tootle.IAccountListener : GLib.Object {
 
 	protected void account_listener_init () {
