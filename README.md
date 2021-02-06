@@ -14,7 +14,7 @@ Simple [Mastodon](https://github.com/tootsuite/mastodon) client for Linux
 1. Make sure you have these dependencies:
 
     Package Name | Required Version | Notes
-    --- |:---:
+    --- |:---:| ---
     meson | 0.50 | 
     valac | 0.48 | 
     libglib-2.0-dev | 2.30 | 
