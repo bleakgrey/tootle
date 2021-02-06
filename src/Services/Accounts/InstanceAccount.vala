@@ -7,6 +7,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 	public string? client_id { get; set; }
 	public string? client_secret { get; set; }
 	public string? access_token { get; set; }
+	public Error? error { get; set; }
 
 	public int64 last_seen_notification { get; set; default = 0; }
 	public bool has_unread_notifications { get; set; default = false; }
@@ -54,6 +55,17 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		streams.unsubscribe (stream, this);
 	}
 
+	public async void probe () throws Error {
+		var req = new Request.GET ("/api/v1/accounts/verify_credentials").with_account (this);
+		yield req.await ();
+
+		var node = network.parse_node (req);
+		var updated = API.Account.from (node);
+		patch (updated);
+
+		message (@"$handle: profile updated");
+	}
+
 	public async Entity resolve (string url) throws Error {
 		message (@"Resolving URL: \"$url\"...");
 		var results = yield API.SearchResults.request (url, this);
@@ -74,11 +86,6 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		}
 
 		app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
-
-		if (obj.kind == API.NotificationType.WATCHLIST) {
-			cached_notifications.add (obj);
-			accounts.save ();
-		}
 	}
 
 }

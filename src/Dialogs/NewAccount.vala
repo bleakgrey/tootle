@@ -93,9 +93,6 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 
 	async void step () throws Error {
 		if (stack.visible_child == done_step) {
-			if (accounts.is_empty ())
-				accounts.switch_account (0);
-
 			app.present_window ();
 			destroy ();
 			return;
@@ -175,20 +172,16 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 		if (account.access_token == null)
 			throw new Oopsie.INSTANCE (_("Instance failed to authorize the access token"));
 
-		message ("Trying to get the user profile");
-		var profile_req = new Request.GET ("/api/v1/accounts/verify_credentials")
-			.with_account (account);
-		yield profile_req.await ();
-
-		var node = network.parse_node (profile_req);
-		var profile = API.Account.from (node);
-		account.patch (profile);
+		yield account.probe ();
 
 		message ("Saving account");
 		accounts.add (account);
 
 		hello_label.label = _("Hello, %s!").printf (account.handle);
 		stack.visible_child = done_step;
+
+		message ("Switching to account");
+		accounts.activate (account);
 	}
 
 	public void redirect (string uri) {

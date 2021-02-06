@@ -130,8 +130,9 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		var account = accounts.saved.@get (i);
 		if (accounts.active == account)
 			return;
+		else
+			accounts.activate (account);
 
-		accounts.switch_account (i);
 		popover.popdown ();
 	}
 

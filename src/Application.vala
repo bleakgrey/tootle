@@ -33,7 +33,6 @@ namespace Tootle {
 
 		public signal void refresh ();
 		public signal void toast (string title);
-		public signal void error (string title, string? text);
 
 		public CssProvider css_provider = new CssProvider ();
 		public CssProvider zoom_css_provider = new CssProvider ();
@@ -84,26 +83,28 @@ namespace Tootle {
 
 		protected override void startup () {
 			base.startup ();
-			Build.print_info ();
-			Hdy.init ();
+			try {
+				Build.print_info ();
+				Hdy.init ();
 
-			settings = new Settings ();
-			streams = new Streams ();
-			accounts = new AccountStore ();
-			network = new Network ();
-			cache = new Cache ();
-			accounts.init ();
+				settings = new Settings ();
+				streams = new Streams ();
+				network = new Network ();
+				cache = new Cache ();
+				accounts = new FileAccountStore ();
+				accounts.init ();
 
-			app.error.connect ((title, msg) => {
-				inform (Gtk.MessageType.ERROR, title, msg);
-			});
+				css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
+				StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+				StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-			window_dummy = new Window ();
-			add_window (window_dummy);
-
-			css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
-			StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-			StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+				window_dummy = new Window ();
+				add_window (window_dummy);
+			}
+			catch (Error e) {
+				inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+				error (@"Couldn't initialize application:\n$(e.message)");
+			}
 
 			set_accels_for_action ("app.about", ACCEL_ABOUT);
 			set_accels_for_action ("app.compose", ACCEL_NEW_POST);
@@ -138,7 +139,7 @@ namespace Tootle {
 		}
 
 		public void present_window () {
-			if (accounts.is_empty ()) {
+			if (accounts.saved.is_empty) {
 				message ("Presenting NewAccount dialog");
 				if (new_account_window == null)
 					new Dialogs.NewAccount ();
@@ -152,7 +153,7 @@ namespace Tootle {
 		}
 
 		public bool on_window_closed () {
-			if (!settings.work_in_background || accounts.is_empty ())
+			if (!settings.work_in_background || accounts.saved.is_empty)
 				app.remove_window (window_dummy);
 				return false;
 		}

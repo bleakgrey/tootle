@@ -63,6 +63,7 @@ executable(
     'src/DateTime.vala',
     'src/Services/Accounts/InstanceAccount.vala',
     'src/Services/Accounts/AccountStore.vala',
+    'src/Services/Accounts/FileAccountStore.vala',
     'src/Services/Accounts/IAccountListener.vala',
     'src/Services/Streams.vala',
     'src/Services/Settings.vala',
