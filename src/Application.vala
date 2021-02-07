@@ -144,6 +144,7 @@ namespace Tootle {
 				message ("Presenting NewAccount dialog");
 				if (new_account_window == null)
 					new Dialogs.NewAccount ();
+				new_account_window.present ();
 			}
 			else {
 				message ("Presenting MainWindow");

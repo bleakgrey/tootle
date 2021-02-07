@@ -43,7 +43,13 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 			);
 			if (forget) {
 				button.active = false;
-				accounts.remove (account);
+				try {
+					accounts.remove (account);
+				}
+				catch (Error e) {
+					warning (e.message);
+					app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+				}
 			}
 		}
 

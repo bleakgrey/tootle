@@ -6,27 +6,43 @@ public abstract class Tootle.AccountStore : GLib.Object {
 	public InstanceAccount? active { get; set; default = null; }
 
 	public bool ensure_active_account () {
-		if (saved.is_empty) {
-			new Dialogs.NewAccount ();
-			return false;
-		}
-		else {
+		var has_active = false;
+
+		if (!saved.is_empty) {
+			if (settings.current_account > saved.size || settings.current_account <= 0)
+				settings.current_account = 0;
+
 			var last_account = saved[settings.current_account];
-			if (active != last_account)
+			if (active != last_account) {
 				activate (last_account);
-			return true;
+				has_active = true;
+			}
 		}
+
+		if (!has_active)
+			app.present_window ();
+
+		return has_active;
 	}
 
-	public virtual void init () throws Error {
+	public virtual void init () throws GLib.Error {
 		load ();
 		ensure_active_account ();
 	}
 
-	public abstract void load ();
-	public abstract void save ();
+	public abstract void load () throws GLib.Error;
+	public abstract void save () throws GLib.Error;
+	public void safe_save () {
+		try {
+			save ();
+		}
+		catch (GLib.Error e) {
+			warning (e.message);
+			app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+		}
+	}
 
-	public virtual void add (InstanceAccount account) {
+	public virtual void add (InstanceAccount account) throws GLib.Error {
 		message (@"Adding new account: $(account.handle)");
 		saved.add (account);
 		save ();
@@ -34,7 +50,7 @@ public abstract class Tootle.AccountStore : GLib.Object {
 		ensure_active_account ();
 	}
 
-	public virtual void remove (InstanceAccount account) {
+	public virtual void remove (InstanceAccount account) throws GLib.Error {
 		message (@"Removing account: $(account.handle)");
 		account.unsubscribe ();
 		saved.remove (account);
