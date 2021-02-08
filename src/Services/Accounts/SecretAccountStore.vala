@@ -72,7 +72,7 @@ public class Tootle.SecretAccountStore : AccountStore {
 		var generator = new Json.Generator ();
 		generator.set_root (account.to_json ());
 		var secret = generator.to_data (null);
-		var label = _("%s Account").printf ("Mastodon");
+		var label = _("%s Account").printf (account.backend);
 
 		try {
 			Secret.password_storev_sync (
@@ -97,15 +97,12 @@ public class Tootle.SecretAccountStore : AccountStore {
 		try {
 			var secret = item.retrieve_secret_sync ();
 			var contents = secret.get_text ();
-
 			var parser = new Json.Parser ();
 			parser.load_from_data (contents, -1);
-
-			account = InstanceAccount.from (parser.get_root ());
+			account = accounts.create_account (parser.get_root ());
 		}
 		catch (GLib.Error e) {
 			warning (e.message);
-			app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
 		}
 		return account;
 	}

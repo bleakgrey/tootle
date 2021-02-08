@@ -153,7 +153,7 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 	}
 
 	async void request_token () throws Error {
-		if (code_entry.text.char_count () <= 10)
+		if (code_entry.text.char_count () <= 1)
 			throw new Oopsie.USER (_("Please enter a valid authorization code"));
 
 		message ("Requesting access token");
@@ -172,7 +172,10 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 		if (account.access_token == null)
 			throw new Oopsie.INSTANCE (_("Instance failed to authorize the access token"));
 
-		yield account.probe ();
+		yield account.verify_credentials ();
+
+		if (account.backend != null)
+			throw new Oopsie.INTERNAL (_("Unsupported instance"));
 
 		message ("Saving account");
 		accounts.add (account);
@@ -224,3 +227,4 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 	}
 
 }
+

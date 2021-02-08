@@ -3,6 +3,7 @@ using Gee;
 
 public class Tootle.InstanceAccount : API.Account, IStreamListener {
 
+	public string? backend { set; get; }
 	public string? instance { get; set; }
 	public string? client_id { get; set; }
 	public string? client_secret { get; set; }
@@ -19,30 +20,22 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		owned get { return @"@$username@$domain"; }
 	}
 
-	public new static InstanceAccount from (Json.Node node) throws Error {
-		return Entity.from_json (typeof (InstanceAccount), node) as InstanceAccount;
-	}
-
-	public InstanceAccount () {
+	construct {
 		on_notification.connect (show_notification);
-	}
-	~InstanceAccount () {
-		unsubscribe ();
 	}
 
 	public InstanceAccount.empty (string instance){
 		Object (id: "", instance: instance);
 	}
-
-	public InstanceAccount.from_account (API.Account account) {
-		Object (id: account.id);
-		patch (account);
+	~InstanceAccount () {
+		unsubscribe ();
 	}
 
 	public bool is_current () {
 		return accounts.active.access_token == access_token;
 	}
 
+	// TODO: This should be IStreamable
 	public string get_stream_url () {
 		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
 	}
@@ -55,7 +48,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		streams.unsubscribe (stream, this);
 	}
 
-	public async void probe () throws Error {
+	public async void verify_credentials () throws Error {
 		var req = new Request.GET ("/api/v1/accounts/verify_credentials").with_account (this);
 		yield req.await ();
 
@@ -74,6 +67,7 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		return entity;
 	}
 
+	// TODO: notification actions
 	void show_notification (API.Notification obj) {
 		var title = HtmlUtils.remove_tags (obj.kind.get_desc (obj.account));
 		var notification = new GLib.Notification (title);

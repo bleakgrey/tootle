@@ -23,7 +23,7 @@ public class Tootle.FileAccountStore : AccountStore {
 
 		array.foreach_element ((arr, i, node) => {
 			try {
-				var account = InstanceAccount.from (node);
+				var account = accounts.create_account (node);
 				saved.add (account);
 			}
 			catch (Error e) {

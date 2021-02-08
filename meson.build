@@ -35,7 +35,7 @@ config.set('NAME', 'Tootle')
 config.set('WEBSITE', 'https://github.com/bleakgrey/tootle')
 config.set('SUPPORT_WEBSITE', 'https://github.com/bleakgrey/tootle/issues')
 config.set('COPYRIGHT', '© 2018-2020 bleak_grey')
-config.set('ACCOUNT_STORE', 'SecretAccountStore')
+config.set('ACCOUNT_STORE', 'FileAccountStore')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -55,7 +55,9 @@ sources = files(
     'src/DateTime.vala',
     'src/Services/Accounts/InstanceAccount.vala',
     'src/Services/Accounts/AccountStore.vala',
+    'src/Services/Accounts/FileAccountStore.vala',
     'src/Services/Accounts/IAccountListener.vala',
+    'src/Services/Accounts/Mastodon/MastodonAccount.vala',
     'src/Services/Streams.vala',
     'src/Services/Settings.vala',
     'src/Services/IStreamListener.vala',
@@ -119,11 +121,10 @@ sources = files(
 libsecret_dep = dependency('libsecret-1', required: false)
 if not libsecret_dep.found()
     warning('Keyring support disabled. Accounts will be stored in a text file.')
-    config.set('ACCOUNT_STORE', 'FileAccountStore')
 else
-    message('Keyring support enabled. Accounts will be stored using Secret Service API.')
+    config.set('ACCOUNT_STORE','SecretAccountStore')
+    sources += 'src/Services/Accounts/'+config.get('ACCOUNT_STORE')+'.vala'
 endif
-sources += 'src/Services/Accounts/'+config.get('ACCOUNT_STORE')+'.vala'
 
 build_file = configure_file(
     input: 'src/Build.vala.in',
