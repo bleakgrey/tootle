@@ -106,4 +106,41 @@ public abstract class Tootle.AccountStore : GLib.Object {
 		return account;
 	}
 
+	// This is a super overcomplicated way and I don't like this.
+	// I just want to store an array with functions that return
+	// a "string?" value and keep the first non-null one.
+	//
+	// I figured signals with GSignalAccumulator could be
+	// useful here, but Vala doesn't support that either.
+	//
+	// So here we go. Vala bad. No cookie.
+	public abstract class BackendTest : GLib.Object {
+
+		public abstract string? get_backend (Json.Object obj);
+
+	}
+
+	public Gee.ArrayList<BackendTest> backend_tests = new Gee.ArrayList<BackendTest> ();
+
+	public async void guess_backend (InstanceAccount account) throws GLib.Error {
+		var req = new Request.GET ("/api/v1/instance")
+			.with_account (account);
+		yield req.await ();
+
+		var root = network.parse (req);
+
+		string? backend = null;
+		backend_tests.foreach (test => {
+			backend = test.get_backend (root);
+			return true;
+		});
+
+		if (backend == null)
+			throw new Oopsie.INTERNAL ("This instance is unsupported.");
+		else {
+			account.backend = backend;
+			message (@"$(account.instance) is using $(account.backend)");
+		}
+	}
+
 }

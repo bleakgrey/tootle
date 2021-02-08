@@ -98,8 +98,10 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 			return;
 		}
 
-		if (stack.visible_child == instance_step)
+		if (stack.visible_child == instance_step) {
 			setup_instance ();
+			yield accounts.guess_backend (account);
+		}
 
 		if (account.client_secret == null || account.client_id == null) {
 			yield register_client ();
@@ -110,7 +112,7 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 	}
 
 	void setup_instance () throws Error {
-		message ("Checking instance URL");
+		message ("Checking instance");
 
 		var str = instance_entry.text
 			.replace ("/", "")
@@ -174,8 +176,7 @@ public class Tootle.Dialogs.NewAccount: Hdy.Window {
 
 		yield account.verify_credentials ();
 
-		if (account.backend != null)
-			throw new Oopsie.INTERNAL (_("Unsupported instance"));
+		account = accounts.create_account (account.to_json ());
 
 		message ("Saving account");
 		accounts.add (account);
