@@ -7,88 +7,90 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	public API.Status status { get; construct set; }
 	public API.NotificationType? kind { get; construct set; }
 
-	[GtkChild]
-	protected Grid grid;
+	public enum ThreadRole {
+		NONE,
+		START,
+		MIDDLE,
+		END;
 
-	[GtkChild]
-	protected Image header_icon;
-	[GtkChild]
-	protected Widgets.RichLabel header_label;
-
-	[GtkChild]
-	public Widgets.Avatar avatar;
-	[GtkChild]
-	protected Widgets.RichLabel name_label;
-	[GtkChild]
-	protected Widgets.RichLabel handle_label;
-	[GtkChild]
-	protected Box indicators;
-	[GtkChild]
-	protected Widgets.RichLabel date_label;
-	[GtkChild]
-	protected Image pin_indicator;
-	[GtkChild]
-	protected Image indicator;
-	[GtkChild]
-	public Revealer revealer;
-	[GtkChild]
-	protected Widgets.RichLabel content;
-	[GtkChild]
-	protected Widgets.RichLabel revealer_content;
-	[GtkChild]
-	protected Widgets.Attachment.Box attachments;
-
-	[GtkChild]
-	protected Box actions;
-	[GtkChild]
-	protected Button reply_button;
-	[GtkChild]
-	protected ToggleButton reblog_button;
-	[GtkChild]
-	protected Image reblog_icon;
-	[GtkChild]
-	protected ToggleButton favorite_button;
-	[GtkChild]
-	protected ToggleButton bookmark_button;
-	[GtkChild]
-	protected Button menu_button;
-
-	protected string escaped_spoiler {
-		owned get {
-			if (status.formal.has_spoiler) {
-				var text = status.formal.spoiler_text ?? "";
-				var label = _("[ Toggle content ]");
-				text += @" <a href=\"tootle://toggle\">$label</a>";
-				return text;
+		public static void connect_posts (Widgets.Status? prev, Widgets.Status curr) {
+			if (prev == null) {
+				curr.thread_role = NONE;
+				return;
 			}
-			else
-				return status.formal.content;
+
+			switch (prev.thread_role) {
+				case NONE:
+					prev.thread_role = START;
+					curr.thread_role = END;
+					break;
+				case END:
+					prev.thread_role = MIDDLE;
+					curr.thread_role = END;
+					break;
+			}
 		}
 	}
 
-	protected string escaped_content {
+	public ThreadRole thread_role { get; set; default = ThreadRole.NONE; }
+
+	[GtkChild] protected Grid grid;
+
+	[GtkChild] protected Image header_icon;
+	[GtkChild] protected Widgets.RichLabel header_label;
+	[GtkChild] public Image thread_line;
+
+	[GtkChild] public Widgets.Avatar avatar;
+	[GtkChild] protected Widgets.RichLabel name_label;
+	[GtkChild] protected Label handle_label;
+	[GtkChild] protected Box indicators;
+	[GtkChild] protected Label date_label;
+	[GtkChild] protected Image pin_indicator;
+	[GtkChild] protected Image indicator;
+
+	[GtkChild] protected Box content_column;
+	[GtkChild] protected Stack spoiler_stack;
+	[GtkChild] protected Box content_box;
+	[GtkChild] protected Widgets.MarkupView content;
+	[GtkChild] protected Widgets.Attachment.Box attachments;
+	[GtkChild] protected Button spoiler_button;
+	[GtkChild] protected Widgets.RichLabel spoiler_label;
+
+	[GtkChild] protected Box actions;
+	[GtkChild] protected Button reply_button;
+	[GtkChild] protected Image reply_button_icon;
+	[GtkChild] protected ToggleButton reblog_button;
+	[GtkChild] protected Image reblog_icon;
+	[GtkChild] protected ToggleButton favorite_button;
+	[GtkChild] protected ToggleButton bookmark_button;
+	[GtkChild] protected Button menu_button;
+
+	protected string spoiler_text {
 		owned get {
-			return status.formal.has_spoiler ? status.formal.content : "";
+			var text = status.formal.spoiler_text;
+			if (text == null || text == "")
+				return _("Click to show sensitive content");
+			else
+				return text;
 		}
 	}
+	public bool reveal_spoiler { get; set; default = false; }
 
 	protected string date {
 		owned get {
-			var date = status.formal.created_at;
-			return @"<small>$(DateTime.humanize (date))</small>";
+			return DateTime.humanize (status.formal.created_at);
 		}
 	}
 
 	public string title_text {
 		owned get {
-			var name = Html.simplify (status.formal.account.display_name);
-			return @"<b>$name</b>";
+			return status.formal.account.display_name;
 		}
 	}
 
 	public string subtitle_text {
 		owned get {
-			return @"<small>$(status.formal.account.handle)</small>";
+			return status.formal.account.handle;
 		}
 	}
 
@@ -108,7 +110,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 	construct {
-		content.activate_link.connect (on_toggle_spoiler);
 		notify["kind"].connect (on_kind_changed);
 		open.connect (on_open);
 
@@ -117,33 +118,33 @@ public class Tootle.Widgets.Status : ListBoxRow {
 				kind = API.NotificationType.REBLOG_REMOTE_USER;
 		}
 
-		status.formal.bind_property ("favourited", favorite_button, "active", BindingFlags.SYNC_CREATE);
-		favorite_button.clicked.connect (() => {
-			status.action (status.formal.favourited ? "unfavourite" : "favourite");
-		});
-
-		status.formal.bind_property ("reblogged", reblog_button, "active", BindingFlags.SYNC_CREATE);
-		reblog_button.clicked.connect (() => {
-			status.action (status.formal.reblogged ? "unreblog" : "reblog");
-		});
-
-		status.formal.bind_property ("bookmarked", bookmark_button, "active", BindingFlags.SYNC_CREATE);
-		bookmark_button.clicked.connect (() => {
-			status.action (status.formal.bookmarked ? "unbookmark" : "bookmark");
-		});
+		bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
+		bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
+		bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
 
 		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
+		if (status.formal.in_reply_to_id != null)
+			reply_button_icon.icon_name = "mail-reply-all-symbolic";
+		else
+			reply_button_icon.icon_name = "mail-reply-sender-symbolic";
 
-		bind_property ("escaped-spoiler", content, "text", BindingFlags.SYNC_CREATE);
-		bind_property ("escaped-content", revealer_content, "text", BindingFlags.SYNC_CREATE);
+		bind_property ("spoiler-text", spoiler_label, "text", BindingFlags.SYNC_CREATE);
+		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
 		bind_property ("title_text", name_label, "text", BindingFlags.SYNC_CREATE);
-		bind_property ("subtitle_text", handle_label, "text", BindingFlags.SYNC_CREATE);
+		bind_property ("subtitle_text", handle_label, "label", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
-		bind_property ("avatar_url", avatar, "url", BindingFlags.SYNC_CREATE);
+		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
 
-		status.formal.bind_property ("has_spoiler", revealer_content, "visible", BindingFlags.SYNC_CREATE);
-		revealer.reveal_child = !status.formal.has_spoiler;
+		status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+			target.set_boolean (!src.get_boolean ());
+			return true;
+		});
+		bind_property ("reveal-spoiler", spoiler_stack, "visible-child-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+			var name = reveal_spoiler ? "content" : "spoiler";
+			target.set_string (name);
+			return true;
+		});
 
 		if (status.formal.visibility == API.Visibility.DIRECT) {
 			reblog_icon.icon_name = status.formal.visibility.get_icon ();
@@ -154,9 +155,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		if (status.id == "") {
 			actions.destroy ();
 			date_label.destroy ();
-			content.single_line_mode = true;
-			content.lines = 2;
-			content.ellipsize = Pango.EllipsizeMode.END;
 		}
 
 		if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
@@ -166,19 +164,19 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		menu_button.clicked.connect (open_menu);
 	}
 
-	public Status (API.Status status, API.NotificationType? _kind = null) {
-		Object (status: status, kind: _kind);
+	public Status (owned API.Status status, API.NotificationType? kind = null) {
+		Object (
+			status: status,
+			kind: kind
+		);
 	}
 	~Status () {
 		notify["kind"].disconnect (on_kind_changed);
 	}
 
-	protected bool on_toggle_spoiler (string uri) {
-		if (uri == "tootle://toggle") {
-			revealer.reveal_child = !revealer.reveal_child;
-			return true;
-		}
-		return false;
+	[GtkCallback]
+	public void toggle_spoiler () {
+		reveal_spoiler = !reveal_spoiler;
 	}
 
 	protected virtual void on_kind_changed () {
@@ -204,7 +202,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
 		var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
 		item_copy.activate.connect (() => {
-			var sanitized = Html.remove_tags (status.formal.content);
+			var sanitized = HtmlUtils.remove_tags (status.formal.content);
 			Desktop.copy (sanitized);
 		});
 
@@ -245,6 +243,84 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 		menu.show_all ();
 		menu.popup_at_widget (menu_button, Gravity.SOUTH_EAST, Gravity.SOUTH_EAST);
+	}
+
+	public void expand_root () {
+		activatable = false;
+		content.selectable = true;
+		content.get_style_context ().add_class ("ttl-large-body");
+
+		var parent = content_column.get_parent () as Container;
+		var left_attach = parent.find_child_property ("left-attach");
+		var width = parent.find_child_property ("width");
+		parent.set_child_property (content_column, 1, 0, left_attach);
+		parent.set_child_property (content_column, 3, 2, width);
+	}
+
+	public void install_thread_line () {
+		var l = thread_line;
+		switch (thread_role) {
+			case NONE:
+				l.visible = false;
+				break;
+			case START:
+				l.valign = Align.FILL;
+				l.margin_top = 24;
+				l.visible = true;
+				break;
+			case MIDDLE:
+				l.valign = Align.FILL;
+				l.margin_top = 0;
+				l.visible = true;
+				break;
+			case END:
+				l.valign = Align.START;
+				l.margin_top = 0;
+				l.visible = true;
+				break;
+		}
+	}
+
+	// This disables the button when its status property is updated.
+	// Fixes a bug where clicking one or more post action buttons
+	// triggers an infite loop of network requests.
+	//
+	// This took me an entire day to fix and I'm quite sad.
+	public void bind_toggleable_prop (ToggleButton button, string prop, string on, string off) {
+		var init_val = Value (Type.BOOLEAN);
+		((GLib.Object) status.formal).get_property (prop, ref init_val);
+		button.active = init_val.get_boolean ();
+
+		status.formal.bind_property (prop, button, "active", BindingFlags.SYNC_CREATE);
+
+		button.toggled.connect (() => {
+			if (!(button.has_focus && button.sensitive))
+				return;
+
+			button.sensitive = false;
+			var val = Value (Type.BOOLEAN);
+			((GLib.Object) status.formal).get_property (prop, ref val);
+			var act = val.get_boolean () ? off : on;
+
+			var req = status.action (act);
+			req.await.begin ((obj, res) => {
+				try {
+					var msg = req.await.end (res);
+					var node = network.parse_node (msg);
+					var entity = API.Status.from (node);
+
+					var new_val = Value (Type.BOOLEAN);
+					((GLib.Object) entity.formal).get_property (prop, ref new_val);
+					((GLib.Object) status.formal).set_property (prop, new_val.get_boolean ());
+				}
+				catch (Error e) {
+					warning (@"Couldn't perform action \"$act\" on a Status:");
+					warning (e.message);
+					app.inform (Gtk.MessageType.WARNING, _("Network Error"), e.message);
+				}
+				button.sensitive = true;
+			});
+		});
 	}
 
 }

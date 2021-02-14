@@ -1,7 +1,3 @@
-.avatar {
-	border-radius: 4px;
-}
-
 .header .chip {
   padding: 4px 12px;
   border-radius: 4px;
@@ -9,33 +5,63 @@
 }
 
 .attachment {
-	border-radius: 6px;
+	border-radius: 5px;
 	background: rgba (150, 150, 150, 0.2);
 	padding:0px;
 	margin:0px;
 }
 .attachment .pic {
-	border-radius: 6px;
+	border-radius: 5px;
 }
 .attachment .chip {
 	padding: 6px;
 	border-radius:6px;
 }
 
-.header-title-button {
+.ttl-header-button {
 	margin: 0px;
 	border-radius: 0px;
 	border-top: none;
 	border-bottom: none;
 }
+.ttl-header-button .title, .ttl-header-button .subtitle {
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
-.padded.app-view {
+.padded.ttl-view {
 	margin: 32px 0 32px 0;
 }
-.app-view:not(.padded) .content row {
+.ttl-view:not(.padded) .content row {
 	border-radius: 0px;
 }
 
-.app-action-bar .circular {
+.ttl-action-bar .circular {
 	box-shadow: none;
+}
+
+.ttl-flat-button {
+  padding: 0px;
+  margin: 0px;
+}
+
+.ttl-post {
+  padding: 0px;
+}
+.ttl-thread-line {
+  background: @theme_fg_color;
+  opacity: .1;
+  margin-top: -8px;
+  margin-bottom: -8px;
+}
+
+.ttl-large-body {
+  font-size: 110%;
+}
+
+.ttl-code {
+	font-family: monospace;
+	padding: 12px;
+	background: rgba(150,150,150,.1);
+	border-radius: 6px;
 }

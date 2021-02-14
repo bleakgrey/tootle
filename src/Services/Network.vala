@@ -20,8 +20,6 @@ public class Tootle.Network : GLib.Object {
         session = new Soup.Session ();
         session.ssl_strict = true;
         session.ssl_use_system_ca_file = true;
-        session.timeout = 15;
-        session.max_conns = 30;
         session.request_unqueued.connect (msg => {
             requests_processing--;
             if (requests_processing <= 0)
@@ -47,7 +45,7 @@ public class Tootle.Network : GLib.Object {
         requests_processing++;
         started ();
 
-		message (@"$(mess.method): $(mess.uri.to_string (false))");
+		// message (@"$(mess.method): $(mess.uri.to_string (false))");
 
         try {
             session.queue_message (mess, (sess, msg) => {

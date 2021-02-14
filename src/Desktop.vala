@@ -3,10 +3,16 @@ using GLib;
 public class Tootle.Desktop {
 
 	// Open a URI in the user's default application
-	public static bool open_uri (string uri) {
+	public static bool open_uri (string _uri) {
+		var uri = _uri;
+		if (!(":" in uri))
+			uri = "file://" + _uri;
+
 		message (@"Opening URI: $uri");
 		try {
-			Gtk.show_uri (null, uri, Gdk.CURRENT_TIME);
+			var success = AppInfo.launch_default_for_uri (uri, null);
+			if (!success)
+				throw new Oopsie.USER (_("launch_default_for_uri() failed"));
 		}
 		catch (Error e){
 			try {
@@ -14,8 +20,9 @@ public class Tootle.Desktop {
 				Process.spawn_sync (null, spawn_args, null, SpawnFlags.SEARCH_PATH, null, null, null);
 			}
 			catch (Error e){
-				warning (@"Can't open URI \"$uri\": $(e.message)");
-				app.error (_("Open this URL in your browser:\n\n%s").printf (uri), "");
+				warning (@"xdg-open failed too: $(e.message)");
+				app.inform (Gtk.MessageType.WARNING, _("Open this URL in your browser"), uri);
+				return false;
 			}
 		}
 		return true;
@@ -37,8 +44,7 @@ public class Tootle.Desktop {
 	}
 
 	// Download a file from the web to a user's configured Downloads folder
-	public delegate void DownloadCallback (string path);
-	public static void download (string url, owned DownloadCallback cb, owned Network.ErrorCallback ecb) {
+	public async static string download (string url) throws Error {
 		message (@"Downloading file: $url...");
 
 		var file_name = Path.get_basename (url);
@@ -55,29 +61,26 @@ public class Tootle.Desktop {
 			dir_path,
 			str_hash (dir_name).to_string () + file_name);
 
-		new Request.GET (url)
-			.then ((sess, msg) => {
-				try {
-					var dir = File.new_for_path (dir_path);
-					if (!dir.query_exists ())
-						dir.make_directory ();
+		var dir = File.new_for_path (dir_path);
+		if (!dir.query_exists ())
+			dir.make_directory_with_parents ();
 
-					var file = File.new_for_path (file_path);
-					if (!file.query_exists ()) {
-						var data = msg.response_body.data;
-						FileOutputStream stream = file.create (FileCreateFlags.PRIVATE);
-						stream.write (data);
-					}
-					message (@"OK: File written to: $file_path");
-					cb (file_path);
+		var file = File.new_for_path (file_path);
 
-				} catch (Error e) {
-					warning ("Error: %s\n", e.message);
-					ecb (0, e.message);
-				}
-			})
-			.on_error ((owned) ecb)
-			.exec ();
+		if (!file.query_exists ()) {
+			var msg = yield new Request.GET (url)
+				.await ();
+
+			var data = msg.response_body.data;
+			FileOutputStream stream = file.create (FileCreateFlags.PRIVATE);
+			stream.write (data);
+
+			message (@"OK: File written to: $file_path");
+		}
+		else
+			message ("OK: File exists already");
+
+		return file_path;
 	}
 
 	public static string fallback_icon (string normal, string fallback, string fallback2 = "broken") {

@@ -23,7 +23,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		public Item (InstanceAccount account, AccountsButton btn) {
 			this.account = account;
 			this.button = btn;
-			avatar.url = account.avatar;
+			avatar.account = account;
 			title.label = account.display_name;
 			handle.label = account.handle;
 		}
@@ -43,7 +43,13 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 			);
 			if (forget) {
 				button.active = false;
-				accounts.remove (account);
+				try {
+					accounts.remove (account);
+				}
+				catch (Error e) {
+					warning (e.message);
+					app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+				}
 			}
 		}
 
@@ -70,8 +76,6 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 	[GtkChild]
 	ModelButton item_refresh;
 	[GtkChild]
-	ModelButton item_search;
-	[GtkChild]
 	Button item_favs;
 	[GtkChild]
 	Button item_conversations;
@@ -82,6 +86,7 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 
 	construct {
 		account_listener_init ();
+		get_style_context ().add_class ("image-button");
 
 		item_refresh.clicked.connect (() => {
 			app.refresh ();
@@ -101,10 +106,6 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		});
 		item_lists.clicked.connect (() => {
 			window.open_view (new Views.Lists ());
-			popover.popdown ();
-		});
-		item_search.clicked.connect (() => {
-			window.open_view (new Views.Search ());
 			popover.popdown ();
 		});
 		item_prefs.clicked.connect (() => {
@@ -135,8 +136,9 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 		var account = accounts.saved.@get (i);
 		if (accounts.active == account)
 			return;
+		else
+			accounts.activate (account);
 
-		accounts.switch_account (i);
 		popover.popdown ();
 	}
 
@@ -148,13 +150,13 @@ public class Tootle.Widgets.AccountsButton : Gtk.MenuButton, IAccountListener {
 
 	public virtual void on_account_changed (InstanceAccount? account) {
 		if (account == null) {
-			avatar.url = null;
+			avatar.account = null;
 			item_accounts.text = "<b><span size=\"large\">%s</span></b>\n%s".printf (
 				_("Anonymous"),
 				_("No active account"));
 		}
 		else {
-			avatar.url = account.avatar;
+			avatar.account = account;
 			item_accounts.text = @"<b><span size=\"large\">$(account.display_name)</span></b>\n$(account.handle)";
 		}
 		item_accounts.use_markup = true;

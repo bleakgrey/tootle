@@ -4,14 +4,10 @@ using Gdk;
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/attachment_slot.ui")]
 public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 
-	[GtkChild]
-	EventBox event_box;
-	[GtkChild]
-	Label chip;
-	[GtkChild]
-	Image play_icon;
-	[GtkChild]
-	Stack stack;
+	[GtkChild] Button button;
+	[GtkChild] Label chip;
+	[GtkChild] Image play_icon;
+	[GtkChild] Stack stack;
 
 	public API.Attachment attachment { get; construct set; }
 
@@ -42,30 +38,24 @@ public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 	}
 
 	construct {
-		event_box.tooltip_text = attachment.description;
-		event_box.button_release_event.connect (on_clicked);
-	}
-
-	void download () {
-        Desktop.download (attachment.url, path => {
-        	app.toast (_("File saved to Downloads"));
-        },
-        () => {});
+		button.tooltip_text = attachment.description;
 	}
 
 	void open () {
-        Desktop.download (attachment.url, path => {
-        	Desktop.open_uri (path);
-        },
-        () => {});
+        Desktop.download.begin (attachment.url, (obj, res) => {
+			try {
+				var path = Desktop.download.end (res);
+				Desktop.open_uri (path);
+			}
+			catch (Error e) {
+				app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+			}
+        });
 	}
 
-    protected virtual bool on_clicked (EventButton ev) {
-		if (ev.button != 1)
-			return false;
-
+	[GtkCallback]
+    protected virtual void on_clicked () {
 		open ();
-		return true;
     }
 
 }

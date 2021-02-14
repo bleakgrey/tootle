@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkImage" id="image1">
@@ -12,15 +12,15 @@
     <property name="can_focus">False</property>
     <property name="icon_name">non-starred-symbolic</property>
   </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">mail-replied-symbolic</property>
-  </object>
   <object class="GtkImage" id="reblog_icon">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="icon_name">media-playlist-repeat-symbolic</property>
+  </object>
+  <object class="GtkImage" id="reply_button_icon">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">mail-reply-sender-symbolic</property>
   </object>
   <template class="TootleWidgetsStatus" parent="GtkListBoxRow">
     <property name="visible">True</property>
@@ -51,199 +51,20 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="actions">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">8</property>
-            <property name="spacing">8</property>
-            <child>
-              <object class="GtkButton" id="reply_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="image">image3</property>
-                <property name="always_show_image">True</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="reblog_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">reblog_icon</property>
-                <property name="always_show_image">True</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="favorite_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">image2</property>
-                <property name="always_show_image">True</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="bookmark_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="image">image1</property>
-                <property name="relief">none</property>
-                <property name="always_show_image">True</property>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="menu_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">view-more-symbolic</property>
-                  </object>
-                </child>
-                <style>
-                  <class name="flat"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-            <property name="width">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkRevealer" id="revealer">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="reveal_child">True</property>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="TootleWidgetsRichLabel" id="revealer_content">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="label">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</property>
-                    <property name="wrap">True</property>
-                    <property name="wrap_mode">word-char</property>
-                    <property name="width_chars">15</property>
-                    <property name="xalign">0</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="TootleWidgetsAttachmentBox" id="attachments">
-                    <property name="visible">True</property>
-                    <property name="margin_top">8</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
-            <property name="width">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="TootleWidgetsAvatar" id="avatar">
-            <property name="width_request">48</property>
-            <property name="height_request">48</property>
-            <property name="valign">start</property>
-            <property name="visible">true</property>
-            <signal name="clicked" handler="on_avatar_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="TootleWidgetsRichLabel" id="header_label">
             <property name="visible">True</property>
             <property name="ellipsize">end</property>
             <property name="xalign">0</property>
             <property name="margin-bottom">8</property>
             <property name="track_visited_links">false</property>
+            <property name="markup">trust</property>
+            <style>
+              <class name="title-4"/>
+            </style>
           </object>
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="TootleWidgetsRichLabel" id="content">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="label">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</property>
-            <property name="wrap">True</property>
-            <property name="wrap_mode">word-char</property>
-            <property name="width_chars">15</property>
-            <property name="xalign">0</property>
-            <property name="margin-top">8</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-            <property name="width">3</property>
           </packing>
         </child>
         <child>
@@ -257,8 +78,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
-                <property name="label" translatable="yes">Name</property>
+                <property name="label" translatable="no">Name</property>
                 <property name="ellipsize">end</property>
+                <property name="single_line_mode">True</property>
+                <style>
+                  <class name="title-4"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -267,12 +92,17 @@
               </packing>
             </child>
             <child>
-              <object class="TootleWidgetsRichLabel" id="handle_label">
+              <object class="GtkLabel" id="handle_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="no">Handle</property>
                 <property name="opacity">0.5</property>
                 <property name="ellipsize">end</property>
+                <property name="single_line_mode">True</property>
+                <property name="xalign">0</property>
+                <style>
+                  <class name="body"/>
+                </style>
               </object>
               <packing>
                 <property name="left_attach">0</property>
@@ -291,9 +121,9 @@
                 <child>
                   <object class="GtkImage" id="pin_indicator">
                     <property name="can_focus">False</property>
+                    <property name="opacity">0.5</property>
                     <property name="icon_name">view-pin-symbolic</property>
                     <property name="icon_size">1</property>
-                    <property name="opacity">0.5</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -304,9 +134,9 @@
                 <child>
                   <object class="GtkImage" id="indicator">
                     <property name="can_focus">False</property>
+                    <property name="opacity">0.5</property>
                     <property name="icon_name">unknown</property>
                     <property name="icon_size">1</property>
-                    <property name="opacity">0.5</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -315,11 +145,15 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="TootleWidgetsRichLabel" id="date_label">
+                  <object class="GtkLabel" id="date_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="no">Yesterday</property>
                     <property name="opacity">0.5</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="body"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -338,10 +172,268 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="content_column">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_top">8</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">8</property>
+            <child>
+              <object class="GtkStack" id="spoiler_stack">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="vhomogeneous">False</property>
+                <property name="transition_type">crossfade</property>
+                <property name="interpolate_size">True</property>
+                <child>
+                  <object class="GtkButton" id="spoiler_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <signal name="clicked" handler="toggle_spoiler" swapped="no"/>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="margin_left">12</property>
+                        <property name="margin_right">12</property>
+                        <property name="margin_top">12</property>
+                        <property name="margin_bottom">12</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">dialog-warning-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="TootleWidgetsRichLabel" id="spoiler_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="text">Spoiler Text Here</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="spoiler"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="name">spoiler</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="content_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="TootleWidgetsMarkupView" id="content">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="TootleWidgetsAttachmentBox" id="attachments">
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="name">content</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="actions">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkButton" id="reply_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="image">reply_button_icon</property>
+                    <property name="always_show_image">True</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="reblog_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">reblog_icon</property>
+                    <property name="always_show_image">True</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="favorite_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image2</property>
+                    <property name="always_show_image">True</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="bookmark_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image1</property>
+                    <property name="relief">none</property>
+                    <property name="always_show_image">True</property>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="menu_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">view-more-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="avatar_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">start</property>
+            <property name="valign">start</property>
+            <signal name="clicked" handler="on_avatar_clicked" swapped="no"/>
+            <child>
+              <object class="TootleWidgetsAvatar" id="avatar">
+                <property name="size">48</property>
+                <property name="valign">start</property>
+                <property name="visible">true</property>
+              </object>
+            </child>
+            <style>
+              <class name="flat"/>
+              <class name="image-button"/>
+              <class name="circular"/>
+              <class name="ttl-flat-button"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="thread_line">
+            <property name="width_request">4</property>
+            <property name="height_request">32</property>
+            <property name="can_focus">False</property>
+            <property name="halign">center</property>
+            <property name="icon_size">0</property>
+            <style>
+              <class name="ttl-thread-line"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="height">3</property>
           </packing>
         </child>
       </object>
     </child>
+    <style>
+      <class name="ttl-post"/>
+    </style>
   </template>
 </interface>

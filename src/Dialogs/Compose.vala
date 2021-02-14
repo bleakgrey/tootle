@@ -2,7 +2,7 @@ using Gtk;
 using Gee;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/compose.ui")]
-public class Tootle.Dialogs.Compose : Window {
+public class Tootle.Dialogs.Compose : Hdy.Window {
 
 	public API.Status? status { get; construct set; }
 	public string style_class { get; construct set; }
@@ -110,7 +110,7 @@ public class Tootle.Dialogs.Compose : Window {
 			cw.text = status.spoiler_text;
 			cw_button.active = true;
 		}
-		content.buffer.text = Html.remove_tags (status.content);
+		content.buffer.text = HtmlUtils.remove_tags (status.content);
 
 		validate ();
 		set_media_mode (status.has_media ());

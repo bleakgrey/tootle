@@ -3,10 +3,38 @@
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="1.0"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">go-previous-symbolic</property>
+  </object>
   <template class="TootleViewsBase" parent="GtkBox">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
+    <signal name="size-allocate" handler="on_resized" swapped="no"/>
+    <child>
+      <object class="HdyHeaderBar" id="header">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show_close_button">True</property>
+        <child>
+          <object class="GtkButton" id="back_button">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Back</property>
+            <property name="image">image1</property>
+            <signal name="clicked" handler="on_close" swapped="no"/>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
     <child>
       <object class="GtkScrolledWindow" id="scrolled">
         <property name="visible">True</property>
@@ -39,6 +67,7 @@
                             <property name="can_focus">False</property>
                             <property name="vhomogeneous">False</property>
                             <property name="transition_type">crossfade</property>
+                            <property name="interpolate_size">True</property>
                             <child>
                               <object class="GtkBox" id="status">
                                 <property name="visible">True</property>
@@ -129,7 +158,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkBox" id="content">
+                              <object class="GtkBox" id="content_box">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
@@ -173,7 +202,7 @@
                   </packing>
                 </child>
                 <style>
-                  <class name="app-view"/>
+                  <class name="ttl-view"/>
                 </style>
               </object>
             </child>

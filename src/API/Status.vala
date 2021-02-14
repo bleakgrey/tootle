@@ -68,9 +68,9 @@ public class Tootle.API.Status : Entity, Widgetizable {
         if (account.note == "")
             content = "";
         else if ("\n" in account.note)
-            content = Html.remove_tags (account.note.split ("\n")[0]);
+            content = account.note.split ("\n")[0];
         else
-            content = Html.remove_tags (account.note);
+            content = account.note;
 	}
 
     public override Gtk.Widget to_widget () {
@@ -78,7 +78,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
     }
 
 	public override void open () {
-		var view = new Views.ExpandedStatus (formal);
+		var view = new Views.Thread (formal);
 		window.open_view (view);
 	}
 
@@ -108,16 +108,8 @@ public class Tootle.API.Status : Entity, Widgetizable {
         return result;
     }
 
-    public void action (string action, owned Network.ErrorCallback? err = network.on_error) {
-        new Request.POST (@"/api/v1/statuses/$(formal.id)/$action")
-        	.with_account (accounts.active)
-        	.then ((sess, msg) => {
-        	    var node = network.parse_node (msg);
-        	    var upd = API.Status.from (node).formal;
-        	    patch (upd);
-            })
-            .on_error ((status, reason) => err (status, reason))
-        	.exec ();
+    public Request action (string action) {
+        return new Request.POST (@"/api/v1/statuses/$(formal.id)/$action").with_account (accounts.active);
     }
 
     public Request annihilate () {
