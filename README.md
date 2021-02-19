@@ -25,7 +25,9 @@ Simple [Mastodon](https://github.com/tootsuite/mastodon) client for Linux
     libgtk-4-dev | 4.3.0 | 
     libadwaita-1.0-dev | 1.0.0-alpha2 | Will be attempted to install automatically if not present.
     libsecret-1-dev | 0.20 | 
-    
+
+#### Fedora
+`sudo dnf install meson vala libvala-devel glib2-devel glib-devel json-glib-devel libgee-devel libsoup-devel gtk4-devel libadwaita-devel libsecret-devel`
 
 2. Run `install.sh` in the project directory. The app will launch automatically on success.
 
