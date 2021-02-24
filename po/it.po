@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-30 16:21+0300\n"
-"PO-Revision-Date: 2021-02-24 11:21+0100\n"
+"PO-Revision-Date: 2021-02-24 12:07+0100\n"
 "Language-Team: mek101-dev.inv@slmail.me\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Tootle è un client GTK per la più grande piattaforma decentralizzata di "
 "microblogging, Mastodon. Con l'esperienza utente in mente, fornisce "
-"un'interfaccia nativa e pulita che permette di integrare l'esperienza social "
+"un'interfaccia nativa pulita che permette di integrare l'esperienza social "
 "di Mastodon con l'ambiente desktop."
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:14
@@ -93,8 +93,9 @@ msgid "Cancel"
 msgstr "Cancella"
 
 #: data/ui/dialogs/compose.ui:119
+#, fuzzy
 msgid "Write your warning here"
-msgstr ""
+msgstr "Avvertimento"
 
 #: data/ui/dialogs/compose.ui:185
 msgid "Visibility"
@@ -102,7 +103,7 @@ msgstr "Visibilità"
 
 #: data/ui/dialogs/compose.ui:238
 msgid "Attach Media"
-msgstr ""
+msgstr "Allega media"
 
 #: data/ui/dialogs/compose.ui:260
 msgid "Instance Emojis"
@@ -110,7 +111,7 @@ msgstr "Emoji dell'istanza"
 
 #: data/ui/dialogs/compose.ui:284
 msgid "Spoiler Warning"
-msgstr ""
+msgstr "Avvertimento spoiler"
 
 #: data/ui/dialogs/compose.ui:329
 msgid "Text"
@@ -130,7 +131,7 @@ msgstr "Salva"
 
 #: data/ui/dialogs/list_editor.ui:200
 msgid "Search among people you follow"
-msgstr ""
+msgstr "Cerca tra le persone che segui"
 
 #: data/ui/dialogs/list_editor.ui:256
 msgid "Nobody here"
@@ -198,11 +199,11 @@ msgstr "Scorrimento infinito"
 
 #: data/ui/dialogs/preferences.ui:143 data/ui/dialogs/preferences.ui:176
 msgid "Warning: This will increase memory usage"
-msgstr ""
+msgstr "Attenzione: ciò aumenterà il consumo di memoria"
 
 #: data/ui/dialogs/preferences.ui:157
 msgid "Stream timelines"
-msgstr ""
+msgstr "Steam delle timeline"
 
 #: data/ui/dialogs/preferences.ui:159
 msgid "Receive new posts and notifications in real-time"
@@ -210,7 +211,7 @@ msgstr ""
 
 #: data/ui/dialogs/preferences.ui:174
 msgid "Stream public timelines"
-msgstr ""
+msgstr "Stream delle timeline pubbliche"
 
 #: data/ui/dialogs/new_account.ui:21
 msgid "Add Account"
@@ -229,9 +230,11 @@ msgstr "Avanti"
 msgid "What is your instance?"
 msgstr "Qual'è la tua istanza?"
 
+# In italiano i programmi sono impersonali. Tradurre con "Nessun account?"?
 #: data/ui/dialogs/new_account.ui:191
+#, fuzzy
 msgid "<a href=\"https://joinmastodon.org/\">Don't have one yet?</a>"
-msgstr ""
+msgstr "<a href=\"https://joinmastodon.org/\">Non ne hai uno?</a>"
 
 #: data/ui/dialogs/new_account.ui:242
 msgid "Enter authorization code"
@@ -259,15 +262,16 @@ msgstr "Liste"
 
 #: data/ui/widgets/accounts_button.ui:204
 msgid "POSTS"
-msgstr ""
+msgstr "Post per p"
 
 #: data/ui/widgets/accounts_button.ui:247
 msgid "FOLLOWING"
 msgstr ""
 
 #: data/ui/widgets/accounts_button.ui:290
+#, fuzzy
 msgid "FOLLOWERS"
-msgstr ""
+msgstr "FOLLOWERS"
 
 #: data/ui/widgets/accounts_button.ui:344
 msgid "Refresh"
@@ -295,7 +299,7 @@ msgstr "Titolo"
 
 #: data/ui/widgets/compose_attachment.ui:29
 msgid "Describe for the visually impaired"
-msgstr ""
+msgstr "Descrizione per i non vedenti"
 
 #: data/ui/widgets/compose_attachment.ui:90
 msgid "Unknown"
@@ -331,9 +335,11 @@ msgstr ""
 "\n"
 "%s"
 
+# Usare "estrazione" invece che "parsing"?
 #: src/Html.vala:3
+#, fuzzy
 msgid "[ There was an error parsing this text :c ]"
-msgstr ""
+msgstr "[ Errore nel parsing del testo :c ]"
 
 #: src/DateTime.vala:11
 msgid "Just now"
@@ -365,7 +371,7 @@ msgstr "Componi"
 
 #: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:253
 msgid "Redraft"
-msgstr "Nuova bozza"
+msgstr "Nuova stesura"
 
 #: src/Dialogs/Compose.vala:154
 msgid "Reply"
@@ -373,7 +379,7 @@ msgstr "Rispondi"
 
 #: src/Dialogs/Compose.vala:197
 msgid "Select media"
-msgstr ""
+msgstr "Med"
 
 #: src/Dialogs/Compose.vala:200
 msgid "_Open"
@@ -409,7 +415,7 @@ msgstr "Inserisci un codice di autorizzazione valido"
 
 #: src/Dialogs/NewAccount.vala:176
 msgid "Instance failed to authorize the access token"
-msgstr ""
+msgstr "L'istanza non ha autorizzato il token di accesso"
 
 #: src/Dialogs/NewAccount.vala:190
 #, c-format
@@ -431,6 +437,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"L'istanza ha invalidato la sessione. Si prega di fare un nuovo login.\n"
+"\n"
+"%s"
 
 #: src/Views/Base.vala:6
 msgid "Nothing to see here"
@@ -497,6 +506,11 @@ msgid ""
 "• Remove its followers from your account\n"
 "• Prevent you from following its users"
 msgstr ""
+"Bloccare un dominio:\n"
+"\n"
+"• Rimuove i suoi post pubblici e le notifiche dalle timeline\n"
+"• Rimuove i suoi followers dal tuo account\n"
+"• Impedirà di seguire i suoi utenti"
 
 #: src/Views/Profile.vala:204
 msgid "Sent follow request"
@@ -557,7 +571,7 @@ msgstr "Nessun account attivo"
 
 #: src/Widgets/Status.vala:72
 msgid "Click to show sensitive content"
-msgstr ""
+msgstr "Clicca per visualizzare i contenuti sensibili"
 
 #: src/Widgets/Status.vala:163
 msgid "This post can't be boosted"
