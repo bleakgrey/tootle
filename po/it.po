@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-30 16:21+0300\n"
-"PO-Revision-Date: 2021-02-23 12:02+0100\n"
+"PO-Revision-Date: 2021-02-24 11:21+0100\n"
 "Language-Team: mek101-dev.inv@slmail.me\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,19 +26,19 @@ msgstr "Tootle"
 #: data/com.github.bleakgrey.tootle.desktop.in:5
 #: data/com.github.bleakgrey.tootle.desktop.in:6
 msgid "Mastodon Client"
-msgstr ""
+msgstr "Mastodon Client"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:8
 msgid "com.github.bleakgrey.tootle"
-msgstr ""
+msgstr "com.github.bleakgrey.tootle"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:11
 msgid "toot;mastodon;social;network;post;"
-msgstr ""
+msgstr "toot;mastodon;social;network;post;"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:8
 msgid "Lightning fast client for Mastodon"
-msgstr ""
+msgstr "Client fulmineo per Mastodon"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:11
 msgid ""
@@ -47,6 +47,10 @@ msgid ""
 "native interface that allows you to integrate Mastodon's social experience "
 "seamlessly with your desktop environment."
 msgstr ""
+"Tootle è un client GTK per la più grande piattaforma decentralizzata di "
+"microblogging, Mastodon. Con l'esperienza utente in mente, fornisce "
+"un'interfaccia nativa e pulita che permette di integrare l'esperienza social "
+"di Mastodon con l'ambiente desktop."
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:14
 msgid ""
@@ -57,14 +61,20 @@ msgid ""
 "brings and the agility of Tootle creates a fantastic duo for all of your "
 "social media needs."
 msgstr ""
+"Mastodon è una piattaforma libera e open source di microblogging simile a "
+"Twitter, ma con decentralizzazione e privacy degli utenti in mente. È uno "
+"dei molti protocolli che interagisce con il Fediverse di protocolli come "
+"Pleroma, GNU Social e altri. La potenza del microblogging decentralizzato di "
+"Mastodon e l'agilità di Tootle creano un duo fantastico per tutte le "
+"esigenze di social media."
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:23
 msgid "bleak_grey"
-msgstr ""
+msgstr "bleak_grey"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:71
 msgid "New app icon (Kudos to Tobias Bernard!)"
-msgstr ""
+msgstr "Nuova icona per l'app (kudos a Tobias Bernard!)"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:72
 msgid "New interface design"
@@ -96,7 +106,7 @@ msgstr ""
 
 #: data/ui/dialogs/compose.ui:260
 msgid "Instance Emojis"
-msgstr ""
+msgstr "Emoji dell'istanza"
 
 #: data/ui/dialogs/compose.ui:284
 msgid "Spoiler Warning"
@@ -140,7 +150,7 @@ msgstr "Tema scuro"
 
 #: data/ui/dialogs/preferences.ui:54
 msgid "Text scale (%)"
-msgstr ""
+msgstr "Scala del testo (%)"
 
 #: data/ui/dialogs/preferences.ui:61
 msgid "100"
@@ -148,15 +158,15 @@ msgstr "100"
 
 #: data/ui/dialogs/preferences.ui:75
 msgid "Behavior"
-msgstr ""
+msgstr "Comportamento"
 
 #: data/ui/dialogs/preferences.ui:79
 msgid "Autostart"
-msgstr ""
+msgstr "Avvio automatico"
 
 #: data/ui/dialogs/preferences.ui:81
 msgid "Start minimized at boot"
-msgstr ""
+msgstr "Avvia minimizzato al boot"
 
 #: data/ui/dialogs/preferences.ui:94
 msgid "Background work"
@@ -164,15 +174,15 @@ msgstr ""
 
 #: data/ui/dialogs/preferences.ui:96
 msgid "Receive notifications even when the app is closed"
-msgstr ""
+msgstr "Ricevi notifiche anche quando l'app è chiusa"
 
 #: data/ui/dialogs/preferences.ui:110
 msgid "Default post visibility"
-msgstr ""
+msgstr "Visibilità dei post di default"
 
 #: data/ui/dialogs/preferences.ui:119
 msgid "Timelines"
-msgstr ""
+msgstr "Timeline"
 
 #: data/ui/dialogs/preferences.ui:124
 msgid "Posts per page"
@@ -229,7 +239,7 @@ msgstr "Inserisci il codice d'autorizzazione"
 
 #: data/ui/dialogs/new_account.ui:276
 msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
-msgstr ""
+msgstr "<a href=\"tootle://manual_auth\">Prova l'autorizzazione manuale</a>"
 
 #: data/ui/widgets/accounts_button.ui:64 src/Views/Conversations.vala:6
 msgid "Conversations"
@@ -261,7 +271,7 @@ msgstr ""
 
 #: data/ui/widgets/accounts_button.ui:344
 msgid "Refresh"
-msgstr ""
+msgstr "Ricarica"
 
 #: data/ui/widgets/accounts_button.ui:357
 msgid "Preferences"
@@ -269,7 +279,7 @@ msgstr "Preferenze"
 
 #: data/ui/widgets/accounts_button.ui:371
 msgid "About"
-msgstr ""
+msgstr "Riguardo a"
 
 #: data/ui/widgets/accounts_button.ui:397 src/Views/Search.vala:43
 msgid "Accounts"
@@ -277,7 +287,7 @@ msgstr "Account"
 
 #: data/ui/widgets/accounts_button_item.ui:60
 msgid "Forget"
-msgstr ""
+msgstr "Dimentica"
 
 #: data/ui/widgets/accounts_button_item.ui:88
 msgid "Title"
@@ -298,7 +308,7 @@ msgstr "Cancella"
 
 #: data/ui/widgets/list_item.ui:26 src/Dialogs/ListEditor.vala:87
 msgid "Untitled"
-msgstr ""
+msgstr "Non titolata"
 
 #: data/ui/widgets/list_item.ui:42
 msgid "Edit"
@@ -335,15 +345,15 @@ msgstr "Ieri"
 
 #: src/DateTime.vala:24
 msgid "%b %e"
-msgstr ""
+msgstr "%e %b"
 
 #: src/DateTime.vala:27
 msgid "%b %e, %Y"
-msgstr ""
+msgstr "%e %b, %Y"
 
 #: src/Dialogs/About.vala:14
 msgid "Report an issue"
-msgstr ""
+msgstr "Riporta un problema"
 
 #: src/Dialogs/Compose.vala:81 src/Views/Lists.vala:33
 msgid "This action cannot be reverted."
@@ -355,7 +365,7 @@ msgstr "Componi"
 
 #: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:253
 msgid "Redraft"
-msgstr ""
+msgstr "Nuova bozza"
 
 #: src/Dialogs/Compose.vala:154
 msgid "Reply"
@@ -375,7 +385,7 @@ msgstr "_Cancella"
 
 #: src/Dialogs/ListEditor.vala:201
 msgid "Discard changes?"
-msgstr ""
+msgstr "Scartare i cambiamenti?"
 
 #: src/Dialogs/ListEditor.vala:202
 msgid "You need to save the list if you want to keep them."
@@ -387,11 +397,11 @@ msgstr "Chiudi"
 
 #: src/Dialogs/NewAccount.vala:85
 msgid "Add Another"
-msgstr ""
+msgstr "Aggiunti un'altro"
 
 #: src/Dialogs/NewAccount.vala:127
 msgid "Please enter a valid instance URL"
-msgstr ""
+msgstr "Inserire l'URL di un'istanza valida"
 
 #: src/Dialogs/NewAccount.vala:160
 msgid "Please enter a valid authorization code"
@@ -404,11 +414,11 @@ msgstr ""
 #: src/Dialogs/NewAccount.vala:190
 #, c-format
 msgid "Hello, %s!"
-msgstr ""
+msgstr "Ciao %s!"
 
 #: src/Dialogs/NewAccount.vala:218
 msgid "Server returned an error"
-msgstr ""
+msgstr "Il server ha ritornato un errore"
 
 #: src/Services/Accounts.vala:32
 msgid "Network Error"
@@ -436,11 +446,11 @@ msgstr "Cerca"
 
 #: src/Views/Thread.vala:13
 msgid "Conversation"
-msgstr ""
+msgstr "Conversazioni"
 
 #: src/Views/Federated.vala:7
 msgid "Federated"
-msgstr ""
+msgstr "Federati"
 
 #: src/Views/Home.vala:6
 msgid "Home"
@@ -494,7 +504,7 @@ msgstr ""
 
 #: src/Views/Profile.vala:206
 msgid "Mutually follows you"
-msgstr ""
+msgstr "Ti segue mutualmente"
 
 #: src/Views/Profile.vala:208
 msgid "Follows you"
@@ -522,11 +532,11 @@ msgstr "Hashtag"
 
 #: src/Views/Search.vala:61
 msgid "Enter query"
-msgstr ""
+msgstr "Inserisci query"
 
 #: src/Widgets/Attachment/Slot.vala:46
 msgid "File saved to Downloads"
-msgstr ""
+msgstr "File salvato in Scaricati"
 
 #: src/Widgets/AccountsButton.vala:40
 #, c-format
@@ -535,7 +545,7 @@ msgstr "Dimenticare %s?"
 
 #: src/Widgets/AccountsButton.vala:41
 msgid "This account will be removed from the application."
-msgstr ""
+msgstr "Questo account sarà rimosso dall'applicazione."
 
 #: src/Widgets/AccountsButton.vala:148
 msgid "Anonymous"
@@ -543,7 +553,7 @@ msgstr "Anonimo"
 
 #: src/Widgets/AccountsButton.vala:149
 msgid "No active account"
-msgstr ""
+msgstr "Nessun account attivo"
 
 #: src/Widgets/Status.vala:72
 msgid "Click to show sensitive content"
