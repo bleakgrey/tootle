@@ -8,6 +8,8 @@ public class Build {
 	public const string SUPPORT_WEBSITE = "@SUPPORT_WEBSITE@";
 	public const string COPYRIGHT = "@COPYRIGHT@";
 	public const string PREFIX = "@PREFIX@";
+	public const string GETTEXT_PACKAGE = "@GETTEXT_PACKAGE@";
+	public const string LOCALEDIR = "@LOCALEDIR@";
 
 	public static string SYSTEM_INFO;
 
