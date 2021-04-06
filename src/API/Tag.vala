@@ -14,7 +14,6 @@ public class Tootle.API.Tag : Entity, Widgetizable {
 		var w = new Widgets.RichLabel (@"<a href=\"$(accounts.active.instance)/tags/$encoded\">#$name</a>");
 		w.use_markup = true;
 		w.halign = Align.START;
-		w.margin = 8;
 		w.show ();
 		return w;
 	}

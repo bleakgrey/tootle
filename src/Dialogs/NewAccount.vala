@@ -10,32 +10,22 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	protected bool use_auto_auth { get; set; default = true; }
 	protected InstanceAccount account { get; set; default = new InstanceAccount.empty (""); }
 
-	[GtkChild]
-	Button back_button;
-	[GtkChild]
-	Button next_button;
+	[GtkChild] unowned Button back_button;
+	[GtkChild] unowned Button next_button;
 
-	[GtkChild]
-	Stack stack;
-	[GtkChild]
-	Box instance_step;
-	[GtkChild]
-	Box code_step;
-	[GtkChild]
-	Box done_step;
+	[GtkChild] unowned Stack stack;
+	[GtkChild] unowned Box instance_step;
+	[GtkChild] unowned Box code_step;
+	[GtkChild] unowned Box done_step;
 
-	[GtkChild]
-	Entry instance_entry;
-	[GtkChild]
-	Entry code_entry;
-	[GtkChild]
-	Label code_label;
-	[GtkChild]
-	Label hello_label;
+	[GtkChild] unowned Entry instance_entry;
+	[GtkChild] unowned Entry code_entry;
+	[GtkChild] unowned Label code_label;
+	[GtkChild] unowned Label hello_label;
 
 	public NewAccount () {
 		Object (transient_for: window);
-		StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+		// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 		reset ();
 		present ();
 		new_account_window = this;
@@ -43,10 +33,10 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 		bind_property ("use-auto-auth", code_label, "visible", BindingFlags.SYNC_CREATE);
 	}
 
-	public override bool delete_event (Gdk.EventAny event) {
-		new_account_window = null;
-		return app.on_window_closed ();
-	}
+	// public override bool delete_event (Gdk.EventAny event) {
+	// 	new_account_window = null;
+	// 	return app.on_window_closed ();
+	// }
 
 	string setup_redirect_uri () {
 		try {

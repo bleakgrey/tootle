@@ -12,33 +12,21 @@ public class Tootle.Views.Base : Box {
 	public bool current { get; set; default = false; }
 	public SimpleActionGroup? actions { get; set; }
 
-	public Container content { get; set; }
+	public Widget content { get; set; }
 
-	[GtkChild]
-	protected Adw.HeaderBar header;
-	[GtkChild]
-	protected Button back_button;
+	[GtkChild] protected unowned Adw.HeaderBar header;
+	[GtkChild] protected unowned Button back_button;
 
-	[GtkChild]
-	protected ScrolledWindow scrolled;
-	[GtkChild]
-	protected Box view;
-	[GtkChild]
-	protected Adw.Clamp clamp;
-	[GtkChild]
-	protected Box column_view;
-	[GtkChild]
-	protected Stack states;
-	[GtkChild]
-	protected Box content_box;
-	[GtkChild]
-	protected ListBox content_list;
-	[GtkChild]
-	protected Button status_button;
-	[GtkChild]
-	Stack status_stack;
-	[GtkChild]
-	Label status_message_label;
+	[GtkChild] protected unowned ScrolledWindow scrolled;
+	[GtkChild] protected unowned Box view;
+	[GtkChild] protected unowned Adw.Clamp clamp;
+	[GtkChild] protected unowned Box column_view;
+	[GtkChild] protected unowned Stack states;
+	[GtkChild] protected unowned Box content_box;
+	[GtkChild] protected unowned ListBox content_list;
+	[GtkChild] protected unowned Button status_button;
+	[GtkChild] unowned Stack status_stack;
+	[GtkChild] unowned Label status_message_label;
 
 	public string state { get; set; default = "status"; }
 	public string status_message { get; set; default = STATUS_EMPTY; }

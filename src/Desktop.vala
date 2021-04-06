@@ -28,11 +28,10 @@ public class Tootle.Desktop {
 		return true;
 	}
 
-	// Copy a string to the clipboard
+	// FIXME: Copy a string to the clipboard
 	public static void copy (string str) {
-		var display = window.get_display ();
-		var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
-		clipboard.set_text (Widgets.RichLabel.restore_entities (str), -1);
+		// var clipboard = Gdk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+		// clipboard.set_text (Widgets.RichLabel.restore_entities (str), -1);
 	}
 
 	public static string get_uri_host (string uri) {
@@ -84,16 +83,17 @@ public class Tootle.Desktop {
 	}
 
 	public static string fallback_icon (string normal, string fallback, string fallback2 = "broken") {
-		var theme = Gtk.IconTheme.get_default ();
-		if (theme.has_icon (normal))
-			return normal;
-		else
-			return theme.has_icon (fallback) ? fallback : fallback2;
+		return normal;
+		// var theme = Gtk.IconTheme.get_default ();
+		// if (theme.has_icon (normal))
+		// 	return normal;
+		// else
+		// 	return theme.has_icon (fallback) ? fallback : fallback2;
 	}
 
-	public static Gdk.Pixbuf icon_to_pixbuf (string name) {
-		var theme = Gtk.IconTheme.get_default ();
-		return theme.load_icon (name, 32, Gtk.IconLookupFlags.GENERIC_FALLBACK);
-	}
+	// public static Gdk.Pixbuf icon_to_pixbuf (string name) {
+	// 	var theme = Gtk.IconTheme.get_default ();
+	// 	return theme.load_icon (name, 32, Gtk.IconLookupFlags.GENERIC_FALLBACK);
+	// }
 
 }

@@ -34,36 +34,36 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	public ThreadRole thread_role { get; set; default = ThreadRole.NONE; }
 
-	[GtkChild] protected Grid grid;
+	[GtkChild] protected unowned Grid grid;
 
-	[GtkChild] protected Image header_icon;
-	[GtkChild] protected Widgets.RichLabel header_label;
-	[GtkChild] public Image thread_line;
+	[GtkChild] protected unowned Image header_icon;
+	[GtkChild] protected unowned Widgets.RichLabel header_label;
+	[GtkChild] public unowned Image thread_line;
 
-	[GtkChild] public Widgets.Avatar avatar;
-	[GtkChild] protected Widgets.RichLabel name_label;
-	[GtkChild] protected Label handle_label;
-	[GtkChild] protected Box indicators;
-	[GtkChild] protected Label date_label;
-	[GtkChild] protected Image pin_indicator;
-	[GtkChild] protected Image indicator;
+	[GtkChild] public unowned Widgets.Avatar avatar;
+	[GtkChild] protected unowned Widgets.RichLabel name_label;
+	[GtkChild] protected unowned Label handle_label;
+	[GtkChild] protected unowned Box indicators;
+	[GtkChild] protected unowned Label date_label;
+	[GtkChild] protected unowned Image pin_indicator;
+	[GtkChild] protected unowned Image indicator;
 
-	[GtkChild] protected Box content_column;
-	[GtkChild] protected Stack spoiler_stack;
-	[GtkChild] protected Box content_box;
-	[GtkChild] protected Widgets.MarkupView content;
-	[GtkChild] protected Widgets.Attachment.Box attachments;
-	[GtkChild] protected Button spoiler_button;
-	[GtkChild] protected Widgets.RichLabel spoiler_label;
+	[GtkChild] protected unowned Box content_column;
+	[GtkChild] protected unowned Stack spoiler_stack;
+	[GtkChild] protected unowned Box content_box;
+	[GtkChild] protected unowned Widgets.MarkupView content;
+	[GtkChild] protected unowned Widgets.Attachment.Box attachments;
+	[GtkChild] protected unowned Button spoiler_button;
+	[GtkChild] protected unowned Widgets.RichLabel spoiler_label;
 
-	[GtkChild] protected Box actions;
-	[GtkChild] protected Button reply_button;
-	[GtkChild] protected Image reply_button_icon;
-	[GtkChild] protected ToggleButton reblog_button;
-	[GtkChild] protected Image reblog_icon;
-	[GtkChild] protected ToggleButton favorite_button;
-	[GtkChild] protected ToggleButton bookmark_button;
-	[GtkChild] protected Button menu_button;
+	[GtkChild] protected unowned Box actions;
+	[GtkChild] protected unowned Button reply_button;
+	[GtkChild] protected unowned Image reply_button_icon;
+	[GtkChild] protected unowned ToggleButton reblog_button;
+	[GtkChild] protected unowned Image reblog_icon;
+	[GtkChild] protected unowned ToggleButton favorite_button;
+	[GtkChild] protected unowned ToggleButton bookmark_button;
+	[GtkChild] protected unowned Button menu_button;
 
 	protected string spoiler_text {
 		owned get {
@@ -194,17 +194,18 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 	protected void open_menu () {
-		var menu = new Gtk.Menu ();
+		//FIXME: Gtk.Menu is gone.
+		// var menu = new Gtk.Menu ();
 
-		var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
-		item_open_link.activate.connect (() => Desktop.open_uri (status.formal.url));
-		var item_copy_link = new Gtk.MenuItem.with_label (_("Copy Link"));
-		item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
-		var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
-		item_copy.activate.connect (() => {
-			var sanitized = HtmlUtils.remove_tags (status.formal.content);
-			Desktop.copy (sanitized);
-		});
+		// var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
+		// item_open_link.activate.connect (() => Desktop.open_uri (status.formal.url));
+		// var item_copy_link = new Gtk.MenuItem.with_label (_("Copy Link"));
+		// item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
+		// var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
+		// item_copy.activate.connect (() => {
+		// 	var sanitized = HtmlUtils.remove_tags (status.formal.content);
+		// 	Desktop.copy (sanitized);
+		// });
 
 		// if (is_notification) {
 		//	 var item_muting = new Gtk.MenuItem.with_label (status.muted ? _("Unmute Conversation") : _("Mute Conversation"));
@@ -212,37 +213,37 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		//	 menu.add (item_muting);
 		// }
 
-		menu.add (item_open_link);
-		menu.add (new SeparatorMenuItem ());
-		menu.add (item_copy_link);
-		menu.add (item_copy);
+		// menu.add (item_open_link);
+		// menu.add (new SeparatorMenuItem ());
+		// menu.add (item_copy_link);
+		// menu.add (item_copy);
 
-		if (status.is_owned ()) {
-			menu.add (new SeparatorMenuItem ());
+		// if (status.is_owned ()) {
+		// 	menu.add (new SeparatorMenuItem ());
 
-			var item_pin = new Gtk.MenuItem.with_label (status.pinned ? _("Unpin from Profile") : _("Pin on Profile"));
-			item_pin.activate.connect (() => {
-				status.action (status.formal.pinned ? "unpin" : "pin");
-			});
-			menu.add (item_pin);
+		// 	var item_pin = new Gtk.MenuItem.with_label (status.pinned ? _("Unpin from Profile") : _("Pin on Profile"));
+		// 	item_pin.activate.connect (() => {
+		// 		status.action (status.formal.pinned ? "unpin" : "pin");
+		// 	});
+		// 	menu.add (item_pin);
 
-			var item_delete = new Gtk.MenuItem.with_label (_("Delete"));
-			item_delete.activate.connect (() => {
-				status.annihilate ()
-					.then ((sess, mess) => {
-						streams.force_delete (status.id);
-					})
-					.exec ();
-			});
-			menu.add (item_delete);
+		// 	var item_delete = new Gtk.MenuItem.with_label (_("Delete"));
+		// 	item_delete.activate.connect (() => {
+		// 		status.annihilate ()
+		// 			.then ((sess, mess) => {
+		// 				streams.force_delete (status.id);
+		// 			})
+		// 			.exec ();
+		// 	});
+		// 	menu.add (item_delete);
 
-			var item_redraft = new Gtk.MenuItem.with_label (_("Redraft"));
-			item_redraft.activate.connect (() => new Dialogs.Compose.redraft (status.formal));
-			menu.add (item_redraft);
-		}
+		// 	var item_redraft = new Gtk.MenuItem.with_label (_("Redraft"));
+		// 	item_redraft.activate.connect (() => new Dialogs.Compose.redraft (status.formal));
+		// 	menu.add (item_redraft);
+		// }
 
-		menu.show_all ();
-		menu.popup_at_widget (menu_button, Gravity.SOUTH_EAST, Gravity.SOUTH_EAST);
+		// menu.show_all ();
+		// menu.popup_at_widget (menu_button, Gravity.SOUTH_EAST, Gravity.SOUTH_EAST);
 	}
 
 	public void expand_root () {
@@ -250,11 +251,12 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		content.selectable = true;
 		content.get_style_context ().add_class ("ttl-large-body");
 
-		var parent = content_column.get_parent () as Container;
-		var left_attach = parent.find_child_property ("left-attach");
-		var width = parent.find_child_property ("width");
-		parent.set_child_property (content_column, 1, 0, left_attach);
-		parent.set_child_property (content_column, 3, 2, width);
+		// TODO: fix expand_root
+		// var parent = content_column.get_parent () as Container;
+		// var left_attach = parent.find_child_property ("left-attach");
+		// var width = parent.find_child_property ("width");
+		// parent.set_child_property (content_column, 1, 0, left_attach);
+		// parent.set_child_property (content_column, 3, 2, width);
 	}
 
 	public void install_thread_line () {

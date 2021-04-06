@@ -81,7 +81,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 				rs_button_action ();
 			}
 		});
-		header.custom_title = menu_button = new Widgets.TimelineMenu ("profile-menu");
+		header.title_widget = menu_button = new Widgets.TimelineMenu ("profile-menu");
 
 		if (profile.id != accounts.active.id)
 			header.pack_end (rs_button);
@@ -279,10 +279,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/profile_field_row.ui")]
 	protected class Field : ListBoxRow {
 
-		[GtkChild]
-		Widgets.RichLabel name_label;
-		[GtkChild]
-		Widgets.RichLabel value_label;
+		[GtkChild] unowned Widgets.RichLabel name_label;
+		[GtkChild] unowned Widgets.RichLabel value_label;
 
 		public Field (API.AccountField field) {
 			name_label.text = field.name;

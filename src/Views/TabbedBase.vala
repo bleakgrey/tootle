@@ -35,7 +35,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		switcher_title.show ();
 		header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
 		header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
-		header.custom_title = switcher_title;
+		header.title_widget = switcher_title;
 
 		switcher_bar = new Adw.ViewSwitcherBar ();
 		switcher_bar.show ();

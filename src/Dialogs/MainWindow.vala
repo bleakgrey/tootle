@@ -6,8 +6,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 	public const string ZOOM_CLASS = "ttl-scalable";
 
-	[GtkChild]
-	Adw.Leaflet deck;
+	[GtkChild] unowned Adw.Leaflet deck;
 
 	Views.Base? last_view = null;
 
@@ -18,7 +17,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 		on_zoom_level_changed ();
 		deck.notify["visible-child"].connect (on_view_changed);
-		button_press_event.connect (on_button_press);
+		// button_press_event.connect (on_button_press);
 		restore_state ();
 	}
 
@@ -46,7 +45,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 	[GtkCallback]
 	void on_child_transition () {
-		if (deck.transition_running)
+		if (deck.child_transition_running)
 			return;
 
 		Widget unused_child;
@@ -54,20 +53,21 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 			unused_child.destroy ();
 	}
 
-	public override bool delete_event (Gdk.EventAny event) {
-		window = null;
-		return app.on_window_closed ();
-	}
+	// public override bool delete_event (Gdk.EventAny event) {
+	// 	window = null;
+	// 	return app.on_window_closed ();
+	// }
 
+	//TODO: switch timelines with 1-4. Should be moved to Views.Main
 	[Deprecated]
 	public void switch_timeline (int32 num) {
 	}
 
-	bool on_button_press (EventButton ev) {
-		if (ev.button == 8)
-			return back ();
-		return false;
-	}
+	// bool on_button_press (EventButton ev) {
+	// 	if (ev.button == 8)
+	// 		return back ();
+	// 	return false;
+	// }
 
 	void on_zoom_level_changed () {
 		try {
@@ -82,7 +82,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 				""".printf (ZOOM_CLASS, scale);
 			}
 
-			app.zoom_css_provider.load_from_data (css);
+			app.zoom_css_provider.load_from_data (css.data);
 		}
 		catch (Error e) {
 			warning (@"Can't set zoom level: $(e.message)");

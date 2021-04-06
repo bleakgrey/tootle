@@ -28,10 +28,11 @@ public class Tootle.Widgets.RichLabel : Label {
 
 	construct {
 		xalign = 0;
+		wrap = true;
 		wrap_mode = Pango.WrapMode.WORD_CHAR;
 		justify = Justification.LEFT;
 		single_line_mode = false;
-		set_line_wrap (true);
+		activate_link.connect (on_activate_link);
 	}
 
 	public RichLabel (string text) {
@@ -53,7 +54,7 @@ public class Tootle.Widgets.RichLabel : Label {
 			   .replace ("&quot;", "\"");
 	}
 
-	public override bool activate_link (string url) {
+	bool on_activate_link (string url) {
 		if (mentions != null){
 			mentions.@foreach (mention => {
 				if (url == mention.url)

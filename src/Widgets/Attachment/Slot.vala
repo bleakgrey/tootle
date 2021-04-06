@@ -4,10 +4,10 @@ using Gdk;
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/attachment_slot.ui")]
 public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 
-	[GtkChild] Button button;
-	[GtkChild] Label chip;
-	[GtkChild] Image play_icon;
-	[GtkChild] Stack stack;
+	[GtkChild] unowned Button button;
+	[GtkChild] unowned Label chip;
+	[GtkChild] unowned Image play_icon;
+	[GtkChild] unowned Stack stack;
 
 	public API.Attachment attachment { get; construct set; }
 
@@ -16,11 +16,11 @@ public class Tootle.Widgets.Attachment.Slot : FlowBoxChild {
 
 		if (attachment.preview_url != null) {
 			var img = new Widgets.Attachment.Picture (attachment.preview_url);
-			img.notify["visible"].connect (() => {
-				stack.visible_child_name = img.visible ? "content" : "loading";
-			});
-			stack.add_named (img, "content");
-			img.on_request ();
+			// img.notify["visible"].connect (() => {
+			// 	stack.visible_child_name = img.visible ? "content" : "loading";
+			// });
+			// stack.add_named (img, "content");
+			// img.on_request ();
 		}
 
 		if (attachment.kind != "image") {

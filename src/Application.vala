@@ -67,7 +67,7 @@ namespace Tootle {
 		public string[] ACCEL_TIMELINE_3 = {"<Alt>4"};
 
 		public static int main (string[] args) {
-			Gtk.init (ref args);
+			Gtk.init ();
 			try {
 				var opt_context = new OptionContext ("- Options");
 				opt_context.add_main_entries (app_options, null);
@@ -94,9 +94,9 @@ namespace Tootle {
 				accounts = new SecretAccountStore();
 				accounts.init ();
 
-				css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
-				StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-				StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+				// css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
+				// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+				// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 				window_dummy = new Window ();
 				add_window (window_dummy);
@@ -196,7 +196,7 @@ namespace Tootle {
 			dlg.text = text;
 			dlg.secondary_text = msg;
 			dlg.transient_for = win;
-			dlg.run ();
+			// dlg.run ();
 			dlg.destroy ();
 		}
 
@@ -211,9 +211,10 @@ namespace Tootle {
 			dlg.text = text;
 			dlg.secondary_text = msg;
 			dlg.transient_for = win;
-			var i = dlg.run ();
+			// var i = dlg.run ();
 			dlg.destroy ();
-			return i == ResponseType.YES;
+			// return i == ResponseType.YES;
+			return false;
 		}
 
 	}

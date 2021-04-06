@@ -9,14 +9,10 @@ public class Tootle.Widgets.AdaptiveButton : Box {
 
 	public signal void clicked ();
 
-	[GtkChild]
-	Button full;
-	[GtkChild]
-	Button mini;
-	[GtkChild]
-	Image image1;
-	[GtkChild]
-	Image image2;
+	[GtkChild] unowned Button full;
+	[GtkChild] unowned Button mini;
+	[GtkChild] unowned Image image1;
+	[GtkChild] unowned Image image2;
 
 	construct {
 		var butts = new Button[]{ full, mini };

@@ -77,9 +77,10 @@ public class Tootle.Views.Thread : Views.Base, IAccountHolder {
 				connect_threads ();
 				on_content_changed ();
 
-				int x,y;
-				translate_coordinates (root_widget, 0, header.get_allocated_height (), out x, out y);
-				scrolled.vadjustment.value = (double)(y*-1);
+				//FIXME: scroll to expanded post
+				// int x,y;
+				// translate_coordinates (root_widget, 0, header.get_allocated_height (), out x, out y);
+				// scrolled.vadjustment.value = (double)(y*-1);
 			})
 			.exec ();
 	}

@@ -14,33 +14,22 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		}
 	}
 
-	[GtkChild]
-	Adw.ViewSwitcherTitle mode_switcher;
-	[GtkChild]
-	Button commit;
-	[GtkChild]
-	Stack commit_stack;
+	[GtkChild] unowned Adw.ViewSwitcherTitle mode_switcher;
+	[GtkChild] unowned Button commit;
+	[GtkChild] unowned Stack commit_stack;
 
-	[GtkChild]
-	Revealer cw_revealer;
-	[GtkChild]
-	ToggleButton cw_button;
-	[GtkChild]
-	Entry cw;
-	[GtkChild]
-	Label counter;
-	[GtkChild]
-	MenuButton visibility_button;
-	[GtkChild]
-	Image visibility_icon;
+	[GtkChild] unowned Revealer cw_revealer;
+	[GtkChild] unowned ToggleButton cw_button;
+	[GtkChild] unowned Entry cw;
+	[GtkChild] unowned Label counter;
+	[GtkChild] unowned MenuButton visibility_button;
+	[GtkChild] unowned Image visibility_icon;
+
 	Widgets.VisibilityPopover visibility_popover;
-	[GtkChild]
-	TextView content;
+	[GtkChild] unowned TextView content;
 
-	[GtkChild]
-	Stack mode;
-	[GtkChild]
-	ListBox media_list;
+	[GtkChild] unowned Stack mode;
+	[GtkChild] unowned ListBox media_list;
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/compose_attachment.ui")]
 	protected class MediaItem : Gtk.ListBoxRow {
@@ -49,12 +38,9 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		public API.Attachment? entity { get; set; }
 		public string? source { get; set; }
 
-		[GtkChild]
-		public Label title_label;
-		[GtkChild]
-		public Entry description;
-		[GtkChild]
-		public Stack icon;
+		[GtkChild] public unowned Label title_label;
+		[GtkChild] public unowned Entry description;
+		[GtkChild] public unowned Stack icon;
 
 		public MediaItem (Compose dialog, string? source, API.Attachment? entity) {
 			this.dialog = dialog;
@@ -121,7 +107,7 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	public Compose (API.Status template = new API.Status.empty ()) {
 		Object (
 			status: template,
-			style_class: STYLE_CLASS_SUGGESTED_ACTION,
+			// style_class: STYLE_CLASS_SUGGESTED_ACTION,
 			label: _("Compose")
 		);
 		message ("Composing status template");
@@ -131,7 +117,7 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	public Compose.redraft (API.Status status) {
 		Object (
 			status: status,
-			style_class: STYLE_CLASS_DESTRUCTIVE_ACTION,
+			// style_class: STYLE_CLASS_DESTRUCTIVE_ACTION,
 			label: _("Redraft")
 		);
 		message (@"Redrafting status $(status.id)");
@@ -150,7 +136,7 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		template.content = to.formal.get_reply_mentions ();
 		Object (
 			status: template,
-			style_class: STYLE_CLASS_SUGGESTED_ACTION,
+			// style_class: STYLE_CLASS_SUGGESTED_ACTION,
 			label: _("Reply")
 		);
 		message (@"Replying to status $(status.in_reply_to_id)");
@@ -203,12 +189,13 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		chooser.select_multiple = true;
 		chooser.set_filter (filter);
 
-		if (chooser.run () == Gtk.ResponseType.ACCEPT) {
-			foreach (unowned string uri in chooser.get_uris ())
-				media_list.insert (new MediaItem (this, uri, null), 0);
+		//FIXME: port file chooser api
+		// if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+		// 	foreach (unowned string uri in chooser.get_uris ())
+		// 		media_list.insert (new MediaItem (this, uri, null), 0);
 
-			mode.visible_child_name = "media";
-		}
+		// 	mode.visible_child_name = "media";
+		// }
 	}
 
 	[GtkCallback]

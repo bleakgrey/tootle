@@ -99,7 +99,8 @@ public class Tootle.Cache : GLib.Object {
                 }
                 catch (Error e) {
                     warning (@"\"$url\" -> Pixbuf: FAIL ($(e.message))");
-                    pixbuf = Desktop.icon_to_pixbuf ("image-x-generic-symbolic");
+                    // pixbuf = Desktop.icon_to_pixbuf ("image-x-generic-symbolic");
+                    pixbuf = null;
                 }
 
                 // message (@"[*] $key");
