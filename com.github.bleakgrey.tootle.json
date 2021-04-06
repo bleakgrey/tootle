@@ -2,7 +2,7 @@
   "app-id": "com.github.bleakgrey.tootle",
   "runtime": "org.gnome.Platform",
   "sdk": "org.gnome.Sdk",
-  "runtime-version": "3.38",
+  "runtime-version": "master",
   "command": "com.github.bleakgrey.tootle",
   "finish-args": [
     "--share=network",
@@ -26,22 +26,22 @@
     "*.a"
   ],
   "modules": [
-    {
-      "name": "libhandy",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dtests=false",
-        "-Dexamples=false",
-        "-Dglade_catalog=disabled"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://ftp.acc.umu.se/pub/GNOME/sources/libhandy/1.0/libhandy-1.0.3.tar.xz",
-          "sha256": "559bb3acc2c362488917eb72ed25bdc181f4ae26ac94d177634cc5d34c867f7a"
-        }
-      ]
-    },
+	{
+	  "name" : "libadwaita",
+	  "buildsystem" : "meson",
+	  "builddir" : true,
+	  "config-opts": [
+	    "-Dexamples=false",
+	    "-Dtests=false"
+	  ],
+	  "sources" : [
+	    {
+	      "type" : "archive",
+	      "url" : "https://gitlab.gnome.org/GNOME/libadwaita/-/archive/594eb987c57e4d20370cc20520871f230ff02ae2/libadwaita-594eb987c57e4d20370cc20520871f230ff02ae2.tar",
+	      "sha256": "960d8e95864cac71be9e893d37baace82d67ecb06b3b09bd24b9fdfece9eca9c"
+	    }
+	  ]
+	},
     {
       "name": "tootle",
       "builddir": true,

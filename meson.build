@@ -1,29 +1,10 @@
-project('com.github.bleakgrey.tootle', 'vala', 'c', version: '1.0.0')
+project('com.github.bleakgrey.tootle', 'vala', 'c', version: '2.0.0')
 
 add_global_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
     ],
     language: 'c',
 )
-
-libhandy_dep = dependency('libhandy-1', version: '>= 1.0', required: false)
-if not libhandy_dep.found()
-  libhandy = subproject(
-    'libhandy',
-    default_options: [
-      'examples=false',
-      'glade_catalog=disabled',
-      'tests=false',
-    ]
-  )
-
-  libhandy_dep = declare_dependency(
-    dependencies: [
-      libhandy.get_variable('libhandy_dep'),
-      libhandy.get_variable('libhandy_vapi'),
-    ]
-  )
-endif
 
 config = configuration_data()
 config.set('EXEC_NAME', meson.project_name())
@@ -34,8 +15,7 @@ config.set('PREFIX', get_option('prefix'))
 config.set('NAME', 'Tootle')
 config.set('WEBSITE', 'https://github.com/bleakgrey/tootle')
 config.set('SUPPORT_WEBSITE', 'https://github.com/bleakgrey/tootle/issues')
-config.set('COPYRIGHT', '© 2018-2020 bleak_grey')
-config.set('ACCOUNT_STORE', 'FileAccountStore')
+config.set('COPYRIGHT', '© 2018-2021 bleak_grey')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -46,6 +26,9 @@ asresources = gnome.compile_resources(
   c_name: 'as'
 )
 
+libgtk_dep = dependency('gtk4', version: '>=4.0.0', required: true)
+libadwaita_dep = dependency('libadwaita-1')
+
 sources = files(
     'src/Application.vala',
     'src/Desktop.vala',
@@ -55,7 +38,7 @@ sources = files(
     'src/DateTime.vala',
     'src/Services/Accounts/InstanceAccount.vala',
     'src/Services/Accounts/AccountStore.vala',
-    'src/Services/Accounts/FileAccountStore.vala',
+    'src/Services/Accounts/SecretAccountStore.vala',
     'src/Services/Accounts/IAccountHolder.vala',
     'src/Services/Accounts/Mastodon/MastodonAccount.vala',
     'src/Services/Streams.vala',
@@ -118,14 +101,6 @@ sources = files(
     'src/Views/List.vala',
 )
 
-libsecret_dep = dependency('libsecret-1', required: false)
-if not libsecret_dep.found()
-    warning('Keyring support disabled. Accounts will be stored in a text file.')
-else
-    config.set('ACCOUNT_STORE','SecretAccountStore')
-    sources += 'src/Services/Accounts/'+config.get('ACCOUNT_STORE')+'.vala'
-endif
-
 build_file = configure_file(
     input: 'src/Build.vala.in',
     output: 'Build.vala',
@@ -138,14 +113,14 @@ executable(
     build_file,
     sources,
     dependencies: [
-        dependency('gtk+-3.0', version: '>=3.22.0'),
         dependency('glib-2.0', version: '>=2.30.0'),
         dependency('gee-0.8', version: '>=0.8.5'),
         dependency('libsoup-2.4'),
         dependency('json-glib-1.0', version: '>=1.4.4'),
         dependency('libxml-2.0'),
-        libhandy_dep,
-        libsecret_dep,
+        dependency('libsecret-1', required: true),
+        libgtk_dep,
+        libadwaita_dep,
     ],
     install: true,
 )

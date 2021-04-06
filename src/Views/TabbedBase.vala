@@ -4,8 +4,8 @@ public class Tootle.Views.TabbedBase : Views.Base {
 
 	static int ID_COUNTER = 0;
 
-	protected Hdy.ViewSwitcherTitle switcher_title;
-	protected Hdy.ViewSwitcherBar switcher_bar;
+	protected Adw.ViewSwitcherTitle switcher_title;
+	protected Adw.ViewSwitcherBar switcher_bar;
 	protected Stack stack;
 
 	Views.Base? last_view = null;
@@ -31,13 +31,13 @@ public class Tootle.Views.TabbedBase : Views.Base {
 	}
 
 	public override void build_header () {
-		switcher_title = new Hdy.ViewSwitcherTitle ();
+		switcher_title = new Adw.ViewSwitcherTitle ();
 		switcher_title.show ();
 		header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
 		header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
 		header.custom_title = switcher_title;
 
-		switcher_bar = new Hdy.ViewSwitcherBar ();
+		switcher_bar = new Adw.ViewSwitcherBar ();
 		switcher_bar.show ();
 		switcher_title.bind_property ("title-visible", switcher_bar, "reveal", BindingFlags.SYNC_CREATE);
 		pack_end (switcher_bar, false, false, 0);

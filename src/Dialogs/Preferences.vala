@@ -1,7 +1,7 @@
 using Gtk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/preferences.ui")]
-public class Tootle.Dialogs.Preferences : Hdy.PreferencesWindow {
+public class Tootle.Dialogs.Preferences : Adw.PreferencesWindow {
 
     [GtkChild]
     Switch dark_theme;
@@ -10,7 +10,7 @@ public class Tootle.Dialogs.Preferences : Hdy.PreferencesWindow {
     [GtkChild]
     Switch work_in_background;
     [GtkChild]
-    Hdy.ComboRow default_post_visibility;
+    Adw.ComboRow default_post_visibility;
     [GtkChild]
     SpinButton timeline_page_size;
     [GtkChild]

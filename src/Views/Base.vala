@@ -15,7 +15,7 @@ public class Tootle.Views.Base : Box {
 	public Container content { get; set; }
 
 	[GtkChild]
-	protected Hdy.HeaderBar header;
+	protected Adw.HeaderBar header;
 	[GtkChild]
 	protected Button back_button;
 
@@ -24,7 +24,7 @@ public class Tootle.Views.Base : Box {
 	[GtkChild]
 	protected Box view;
 	[GtkChild]
-	protected Hdy.Clamp clamp;
+	protected Adw.Clamp clamp;
 	[GtkChild]
 	protected Box column_view;
 	[GtkChild]

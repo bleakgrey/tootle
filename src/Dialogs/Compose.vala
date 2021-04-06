@@ -2,7 +2,7 @@ using Gtk;
 using Gee;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/compose.ui")]
-public class Tootle.Dialogs.Compose : Hdy.Window {
+public class Tootle.Dialogs.Compose : Adw.Window {
 
 	public API.Status? status { get; construct set; }
 	public string style_class { get; construct set; }
@@ -15,7 +15,7 @@ public class Tootle.Dialogs.Compose : Hdy.Window {
 	}
 
 	[GtkChild]
-	Hdy.ViewSwitcherTitle mode_switcher;
+	Adw.ViewSwitcherTitle mode_switcher;
 	[GtkChild]
 	Button commit;
 	[GtkChild]

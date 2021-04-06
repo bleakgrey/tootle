@@ -3,8 +3,8 @@ using Gtk;
 public class Tootle.Views.Search : Views.TabbedBase {
 
 	public string query { get; set; default = ""; }
-	Hdy.SearchBar bar;
-	Hdy.Clamp bar_clamp;
+	Adw.SearchBar bar;
+	Adw.Clamp bar_clamp;
 	SearchEntry entry;
 
 	Views.Base accounts_tab;
@@ -14,7 +14,7 @@ public class Tootle.Views.Search : Views.TabbedBase {
 	public Search () {
 		Object (label: _("Search"));
 
-		bar = new Hdy.SearchBar ();
+		bar = new Adw.SearchBar ();
 		bar.search_mode_enabled = true;
 		bar.show ();
 		pack_start (bar, false, false, 0);
@@ -25,7 +25,7 @@ public class Tootle.Views.Search : Views.TabbedBase {
 		entry.text = query;
 		entry.show ();
 
-		bar_clamp = new Hdy.Clamp ();
+		bar_clamp = new Adw.Clamp ();
 		bar_clamp.show ();
 		bar_clamp.add (entry);
 

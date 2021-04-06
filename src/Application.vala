@@ -85,13 +85,13 @@ namespace Tootle {
 			base.startup ();
 			try {
 				Build.print_info ();
-				Hdy.init ();
+				Adw.init ();
 
 				settings = new Settings ();
 				streams = new Streams ();
 				network = new Network ();
 				cache = new Cache ();
-				accounts = Build.get_account_store ();
+				accounts = new SecretAccountStore();
 				accounts.init ();
 
 				css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");

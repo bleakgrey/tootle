@@ -1,4 +1,4 @@
-using Hdy;
+using Adw;
 using Gtk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/adaptive_button.ui")]

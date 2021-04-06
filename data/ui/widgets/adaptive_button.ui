@@ -18,7 +18,7 @@
     <property name="can_focus">False</property>
     <property name="halign">end</property>
     <child>
-      <object class="HdySqueezer">
+      <object class="AdwSqueezer">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>

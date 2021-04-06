@@ -1,11 +1,11 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Widgets.Avatar : Bin {
+public class Tootle.Widgets.Avatar : Adw.Bin {
 
 	Cache.Reference? cached;
 
-	Hdy.Avatar avatar;
+	Adw.Avatar avatar;
 
 	public int size {
 		get {
@@ -19,12 +19,11 @@ public class Tootle.Widgets.Avatar : Bin {
 	public API.Account? account { get; set; }
 
 	construct {
-		avatar = new Hdy.Avatar (48, null, true);
+		avatar = new Adw.Avatar (48, null, true);
 		avatar.destroy.connect (() => {
 			avatar.set_image_load_func (null);
 		});
-		add (avatar);
-		show_all ();
+		child = avatar;
 
 		notify["account"].connect (on_invalidated);
 		on_invalidated ();
@@ -50,7 +49,7 @@ public class Tootle.Widgets.Avatar : Bin {
 		if (account == null) {
 			// This exact string makes the avatar grey.
 			//
-			// If left null, *each* blank Hdy.Avatar receives
+			// If left null, *each* blank Adw.Avatar receives
 			// a random color and hurts my eyes. No bueno.
 			avatar.text = "abc";
 			avatar.show_initials = false;

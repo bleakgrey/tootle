@@ -2,12 +2,12 @@ using Gtk;
 using Gdk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/main.ui")]
-public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
+public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 	public const string ZOOM_CLASS = "ttl-scalable";
 
 	[GtkChild]
-	Hdy.Deck deck;
+	Adw.Leaflet deck;
 
 	Views.Base? last_view = null;
 
@@ -40,7 +40,7 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 	}
 
 	public bool back () {
-		deck.navigate (Hdy.NavigationDirection.BACK);
+		deck.navigate (Adw.NavigationDirection.BACK);
 		return true;
 	}
 
@@ -50,7 +50,7 @@ public class Tootle.Dialogs.MainWindow: Hdy.Window, ISavedWindow {
 			return;
 
 		Widget unused_child;
-		while ((unused_child = deck.get_adjacent_child (Hdy.NavigationDirection.FORWARD)) != null)
+		while ((unused_child = deck.get_adjacent_child (Adw.NavigationDirection.FORWARD)) != null)
 			unused_child.destroy ();
 	}
 
