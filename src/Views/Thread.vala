@@ -20,35 +20,35 @@ public class Tootle.Views.Thread : Views.Base, IAccountHolder {
 		request ();
 	}
 
-	Widgets.Status append (Entity entity){
-		var w = entity.to_widget () as Widgets.Status;
-		w.reveal_spoiler = true;
-		content_list.insert (w, -1);
-		return w;
-	}
+	// Widgets.Status append (Entity entity){
+	// 	var w = entity.to_widget () as Widgets.Status;
+	// 	w.reveal_spoiler = true;
+	// 	content_list.insert (w, -1);
+	// 	return w;
+	// }
 
 	void connect_threads () {
-		Widgets.Status? last_w = null;
-		string? last_id = null;
+		// Widgets.Status? last_w = null;
+		// string? last_id = null;
 
-		content.get_children ().foreach (i => {
-			var w = i as Widgets.Status;
-			var id = w.status.formal.in_reply_to_id;
+		// content.get_children ().foreach (i => {
+		// 	var w = i as Widgets.Status;
+		// 	var id = w.status.formal.in_reply_to_id;
 
-			if (id == last_id) {
-				Widgets.Status.ThreadRole.connect_posts (last_w, w);
-			}
+		// 	if (id == last_id) {
+		// 		Widgets.Status.ThreadRole.connect_posts (last_w, w);
+		// 	}
 
-			last_w = w;
-			last_id = w.status.formal.id;
-		});
+		// 	last_w = w;
+		// 	last_id = w.status.formal.id;
+		// });
 
-		content.get_children ().foreach (i => {
-			var w = i as Widgets.Status;
-			w.install_thread_line ();
-		});
+		// content.get_children ().foreach (i => {
+		// 	var w = i as Widgets.Status;
+		// 	w.install_thread_line ();
+		// });
 
-		root_widget.thread_line.hide ();
+		// root_widget.thread_line.hide ();
 	}
 
 	public void request () {
@@ -62,16 +62,17 @@ public class Tootle.Views.Thread : Views.Base, IAccountHolder {
 				var ancestors = root.get_array_member ("ancestors");
 				ancestors.foreach_element ((array, i, node) => {
 					var status = Entity.from_json (typeof (API.Status), node);
-					append (status);
+					model.append (status);
 				});
 
-				root_widget = append (root_status) as Widgets.Status;
+				root_widget = root_status.to_widget () as Widgets.Status;
 				root_widget.expand_root ();
+				content_list.append (root_widget);
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {
 					var status = Entity.from_json (typeof (API.Status), node);
-					append (status);
+					model.append (status);
 				});
 
 				connect_threads ();

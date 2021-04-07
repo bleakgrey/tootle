@@ -20,6 +20,8 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base
 		status_button.clicked.connect (on_refresh);
 		account_listener_init ();
 
+		content_list.bind_model (model, create_model_widget);
+
 		on_status_added_sigig = on_status_added.connect (add_status);
 		on_status_removed.connect (remove_status);
 	}
@@ -27,24 +29,13 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base
 		streams.unsubscribe (stream, this);
 	}
 
+	public virtual Widget create_model_widget (Object obj) {
+		var w = obj as Widgetizable;
+		return w.to_widget ();
+	}
+
 	public virtual bool is_status_owned (API.Status status) {
 		return status.is_owned ();
-	}
-
-	public void prepend (Widget? w) {
-		append (w, true);
-	}
-
-	public virtual void append (Widget? w, bool first = false) {
-		if (w == null) {
-			warning ("Attempted to add an empty widget");
-			return;
-		}
-
-		if (first)
-			content_list.prepend (w);
-		else
-			content_list.insert (w, -1);
 	}
 
 	public override void clear () {
@@ -99,8 +90,7 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base
 			Network.parse_array (msg, node => {
 				try {
 					var e = Entity.from_json (accepts, node);
-					var w = e as Widgetizable;
-					append (w.to_widget ());
+					model.append (e);
 				}
 				catch (Error e) {
 					warning (@"Timeline item parse error: $(e.message)");
@@ -154,16 +144,16 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base
 			allow_update = settings.public_live_updates;
 
 		if (settings.live_updates && allow_update)
-			prepend (status.to_widget ());
+			model.insert (-1, status);
 	}
 
 	protected virtual void remove_status (string id) {
 		if (settings.live_updates) {
-			content_list.get_children ().@foreach (w => {
-				var sw = w as Widgets.Status;
-				if (sw != null && sw.status.id == id)
-					sw.destroy ();
-			});
+			// content_list.get_children ().@foreach (w => {
+			// 	var sw = w as Widgets.Status;
+			// 	if (sw != null && sw.status.id == id)
+			// 		sw.destroy ();
+			// });
 		}
 	}
 

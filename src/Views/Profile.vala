@@ -31,8 +31,9 @@ public class Tootle.Views.Profile : Views.Timeline {
 		profile_list = builder.get_object ("profile_list") as ListBox;
 
 		var hdr = builder.get_object ("grid") as Grid;
-		column_view.pack_start (hdr, false, false, 0);
-		column_view.reorder_child (hdr, 0);
+		column_view.prepend (hdr);
+		// column_view.pack_start (hdr, false, false, 0);
+		// column_view.reorder_child (hdr, 0);
 
 		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
 		avatar.account = profile;

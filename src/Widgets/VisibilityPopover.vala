@@ -31,8 +31,6 @@ public class Tootle.Widgets.VisibilityPopover: Popover {
 
 			// i++;
 		}
-
-		box.show_all ();
 	}
 
 	public VisibilityPopover.with_button (MenuButton w) {

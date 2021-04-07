@@ -29,18 +29,19 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
         }
     }
 
-    public override void append (Widget? w, bool reverse = false) {
-        base.append (w, reverse);
-        var nw = w as Widgets.Notification;
-        var notification = nw.notification;
+	//FIXME: Display unread dot
+  //   public override void append (Widget? w, bool reverse = false) {
+  //       base.append (w, reverse);
+  //       var nw = w as Widgets.Notification;
+  //       var notification = nw.notification;
 
-        if (int64.parse (notification.id) > last_id)
-            last_id = int64.parse (notification.id);
+  //       if (int64.parse (notification.id) > last_id)
+  //           last_id = int64.parse (notification.id);
 
-		needs_attention = has_unread () && !current;
-        if (needs_attention)
-            accounts.safe_save ();
-    }
+		// needs_attention = has_unread () && !current;
+  //       if (needs_attention)
+  //           accounts.safe_save ();
+  //   }
 
     public override void on_account_changed (InstanceAccount? acc) {
         base.on_account_changed (acc);
@@ -57,7 +58,7 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
     public override bool request () {
         if (account != null) {
             account.cached_notifications.@foreach (n => {
-                append (n.to_widget ());
+                model.append (n);
                 return true;
             });
         }
@@ -71,7 +72,7 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
     }
 
     void add_notification (API.Notification n) {
-        prepend (n.to_widget ());
+        model.insert (-1, n);
     }
 
 }

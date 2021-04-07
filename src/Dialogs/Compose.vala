@@ -166,11 +166,11 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		commit_stack.visible_child_name = working ? "working" : "ready";
 		commit.sensitive = !working;
 
-		media_list.@foreach (w => {
-			var item = w as MediaItem;
-			if (item != null)
-				item.icon.visible_child_name = working ? "upload" : "new";
-		});
+		// media_list.@foreach (w => {
+		// 	var item = w as MediaItem;
+		// 	if (item != null)
+		// 		item.icon.visible_child_name = working ? "upload" : "new";
+		// });
 	}
 
 	[GtkCallback]
@@ -237,11 +237,11 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 
 		Gee.ArrayList<MediaItem> pending_media = new Gee.ArrayList<MediaItem>();
 		Gee.ArrayList<string> media_ids = new Gee.ArrayList<string>();
-		media_list.@foreach (w => {
-			var item = w as MediaItem;
-			if (item != null)
-				pending_media.add (item);
-		});
+		// media_list.@foreach (w => {
+		// 	var item = w as MediaItem;
+		// 	if (item != null)
+		// 		pending_media.add (item);
+		// });
 
 		var media_param = "";
 		if (!pending_media.is_empty) {

@@ -26,14 +26,13 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 			application: app,
 			icon_name: Build.DOMAIN,
 			title: Build.NAME,
-			resizable: true,
-			window_position: WindowPosition.CENTER
+			resizable: true
 		);
 		open_view (new Views.Main ());
 	}
 
 	public Views.Base open_view (Views.Base view) {
-		deck.add (view);
+		deck.append (view);
 		deck.visible_child = view;
 		return view;
 	}
@@ -58,7 +57,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 	// 	return app.on_window_closed ();
 	// }
 
-	//TODO: switch timelines with 1-4. Should be moved to Views.Main
+	//TODO: switch timelines with 1-4. Should be moved to Views.TabbedBase
 	[Deprecated]
 	public void switch_timeline (int32 num) {
 	}

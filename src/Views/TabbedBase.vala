@@ -12,20 +12,20 @@ public class Tootle.Views.TabbedBase : Views.Base {
 
 	construct {
 		content = content_box;
-		content_list.destroy ();
+		content_list.destroy();
 		state = "content";
 
-		states.get_parent ().remove (states);
+		(states.get_parent () as Box).remove (states);
 		view.get_style_context ().remove_class ("ttl-view");
 		scrolled.destroy ();
-		pack_start (states);
+		prepend (states);
 
 		stack = new Stack ();
 		stack.transition_duration = 100;
 		stack.transition_type = StackTransitionType.CROSSFADE;
 		stack.notify["visible-child"].connect (on_view_switched);
 		stack.show ();
-		content_box.pack_start (stack);
+		content_box.prepend (stack);
 
 		switcher_bar.stack = switcher_title.stack = stack;
 	}
@@ -40,16 +40,17 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		switcher_bar = new Adw.ViewSwitcherBar ();
 		switcher_bar.show ();
 		switcher_title.bind_property ("title-visible", switcher_bar, "reveal", BindingFlags.SYNC_CREATE);
-		pack_end (switcher_bar, false, false, 0);
+		append (switcher_bar);
 	}
 
 	public void add_tab (Views.Base view) {
 		ID_COUNTER++;
 		stack.add_titled (view, ID_COUNTER.to_string (), view.label);
-		stack.child_set_property (view, "icon-name", view.icon);
-		view.notify["needs-attention"].connect (() => {
-			stack.child_set_property (view, "needs-attention", view.needs_attention);
-		});
+		//FIXME: needs attention property in Stack
+		// stack.child_set_property (view, "icon-name", view.icon);
+		// view.notify["needs-attention"].connect (() => {
+		// 	stack.child_set_property (view, "needs-attention", view.needs_attention);
+		// });
 		view.header.hide ();
 	}
 
@@ -65,11 +66,11 @@ public class Tootle.Views.TabbedBase : Views.Base {
 
 	public delegate void TabCB (Views.Base tab);
 	public void foreach_tab (TabCB cb) {
-		stack.@foreach (child => {
-			var tab = child as Views.Base;
-			if (tab != null)
-				cb (tab);
-		});
+		// stack.@foreach (child => {
+		// 	var tab = child as Views.Base;
+		// 	if (tab != null)
+		// 		cb (tab);
+		// });
 	}
 
 	public override void clear () {
@@ -105,7 +106,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		}
 
 		if (view != null) {
-			header.title = view.label;
+			// header.title = view.label;
 			view.current = true;
 			view.on_shown ();
 		}

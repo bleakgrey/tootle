@@ -48,7 +48,6 @@ namespace Tootle {
 			{ "back", back_activated },
 			{ "refresh", refresh_activated },
 			{ "search", search_activated },
-			{ "switch-timeline", switch_timeline_activated, "i" }
 		};
 
 		construct {
@@ -61,10 +60,6 @@ namespace Tootle {
 		public string[] ACCEL_BACK = {"<Alt>BackSpace", "<Alt>Left"};
 		public string[] ACCEL_REFRESH = {"<Ctrl>R", "F5"};
 		public string[] ACCEL_SEARCH = {"<Ctrl>F"};
-		public string[] ACCEL_TIMELINE_0 = {"<Alt>1"};
-		public string[] ACCEL_TIMELINE_1 = {"<Alt>2"};
-		public string[] ACCEL_TIMELINE_2 = {"<Alt>3"};
-		public string[] ACCEL_TIMELINE_3 = {"<Alt>4"};
 
 		public static int main (string[] args) {
 			Gtk.init ();
@@ -112,10 +107,6 @@ namespace Tootle {
 			set_accels_for_action ("app.back", ACCEL_BACK);
 			set_accels_for_action ("app.refresh", ACCEL_REFRESH);
 			set_accels_for_action ("app.search", ACCEL_SEARCH);
-			set_accels_for_action ("app.switch-timeline(0)", ACCEL_TIMELINE_0); //TODO: There's no action for handling these
-			set_accels_for_action ("app.switch-timeline(1)", ACCEL_TIMELINE_1);
-			set_accels_for_action ("app.switch-timeline(2)", ACCEL_TIMELINE_2);
-			set_accels_for_action ("app.switch-timeline(3)", ACCEL_TIMELINE_3);
 			add_action_entries (app_entries, this);
 		}
 
@@ -174,11 +165,6 @@ namespace Tootle {
 
 		void refresh_activated () {
 			refresh ();
-		}
-
-		void switch_timeline_activated (SimpleAction a, Variant? v) {
-			int32 num = v.get_int32 ();
-			window.switch_timeline (num);
 		}
 
 		void about_activated () {

@@ -12,8 +12,6 @@ public class Tootle.Views.Base : Box {
 	public bool current { get; set; default = false; }
 	public SimpleActionGroup? actions { get; set; }
 
-	public Widget content { get; set; }
-
 	[GtkChild] protected unowned Adw.HeaderBar header;
 	[GtkChild] protected unowned Button back_button;
 
@@ -31,9 +29,12 @@ public class Tootle.Views.Base : Box {
 	public string state { get; set; default = "status"; }
 	public string status_message { get; set; default = STATUS_EMPTY; }
 
+	public GLib.ListStore model;
+	public Widget content { get; set; }
+
 	public bool empty {
 		get {
-			return content.get_children ().length () <= 0;
+			return model.get_n_items () <= 0;
 		}
 	}
 
@@ -48,8 +49,9 @@ public class Tootle.Views.Base : Box {
 			if (pos == PositionType.BOTTOM)
 				on_bottom_reached ();
 		});
-		content.remove.connect (() => on_content_changed ());
-		content_list.remove.connect (() => on_content_changed ());
+		// content.remove.connect (() => on_content_changed ());
+		// content_list.remove.connect (() => on_content_changed ());
+		model.items_changed.connect (() => on_content_changed ());
 		content_list.row_activated.connect (on_content_item_activated);
 
 		notify["status-message"].connect (() => {
@@ -72,9 +74,7 @@ public class Tootle.Views.Base : Box {
 	public virtual void build_header () {}
 
 	public virtual void clear (){
-		content.forall (w => {
-			w.destroy ();
-		});
+		model.remove_all ();
 		state = "status";
 	}
 
@@ -97,7 +97,7 @@ public class Tootle.Views.Base : Box {
 		else {
 			state = "content";
 		}
-		check_resize ();
+		// check_resize ();
 	}
 
 	public virtual void on_error (int32 code, string reason) {
@@ -107,20 +107,20 @@ public class Tootle.Views.Base : Box {
 		state = "status";
 	}
 
-	[GtkCallback]
-	protected void on_resized () {
-		Allocation alloc;
-		get_allocation (out alloc);
+	// [GtkCallback]
+	// protected void on_resized () {
+	// 	Allocation alloc;
+	// 	get_allocation (out alloc);
 
-		var target_w = clamp.maximum_size;
-		var view_w = alloc.width;
+	// 	var target_w = clamp.maximum_size;
+	// 	var view_w = alloc.width;
 
-		var ctx = view.get_style_context ();
-		if (view_w <= target_w && ctx.has_class ("padded"))
-			ctx.remove_class ("padded");
-		if (view_w > target_w && !ctx.has_class ("padded"))
-			ctx.add_class ("padded");
-	}
+	// 	var ctx = view.get_style_context ();
+	// 	if (view_w <= target_w && ctx.has_class ("padded"))
+	// 		ctx.remove_class ("padded");
+	// 	if (view_w > target_w && !ctx.has_class ("padded"))
+	// 		ctx.add_class ("padded");
+	// }
 
 	public virtual void on_content_item_activated (ListBoxRow row) {
 		Signal.emit_by_name (row, "open");

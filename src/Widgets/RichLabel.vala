@@ -1,42 +1,55 @@
 using Gtk;
 using Gee;
 
-public class Tootle.Widgets.RichLabel : Label {
+public class Tootle.Widgets.RichLabel : Adw.Bin {
+
+	Label widget;
 
 	// TODO: We can parse <a> tags and extract resolvable URIs now
 	public weak ArrayList<API.Mention>? mentions;
 
-	MarkupPolicy _markup = DISALLOW;
-	public MarkupPolicy markup {
+	public string text {
 		get {
-			return _markup;
+			return widget.label;
 		}
 		set {
-			_markup = value;
-			_markup.apply (this);
+			widget.label = value;
 		}
 	}
 
-	public string text {
+	public string label {
 		get {
-			return this.label;
+			return widget.label;
 		}
 		set {
-			this.label = markup.process (value);
+			widget.label = value;
+		}
+	}
+
+	public bool selectable {
+		get {
+			return widget.selectable;
+		}
+		set {
+			widget.selectable = value;
 		}
 	}
 
 	construct {
-		xalign = 0;
-		wrap = true;
-		wrap_mode = Pango.WrapMode.WORD_CHAR;
-		justify = Justification.LEFT;
-		single_line_mode = false;
-		activate_link.connect (on_activate_link);
+		widget = new Label ("");
+		with (widget){
+			xalign = 0;
+			wrap = true;
+			wrap_mode = Pango.WrapMode.WORD_CHAR;
+			justify = Justification.LEFT;
+			single_line_mode = false;
+			activate_link.connect (on_activate_link);
+		}
+		child = widget;
 	}
 
 	public RichLabel (string text) {
-		set_label (text);
+		widget.set_label (text);
 	}
 
 	public static string escape_entities (string content) {
