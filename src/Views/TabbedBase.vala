@@ -11,34 +11,29 @@ public class Tootle.Views.TabbedBase : Views.Base {
 	Views.Base? last_view = null;
 
 	construct {
-		content = content_box;
-		content_list.destroy();
 		state = "content";
 
 		(states.get_parent () as Box).remove (states);
 		view.get_style_context ().remove_class ("ttl-view");
-		scrolled.destroy ();
-		prepend (states);
+		(scrolled.get_parent () as Box).remove (scrolled);
+		insert_child_after (states, header);
 
 		stack = new Stack ();
 		stack.transition_duration = 100;
 		stack.transition_type = StackTransitionType.CROSSFADE;
 		stack.notify["visible-child"].connect (on_view_switched);
-		stack.show ();
-		content_box.prepend (stack);
+		content_box.append (stack);
 
 		switcher_bar.stack = switcher_title.stack = stack;
 	}
 
 	public override void build_header () {
 		switcher_title = new Adw.ViewSwitcherTitle ();
-		switcher_title.show ();
 		// header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
 		// header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
 		header.title_widget = switcher_title;
 
 		switcher_bar = new Adw.ViewSwitcherBar ();
-		switcher_bar.show ();
 		switcher_title.bind_property ("title-visible", switcher_bar, "reveal", BindingFlags.SYNC_CREATE);
 		append (switcher_bar);
 	}
@@ -55,7 +50,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 	}
 
 	public Views.Base add_list_tab (string label, string icon) {
-		var tab = new Views.Base ();
+		var tab = new Views.ContentBase ();
 		tab.label = label;
 		tab.icon = icon;
 
@@ -64,7 +59,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		return tab;
 	}
 
-	public delegate void TabCB (Views.Base tab);
+	public delegate void TabCB (Views.ContentBase tab);
 	public void foreach_tab (TabCB cb) {
 		// stack.@foreach (child => {
 		// 	var tab = child as Views.Base;

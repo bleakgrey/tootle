@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.Thread : Views.Base, IAccountHolder {
+public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 
 	protected InstanceAccount? account { get; set; default = null; }
 	public API.Status root_status { get; construct set; }
@@ -67,7 +67,7 @@ public class Tootle.Views.Thread : Views.Base, IAccountHolder {
 
 				root_widget = root_status.to_widget () as Widgets.Status;
 				root_widget.expand_root ();
-				content_list.append (root_widget);
+				content.append (root_widget);
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {

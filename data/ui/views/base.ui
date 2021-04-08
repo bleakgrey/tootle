@@ -128,15 +128,6 @@
                                   <object class="GtkBox" id="content_box">
                                     <property name="can_focus">0</property>
                                     <property name="orientation">vertical</property>
-                                    <child>
-                                      <object class="GtkListBox" id="content_list">
-                                        <property name="can_focus">0</property>
-                                        <property name="selection_mode">none</property>
-                                        <style>
-                                          <class name="content"/>
-                                        </style>
-                                      </object>
-                                    </child>
                                   </object>
                                 </property>
                               </object>

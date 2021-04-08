@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base {
+public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.ContentBase {
 
 	public string url { get; construct set; }
 	public bool is_public { get; construct set; default = false; }
@@ -20,7 +20,7 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Base
 		status_button.clicked.connect (on_refresh);
 		account_listener_init ();
 
-		content_list.bind_model (model, create_model_widget);
+		content.bind_model (model, create_model_widget);
 
 		on_status_added_sigig = on_status_added.connect (add_status);
 		on_status_removed.connect (remove_status);

@@ -28,7 +28,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 			title: Build.NAME,
 			resizable: true
 		);
-		open_view (new Views.Home ());
+		open_view (new Views.Main ());
 	}
 
 	public Views.Base open_view (Views.Base view) {
@@ -49,7 +49,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 		Widget unused_child;
 		while ((unused_child = leaflet.get_adjacent_child (Adw.NavigationDirection.FORWARD)) != null)
-			unused_child.destroy ();
+			leaflet.remove (unused_child);
 	}
 
 	// public override bool delete_event (Gdk.EventAny event) {

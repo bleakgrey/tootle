@@ -21,7 +21,6 @@ public class Tootle.Views.Base : Box {
 	[GtkChild] protected unowned Box column_view;
 	[GtkChild] protected unowned Stack states;
 	[GtkChild] protected unowned Box content_box;
-	[GtkChild] protected unowned ListBox content_list;
 	[GtkChild] protected unowned Button status_button;
 	[GtkChild] unowned Stack status_stack;
 	[GtkChild] unowned Label status_message_label;
@@ -29,29 +28,11 @@ public class Tootle.Views.Base : Box {
 	public string state { get; set; default = "status"; }
 	public string status_message { get; set; default = STATUS_EMPTY; }
 
-	public GLib.ListStore model;
-	public Widget content { get; set; }
-
-	public bool empty {
-		get {
-			return model.get_n_items () <= 0;
-		}
-	}
-
 	construct {
 		// bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
 
-		content = content_list;
-
 		status_button.label = _("Reload");
 		bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
-		scrolled.edge_reached.connect (pos => {
-			if (pos == PositionType.BOTTOM)
-				on_bottom_reached ();
-		});
-		model = new GLib.ListStore (typeof (Widgetizable));
-		model.items_changed.connect (() => on_content_changed ());
-		content_list.row_activated.connect (on_content_item_activated);
 
 		notify["status-message"].connect (() => {
 			status_message_label.label = @"<span size='large'>$status_message</span>";
@@ -72,12 +53,9 @@ public class Tootle.Views.Base : Box {
 
 	public virtual void build_header () {}
 
-	public virtual void clear (){
-		model.remove_all ();
+	public virtual void clear () {
 		state = "status";
 	}
-
-	public virtual void on_bottom_reached () {}
 
 	public virtual void on_shown () {
 		if (actions != null)
@@ -88,16 +66,7 @@ public class Tootle.Views.Base : Box {
 			window.insert_action_group ("view", null);
 	}
 
-	public virtual void on_content_changed () {
-		if (empty) {
-			status_message = STATUS_EMPTY;
-			state = "status";
-		}
-		else {
-			state = "content";
-		}
-		// check_resize ();
-	}
+	public virtual void on_content_changed () {}
 
 	public virtual void on_error (int32 code, string reason) {
 		status_message = reason;
@@ -120,10 +89,6 @@ public class Tootle.Views.Base : Box {
 	// 	if (view_w > target_w && !ctx.has_class ("padded"))
 	// 		ctx.add_class ("padded");
 	// }
-
-	public virtual void on_content_item_activated (ListBoxRow row) {
-		Signal.emit_by_name (row, "open");
-	}
 
 	[GtkCallback]
 	void on_close () {

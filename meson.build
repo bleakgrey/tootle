@@ -81,6 +81,7 @@ sources = files(
     'src/Dialogs/Preferences.vala',
     'src/Dialogs/ListEditor.vala',
     'src/Views/Base.vala',
+    'src/Views/ContentBase.vala',
     'src/Views/TabbedBase.vala',
     'src/Views/Main.vala',
     'src/Views/Timeline.vala',
