@@ -36,15 +36,14 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 	}
 
 	construct {
-		widget = new Label ("");
-		with (widget){
-			xalign = 0;
-			wrap = true;
-			wrap_mode = Pango.WrapMode.WORD_CHAR;
-			justify = Justification.LEFT;
-			single_line_mode = false;
-			activate_link.connect (on_activate_link);
-		}
+		widget = new Label ("") {
+			xalign = 0,
+			wrap = true,
+			wrap_mode = Pango.WrapMode.WORD_CHAR,
+			justify = Justification.LEFT,
+			single_line_mode = false
+		};
+		widget.activate_link.connect (on_activate_link);
 		child = widget;
 	}
 

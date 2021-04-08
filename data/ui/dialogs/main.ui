@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.2 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <requires lib="libhandy" version="1.0"/>
   <template class="TootleDialogsMainWindow" parent="AdwWindow">
     <property name="width_request">360</property>
     <property name="height_request">600</property>
-    <property name="can_focus">False</property>
     <child>
-      <object class="AdwLeaflet" id="deck">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="can_swipe_back">True</property>
-        <signal name="notify::transition-running" handler="on_child_transition"/>
-        <signal name="notify::visible-child" handler="on_child_transition"/>
-        <child>
-          <placeholder/>
+
+      <object class="AdwFlap" id="flap">
+        <child type="flap">
+        </child>
+        <child type="separator">
+        </child>
+        <child type="content">
+          <object class="AdwLeaflet" id="leaflet">
+            <property name="can_swipe_back">True</property>
+            <signal name="notify::transition-running" handler="on_child_transition"/>
+            <signal name="notify::visible-child" handler="on_view_changed"/>
+          </object>
         </child>
       </object>
+
     </child>
   </template>
 </interface>

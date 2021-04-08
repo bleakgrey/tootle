@@ -39,7 +39,7 @@ public class Tootle.Views.Base : Box {
 	}
 
 	construct {
-		bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
+		// bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
 
 		content = content_list;
 
@@ -49,8 +49,7 @@ public class Tootle.Views.Base : Box {
 			if (pos == PositionType.BOTTOM)
 				on_bottom_reached ();
 		});
-		// content.remove.connect (() => on_content_changed ());
-		// content_list.remove.connect (() => on_content_changed ());
+		model = new GLib.ListStore (typeof (Widgetizable));
 		model.items_changed.connect (() => on_content_changed ());
 		content_list.row_activated.connect (on_content_item_activated);
 

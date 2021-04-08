@@ -33,8 +33,8 @@ public class Tootle.Views.TabbedBase : Views.Base {
 	public override void build_header () {
 		switcher_title = new Adw.ViewSwitcherTitle ();
 		switcher_title.show ();
-		header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
-		header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
+		// header.bind_property ("title", switcher_title, "title", BindingFlags.SYNC_CREATE);
+		// header.bind_property ("subtitle", switcher_title, "subtitle", BindingFlags.SYNC_CREATE);
 		header.title_widget = switcher_title;
 
 		switcher_bar = new Adw.ViewSwitcherBar ();
