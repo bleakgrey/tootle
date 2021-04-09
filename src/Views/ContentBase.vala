@@ -12,16 +12,17 @@ public class Tootle.Views.ContentBase : Views.Base {
 	}
 
 	construct {
+		model = new GLib.ListStore (typeof (Widgetizable));
+		model.items_changed.connect (() => on_content_changed ());
+
 		content = new ListBox () {
 			selection_mode = SelectionMode.NONE,
 			can_focus = false
 		};
 		content.add_css_class ("content");
 		content.row_activated.connect (on_content_item_activated);
+		content.bind_model (model, on_create_model_widget);
 		content_box.append (content);
-
-		model = new GLib.ListStore (typeof (Widgetizable));
-		model.items_changed.connect (() => on_content_changed ());
 
 		scrolled.edge_reached.connect (pos => {
 			if (pos == PositionType.BOTTOM)
@@ -43,6 +44,11 @@ public class Tootle.Views.ContentBase : Views.Base {
 			state = "content";
 		}
 		// check_resize ();
+	}
+
+
+	public virtual Widget on_create_model_widget (Object obj) {
+		return (obj as Widgetizable).to_widget ();
 	}
 
 	public virtual void on_bottom_reached () {}

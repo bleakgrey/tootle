@@ -23,7 +23,7 @@ public class Tootle.Widgets.Avatar : Adw.Bin {
 		// avatar.destroy.connect (() => {
 		// 	avatar.set_image_load_func (null);
 		// });
-		// child = avatar;
+		child = avatar;
 
 		// notify["account"].connect (on_invalidated);
 		// on_invalidated ();

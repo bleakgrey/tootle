@@ -8,6 +8,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 	[GtkChild] unowned Adw.Flap flap;
 	[GtkChild] unowned Adw.Leaflet leaflet;
+	[GtkChild] unowned Views.Sidebar sidebar;
 
 	Views.Base? last_view = null;
 

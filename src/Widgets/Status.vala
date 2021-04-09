@@ -58,9 +58,9 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	[GtkChild] protected unowned Box actions;
 	[GtkChild] protected unowned Button reply_button;
-	[GtkChild] protected unowned Image reply_button_icon;
+	// [GtkChild] protected unowned Image reply_button_icon;
 	[GtkChild] protected unowned ToggleButton reblog_button;
-	[GtkChild] protected unowned Image reblog_icon;
+	// [GtkChild] protected unowned Image reblog_icon;
 	[GtkChild] protected unowned ToggleButton favorite_button;
 	[GtkChild] protected unowned ToggleButton bookmark_button;
 	[GtkChild] protected unowned Button menu_button;
@@ -123,14 +123,14 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
 
 		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
-		if (status.formal.in_reply_to_id != null)
-			reply_button_icon.icon_name = "mail-reply-all-symbolic";
-		else
-			reply_button_icon.icon_name = "mail-reply-sender-symbolic";
+		// if (status.formal.in_reply_to_id != null)
+		// 	reply_button_icon.icon_name = "mail-reply-all-symbolic";
+		// else
+		// 	reply_button_icon.icon_name = "mail-reply-sender-symbolic";
 
-		bind_property ("spoiler-text", spoiler_label, "text", BindingFlags.SYNC_CREATE);
+		bind_property ("spoiler-text", spoiler_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
-		bind_property ("title_text", name_label, "text", BindingFlags.SYNC_CREATE);
+		bind_property ("title_text", name_label, "label", BindingFlags.SYNC_CREATE);
 		bind_property ("subtitle_text", handle_label, "label", BindingFlags.SYNC_CREATE);
 		bind_property ("date", date_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
@@ -147,7 +147,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		});
 
 		if (status.formal.visibility == API.Visibility.DIRECT) {
-			reblog_icon.icon_name = status.formal.visibility.get_icon ();
+			// reblog_icon.icon_name = status.formal.visibility.get_icon ();
 			reblog_button.sensitive = false;
 			reblog_button.tooltip_text = _("This post can't be boosted");
 		}
@@ -157,9 +157,9 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			date_label.destroy ();
 		}
 
-		if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
-			attachments.destroy ();
-		}
+		// if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
+		// 	attachments.destroy ();
+		// }
 
 		menu_button.clicked.connect (open_menu);
 	}

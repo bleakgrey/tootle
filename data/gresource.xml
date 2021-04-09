@@ -5,6 +5,7 @@
         <file>ui/views/new_account.ui</file>
         <file>ui/views/base.ui</file>
         <file>ui/views/profile_header.ui</file>
+        <file>ui/views/sidebar.ui</file>
         <file>ui/widgets/status.ui</file>
         <file>ui/widgets/accounts_button.ui</file>
         <file>ui/widgets/accounts_button_item.ui</file>

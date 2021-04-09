@@ -168,7 +168,26 @@ namespace Tootle {
 		}
 
 		void about_activated () {
-			new Dialogs.About ();
+			var dialog = new AboutDialog () {
+				transient_for = window,
+				modal = true,
+
+				logo_icon_name = Build.DOMAIN,
+				program_name = Build.NAME,
+				version = Build.VERSION,
+				website = Build.SUPPORT_WEBSITE,
+				website_label = _("Report an issue"),
+				license_type = License.GPL_3_0_ONLY,
+				copyright = Build.COPYRIGHT
+			};
+
+			// For some obscure reason, const arrays produce duplicates in the credits.
+			// Static functions seem to avoid this peculiar behavior.
+			dialog.authors = Build.get_authors ();
+			dialog.artists = Build.get_artists ();
+			dialog.translator_credits = Build.TRANSLATOR != " " ? Build.TRANSLATOR : null;
+
+			dialog.present ();
 		}
 
 		public void inform (Gtk.MessageType type, string text, string? msg = null, Gtk.Window? win = window){

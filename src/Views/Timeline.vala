@@ -20,18 +20,11 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Cont
 		status_button.clicked.connect (on_refresh);
 		account_listener_init ();
 
-		content.bind_model (model, create_model_widget);
-
 		on_status_added_sigig = on_status_added.connect (add_status);
 		on_status_removed.connect (remove_status);
 	}
 	~Timeline () {
 		streams.unsubscribe (stream, this);
-	}
-
-	public virtual Widget create_model_widget (Object obj) {
-		var w = obj as Widgetizable;
-		return w.to_widget ();
 	}
 
 	public virtual bool is_status_owned (API.Status status) {

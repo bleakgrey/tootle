@@ -9,8 +9,13 @@
 
       <object class="AdwFlap" id="flap">
         <child type="flap">
+          <object class="TootleViewsSidebar" id="sidebar">
+          </object>
         </child>
         <child type="separator">
+          <object class="GtkSeparator">
+            <property name="orientation">vertical</property>
+          </object>
         </child>
         <child type="content">
           <object class="AdwLeaflet" id="leaflet">

@@ -56,7 +56,6 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 			.with_account (account)
 			.with_ctx (this)
 			.then ((sess, msg) => {
-
 				var root = network.parse (msg);
 
 				var ancestors = root.get_array_member ("ancestors");
@@ -65,9 +64,7 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 					model.append (status);
 				});
 
-				root_widget = root_status.to_widget () as Widgets.Status;
-				root_widget.expand_root ();
-				content.append (root_widget);
+				model.append (root_status);
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {

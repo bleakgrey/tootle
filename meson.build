@@ -1,4 +1,4 @@
-project('com.github.bleakgrey.tootle', 'vala', 'c', version: '2.0.0')
+project('com.github.bleakgrey.tootle', 'vala', 'c', version: 'master')
 
 add_global_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
@@ -76,13 +76,13 @@ sources = files(
     'src/Dialogs/ISavedWindow.vala',
     'src/Dialogs/NewAccount.vala',
     'src/Dialogs/MainWindow.vala',
-    'src/Dialogs/About.vala',
     'src/Dialogs/Compose.vala',
     'src/Dialogs/Preferences.vala',
     'src/Dialogs/ListEditor.vala',
     'src/Views/Base.vala',
     'src/Views/ContentBase.vala',
     'src/Views/TabbedBase.vala',
+    'src/Views/Sidebar.vala',
     'src/Views/Main.vala',
     'src/Views/Timeline.vala',
     'src/Views/Home.vala',

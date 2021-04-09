@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="TootleViewsSidebar" parent="AdwBin">
+    <property name="width_request">250</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">False</property>
+            <property name="show-end-title-buttons">False</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="child">
+              <object class="GtkViewport">
+              </object>
+            </property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+    <style>
+      <class name="sidebar"/>
+    </style>
+  </template>
+</interface>

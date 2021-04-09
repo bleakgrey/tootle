@@ -284,8 +284,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 		[GtkChild] unowned Widgets.RichLabel value_label;
 
 		public Field (API.AccountField field) {
-			name_label.text = field.name;
-			value_label.text = field.val;
+			name_label.label = field.name;
+			value_label.label = field.val;
 		}
 
 	}

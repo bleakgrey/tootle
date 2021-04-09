@@ -8,15 +8,6 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 	// TODO: We can parse <a> tags and extract resolvable URIs now
 	public weak ArrayList<API.Mention>? mentions;
 
-	public string text {
-		get {
-			return widget.label;
-		}
-		set {
-			widget.label = value;
-		}
-	}
-
 	public string label {
 		get {
 			return widget.label;
@@ -35,13 +26,24 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 		}
 	}
 
+	public Pango.EllipsizeMode ellipsize {
+		get { return widget.ellipsize; }
+		set { widget.ellipsize = value; }
+	}
+
+	public bool single_line_mode {
+		get { return widget.single_line_mode; }
+		set { widget.single_line_mode = value; }
+	}
+
 	construct {
 		widget = new Label ("") {
 			xalign = 0,
 			wrap = true,
 			wrap_mode = Pango.WrapMode.WORD_CHAR,
 			justify = Justification.LEFT,
-			single_line_mode = false
+			single_line_mode = false,
+			use_markup = true
 		};
 		widget.activate_link.connect (on_activate_link);
 		child = widget;
