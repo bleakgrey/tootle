@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="TootleViewsSidebarAccount" parent="AdwActionRow">
+    <property name="height_request">76</property>
+    <property name="title_lines">2</property>
+
+    <child type="prefix">
+      <object class="TootleWidgetsAvatar" id="avatar">
+      </object>
+    </child>
+
+    <child type="suffix">
+      <object class="GtkSpinner" id="loading">
+        <property name="spinning">1</property>
+        <property name="visible">0</property>
+      </object>
+    </child>
+
+  </template>
+</interface>

@@ -31,11 +31,10 @@ libadwaita_dep = dependency('libadwaita-1')
 
 sources = files(
     'src/Application.vala',
-    'src/Desktop.vala',
-    'src/Drawing.vala',
-    'src/Html.vala',
-    'src/Request.vala',
-    'src/DateTime.vala',
+    'src/Utils/Desktop.vala',
+    'src/Utils/Drawing.vala',
+    'src/Utils/Html.vala',
+    'src/Utils/DateTime.vala',
     'src/Services/Accounts/InstanceAccount.vala',
     'src/Services/Accounts/AccountStore.vala',
     'src/Services/Accounts/SecretAccountStore.vala',
@@ -46,6 +45,7 @@ sources = files(
     'src/Services/IStreamListener.vala',
     'src/Services/Cache.vala',
     'src/Services/Network.vala',
+    'src/Services/Request.vala',
     'src/API/Account.vala',
     'src/API/AccountField.vala',
     'src/API/Relationship.vala',

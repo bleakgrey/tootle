@@ -8,13 +8,18 @@
       <object class="AdwHeaderBar">
         <property name="show-start-title-buttons">0</property>
         <property name="show-end-title-buttons">0</property>
-      </object>
-    </child>
-
-    <!-- Profile Header -->
-    <child>
-      <object class="GtkGrid" id="header">
-
+        <child type="start">
+          <object class="GtkButton" id="compose_button">
+            <property name="icon-name">document-edit-symbolic</property>
+            <!-- <signal name="toggled" handler="on_mode_changed"/> -->
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkToggleButton" id="accounts_button">
+            <property name="icon-name">system-switch-user-symbolic</property>
+            <signal name="toggled" handler="on_mode_changed"/>
+          </object>
+        </child>
       </object>
     </child>
 
@@ -25,16 +30,47 @@
           <object class="GtkViewport">
             <child>
               <object class="GtkStack" id="mode">
-                <!-- Current account menu -->
-                <!-- <child> -->
+                <property name="transition_type">crossfade</property>
 
-                <!-- </child> -->
-                <!-- Account management -->
+                <!-- Account actions -->
                 <child>
-                <object class="GtkListBox" id="accounts">
+                <object class="GtkStackPage">
+                <property name="name">actions</property>
+                <property name="child">
+                  <object class="GtkBox">
+                  <property name="orientation">vertical</property>
 
+                  <!-- Header -->
+                  <child>
+                    <object class="GtkGrid" id="header">
+                    </object>
+                  </child>
+                  <child>
+                    <object class="GtkListBox" id="items">
+                      <property name="selection_mode">none</property>
+                      <signal name="selected_rows_changed" handler="on_action_selected"/>
+                      <style>
+                        <class name="navigation-sidebar"/>
+                      </style>
+                    </object>
+                  </child>
+
+              </object>
+              </property>
+              </object>
+              </child>
+
+                <!-- Active account menu -->
+                <child><object class="GtkStackPage"><property name="name">saved_accounts</property><property name="child">
+                <object class="GtkListBox" id="saved_accounts">
+                  <property name="selection_mode">single</property>
+                  <signal name="selected_rows_changed" handler="on_account_selected"/>
+                  <style>
+                    <class name="navigation-sidebar"/>
+                  </style>
                 </object>
-                </child>
+                </property>
+                </object></child>
 
               </object>
             </child>
@@ -47,6 +83,7 @@
     <style>
       <class name="sidebar"/>
     </style>
+
   </template>
 </interface>
 

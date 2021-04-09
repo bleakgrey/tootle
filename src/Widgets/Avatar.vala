@@ -24,6 +24,7 @@ public class Tootle.Widgets.Avatar : Button {
 		// 	avatar.set_image_load_func (null);
 		// });
 		child = avatar;
+		halign = valign = Align.CENTER;
 		add_css_class ("flat");
 		add_css_class ("circular");
 		add_css_class ("image-button");
