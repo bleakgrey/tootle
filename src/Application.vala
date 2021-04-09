@@ -94,7 +94,7 @@ namespace Tootle {
 				// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
 				window_dummy = new Window ();
-				add_window (window_dummy);
+				// add_window (window_dummy);
 			}
 			catch (Error e) {
 				var msg = _("Could not start application: %s").printf (e.message);

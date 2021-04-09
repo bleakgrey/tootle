@@ -20,7 +20,7 @@
         <child type="content">
           <object class="AdwLeaflet" id="leaflet">
             <property name="can_swipe_back">True</property>
-            <signal name="notify::transition-running" handler="on_child_transition"/>
+            <signal name="notify::child-transition-running" handler="on_child_transition"/>
             <signal name="notify::visible-child" handler="on_view_changed"/>
           </object>
         </child>

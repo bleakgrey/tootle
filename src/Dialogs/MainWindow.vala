@@ -43,16 +43,6 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 		return true;
 	}
 
-	[GtkCallback]
-	void on_child_transition () {
-		if (leaflet.child_transition_running)
-			return;
-
-		Widget unused_child;
-		while ((unused_child = leaflet.get_adjacent_child (Adw.NavigationDirection.FORWARD)) != null)
-			leaflet.remove (unused_child);
-	}
-
 	// public override bool delete_event (Gdk.EventAny event) {
 	// 	window = null;
 	// 	return app.on_window_closed ();
@@ -90,9 +80,8 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 
 	[GtkCallback]
 	void on_view_changed () {
-		on_child_transition ();
-
 		var view = leaflet.visible_child as Views.Base;
+		on_child_transition ();
 
 		if (last_view != null) {
 			last_view.current = false;
@@ -105,6 +94,17 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 		}
 
 		last_view = view;
+	}
+
+	[GtkCallback]
+	void on_child_transition () {
+		if (leaflet.child_transition_running)
+			return;
+
+		Widget unused_child;
+		while ((unused_child = leaflet.get_adjacent_child (Adw.NavigationDirection.FORWARD)) != null) {
+			leaflet.remove (unused_child);
+		}
 	}
 
 }

@@ -28,27 +28,31 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 	// }
 
 	void connect_threads () {
-		// Widgets.Status? last_w = null;
-		// string? last_id = null;
+		Widgets.Status? last_w = null;
+		string? last_id = null;
 
-		// content.get_children ().foreach (i => {
-		// 	var w = i as Widgets.Status;
-		// 	var id = w.status.formal.in_reply_to_id;
+		for (var w = content.get_row_at_index (0) as Widgets.Status;
+				w != null;
+				w = w.get_next_sibling () as Widgets.Status) {
 
-		// 	if (id == last_id) {
-		// 		Widgets.Status.ThreadRole.connect_posts (last_w, w);
-		// 	}
+			var id = w.status.formal.in_reply_to_id;
 
-		// 	last_w = w;
-		// 	last_id = w.status.formal.id;
-		// });
+			if (id == last_id) {
+				Widgets.Status.ThreadRole.connect_posts (last_w, w);
+			}
 
-		// content.get_children ().foreach (i => {
-		// 	var w = i as Widgets.Status;
-		// 	w.install_thread_line ();
-		// });
+			last_w = w;
+			last_id = w.status.formal.id;
+		}
 
-		// root_widget.thread_line.hide ();
+		for (var w = content.get_row_at_index (0) as Widgets.Status;
+				w != null;
+				w = w.get_next_sibling () as Widgets.Status) {
+
+			w.install_thread_line ();
+		}
+
+		root_widget.thread_line.hide ();
 	}
 
 	public void request () {
@@ -65,6 +69,9 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 				});
 
 				model.append (root_status);
+				uint root_index;
+				model.find (root_status, out root_index);
+				root_widget = content.get_row_at_index ((int)root_index) as Widgets.Status;
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {

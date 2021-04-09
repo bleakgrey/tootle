@@ -267,29 +267,16 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="avatar_button">
-            <property name="receives_default">1</property>
-            <property name="halign">start</property>
-            <property name="valign">start</property>
-            <signal name="clicked" handler="on_avatar_clicked" swapped="no"/>
-            <child>
               <object class="TootleWidgetsAvatar" id="avatar">
                 <property name="size">48</property>
                 <property name="valign">start</property>
                 <property name="visible">true</property>
+                <signal name="clicked" handler="on_avatar_clicked" swapped="no"/>
+              <layout>
+                <property name="column">0</property>
+                <property name="row">1</property>
+              </layout>
               </object>
-            </child>
-            <style>
-              <class name="flat"/>
-              <class name="image-button"/>
-              <class name="circular"/>
-              <class name="ttl-flat-button"/>
-            </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">1</property>
-            </layout>
-          </object>
         </child>
         <child>
           <object class="GtkImage" id="thread_line">

@@ -1,9 +1,9 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Widgets.Avatar : Adw.Bin {
+public class Tootle.Widgets.Avatar : Button {
 
-	Cache.Reference? cached;
+	// Cache.Reference? cached;
 
 	Adw.Avatar avatar;
 
@@ -24,8 +24,12 @@ public class Tootle.Widgets.Avatar : Adw.Bin {
 		// 	avatar.set_image_load_func (null);
 		// });
 		child = avatar;
+		add_css_class ("flat");
+		add_css_class ("circular");
+		add_css_class ("image-button");
+		add_css_class ("ttl-flat-button");
 
-		// notify["account"].connect (on_invalidated);
+		notify["account"].connect (on_invalidated);
 		// on_invalidated ();
 	}
 
@@ -33,6 +37,18 @@ public class Tootle.Widgets.Avatar : Adw.Bin {
 	// 	notify["account"].disconnect (on_invalidated);
 	// 	cache.unload (ref cached);
 	// }
+
+	void on_invalidated () {
+		if (account == null) {
+			avatar.text = "d";
+			avatar.show_initials = false;
+		}
+		else {
+			avatar.text = account.display_name;
+			avatar.show_initials = true;
+		}
+		// avatar.set_image_load_func (avatar_set_pixbuf);
+	}
 
 	// void on_invalidated () {
 	// 	if (cached != null)
