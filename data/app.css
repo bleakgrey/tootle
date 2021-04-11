@@ -55,13 +55,13 @@
 /* 	border-radius: 6px; */
 /* } */
 
-.small .content row {
+.ttl-view .small .content row {
 	border-left: none;
 	border-right: none;
 	border-radius:0px;
 }
 
-.large .content {
+.ttl-view .large .content {
 	margin: 32px 0 32px 0;
 }
 

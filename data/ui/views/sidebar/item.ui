@@ -2,7 +2,6 @@
 <interface>
   <template class="TootleViewsSidebarItemRow" parent="GtkListBoxRow">
     <property name="activatable">1</property>
-
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

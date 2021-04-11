@@ -18,7 +18,10 @@ public class Tootle.Views.Sidebar : Box {
 			label = _("Preferences"),
 			icon = "emblem-system-symbolic",
 			selectable = false,
-			separated = true
+			separated = true,
+			on_activated = () => {
+				Dialogs.Preferences.open ();
+			}
 	};
 
 	construct {
@@ -57,7 +60,8 @@ public class Tootle.Views.Sidebar : Box {
 		item_model.append (item_preferences);
 	}
 
-	[GtkCallback] void on_mode_changed () {
+	[GtkCallback]
+	void on_mode_changed () {
 		mode.visible_child_name = accounts_button.active ? "saved_accounts" : "items";
 	}
 
@@ -66,6 +70,7 @@ public class Tootle.Views.Sidebar : Box {
 	// Item
 
 	public class Item : Object {
+		public VoidFunc? on_activated;
 		public string label { get; set; default = ""; }
 		public string icon { get; set; default = ""; }
 		public int badge { get; set; default = 0; }
@@ -98,10 +103,11 @@ public class Tootle.Views.Sidebar : Box {
 		return new ItemRow (obj as Item);
 	}
 
-	[GtkCallback] void on_item_activated (ListBoxRow _row) {
+	[GtkCallback]
+	void on_item_activated (ListBoxRow _row) {
 		var row = _row as ItemRow;
-
-		warning ("item");
+		if (row.item.on_activated != null)
+			row.item.on_activated ();
 	}
 
 	void on_item_header_update (ListBoxRow _row, ListBoxRow? _before) {
@@ -140,7 +146,8 @@ public class Tootle.Views.Sidebar : Box {
 		return new AccountRow (obj as InstanceAccount);
 	}
 
-	[GtkCallback] void on_account_activated (ListBoxRow _row) {
+	[GtkCallback]
+	void on_account_activated (ListBoxRow _row) {
 		var row = _row as AccountRow;
 		warning ("switching to account");
 	}
