@@ -82,4 +82,31 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 		app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
 	}
 
+	public virtual void populate_user_menu (GLib.ListStore model) {
+		model.append (new Views.Sidebar.Item () {
+			label = "Home",
+			icon = "user-home-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Notifications",
+			icon = "preferences-system-notifications-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Direct Messages",
+			icon = "user-invisible-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Bookmarks",
+			icon = "user-bookmarks-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Favorites",
+			icon = "non-starred-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Lists",
+			icon = "view-list-symbolic"
+		});
+	}
+
 }

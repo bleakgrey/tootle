@@ -6,7 +6,7 @@
         <file>ui/views/base.ui</file>
         <file>ui/views/sidebar/view.ui</file>
         <file>ui/views/sidebar/account.ui</file>
-        <file>ui/views/sidebar/action.ui</file>
+        <file>ui/views/sidebar/item.ui</file>
         <file>ui/widgets/status.ui</file>
         <file>ui/widgets/accounts_button_item.ui</file>
         <file>ui/widgets/profile_field_row.ui</file>

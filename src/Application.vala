@@ -12,7 +12,7 @@ namespace Tootle {
 	public static Application app;
 	public static Dialogs.MainWindow? window;
 	public static Dialogs.NewAccount? new_account_window;
-	public static Window window_dummy;
+	// public static Window window_dummy;
 
 	public static Settings settings;
 	public static AccountStore accounts;
@@ -35,7 +35,7 @@ namespace Tootle {
 		public signal void toast (string title);
 
 		public CssProvider css_provider = new CssProvider ();
-		public CssProvider zoom_css_provider = new CssProvider ();
+		public CssProvider zoom_css_provider = new CssProvider (); //FIXME: Zoom not working
 
 		public const GLib.OptionEntry[] app_options = {
 			{ "hidden", 0, 0, OptionArg.NONE, ref start_hidden, "Do not show main window on start", null },
@@ -89,12 +89,9 @@ namespace Tootle {
 				accounts = new SecretAccountStore();
 				accounts.init ();
 
-				// css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
-				// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-				// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-				window_dummy = new Window ();
-				// add_window (window_dummy);
+				css_provider.load_from_resource (@"$(Build.RESOURCES)app.css");
+				StyleContext.add_provider_for_display (Gdk.Display.get_default (), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+				StyleContext.add_provider_for_display (Gdk.Display.get_default (), zoom_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 			}
 			catch (Error e) {
 				var msg = _("Could not start application: %s").printf (e.message);
@@ -145,11 +142,12 @@ namespace Tootle {
 			}
 		}
 
-		public bool on_window_closed () {
-			if (!settings.work_in_background || accounts.saved.is_empty)
-				app.remove_window (window_dummy);
-				return false;
-		}
+		// TODO: Background mode
+		// public bool on_window_closed () {
+		// 	if (!settings.work_in_background || accounts.saved.is_empty)
+		// 		app.remove_window (window_dummy);
+		// 		return false;
+		// }
 
 		void compose_activated () {
 			new Dialogs.Compose ();

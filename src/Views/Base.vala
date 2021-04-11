@@ -75,21 +75,6 @@ public class Tootle.Views.Base : Box {
 		state = "status";
 	}
 
-	// [GtkCallback]
-	// protected void on_resized () {
-	// 	Allocation alloc;
-	// 	get_allocation (out alloc);
-
-	// 	var target_w = clamp.maximum_size;
-	// 	var view_w = alloc.width;
-
-	// 	var ctx = view.get_style_context ();
-	// 	if (view_w <= target_w && ctx.has_class ("padded"))
-	// 		ctx.remove_class ("padded");
-	// 	if (view_w > target_w && !ctx.has_class ("padded"))
-	// 		ctx.add_class ("padded");
-	// }
-
 	[GtkCallback]
 	void on_close () {
 		window.back ();

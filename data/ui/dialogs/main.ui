@@ -12,14 +12,16 @@
           <object class="TootleViewsSidebar" id="sidebar">
           </object>
         </child>
-        <child type="separator">
-          <object class="GtkSeparator">
-            <property name="orientation">vertical</property>
-          </object>
-        </child>
+        <!-- <child type="separator"> -->
+        <!--   <object class="GtkSeparator"> -->
+        <!--     <property name="orientation">vertical</property> -->
+        <!--   </object> -->
+        <!-- </child> -->
         <child type="content">
           <object class="AdwLeaflet" id="leaflet">
             <property name="can_swipe_back">True</property>
+            <property name="hhomogeneous-folded">0</property>
+            <property name="hhomogeneous-unfolded">1</property>
             <signal name="notify::child-transition-running" handler="on_child_transition"/>
             <signal name="notify::visible-child" handler="on_view_changed"/>
           </object>
