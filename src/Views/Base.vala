@@ -29,8 +29,6 @@ public class Tootle.Views.Base : Box {
 	public string status_message { get; set; default = STATUS_EMPTY; }
 
 	construct {
-		// bind_property ("label", header, "title", BindingFlags.SYNC_CREATE);
-
 		status_button.label = _("Reload");
 		bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
 
@@ -51,7 +49,11 @@ public class Tootle.Views.Base : Box {
 		build_header ();
 	}
 
-	public virtual void build_header () {}
+	public virtual void build_header () {
+		var title = new Adw.WindowTitle (null, null);
+		bind_property ("label", title, "title", BindingFlags.SYNC_CREATE);
+		header.title_widget = title;
+	}
 
 	public virtual void clear () {
 		state = "status";

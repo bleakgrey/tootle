@@ -87,10 +87,10 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 			label = "Home",
 			icon = "user-home-symbolic"
 		});
-		model.append (new Views.Sidebar.Item () {
-			label = "Notifications",
-			icon = "preferences-system-notifications-symbolic"
-		});
+		// model.append (new Views.Sidebar.Item () {
+		// 	label = "Notifications",
+		// 	icon = "preferences-system-notifications-symbolic"
+		// });
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
 			icon = "user-invisible-symbolic"

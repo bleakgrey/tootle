@@ -8,9 +8,9 @@ public class Tootle.Views.Main : Views.TabbedBase {
 
 	public Main () {
 		add_tab (new Views.Home ());
-		// add_tab (new Views.Notifications ());
-		// add_tab (new Views.Local ());
-		// add_tab (new Views.Federated ());
+		add_tab (new Views.Notifications ());
+		add_tab (new Views.Local ());
+		add_tab (new Views.Federated ());
 	}
 
 	public override void build_header () {
