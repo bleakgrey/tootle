@@ -267,6 +267,23 @@
           </object>
         </child>
         <child>
+          <object class="GtkImage" id="thread_line">
+            <property name="visible">0</property>
+            <property name="width_request">4</property>
+            <property name="height_request">32</property>
+            <property name="halign">center</property>
+            <property name="pixel-size">4</property>
+            <style>
+              <class name="ttl-thread-line"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="row-span">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
               <object class="TootleWidgetsAvatar" id="avatar">
                 <property name="size">48</property>
                 <property name="valign">start</property>
@@ -277,23 +294,6 @@
                 <property name="row">1</property>
               </layout>
               </object>
-        </child>
-        <child>
-          <object class="GtkImage" id="thread_line">
-            <property name="visible">0</property>
-            <property name="width_request">4</property>
-            <property name="height_request">32</property>
-            <property name="can_focus">0</property>
-            <property name="halign">center</property>
-            <style>
-              <class name="ttl-thread-line"/>
-            </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">0</property>
-              <property name="row-span">3</property>
-            </layout>
-          </object>
         </child>
       </object>
     </property>

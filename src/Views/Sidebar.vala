@@ -35,8 +35,6 @@ public class Tootle.Views.Sidebar : Box {
 
 	void on_account_switch (InstanceAccount? account) {
 		warning (account.handle);
-		saved_accounts.unselect_all ();
-
 		item_model.remove_all ();
 
 		if (account != null) {
@@ -44,6 +42,7 @@ public class Tootle.Views.Sidebar : Box {
 			accounts.model.find (account, out id);
 			var row = saved_accounts.get_row_at_index ((int)id);
 			saved_accounts.select_row (row);
+			warning (@"Selecting row: $id");
 
 			title.label = account.display_name;
 			subtitle.label = account.handle;
@@ -52,6 +51,8 @@ public class Tootle.Views.Sidebar : Box {
 			account.populate_user_menu (item_model);
 		}
 		else {
+			saved_accounts.unselect_all ();
+
 			title.label = _("Anonymous");
 			subtitle.label = _("No account selected");
 			avatar.account = null;

@@ -9,7 +9,7 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
         Object (
             url: "/api/v1/notifications",
         	label: _("Notifications"),
-        	icon: Desktop.fallback_icon ("notification-symbolic", "preferences-system-notifications-symbolic", "user-invisible-symbolic")
+        	icon: "user-invisible-symbolic"
         );
         accepts = typeof (API.Notification);
         on_notification.connect (add_notification);

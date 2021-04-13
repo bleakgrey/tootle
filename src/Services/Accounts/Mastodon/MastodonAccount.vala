@@ -19,4 +19,35 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 		});
 	}
 
+	public override void populate_user_menu (GLib.ListStore model) {
+		model.append (new Views.Sidebar.Item () {
+			label = "Timelines",
+			icon = "user-home-symbolic"
+		});
+		// model.append (new Views.Sidebar.Item () {
+		// 	label = "Notifications",
+		// 	icon = "preferences-system-notifications-symbolic"
+		// });
+		model.append (new Views.Sidebar.Item () {
+			label = "Direct Messages",
+			icon = "user-invisible-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Bookmarks",
+			icon = "user-bookmarks-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Favorites",
+			icon = "non-starred-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Lists",
+			icon = "view-list-symbolic"
+		});
+		model.append (new Views.Sidebar.Item () {
+			label = "Search",
+			icon = "system-search-symbolic"
+		});
+	}
+
 }

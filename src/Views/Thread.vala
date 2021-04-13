@@ -20,13 +20,6 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 		request ();
 	}
 
-	// Widgets.Status append (Entity entity){
-	// 	var w = entity.to_widget () as Widgets.Status;
-	// 	w.reveal_spoiler = true;
-	// 	content_list.insert (w, -1);
-	// 	return w;
-	// }
-
 	void connect_threads () {
 		Widgets.Status? last_w = null;
 		string? last_id = null;
@@ -72,6 +65,7 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 				uint root_index;
 				model.find (root_status, out root_index);
 				root_widget = content.get_row_at_index ((int)root_index) as Widgets.Status;
+				root_widget.expand_root ();
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {
