@@ -50,13 +50,11 @@ public abstract class Tootle.AccountStore : GLib.Object {
 		saved.add (account);
 		model.append (account);
 		save ();
-		account.subscribe ();
 		ensure_active_account ();
 	}
 
 	public virtual void remove (InstanceAccount account) throws GLib.Error {
 		message (@"Removing account: $(account.handle)");
-		account.unsubscribe ();
 		saved.remove (account);
 
 		uint pos;

@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
+public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 
 	protected InstanceAccount? account { get; set; default = null; }
 	public API.Status root_status { get; construct set; }
@@ -12,7 +12,10 @@ public class Tootle.Views.Thread : Views.ContentBase, IAccountHolder {
 			status_message: STATUS_LOADING,
 			label: _("Conversation")
 		);
-		account_listener_init ();
+		construct_account_holder ();
+	}
+	~Thread () {
+		destruct_account_holder ();
 	}
 
 	public override void on_account_changed (InstanceAccount? acc) {

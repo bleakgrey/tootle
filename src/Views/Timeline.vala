@@ -1,30 +1,28 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.ContentBase {
+public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBase {
 
 	public string url { get; construct set; }
 	public bool is_public { get; construct set; default = false; }
 	public Type accepts { get; set; default = typeof (API.Status); }
 
 	protected InstanceAccount? account { get; set; default = null; }
-	protected ulong on_status_added_sigig;
 
 	public bool is_last_page { get; set; default = false; }
 	public string? page_next { get; set; }
 	public string? page_prev { get; set; }
-	public string? stream = null;
 
 	construct {
 		app.refresh.connect (on_refresh);
 		status_button.clicked.connect (on_refresh);
-		account_listener_init ();
 
-		on_status_added_sigig = on_status_added.connect (add_status);
-		on_status_removed.connect (remove_status);
+		construct_account_holder ();
+		construct_streamable ();
 	}
 	~Timeline () {
-		streams.unsubscribe (stream, this);
+		destruct_account_holder ();
+		destruct_streamable ();
 	}
 
 	public virtual bool is_status_owned (API.Status status) {
@@ -108,19 +106,11 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Cont
 		GLib.Idle.add (request);
 	}
 
-	public virtual string? get_stream_url () {
-		return null;
-	}
 
 	public virtual void on_account_changed (InstanceAccount? acc) {
 		account = acc;
-		reconnect_stream ();
+		update_stream ();
 		on_refresh ();
-	}
-
-	public void reconnect_stream () {
-		streams.unsubscribe (stream, this);
-		streams.subscribe (get_stream_url (), this, out stream);
 	}
 
 	protected override void on_bottom_reached () {
@@ -131,22 +121,40 @@ public class Tootle.Views.Timeline : IAccountHolder, IStreamListener, Views.Cont
 		request ();
 	}
 
-	protected virtual void add_status (API.Status status) {
-		var allow_update = true;
-		if (is_public)
-			allow_update = settings.public_live_updates;
 
-		if (settings.live_updates && allow_update)
-			model.insert (-1, status);
+
+	// Streamable
+
+	public string? _connection_url { get; set; }
+	public bool subscribed { get; set; }
+
+	protected override void on_streaming_policy_changed () {
+		var allow_streaming = settings.live_updates;
+		if (is_public)
+			allow_streaming = allow_streaming && settings.public_live_updates;
+
+		subscribed = allow_streaming;
 	}
 
-	protected virtual void remove_status (string id) {
-		if (settings.live_updates) {
-			// content_list.get_children ().@foreach (w => {
-			// 	var sw = w as Widgets.Status;
-			// 	if (sw != null && sw.status.id == id)
-			// 		sw.destroy ();
-			// });
+	public virtual string? get_stream_url () {
+		return null;
+	}
+
+	public virtual void on_stream_event (Streamable.Event ev) {
+		try {
+			switch (ev.type) {
+				case Mastodon.Account.EVENT_NEW_POST:
+					var entity = Entity.from_json (accepts, ev.get_node ());
+					model.insert (0, entity);
+					return;
+				case Mastodon.Account.EVENT_DELETE_POST:
+					return;
+				default:
+					throw new Oopsie.INSTANCE ("Unknown event: " + ev.type);
+			}
+		}
+		catch (Error e) {
+			warning ("Couldn't process stream event: " + e.message);
 		}
 	}
 

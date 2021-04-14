@@ -9,8 +9,43 @@ public class Tootle.Streams : Object {
 		default = new HashTable<string, Connection> (GLib.str_hash, GLib.str_equal);
 	}
 
+	public void subscribe (string? url, Streamable s) {
+		if (url == null)
+			return;
+
+		if (connections.contains (url)) {
+			connections[url].add (s);
+		}
+		else {
+			var con = new Connection (url);
+			connections[url] = con;
+			con.add (s);
+			con.start ();
+		}
+	}
+
+	public void unsubscribe (string? url, Streamable s) {
+		if (url == null)
+			return;
+
+		if (connections.contains (url)) {
+			var unused = connections.@get (url).remove (s);
+			if (unused)
+				connections.remove (url);
+		}
+	}
+
+	// public void force_delete (string id) {
+	// 	connections.get_values ().@foreach (c => {
+	// 		c.subscribers.@foreach (s => {
+	// 			s.on_status_removed (id);
+	// 			return true;
+	// 		});
+	// 	});
+	// }
+
 	protected class Connection : Object {
-		public ArrayList<IStreamListener> subscribers;
+		public ArrayList<Streamable> subscribers;
 		protected WebsocketConnection socket;
 		protected Message msg;
 
@@ -25,7 +60,7 @@ public class Tootle.Streams : Object {
 		}
 
 		public Connection (string url) {
-			this.subscribers = new ArrayList<IStreamListener> ();
+			this.subscribers = new ArrayList<Streamable> ();
 			this.msg = new Message ("GET", url);
 		}
 
@@ -40,27 +75,31 @@ public class Tootle.Streams : Object {
 			return false;
 		}
 
-		public void add (IStreamListener s) {
-			info ("%s > %s", get_subscriber_name (s), name);
+		public void add (Streamable s) {
+			info ("%s > %s", s.get_subscriber_name (), name);
 			subscribers.add (s);
 		}
 
-		public void remove (IStreamListener s) {
+		public bool remove (Streamable s) {
 			if (subscribers.contains (s)) {
-				info ("%s X %s", get_subscriber_name (s), name);
+				info ("%s X %s", s.get_subscriber_name (), name);
 				subscribers.remove (s);
 			}
 
 			if (subscribers.size <= 0) {
-				info (@"Closing: $name");
+				message (@"Closing: $name");
 				closing = true;
 				socket.close (0, null);
+				return true;
 			}
+			return false;
 		}
 
 		void on_error (Error e) {
-			if (!closing)
-				warning (@"Error in $name: $(e.message)");
+			if (closing)
+				return;
+
+			warning (@"Error in $name: $(e.message)");
 		}
 
 		void on_closed () {
@@ -72,113 +111,37 @@ public class Tootle.Streams : Object {
 			message (@"Closing stream: $name");
 		}
 
-		void on_message (int i, Bytes bytes) {
+		protected virtual void on_message (int i, Bytes bytes) {
 			try {
-				emit (bytes, this);
+				Streamable.Event ev;
+				decode (bytes, out ev);
+
+				subscribers.@foreach (s => {
+					// message (@"$(name): $(ev.type) for $(s.get_subscriber_name ())");
+					s.on_stream_event (ev);
+					return true;
+				});
 			}
 			catch (Error e) {
-				warning (@"Couldn't handle websocket event. Reason: $(e.message)");
+				warning (@"Failed to handle websocket message. Reason: $(e.message)");
 			}
 		}
-	}
 
-	public void subscribe (string? url, IStreamListener s, out string cookie) {
-		if (url == null)
-			return;
+		void decode (Bytes bytes, out Streamable.Event event) throws Error{
+			var msg = (string) bytes.get_data ();
+			var parser = new Json.Parser ();
+			parser.load_from_data (msg, -1);
+			var obj = parser.steal_root ().get_object ();
+			if (obj == null)
+				throw new Oopsie.INSTANCE ("Failed to decode message as an Object");
 
-		if (connections.contains (url)) {
-			connections[url].add (s);
+			if (!obj.has_member ("event"))
+				throw new Oopsie.INSTANCE ("No event specified");
+			event = Streamable.Event ();
+			event.type = obj.get_string_member ("event");
+			event.payload = obj.get_member ("payload");
 		}
-		else {
-			var con = new Connection (url);
-			connections[url] = con;
-			con.add (s);
-			con.start ();
-		}
-		cookie = url;
-	}
 
-	public void unsubscribe (string? cookie, IStreamListener s) {
-		var url = cookie;
-		if (url == null)
-			return;
-
-		if (connections.contains (url))
-			connections.@get (url).remove (s);
-	}
-
-	static string get_subscriber_name (Object s) {
-		return s.get_type ().name ();
-	}
-
-	static void decode (Bytes bytes, out Json.Node root, out Json.Object obj, out string event) throws Error {
-		var msg = (string) bytes.get_data ();
-		var parser = new Json.Parser ();
-		parser.load_from_data (msg, -1);
-		root = parser.steal_root ();
-		obj = root.get_object ();
-		event = obj.get_string_member ("event");
-	}
-
-	static Json.Node payload (Json.Object obj) {
-		var payload = obj.get_string_member ("payload");
-		var data = Soup.URI.decode (payload);
-		var parser = new Json.Parser ();
-		parser.load_from_data (data, -1);
-		return parser.steal_root ();
-	}
-
-	static void emit (Bytes bytes, Connection c) throws Error {
-		if (!settings.live_updates)
-			return;
-
-		Json.Node root;
-		Json.Object root_obj;
-		string ev;
-		decode (bytes, out root, out root_obj, out ev);
-
-		// c.subscribers.@foreach (s => {
-		// 	message (@"$(c.name): $ev for $(get_subscriber_name (s))");
-		// 	return true;
-		// });
-
-		switch (ev) {
-			case "update":
-				var node = payload (root_obj);
-				var status = Entity.from_json (typeof (API.Status), node) as API.Status;
-				c.subscribers.@foreach (s => {
-					s.on_status_added (status);
-					return true;
-				});
-				break;
-			case "delete":
-				var id = root_obj.get_string_member ("payload");
-				c.subscribers.@foreach (s => {
-					s.on_status_removed (id);
-					return true;
-				});
-				break;
-			case "notification":
-				var node = payload (root_obj);
-				var notif = Entity.from_json (typeof (API.Notification), node) as API.Notification;
-				c.subscribers.@foreach (s => {
-					s.on_notification (notif);
-					return true;
-				});
-				break;
-			default:
-				warning (@"Unknown websocket event: \"$ev\". Ignoring.");
-				break;
-		}
-	}
-
-	public void force_delete (string id) {
-		connections.get_values ().@foreach (c => {
-			c.subscribers.@foreach (s => {
-				s.on_status_removed (id);
-				return true;
-			});
-		});
 	}
 
 }

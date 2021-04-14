@@ -129,16 +129,22 @@ public class Tootle.Views.Sidebar : Box {
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/sidebar/account.ui")]
 	protected class AccountRow : Adw.ActionRow {
-		InstanceAccount account;
+		InstanceAccount? account;
 
 		[GtkChild] unowned Widgets.Avatar avatar;
 		[GtkChild] unowned Spinner loading;
 
-		public AccountRow (InstanceAccount _account) {
+		public AccountRow (InstanceAccount? _account) {
 			account = _account;
-			title = account.display_name;
-			subtitle = account.handle;
-			avatar.account = account;
+			if (account != null) {
+				title = account.display_name;
+				subtitle = account.handle;
+				avatar.account = account;
+			}
+			else {
+				title = _("Add Account");
+				avatar.account = null;
+			}
 		}
 
 	}

@@ -1,7 +1,7 @@
 using GLib;
 using Gee;
 
-public class Tootle.InstanceAccount : API.Account, IStreamListener {
+public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	public string? backend { set; get; }
 	public string? instance { get; set; }
@@ -14,38 +14,27 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 	public bool has_unread_notifications { get; set; default = false; }
 	public ArrayList<API.Notification> cached_notifications { get; set; default = new ArrayList<API.Notification> (); }
 
-	protected string? stream;
-
 	public new string handle {
 		owned get { return @"@$username@$domain"; }
 	}
 
 	construct {
-		on_notification.connect (show_notification);
+		// on_notification.connect (show_notification);
+		construct_streamable ();
 	}
 
 	public InstanceAccount.empty (string instance){
-		Object (id: "", instance: instance);
+		Object (
+			id: "",
+			instance: instance
+		);
 	}
 	~InstanceAccount () {
-		unsubscribe ();
+		destruct_streamable ();
 	}
 
 	public bool is_current () {
 		return accounts.active.access_token == access_token;
-	}
-
-	// TODO: This should be IStreamable
-	public string get_stream_url () {
-		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
-	}
-
-	public void subscribe () {
-		streams.subscribe (get_stream_url (), this, out stream);
-	}
-
-	public void unsubscribe () {
-		streams.unsubscribe (stream, this);
 	}
 
 	public async void verify_credentials () throws Error {
@@ -83,5 +72,20 @@ public class Tootle.InstanceAccount : API.Account, IStreamListener {
 	}
 
 	public virtual void populate_user_menu (GLib.ListStore model) {}
+
+
+
+	// Streamable
+
+	public string? _connection_url { get; set; }
+	public bool subscribed { get; set; }
+
+	public virtual string? get_stream_url () {
+		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
+	}
+
+	public virtual void on_stream_event (Streamable.Event ev) {
+
+	}
 
 }

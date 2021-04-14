@@ -2,6 +2,10 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 
 	public const string BACKEND = "Mastodon";
 
+	public const string EVENT_NEW_POST = "update";
+	public const string EVENT_DELETE_POST = "delete";
+	public const string EVENT_NOTIFICATION = "notification";
+
 	class Test : AccountStore.BackendTest {
 
 		public override string? get_backend (Json.Object obj) {

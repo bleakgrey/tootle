@@ -38,6 +38,7 @@ public class Tootle.SecretAccountStore : AccountStore {
 			if (account != null) {
 				saved.add (account);
 				model.append (account);
+				account.subscribed = true;
 			}
 		});
 

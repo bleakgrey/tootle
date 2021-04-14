@@ -1,7 +1,7 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStreamListener {
+public class Tootle.Views.Notifications : Views.Timeline, AccountHolder, Streamable {
 
     protected int64 last_id = 0;
 
@@ -9,15 +9,13 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
         Object (
             url: "/api/v1/notifications",
         	label: _("Notifications"),
-        	icon: "user-invisible-symbolic"
+        	icon: "preferences-system-notifications-symbolic"
         );
         accepts = typeof (API.Notification);
-        on_notification.connect (add_notification);
-        disconnect (on_status_added_sigig);
     }
 
     public override string? get_stream_url () {
-        return account != null ? @"$(account.instance)/api/v1/streaming/?stream=user&access_token=$(account.access_token)" : null;
+        return account.get_stream_url ();
     }
 
     public override void on_shown () {
@@ -71,8 +69,18 @@ public class Tootle.Views.Notifications : Views.Timeline, IAccountHolder, IStrea
         return last_id > account.last_seen_notification || needs_attention;
     }
 
-    void add_notification (API.Notification n) {
-        model.insert (-1, n);
-    }
+	public override void on_stream_event (Streamable.Event ev) {
+		try {
+			switch (ev.type) {
+				case Mastodon.Account.EVENT_NOTIFICATION:
+					var entity = Entity.from_json (accepts, ev.get_node ());
+					model.insert (0, entity);
+					return;
+			}
+		}
+		catch (Error e) {
+			warning ("Couldn't process stream event: " + e.message);
+		}
+	}
 
 }

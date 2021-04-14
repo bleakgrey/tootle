@@ -1,13 +1,13 @@
-public interface Tootle.IAccountHolder : GLib.Object {
+public interface Tootle.AccountHolder : GLib.Object {
 
 	protected abstract InstanceAccount? account { get; set; default = null; }
 
-	protected void account_listener_init () {
+	protected void construct_account_holder () {
 		accounts.switched.connect (on_account_changed);
 		accounts.changed.connect (on_accounts_changed);
 		on_account_changed (accounts.active);
 	}
-	protected void account_listener_free () {
+	protected void destruct_account_holder () {
 		accounts.switched.disconnect (on_account_changed);
 		accounts.changed.disconnect (on_accounts_changed);
 	}
