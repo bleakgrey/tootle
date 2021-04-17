@@ -34,6 +34,20 @@
             </child>
             <child>
               <object class="AdwActionRow">
+                <property name="title" translatable="yes">Multiple Columns</property>
+                <property name="subtitle" translatable="yes">Warning: Expirimental and highly flammable</property>
+                <property name="activatable_widget">multiple_columns</property>
+                <property name="sensitive">0</property>
+                <child>
+                  <object class="GtkSwitch" id="multiple_columns">
+                    <property name="can_focus">0</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
                 <property name="visible">0</property>
                 <property name="title" translatable="yes">Text scale (%)</property>
                 <property name="activatable_widget">post_text_size</property>

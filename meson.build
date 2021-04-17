@@ -62,7 +62,6 @@ sources = files(
     'src/API/Entity.vala',
     'src/Widgets/Widgetizable.vala',
     'src/Widgets/Avatar.vala',
-    'src/Widgets/TimelineMenu.vala',
     'src/Widgets/RichLabel.vala',
     'src/Widgets/Status.vala',
     'src/Widgets/Notification.vala',

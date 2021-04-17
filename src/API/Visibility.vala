@@ -63,7 +63,7 @@ public enum Tootle.API.Visibility {
             case PRIVATE:
                 return "changes-prevent-symbolic";
             case DIRECT:
-                return "user-available-symbolic";
+                return "mail-unread-symbolic";
             default:
                 return "network-workgroup-symbolic";
         }

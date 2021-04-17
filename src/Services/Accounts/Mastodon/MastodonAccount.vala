@@ -34,7 +34,7 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 		// });
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
-			icon = "user-invisible-symbolic"
+			icon = API.Visibility.DIRECT.get_icon ()
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Bookmarks",

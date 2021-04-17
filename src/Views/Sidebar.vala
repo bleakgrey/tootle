@@ -23,6 +23,14 @@ public class Tootle.Views.Sidebar : Box {
 				Dialogs.Preferences.open ();
 			}
 	};
+	Item item_about = new Item () {
+			label = _("About"),
+			icon = "help-about-symbolic",
+			selectable = false,
+			on_activated = () => {
+				app.lookup_action ("about").activate (null);
+			}
+	};
 
 	construct {
 		accounts.switched.connect (on_account_switch);
@@ -59,6 +67,7 @@ public class Tootle.Views.Sidebar : Box {
 		}
 
 		item_model.append (item_preferences);
+		item_model.append (item_about);
 	}
 
 	[GtkCallback]
@@ -116,7 +125,6 @@ public class Tootle.Views.Sidebar : Box {
 		var before = _before as ItemRow;
 
 		row.set_header (null);
-		before.set_header (null);
 
 		if (row.item.separated && before != null && !before.item.separated) {
 			row.set_header (new Separator (Orientation.HORIZONTAL));

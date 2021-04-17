@@ -2,8 +2,13 @@
 <gresources>
     <gresource prefix="/com/github/bleakgrey/tootle/">
         <file alias="app.css">app.css</file>
+
+        <file preprocess="xml-stripblanks">icons/mention-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/hashtag-symbolic.svg</file>
+
         <file>ui/views/new_account.ui</file>
         <file>ui/views/base.ui</file>
+        <file>ui/views/profile_header.ui</file>
         <file>ui/views/sidebar/view.ui</file>
         <file>ui/views/sidebar/account.ui</file>
         <file>ui/views/sidebar/item.ui</file>

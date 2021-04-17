@@ -15,77 +15,101 @@ public class Tootle.Views.Profile : Views.Timeline {
 	SimpleAction blocking_action;
 	SimpleAction domain_blocking_action;
 
-	ListBox profile_list;
-	Label relationship;
-	Widgets.TimelineMenu menu_button;
-
-	Widgets.AdaptiveButton rs_button;
-	SourceFunc? rs_button_action;
-
-	weak ListBoxRow note_row;
+	protected Cover cover;
+	protected MenuButton menu_button;
+	protected Button rs_button;
+	protected SourceFunc? rs_button_action;
 
 	construct {
 		build_actions ();
 
-		var builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/views/profile_header.ui");
-		profile_list = builder.get_object ("profile_list") as ListBox;
-
-		var hdr = builder.get_object ("grid") as Grid;
-		column_view.prepend (hdr);
+		cover = new Cover ();
+		column_view.prepend (cover);
 		// column_view.pack_start (hdr, false, false, 0);
 		// column_view.reorder_child (hdr, 0);
 
-		var avatar = builder.get_object ("avatar") as Widgets.Avatar;
-		avatar.account = profile;
+		// var handle = builder.get_object ("handle") as Widgets.RichLabel;
+		// profile.bind_property ("display-name", handle, "text", BindingFlags.SYNC_CREATE);
 
-		var domain = "@" + profile.domain;
-		menu_button.title.label = profile.handle.replace (domain, "");
-		menu_button.subtitle.label = domain;
-		if ("@" in profile.acct)
-			menu_button.subtitle.show ();
+		// note_row = builder.get_object ("note_row") as ListBoxRow;
+		// var note = builder.get_object ("note") as Widgets.MarkupView;
+		// profile.bind_property ("note", note, "content", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		// 	var text = (string) src;
+		// 	target.set_string (text);
+		// 	note_row.visible = text != "";
+		// 	return true;
+		// });
 
-		var handle = builder.get_object ("handle") as Widgets.RichLabel;
-		profile.bind_property ("display-name", handle, "text", BindingFlags.SYNC_CREATE);
+		// relationship = builder.get_object ("relationship") as Label;
+		// rs.notify["id"].connect (on_rs_updated);
 
-		note_row = builder.get_object ("note_row") as ListBoxRow;
-		var note = builder.get_object ("note") as Widgets.MarkupView;
-		profile.bind_property ("note", note, "content", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			var text = (string) src;
-			target.set_string (text);
-			note_row.visible = text != "";
-			return true;
-		});
-
-		relationship = builder.get_object ("relationship") as Label;
-		rs.notify["id"].connect (on_rs_updated);
-
-		rebuild_fields ();
+		// rebuild_fields ();
 	}
 
 	public Profile (API.Account acc) {
 		Object (
 			profile: acc,
 			rs: new API.Relationship.for_account (acc),
-			label: acc.acct,
+			label: _("Profile"),
 			url: @"/api/v1/accounts/$(acc.id)/statuses"
 		);
+		cover.bind (profile);
 	}
-	~Profile () {
-		menu_button.destroy ();
+
+	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/profile_header.ui")]
+	protected class Cover : Box {
+
+		[GtkChild] unowned ListBox info;
+		[GtkChild] unowned Widgets.RichLabel display_name;
+		[GtkChild] unowned Label handle;
+		[GtkChild] unowned Widgets.Avatar avatar;
+		[GtkChild] unowned Widgets.MarkupView note;
+
+		public void bind (API.Account account) {
+			display_name.label = account.display_name;
+			handle.label = account.handle;
+			avatar.account = account;
+			note.content = account.note;
+
+			if (account.fields != null) {
+				foreach (API.AccountField f in account.fields) {
+					var row = new Adw.ActionRow ();
+					var val = new Widgets.RichLabel (f.val);
+					row.can_target = false;
+					row.title = f.name;
+					row.add_suffix (val);
+
+					info.append (row);
+				}
+			}
+		}
+
 	}
 
 	public override void build_header () {
-		rs_button = new Widgets.AdaptiveButton ();
-		rs_button.clicked.connect (() => {
-			if (rs_button_action != null) {
-				rs_button.sensitive = false;
-				rs_button_action ();
-			}
-		});
-		header.title_widget = menu_button = new Widgets.TimelineMenu ("profile-menu");
+		base.build_header ();
+		// rs_button = new Widgets.AdaptiveButton ();
+		// rs_button.clicked.connect (() => {
+		// 	if (rs_button_action != null) {
+		// 		rs_button.sensitive = false;
+		// 		rs_button_action ();
+		// 	}
+		// });
 
-		if (profile.id != accounts.active.id)
-			header.pack_end (rs_button);
+		// if (profile.id != accounts.active.id)
+		// 	header.pack_end (rs_button);
+
+		menu_button = new MenuButton ();
+		var menu_builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/menus.ui");
+		var menu = "profile-menu"; //"new_style_menu_model"
+		menu_button.menu_model = menu_builder.get_object (menu) as MenuModel;
+		menu_button.popover.width_request = 250;
+		menu_button.icon_name = "view-more-symbolic";
+		header.pack_end (menu_button);
+
+		var a = new Button ();
+		a.label = _("Follow");
+		header.pack_end (a);
 	}
 
 	void build_actions () {
@@ -125,6 +149,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		actions.add_action (mention_action);
 
+		//FIXME: Take a variant to copy "handle" and "uri"
 		var copy_handle_action = new SimpleAction ("copy_handle", null);
 		copy_handle_action.activate.connect (v => {
 			Desktop.copy (profile.handle);
@@ -140,6 +165,11 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		hiding_reblogs_action = new SimpleAction.stateful ("hiding_reblogs", null, false);
 		hiding_reblogs_action.change_state.connect (v => {
+			if (!rs.following) {
+				warning ("Trying to hide boosts while not following an account.");
+				return;
+			}
+
 			var state = !v.get_boolean ();
 			rs.modify ("follow", "reblogs", @"$state");
 		});
@@ -199,26 +229,26 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
 	 void on_rs_updated () {
-		var label = "";
-		if (rs_button.sensitive = rs != null) {
-			if (rs.requested)
-				label = _("Sent follow request");
-			else if (rs.followed_by && rs.following)
-				label = _("Mutually follows you");
-			else if (rs.followed_by)
-				label = _("Follows you");
+		// var label = "";
+		// if (rs_button.sensitive = rs != null) {
+		// 	if (rs.requested)
+		// 		label = _("Sent follow request");
+		// 	else if (rs.followed_by && rs.following)
+		// 		label = _("Mutually follows you");
+		// 	else if (rs.followed_by)
+		// 		label = _("Follows you");
 
 
-			string action_icon = "";
-			string action_label = "";
-			get_rs_button_state (ref action_label, ref action_icon, ref rs_button_action);
-			rs_button.icon_name = action_icon;
-			rs_button.label = action_label;
+		// 	string action_icon = "";
+		// 	string action_label = "";
+		// 	get_rs_button_state (ref action_label, ref action_icon, ref rs_button_action);
+		// 	rs_button.icon_name = action_icon;
+		// 	rs_button.label = action_label;
 
-		}
+		// }
 
-		relationship.label = label;
-		relationship.visible = label != "";
+		// relationship.label = label;
+		// relationship.visible = label != "";
 
 		invalidate_actions (false);
 	}
@@ -231,7 +261,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 			icon_name = "view-reveal-symbolic";
 			fn = () => {
 				blocking_action.change_state (false);
-				rs_button.sensitive = true;
+				// rs_button.sensitive = true;
 				return true;
 			};
 			return;
@@ -272,31 +302,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 			var node = network.parse_node (mess);
 			var acc = API.Account.from (node);
 			window.open_view (new Views.Profile (acc));
-		}, (status, reason) => {
-			network.on_error (status, reason);
-		});
-	}
-
-	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/profile_field_row.ui")]
-	protected class Field : ListBoxRow {
-
-		[GtkChild] unowned Widgets.RichLabel name_label;
-		[GtkChild] unowned Widgets.RichLabel value_label;
-
-		public Field (API.AccountField field) {
-			name_label.label = field.name;
-			value_label.label = field.val;
-		}
-
-	}
-
-	void rebuild_fields () {
-		if (profile.fields != null) {
-			foreach (Entity e in profile.fields) {
-				var w = new Field (e as API.AccountField);
-				profile_list.insert (w, -1);
-			}
-		}
+		},
+		network.on_error);
 	}
 
 }

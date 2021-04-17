@@ -34,9 +34,6 @@
 /*   margin: 0px; */
 /* } */
 
-.ttl-post {
-  padding: 0px;
-}
 .ttl-thread-line {
   background: @theme_fg_color;
   opacity: .1;
@@ -61,8 +58,22 @@
 	border-radius:0px;
 }
 
-.ttl-view .large .content {
-	margin: 32px 0 32px 0;
+.ttl-view .content row  {
+  padding: 0px;
+}
+
+.ttl-view .large:first-child {
+	margin-top: 32px;
+}
+.ttl-view .large:last-child {
+	margin-bottom: 32px;
+}
+
+.header-image {
+  background:grey;
+}
+.large .header-image {
+  border-radius:6px 6px 0 0;
 }
 
 .badge {

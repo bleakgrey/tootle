@@ -41,7 +41,7 @@ public class Tootle.Views.Search : Views.TabbedBase {
 
 		accounts_tab = add_list_tab (_("Accounts"), "system-users-symbolic");
 		statuses_tab = add_list_tab (_("Statuses"), "user-available-symbolic");
-		hashtags_tab = add_list_tab (_("Hashtags"), "emoji-flags-symbolic");
+		hashtags_tab = add_list_tab (_("Hashtags"), "hashtag-symbolic");
 
 		request ();
 	}
