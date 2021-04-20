@@ -19,10 +19,14 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 
 		construct_account_holder ();
 		construct_streamable ();
+
+		content.bind_model (model, on_create_model_widget);
 	}
 	~Timeline () {
 		destruct_account_holder ();
 		destruct_streamable ();
+
+		content.bind_model (null, null);
 	}
 
 	public virtual bool is_status_owned (API.Status status) {
@@ -80,8 +84,8 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 		.then ((sess, msg) => {
 			Network.parse_array (msg, node => {
 				try {
-					var e = Entity.from_json (accepts, node);
-					model.append (e);
+					var e = entity_cache.lookup_or_insert (node, accepts);
+					model.append (e); //FIXME: use splice();
 				}
 				catch (Error e) {
 					warning (@"Timeline item parse error: $(e.message)");

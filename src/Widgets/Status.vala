@@ -4,35 +4,8 @@ using Gdk;
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/status.ui")]
 public class Tootle.Widgets.Status : ListBoxRow {
 
-	public API.Status status { get; construct set; }
-	public API.NotificationType? kind { get; construct set; }
-
-	public enum ThreadRole {
-		NONE,
-		START,
-		MIDDLE,
-		END;
-
-		public static void connect_posts (Widgets.Status? prev, Widgets.Status curr) {
-			if (prev == null) {
-				curr.thread_role = NONE;
-				return;
-			}
-
-			switch (prev.thread_role) {
-				case NONE:
-					prev.thread_role = START;
-					curr.thread_role = END;
-					break;
-				case END:
-					prev.thread_role = MIDDLE;
-					curr.thread_role = END;
-					break;
-			}
-		}
-	}
-
-	public ThreadRole thread_role { get; set; default = ThreadRole.NONE; }
+	public API.Status? status { get; set; }
+	public API.NotificationType? kind { get; set; }
 
 	[GtkChild] protected unowned Grid grid;
 
@@ -74,7 +47,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 				return text;
 		}
 	}
-	public bool reveal_spoiler { get; set; default = false; }
+	public bool reveal_spoiler { get; set; default = true; }
 
 	protected string date {
 		owned get {
@@ -111,18 +84,34 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 	construct {
 		notify["kind"].connect (on_kind_changed);
+		notify["status"].connect (on_rebind);
 		open.connect (on_open);
+
+		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
+		menu_button.clicked.connect (open_menu);
+	}
+
+	public Status (API.Status status, API.NotificationType? kind = null) {
+		Object (
+			status: status,
+			kind: kind
+		);
+	}
+	~Status () {
+		message ("Destroying Status widget");
+		status = null;
+	}
+
+	protected virtual void on_rebind () {
+		// bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
+		// bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
+		// bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
 
 		if (kind == null) {
 			if (status.reblog != null)
 				kind = API.NotificationType.REBLOG_REMOTE_USER;
 		}
 
-		bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
-		bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
-		bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
-
-		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
 		// if (status.formal.in_reply_to_id != null)
 		// 	reply_button_icon.icon_name = "mail-reply-all-symbolic";
 		// else
@@ -136,15 +125,20 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
 
-		status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			target.set_boolean (!src.get_boolean ());
-			return true;
-		});
-		bind_property ("reveal-spoiler", spoiler_stack, "visible-child-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
-			var name = reveal_spoiler ? "content" : "spoiler";
-			target.set_string (name);
-			return true;
-		});
+		reveal_spoiler = true;
+		spoiler_stack.visible_child_name = "content";
+
+	// status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.INVERT_BOOLEAN);
+
+		// status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		// 	target.set_boolean (!src.get_boolean ());
+		// 	return true;
+		// }); !!!
+		// bind_property ("reveal-spoiler", spoiler_stack, "visible-child-name", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
+		// 	var name = reveal_spoiler ? "content" : "spoiler";
+		// 	target.set_string (name);
+		// 	return true;
+		// });
 
 		if (status.formal.visibility == API.Visibility.DIRECT) {
 			// reblog_icon.icon_name = status.formal.visibility.get_icon ();
@@ -160,18 +154,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		// if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
 		// 	attachments.destroy ();
 		// }
-
-		menu_button.clicked.connect (open_menu);
-	}
-
-	public Status (owned API.Status status, API.NotificationType? kind = null) {
-		Object (
-			status: status,
-			kind: kind
-		);
-	}
-	~Status () {
-		notify["kind"].disconnect (on_kind_changed);
 	}
 
 	[GtkCallback]
@@ -194,7 +176,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 	protected void open_menu () {
-		//FIXME: Gtk.Menu is gone.
+		// FIXME: Gtk.Menu is gone.
 		// var menu = new Gtk.Menu ();
 
 		// var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
@@ -257,33 +239,10 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		child.set_property ("column_span", 2);
 	}
 
-	public void install_thread_line () {
-		var l = thread_line;
-		switch (thread_role) {
-			case NONE:
-				l.visible = false;
-				break;
-			case START:
-				l.valign = Align.FILL;
-				l.margin_top = 24;
-				l.visible = true;
-				break;
-			case MIDDLE:
-				l.valign = Align.FILL;
-				l.margin_top = 0;
-				l.visible = true;
-				break;
-			case END:
-				l.valign = Align.START;
-				l.margin_top = 0;
-				l.visible = true;
-				break;
-		}
-	}
 
 	// This disables the button when its status property is updated.
 	// Fixes a bug where clicking one or more post action buttons
-	// triggers an infite loop of network requests.
+	// triggers an infinite loop of network requests.
 	//
 	// This took me an entire day to fix and I'm quite sad.
 	public void bind_toggleable_prop (ToggleButton button, string prop, string on, string off) {
@@ -321,6 +280,61 @@ public class Tootle.Widgets.Status : ListBoxRow {
 				button.sensitive = true;
 			});
 		});
+	}
+
+
+
+	// Threads
+
+	public enum ThreadRole {
+		NONE,
+		START,
+		MIDDLE,
+		END;
+
+		public static void connect_posts (Widgets.Status? prev, Widgets.Status curr) {
+			if (prev == null) {
+				curr.thread_role = NONE;
+				return;
+			}
+
+			switch (prev.thread_role) {
+				case NONE:
+					prev.thread_role = START;
+					curr.thread_role = END;
+					break;
+				case END:
+					prev.thread_role = MIDDLE;
+					curr.thread_role = END;
+					break;
+			}
+		}
+	}
+
+	public ThreadRole thread_role { get; set; default = ThreadRole.NONE; }
+
+	public void install_thread_line () {
+		var l = thread_line;
+		switch (thread_role) {
+			case NONE:
+				l.visible = false;
+				break;
+			case START:
+				l.valign = Align.FILL;
+				l.margin_top = 24;
+				l.visible = true;
+				break;
+			case MIDDLE:
+				l.valign = Align.FILL;
+				l.margin_top = 0;
+				l.visible = true;
+				break;
+			case END:
+				l.valign = Align.START;
+				l.margin_top = 0;
+				l.visible = true;
+				break;
+		}
 	}
 
 }

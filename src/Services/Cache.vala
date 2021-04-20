@@ -1,6 +1,7 @@
 using Gee;
 using Gdk;
 
+[Deprecated]
 public class Tootle.Cache : GLib.Object {
 
     protected HashTable<string, Item> items { get; set; }

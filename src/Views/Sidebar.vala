@@ -68,6 +68,14 @@ public class Tootle.Views.Sidebar : Box {
 
 		item_model.append (item_preferences);
 		item_model.append (item_about);
+
+		item_model.append (new Item () {
+			label = "(Debug) Empty View",
+			separated = true,
+			on_activated = () => {
+				window.open_view (new Views.ContentBase ());
+			}
+		});
 	}
 
 	[GtkCallback]

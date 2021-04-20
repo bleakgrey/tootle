@@ -2,7 +2,7 @@ using Gtk;
 
 public class Tootle.Views.ContentBase : Views.Base {
 
-	public GLib.ListStore model;
+	protected GLib.ListStore model;
 	protected ListBox content;
 
 	public bool empty {
@@ -19,15 +19,27 @@ public class Tootle.Views.ContentBase : Views.Base {
 			selection_mode = SelectionMode.NONE,
 			can_focus = false
 		};
+		content_box.append (content);
 		content.add_css_class ("content");
 		content.row_activated.connect (on_content_item_activated);
+
 		content.bind_model (model, on_create_model_widget);
-		content_box.append (content);
 
 		scrolled.edge_reached.connect (pos => {
 			if (pos == PositionType.BOTTOM)
 				on_bottom_reached ();
 		});
+	}
+	~ContentBase () {
+		message ("Destroying ContentBase");
+		// model.remove_all ();
+	}
+
+	// GTK4's ListBox refuses to be destroyed when bound to a
+	// model. We need to unbind it manually here.
+	public override void dispose () {
+		content.bind_model (null, null);
+		base.dispose ();
 	}
 
 	public override void clear () {

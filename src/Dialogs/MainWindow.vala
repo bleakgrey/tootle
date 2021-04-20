@@ -104,6 +104,7 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 		Widget unused_child;
 		while ((unused_child = leaflet.get_adjacent_child (Adw.NavigationDirection.FORWARD)) != null) {
 			leaflet.remove (unused_child);
+			unused_child.dispose ();
 		}
 	}
 

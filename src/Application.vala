@@ -20,6 +20,8 @@ namespace Tootle {
 	public static Cache cache;
 	public static Streams streams;
 
+	public static EntityCache entity_cache;
+
 	public static bool start_hidden = false;
 
 	public class Application : Gtk.Application {
@@ -86,6 +88,7 @@ namespace Tootle {
 				streams = new Streams ();
 				network = new Network ();
 				cache = new Cache ();
+				entity_cache = new EntityCache ();
 				accounts = new SecretAccountStore();
 				accounts.init ();
 

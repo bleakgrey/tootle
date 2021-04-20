@@ -48,6 +48,9 @@ public class Tootle.Views.Base : Box {
 
 		build_header ();
 	}
+	~Base () {
+		message ("Destroying base "+label);
+	}
 
 	public virtual void build_header () {
 		var title = new Adw.WindowTitle (null, null);

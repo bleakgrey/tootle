@@ -2,9 +2,9 @@ using Gtk;
 
 public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 
-	protected InstanceAccount? account { get; set; default = null; }
-	public API.Status root_status { get; construct set; }
-	protected Widgets.Status root_widget;
+	protected InstanceAccount? account { get; set; }
+	public API.Status root_status { get; set; }
+	protected unowned Widgets.Status root_widget;
 
 	public Thread (API.Status status) {
 		Object (
@@ -15,6 +15,7 @@ public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 		construct_account_holder ();
 	}
 	~Thread () {
+		message ("Destroying Thread");
 		destruct_account_holder ();
 	}
 
@@ -60,8 +61,8 @@ public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 
 				var ancestors = root.get_array_member ("ancestors");
 				ancestors.foreach_element ((array, i, node) => {
-					var status = Entity.from_json (typeof (API.Status), node);
-					model.append (status);
+					var e = entity_cache.lookup_or_insert (node, typeof (API.Status));
+					model.append (e);
 				});
 
 				model.append (root_status);
@@ -72,8 +73,8 @@ public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 
 				var descendants = root.get_array_member ("descendants");
 				descendants.foreach_element ((array, i, node) => {
-					var status = Entity.from_json (typeof (API.Status), node);
-					model.append (status);
+					var e = entity_cache.lookup_or_insert (node, typeof (API.Status));
+					model.append (e);
 				});
 
 				connect_threads ();

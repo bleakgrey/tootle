@@ -27,6 +27,10 @@ public class Tootle.Request : Soup.Message {
 		Object (method: "DELETE", url: url);
 	}
 
+	// ~Request () {
+	// 	message ("Destroy req: "+url);
+	// }
+
 	public Request then (owned Network.SuccessCallback cb) {
 		this.cb = (owned) cb;
 		return this;

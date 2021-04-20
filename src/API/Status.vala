@@ -2,6 +2,10 @@ using Gee;
 
 public class Tootle.API.Status : Entity, Widgetizable {
 
+	~Status () {
+		message ("[OBJ] Destroyed "+uri);
+	}
+
     public string id { get; set; }
     public API.Account account { get; set; }
     public string uri { get; set; }
