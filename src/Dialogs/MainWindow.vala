@@ -2,7 +2,7 @@ using Gtk;
 using Gdk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/dialogs/main.ui")]
-public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
+public class Tootle.Dialogs.MainWindow: Adw.ApplicationWindow, Saveable {
 
 	public const string ZOOM_CLASS = "ttl-scalable";
 
@@ -13,13 +13,14 @@ public class Tootle.Dialogs.MainWindow: Adw.Window, ISavedWindow {
 	Views.Base? last_view = null;
 
 	construct {
+		construct_saveable (settings);
+
 		var gtk_settings = Gtk.Settings.get_default ();
 		settings.bind_property ("dark-theme", gtk_settings, "gtk-application-prefer-dark-theme", BindingFlags.SYNC_CREATE);
 		settings.notify["post-text-size"].connect (() => on_zoom_level_changed ());
 
 		on_zoom_level_changed ();
 		// button_press_event.connect (on_button_press);
-		restore_state ();
 	}
 
 	public MainWindow (Gtk.Application app) {

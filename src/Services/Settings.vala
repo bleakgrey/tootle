@@ -13,11 +13,6 @@ public class Tootle.Settings : GLib.Settings {
 	public bool public_live_updates { get; set; }
 	public bool aggressive_resolving { get; set; }
 
-	public int window_x { get; set; }
-	public int window_y { get; set; }
-	public int window_w { get; set; }
-	public int window_h { get; set; }
-
 	public Settings () {
 		Object (schema_id: Build.DOMAIN);
 		init ("active-account");
@@ -30,11 +25,6 @@ public class Tootle.Settings : GLib.Settings {
 		init ("live-updates");
 		init ("public-live-updates");
 		init ("aggressive-resolving");
-
-		init ("window-x");
-		init ("window-y");
-		init ("window-w");
-		init ("window-h");
 	}
 
 	void init (string key) {
