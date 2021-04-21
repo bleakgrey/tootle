@@ -10,10 +10,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	protected bool use_auto_auth { get; set; default = true; }
 	protected InstanceAccount account { get; set; default = new InstanceAccount.empty (""); }
 
-	[GtkChild] unowned Button back_button;
-	[GtkChild] unowned Button next_button;
-
-	[GtkChild] unowned Stack stack;
+	[GtkChild] unowned Adw.Leaflet deck;
 	[GtkChild] unowned Box instance_step;
 	[GtkChild] unowned Box code_step;
 	[GtkChild] unowned Box done_step;
@@ -21,22 +18,24 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	[GtkChild] unowned Entry instance_entry;
 	[GtkChild] unowned Entry code_entry;
 	[GtkChild] unowned Label code_label;
-	[GtkChild] unowned Label hello_label;
+	[GtkChild] unowned Adw.StatusPage done_page;
 
 	public NewAccount () {
 		Object (transient_for: window);
+		new_account_window = this;
+		app.add_window (this);
 		// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 		reset ();
 		present ();
-		new_account_window = this;
 
 		bind_property ("use-auto-auth", code_label, "visible", BindingFlags.SYNC_CREATE);
 	}
 
-	// public override bool delete_event (Gdk.EventAny event) {
-	// 	new_account_window = null;
-	// 	return app.on_window_closed ();
-	// }
+	public override bool close_request () {
+		warning ("CLose Request");
+		new_account_window = null;
+		return base.close_request ();
+	}
 
 	string setup_redirect_uri () {
 		try {
@@ -65,15 +64,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	void reset () {
 		message ("Reset state");
 		account = new InstanceAccount.empty (account.instance);
-		stack.visible_child = instance_step;
-		invalidate ();
-	}
-
-	void invalidate () {
-		next_button.sensitive = !is_working;
-		next_button.label = stack.visible_child == done_step ? _("Done") : _("Next");
-		back_button.label = stack.visible_child == done_step ? _("Add Another") : _("Back");
-		back_button.visible = stack.visible_child != instance_step;
+		deck.visible_child = instance_step;
 	}
 
 	void oopsie (string title, string msg = "") {
@@ -82,13 +73,13 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	}
 
 	async void step () throws Error {
-		if (stack.visible_child == done_step) {
+		if (deck.visible_child == done_step) {
 			app.present_window ();
 			destroy ();
 			return;
 		}
 
-		if (stack.visible_child == instance_step) {
+		if (deck.visible_child == instance_step) {
 			setup_instance ();
 			yield accounts.guess_backend (account);
 		}
@@ -102,7 +93,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	}
 
 	void setup_instance () throws Error {
-		message ("Checking instance");
+		message ("Checking instance URL");
 
 		var str = instance_entry.text
 			.replace ("/", "")
@@ -122,9 +113,9 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 		var msg = new Request.POST (@"/api/v1/apps")
 			.with_account (account)
 			.with_form_data ("client_name", Build.NAME)
-			.with_form_data ("website", Build.WEBSITE)
+			.with_form_data ("redirect_uris", redirect_uri = setup_redirect_uri ())
 			.with_form_data ("scopes", scopes)
-			.with_form_data ("redirect_uris", redirect_uri = setup_redirect_uri ());
+			.with_form_data ("website", Build.WEBSITE);
 		yield msg.await ();
 
 		var root = network.parse (msg);
@@ -132,7 +123,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 		account.client_secret = root.get_string_member ("client_secret");
 		message ("OK: Instance registered client");
 
-		stack.visible_child = code_step;
+		deck.visible_child = code_step;
 		open_confirmation_page ();
 	}
 
@@ -145,7 +136,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	}
 
 	async void request_token () throws Error {
-		if (code_entry.text.char_count () <= 1)
+		if (code_entry.text.char_count () <= 10)
 			throw new Oopsie.USER (_("Please enter a valid authorization code"));
 
 		message ("Requesting access token");
@@ -171,8 +162,8 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 		message ("Saving account");
 		accounts.add (account);
 
-		hello_label.label = _("Hello, %s!").printf (account.handle);
-		stack.visible_child = done_step;
+		done_page.title = _("Hello, %s!").printf (account.handle);
+		deck.visible_child = done_step;
 
 		message ("Switching to account");
 		accounts.activate (account);
@@ -196,7 +187,6 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 		if (is_working) return;
 
 		is_working = true;
-		invalidate ();
 		step.begin ((obj, res) => {
 			try {
 				step.end (res);
@@ -208,13 +198,20 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 				oopsie (e.message);
 			}
 			is_working = false;
-			invalidate ();
 		});
 	}
 
 	[GtkCallback]
 	void on_back_clicked () {
 		reset ();
+	}
+
+	[GtkCallback]
+	void on_visible_child_notify () {
+		if (!deck.child_transition_running && deck.visible_child == instance_step)
+			reset ();
+
+		deck.can_swipe_back = deck.visible_child != done_step;
 	}
 
 }
