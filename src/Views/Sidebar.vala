@@ -43,6 +43,7 @@ public class Tootle.Views.Sidebar : Box {
 
 	void on_account_switch (InstanceAccount? account) {
 		warning (account.handle);
+		accounts_button.active = false;
 		item_model.remove_all ();
 
 		if (account != null) {
@@ -145,7 +146,7 @@ public class Tootle.Views.Sidebar : Box {
 
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/sidebar/account.ui")]
 	protected class AccountRow : Adw.ActionRow {
-		InstanceAccount? account;
+		public InstanceAccount? account;
 
 		[GtkChild] unowned Widgets.Avatar avatar;
 		[GtkChild] unowned Spinner loading;
@@ -172,7 +173,7 @@ public class Tootle.Views.Sidebar : Box {
 	[GtkCallback]
 	void on_account_activated (ListBoxRow _row) {
 		var row = _row as AccountRow;
-		warning ("switching to account");
+		accounts.activate (row.account);
 	}
 
 }

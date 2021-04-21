@@ -32,7 +32,6 @@ libadwaita_dep = dependency('libadwaita-1')
 sources = files(
     'src/Application.vala',
     'src/Utils/Desktop.vala',
-    'src/Utils/Drawing.vala',
     'src/Utils/Html.vala',
     'src/Utils/DateTime.vala',
     'src/Services/Accounts/InstanceAccount.vala',
