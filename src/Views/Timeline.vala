@@ -111,7 +111,7 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 	}
 
 
-	public virtual void on_account_changed (InstanceAccount? acc) {
+	protected virtual void on_account_changed (InstanceAccount? acc) {
 		account = acc;
 		update_stream ();
 		on_refresh ();

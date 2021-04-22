@@ -6,13 +6,17 @@ public interface Tootle.AccountHolder : GLib.Object {
 		accounts.switched.connect (on_account_changed);
 		accounts.changed.connect (on_accounts_changed);
 		on_account_changed (accounts.active);
+		on_accounts_changed (accounts.saved);
 	}
 	protected void destruct_account_holder () {
 		accounts.switched.disconnect (on_account_changed);
 		accounts.changed.disconnect (on_accounts_changed);
 	}
 
-	public virtual void on_account_changed (InstanceAccount? account) {}
-	public virtual void on_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {}
+	protected virtual void on_account_changed (InstanceAccount? acc) {
+		this.account = acc;
+	}
+
+	protected virtual void on_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {}
 
 }

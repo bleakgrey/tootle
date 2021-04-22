@@ -7,13 +7,18 @@
 
     <child type="prefix">
       <object class="TootleWidgetsAvatar" id="avatar">
+        <property name="size">32</property>
       </object>
     </child>
 
     <child type="suffix">
-      <object class="GtkSpinner" id="loading">
-        <property name="spinning">1</property>
-        <property name="visible">0</property>
+      <object class="GtkButton" id="forget">
+        <property name="icon-name">user-trash-symbolic</property>
+        <property name="valign">center</property>
+        <signal name="clicked" handler="on_forget" swapped="no"/>
+        <style>
+          <class name="circular"/>
+        </style>
       </object>
     </child>
 

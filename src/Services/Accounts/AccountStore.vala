@@ -3,7 +3,6 @@ using Gee;
 public abstract class Tootle.AccountStore : GLib.Object {
 
 	public ArrayList<InstanceAccount> saved { get; set; default = new ArrayList<InstanceAccount> (); }
-	public GLib.ListStore model { get; set; default = new GLib.ListStore (typeof (InstanceAccount)); }
 	public InstanceAccount? active { get; set; default = null; }
 
 	public signal void changed (ArrayList<InstanceAccount> accounts);
@@ -48,7 +47,7 @@ public abstract class Tootle.AccountStore : GLib.Object {
 	public virtual void add (InstanceAccount account) throws GLib.Error {
 		message (@"Adding new account: $(account.handle)");
 		saved.add (account);
-		model.append (account);
+		changed (saved);
 		save ();
 		ensure_active_account ();
 	}
@@ -56,11 +55,6 @@ public abstract class Tootle.AccountStore : GLib.Object {
 	public virtual void remove (InstanceAccount account) throws GLib.Error {
 		message (@"Removing account: $(account.handle)");
 		saved.remove (account);
-
-		uint pos;
-		model.find (account, out pos);
-		model.remove (pos);
-
 		changed (saved);
 		save ();
 		ensure_active_account ();

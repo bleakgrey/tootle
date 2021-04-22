@@ -1,7 +1,7 @@
 using Gtk;
 
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/sidebar/view.ui")]
-public class Tootle.Views.Sidebar : Box {
+public class Tootle.Views.Sidebar : Box, AccountHolder {
 
 	[GtkChild] unowned ToggleButton accounts_button;
 	[GtkChild] unowned Stack mode;
@@ -12,6 +12,7 @@ public class Tootle.Views.Sidebar : Box {
 	[GtkChild] unowned Label title;
 	[GtkChild] unowned Label subtitle;
 
+	protected InstanceAccount? account { get; set; default = null; }
 	GLib.ListStore item_model = new GLib.ListStore (typeof (Object));
 
 	Item item_preferences = new Item () {
@@ -33,26 +34,34 @@ public class Tootle.Views.Sidebar : Box {
 	};
 
 	construct {
-		accounts.switched.connect (on_account_switch);
-		on_account_switch (accounts.active);
-
+		construct_account_holder ();
 		items.bind_model (item_model, on_item_create);
 		items.set_header_func (on_item_header_update);
-		saved_accounts.bind_model (accounts.model, on_account_create);
+		saved_accounts.set_header_func (on_account_header_update);
 	}
 
-	void on_account_switch (InstanceAccount? account) {
+	protected virtual void on_accounts_changed (Gee.ArrayList<InstanceAccount> accounts) {
+		for (var w = saved_accounts.get_first_child (); w != null; w = w.get_next_sibling ()) {
+			saved_accounts.remove (w);
+		}
+
+		accounts.foreach (acc => {
+			saved_accounts.append (new AccountRow (acc));
+			return true;
+		});
+
+		var new_acc_row = new AccountRow (null);
+		saved_accounts.append (new_acc_row);
+	}
+
+	protected virtual void on_account_changed (InstanceAccount? account) {
+		this.account = account;
+
 		warning (account.handle);
 		accounts_button.active = false;
 		item_model.remove_all ();
 
 		if (account != null) {
-			uint id;
-			accounts.model.find (account, out id);
-			var row = saved_accounts.get_row_at_index ((int)id);
-			saved_accounts.select_row (row);
-			warning (@"Selecting row: $id");
-
 			title.label = account.display_name;
 			subtitle.label = account.handle;
 			avatar.account = account;
@@ -79,8 +88,7 @@ public class Tootle.Views.Sidebar : Box {
 		});
 	}
 
-	[GtkCallback]
-	void on_mode_changed () {
+	[GtkCallback] void on_mode_changed () {
 		mode.visible_child_name = accounts_button.active ? "saved_accounts" : "items";
 	}
 
@@ -122,8 +130,7 @@ public class Tootle.Views.Sidebar : Box {
 		return new ItemRow (obj as Item);
 	}
 
-	[GtkCallback]
-	void on_item_activated (ListBoxRow _row) {
+	[GtkCallback] void on_item_activated (ListBoxRow _row) {
 		var row = _row as ItemRow;
 		if (row.item.on_activated != null)
 			row.item.on_activated ();
@@ -149,7 +156,7 @@ public class Tootle.Views.Sidebar : Box {
 		public InstanceAccount? account;
 
 		[GtkChild] unowned Widgets.Avatar avatar;
-		[GtkChild] unowned Spinner loading;
+		[GtkChild] unowned Button forget;
 
 		public AccountRow (InstanceAccount? _account) {
 			account = _account;
@@ -161,19 +168,45 @@ public class Tootle.Views.Sidebar : Box {
 			else {
 				title = _("Add Account");
 				avatar.account = null;
+				selectable = false;
+				forget.hide ();
+			}
+		}
+
+		[GtkCallback] void on_forget () {
+			var confirmed = app.question (
+				_("Forget %s?".printf (account.handle)),
+				_("This account will be removed from the application."),
+				window
+			);
+			if (confirmed) {
+				try {
+					accounts.remove (account);
+				}
+				catch (Error e) {
+					warning (e.message);
+					app.inform (Gtk.MessageType.ERROR, _("Error"), e.message);
+				}
 			}
 		}
 
 	}
 
-	Widget on_account_create (Object obj) {
-		return new AccountRow (obj as InstanceAccount);
+	void on_account_header_update (ListBoxRow _row, ListBoxRow? _before) {
+		var row = _row as AccountRow;
+
+		row.set_header (null);
+
+		if (row.account == null && _before != null)
+			row.set_header (new Separator (Orientation.HORIZONTAL));
 	}
 
-	[GtkCallback]
-	void on_account_activated (ListBoxRow _row) {
+	[GtkCallback] void on_account_activated (ListBoxRow _row) {
 		var row = _row as AccountRow;
-		accounts.activate (row.account);
+		if (row.account != null)
+			accounts.activate (row.account);
+		else
+			new Dialogs.NewAccount ().present ();
 	}
 
 }

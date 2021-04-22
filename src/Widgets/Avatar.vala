@@ -3,8 +3,6 @@ using Gdk;
 
 public class Tootle.Widgets.Avatar : Button {
 
-	// Cache.Reference? cached;
-
 	Adw.Avatar avatar;
 
 	public int size {
@@ -20,9 +18,6 @@ public class Tootle.Widgets.Avatar : Button {
 
 	construct {
 		avatar = new Adw.Avatar (48, null, true);
-		// avatar.destroy.connect (() => {
-		// 	avatar.set_image_load_func (null);
-		// });
 		child = avatar;
 		halign = valign = Align.CENTER;
 		add_css_class ("flat");
@@ -31,13 +26,8 @@ public class Tootle.Widgets.Avatar : Button {
 		add_css_class ("ttl-flat-button");
 
 		notify["account"].connect (on_invalidated);
-		// on_invalidated ();
+		on_invalidated ();
 	}
-
-	// ~Avatar () {
-	// 	notify["account"].disconnect (on_invalidated);
-	// 	cache.unload (ref cached);
-	// }
 
 	void on_invalidated () {
 		if (account == null) {
@@ -48,46 +38,6 @@ public class Tootle.Widgets.Avatar : Button {
 			avatar.text = account.display_name;
 			avatar.show_initials = true;
 		}
-		// avatar.set_image_load_func (avatar_set_pixbuf);
 	}
-
-	// void on_invalidated () {
-	// 	if (cached != null)
-	// 		cache.unload (ref cached);
-
-	// 	if (account != null)
-	// 		cache.load (account.avatar, on_cache_result);
-	// 	else
-	// 		on_cache_result (null);
-	// }
-
-	// void on_cache_result (Cache.Reference? result) {
-	// 	cached = result;
-	// 	if (account == null) {
-			// This exact string makes the avatar grey.
-			//
-			// If left null, *each* blank Adw.Avatar receives
-			// a random color and hurts my eyes. No bueno.
-	// 		avatar.text = "abc";
-	// 		avatar.show_initials = false;
-	// 	}
-	// 	else if (cached != null) {
-	// 		avatar.text = account.display_name;
-	// 		avatar.show_initials = true;
-	// 	}
-	// 	avatar.set_image_load_func (avatar_set_pixbuf);
-	// }
-
-	// Pixbuf? avatar_set_pixbuf (int size) {
-	// 	if (cached == null || cached.data == null)
-	// 		return null;
-	// 	else {
-	// 		var pb = cached.data;
-	// 		if (pb.width != size)
-	// 			return pb.scale_simple (size, size, InterpType.BILINEAR);
-	// 		else
-	// 			return pb;
-	// 	}
-	// }
 
 }

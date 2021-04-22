@@ -33,14 +33,14 @@ public class Tootle.SecretAccountStore : AccountStore {
 			null
 		);
 
-		// secrets.foreach (item => {
-		// 	var account = secret_to_account (item);
-		// 	if (account != null) {
-		// 		saved.add (account);
-		// 		model.append (account);
-		// 		account.subscribed = true;
-		// 	}
-		// });
+		secrets.foreach (item => {
+			var account = secret_to_account (item);
+			if (account != null) {
+				saved.add (account);
+				account.subscribed = true;
+			}
+		});
+		changed (saved);
 
 		message (@"Loaded $(saved.size) accounts");
 	}
