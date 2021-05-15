@@ -68,7 +68,7 @@ public class Tootle.Dialogs.ListEditor: Adw.Window {
 	public signal void done ();
 
 	construct {
-		transient_for = window;
+		transient_for = app.main_window;
 		show ();
 	}
 

@@ -301,7 +301,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		network.queue (msg, (sess, mess) => {
 			var node = network.parse_node (mess);
 			var acc = API.Account.from (node);
-			window.open_view (new Views.Profile (acc));
+			app.main_window.open_view (new Views.Profile (acc));
 		},
 		network.on_error);
 	}

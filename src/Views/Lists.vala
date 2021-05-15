@@ -43,7 +43,7 @@ public class Tootle.Views.Lists : Views.Timeline {
 				return;
 
 			var view = new Views.List (list);
-			window.open_view (view);
+			app.main_window.open_view (view);
 		}
     }
 

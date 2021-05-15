@@ -13,7 +13,7 @@ public class Tootle.Dialogs.Preferences : Adw.PreferencesWindow {
     [GtkChild] unowned Switch public_live_updates;
 
     construct {
-        transient_for = window;
+        transient_for = app.main_window;
 
 		//FIXME: default_post_visibility options
         // default_post_visibility.set_for_enum (typeof (API.Visibility), e => {

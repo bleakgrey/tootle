@@ -83,7 +83,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
 
 	public override void open () {
 		var view = new Views.Thread (formal);
-		window.open_view (view);
+		app.main_window.open_view (view);
 	}
 
     public bool is_owned (){

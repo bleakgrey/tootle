@@ -21,8 +21,8 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 	[GtkChild] unowned Adw.StatusPage done_page;
 
 	public NewAccount () {
-		Object (transient_for: window);
-		new_account_window = this;
+		Object (transient_for: app.main_window);
+		app.add_account_window = this;
 		app.add_window (this);
 		// StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), app.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 		reset ();
@@ -33,7 +33,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 
 	public override bool close_request () {
 		warning ("CLose Request");
-		new_account_window = null;
+		app.add_account_window = null;
 		return base.close_request ();
 	}
 

@@ -6,7 +6,7 @@ public class Tootle.Dialogs.MainWindow: Adw.ApplicationWindow, Saveable {
 
 	public const string ZOOM_CLASS = "ttl-scalable";
 
-	[GtkChild] unowned Adw.Flap flap;
+	[GtkChild] public unowned Adw.Flap flap;
 	[GtkChild] unowned Adw.Leaflet leaflet;
 	[GtkChild] unowned Views.Sidebar sidebar;
 

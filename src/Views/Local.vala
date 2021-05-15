@@ -2,7 +2,7 @@ public class Tootle.Views.Local : Views.Federated {
 
     public Local () {
         label = _("Local");
-        icon = Desktop.fallback_icon ("system-users-symbolic", "document-open-recent-symbolic");
+        icon = "system-users-symbolic";
     }
 
     public override Request append_params (Request r) {

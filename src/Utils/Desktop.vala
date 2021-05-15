@@ -20,8 +20,9 @@ public class Tootle.Desktop {
 				Process.spawn_sync (null, spawn_args, null, SpawnFlags.SEARCH_PATH, null, null, null);
 			}
 			catch (Error e){
-				warning (@"xdg-open failed too: $(e.message)");
-				app.inform (Gtk.MessageType.WARNING, _("Open this URL in your browser"), uri);
+				//FIXME: WHY DO THESE TWO LINES CRASH THE COMPILER WHAT IS HAPPENING HERE
+				// warning (@"xdg-open failed too: $(e.message)");
+				// app.inform (Gtk.MessageType.WARNING, _("Open this URL in your browser"), uri);
 				return false;
 			}
 		}
@@ -80,15 +81,6 @@ public class Tootle.Desktop {
 			message ("OK: File exists already");
 
 		return file_path;
-	}
-
-	public static string fallback_icon (string normal, string fallback, string fallback2 = "broken") {
-		return normal;
-		// var theme = Gtk.IconTheme.get_default ();
-		// if (theme.has_icon (normal))
-		// 	return normal;
-		// else
-		// 	return theme.has_icon (fallback) ? fallback : fallback2;
 	}
 
 	// public static Gdk.Pixbuf icon_to_pixbuf (string name) {

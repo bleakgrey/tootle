@@ -73,7 +73,7 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	}
 
 	construct {
-		transient_for = window;
+		transient_for = app.main_window;
 
 		notify["working"].connect (on_state_change);
 

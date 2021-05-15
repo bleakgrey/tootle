@@ -83,7 +83,7 @@ public class Tootle.Views.Sidebar : Box, AccountHolder {
 			label = "(Debug) Empty View",
 			separated = true,
 			on_activated = () => {
-				window.open_view (new Views.ContentBase ());
+				app.main_window.open_view (new Views.ContentBase ());
 			}
 		});
 	}
@@ -177,7 +177,7 @@ public class Tootle.Views.Sidebar : Box, AccountHolder {
 			var confirmed = app.question (
 				_("Forget %s?".printf (account.handle)),
 				_("This account will be removed from the application."),
-				window
+				app.main_window
 			);
 			if (confirmed) {
 				try {

@@ -9,7 +9,7 @@
       <object class="AdwHeaderBar" id="header">
         <property name="visible">True</property>
         <property name="hexpand">True</property>
-        <!-- <property name="centering-policy">strict</property> -->
+        <property name="centering-policy">strict</property>
         <child>
           <object class="GtkButton" id="back_button">
             <property name="tooltip_text" translatable="yes">Back</property>

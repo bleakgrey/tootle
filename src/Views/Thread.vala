@@ -99,7 +99,7 @@ public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 				var node = statuses.get_element (0);
 				if (node != null){
 					var status = API.Status.from (node);
-					window.open_view (new Views.Thread (status));
+					app.main_window.open_view (new Views.Thread (status));
 				}
 				else
 					Desktop.open_uri (q);

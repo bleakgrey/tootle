@@ -64,11 +64,11 @@ public class Tootle.Views.Base : Box {
 
 	public virtual void on_shown () {
 		if (actions != null)
-			window.insert_action_group ("view", actions);
+			app.main_window.insert_action_group ("view", actions);
 	}
 	public virtual void on_hidden () {
 		if (actions != null)
-			window.insert_action_group ("view", null);
+			app.main_window.insert_action_group ("view", null);
 	}
 
 	public virtual void on_content_changed () {}
@@ -82,7 +82,7 @@ public class Tootle.Views.Base : Box {
 
 	[GtkCallback]
 	void on_close () {
-		window.back ();
+		app.main_window.back ();
 	}
 
 }

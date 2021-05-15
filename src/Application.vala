@@ -10,9 +10,6 @@ namespace Tootle {
 	}
 
 	public static Application app;
-	public static Dialogs.MainWindow? window;
-	public static Dialogs.NewAccount? new_account_window;
-	// public static Window window_dummy;
 
 	public static Settings settings;
 	public static AccountStore accounts;
@@ -25,6 +22,9 @@ namespace Tootle {
 	public static bool start_hidden = false;
 
 	public class Application : Gtk.Application {
+
+		public Dialogs.MainWindow? main_window { get; set; }
+		public Dialogs.NewAccount? add_account_window { get; set; }
 
 		// These are used for the GTK Inspector
 		public Settings app_settings { get {return Tootle.settings; } }
@@ -122,8 +122,8 @@ namespace Tootle {
 		public override void open (File[] files, string hint) {
 			foreach (File file in files) {
 				string uri = file.get_uri ();
-				if (new_account_window != null)
-					new_account_window.redirect (uri);
+				if (add_account_window != null)
+					add_account_window.redirect (uri);
 				else
 					warning (@"Received an unexpected uri to open: $uri");
 				return;
@@ -133,15 +133,15 @@ namespace Tootle {
 		public void present_window () {
 			if (accounts.saved.is_empty) {
 				message ("Presenting NewAccount dialog");
-				if (new_account_window == null)
+				if (add_account_window == null)
 					new Dialogs.NewAccount ();
-				new_account_window.present ();
+				add_account_window.present ();
 			}
 			else {
 				message ("Presenting MainWindow");
-				if (window == null)
-					window = new Dialogs.MainWindow (this);
-				window.present ();
+				if (main_window == null)
+					main_window = new Dialogs.MainWindow (this);
+				main_window.present ();
 			}
 		}
 
@@ -157,11 +157,11 @@ namespace Tootle {
 		}
 
 		void back_activated () {
-			window.back ();
+			main_window.back ();
 		}
 
 		void search_activated () {
-			window.open_view (new Views.Search ());
+			main_window.open_view (new Views.Search ());
 		}
 
 		void refresh_activated () {
@@ -170,7 +170,7 @@ namespace Tootle {
 
 		void about_activated () {
 			var dialog = new AboutDialog () {
-				transient_for = window,
+				transient_for = main_window,
 				modal = true,
 
 				logo_icon_name = Build.DOMAIN,
@@ -191,7 +191,7 @@ namespace Tootle {
 			dialog.present ();
 		}
 
-		public void inform (Gtk.MessageType type, string text, string? msg = null, Gtk.Window? win = window){
+		public void inform (Gtk.MessageType type, string text, string? msg = null, Gtk.Window? win = main_window){
 			var dlg = new Gtk.MessageDialog (
 				win,
 				Gtk.DialogFlags.MODAL,
@@ -206,7 +206,7 @@ namespace Tootle {
 			dlg.destroy ();
 		}
 
-		public bool question (string text, string? msg = null, Gtk.Window? win = window) {
+		public bool question (string text, string? msg = null, Gtk.Window? win = main_window) {
 			var dlg = new Gtk.MessageDialog (
 				win,
 				Gtk.DialogFlags.MODAL,
