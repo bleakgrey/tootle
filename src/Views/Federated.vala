@@ -5,7 +5,7 @@ public class Tootle.Views.Federated : Views.Timeline {
         	url: "/api/v1/timelines/public",
         	is_public: true,
         	label: _("Federated"),
-        	icon: "network-workgroup-symbolic"
+        	icon: "globe-symbolic"
         );
     }
 

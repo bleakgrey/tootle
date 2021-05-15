@@ -2,7 +2,7 @@ public class Tootle.Views.Local : Views.Federated {
 
     public Local () {
         label = _("Local");
-        icon = "system-users-symbolic";
+        icon = "network-server-symbolic";
     }
 
     public override Request append_params (Request r) {
