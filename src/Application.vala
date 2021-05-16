@@ -14,10 +14,10 @@ namespace Tootle {
 	public static Settings settings;
 	public static AccountStore accounts;
 	public static Network network;
-	public static Cache cache;
 	public static Streams streams;
 
 	public static EntityCache entity_cache;
+	public static ImageCache image_cache;
 
 	public static bool start_hidden = false;
 
@@ -30,7 +30,6 @@ namespace Tootle {
 		public Settings app_settings { get {return Tootle.settings; } }
 		public AccountStore app_accounts { get {return Tootle.accounts; } }
 		public Network app_network { get {return Tootle.network; } }
-		public Cache app_cache { get {return Tootle.cache; } }
 		public Streams app_streams { get {return Tootle.streams; } }
 
 		public signal void refresh ();
@@ -87,8 +86,8 @@ namespace Tootle {
 				settings = new Settings ();
 				streams = new Streams ();
 				network = new Network ();
-				cache = new Cache ();
 				entity_cache = new EntityCache ();
+				image_cache = new ImageCache ();
 				accounts = new SecretAccountStore();
 				accounts.init ();
 

@@ -28,10 +28,13 @@ public class Tootle.AbstractCache : Object {
 			while (iter.has_next ()) {
 				iter.next ();
 				var obj = iter.get_value ();
-				var min_ref_count = obj.get_data<uint> (DATA_MIN_REF_COUNT);
-				var remove = obj.ref_count <= min_ref_count;
+				assert (obj != null);
 
-				if (remove) {
+				var min_ref_count = obj.get_data<uint> (DATA_MIN_REF_COUNT);
+				if ("jpg" in iter.get_key ()) {
+					warning (@"Key \"$(iter.get_key ())\": $(obj.ref_count)/$(min_ref_count)");
+				}
+				if (obj.ref_count <= min_ref_count) {
 					cleared++;
 					Value url = Value (typeof (string));
 					obj.get_property ("url", ref url);
@@ -61,13 +64,21 @@ public class Tootle.AbstractCache : Object {
 		return items.has_key (get_key (id));
 	}
 
-	public void insert (string id, owned Object obj) {
+	public string insert (string id, owned Object obj) {
 		var key = get_key (id);
 		message ("Inserting: "+key);
 		items.@set (key, (owned) obj);
 
 		var nobj = items.@get (key);
 		nobj.set_data<uint> (DATA_MIN_REF_COUNT, nobj.ref_count);
+
+		return key;
+	}
+
+	public void nuke () {
+		message ("Clearing cache");
+		items.clear ();
+		items_in_progress.clear ();
 	}
 
 }
