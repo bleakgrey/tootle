@@ -31,14 +31,12 @@ public class Tootle.AbstractCache : Object {
 				assert (obj != null);
 
 				var min_ref_count = obj.get_data<uint> (DATA_MIN_REF_COUNT);
-				if ("jpg" in iter.get_key ()) {
-					warning (@"Key \"$(iter.get_key ())\": $(obj.ref_count)/$(min_ref_count)");
-				}
+				// if ("jpg" in iter.get_key ()) {
+				// 	warning (@"Key \"$(iter.get_key ())\": $(obj.ref_count)/$(min_ref_count)");
+				// }
 				if (obj.ref_count <= min_ref_count) {
 					cleared++;
-					Value url = Value (typeof (string));
-					obj.get_property ("url", ref url);
-					message (@"Freeing: $((string) url)");
+					message (@"Freeing: $(iter.get_key ())");
 					iter.unset ();
 					obj.dispose ();
 				}

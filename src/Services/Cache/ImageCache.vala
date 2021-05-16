@@ -2,9 +2,6 @@ using Gdk;
 
 public class Tootle.ImageCache : AbstractCache {
 
-	// [Signal (detailed = true)]
-	// public signal void on_item_changed (bool is_loaded, owned Pixbuf? data);
-
 	public delegate void OnItemChangedFn (bool is_loaded, owned Pixbuf? data);
 
 	protected Pixbuf decode_image (owned Soup.Message msg) throws Error {
@@ -19,9 +16,6 @@ public class Tootle.ImageCache : AbstractCache {
         var stream = new MemoryInputStream.from_data (data);
         pixbuf = new Pixbuf.from_stream (stream);
         stream.close ();
-
-        if (pixbuf == null)
-        	throw new Oopsie.INSTANCE ("Returned pixbuf is null");
 
         return pixbuf;
 	}
@@ -62,9 +56,7 @@ public class Tootle.ImageCache : AbstractCache {
                 download_msg.disconnect (id);
             });
 
-            network.queue (download_msg, (sess, mess) => {
-                // no one cares
-            },
+            network.queue (download_msg, (sess, mess) => {},
             (code, reason) => {
                 cb (true, null);
             });

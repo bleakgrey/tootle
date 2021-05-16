@@ -3,7 +3,7 @@ using Gdk;
 
 public class Tootle.Widgets.Avatar : Button {
 
-	protected Adw.Avatar avatar {
+	protected Adw.Avatar? avatar {
 		get {
 			return child as Adw.Avatar;
 		}
@@ -24,10 +24,9 @@ public class Tootle.Widgets.Avatar : Button {
 
 	construct {
 		child = new Adw.Avatar (48, null, true);
-		avatar.destroy.connect (() => {
-			avatar.set_image_load_func (null);
-		});
-
+		// child.destroy.connect (() => {
+		// 	warning ("DESTROY ADW AVATAR");
+		// });
 		halign = valign = Align.CENTER;
 		add_css_class ("flat");
 		add_css_class ("circular");
@@ -37,6 +36,15 @@ public class Tootle.Widgets.Avatar : Button {
 		notify["account"].connect (on_invalidated);
 		on_invalidated ();
 	}
+	~Avatar () {
+		// warning ("DESTROY TTL AVATAR");
+		// cached_data = null;
+	}
+
+	// public override void dispose () {
+	// 	base.dispose ();
+	// 	warning ("DISPOSE");
+	// }
 
 	void on_invalidated () {
 		if (account == null) {
@@ -52,7 +60,7 @@ public class Tootle.Widgets.Avatar : Button {
 
 	void on_cache_response (bool is_loaded, owned Pixbuf? data) {
 		cached_data = data;
-		avatar.set_image_load_func (set_avatar_pixbuf_fn);
+		avatar.set_image_load_func (set_avatar_pixbuf_fn); //FIXME: Adw.Avatar refuses to be destroyed while this function is set. We need to find a way to unset this if this widget is destroyed.
 	}
 
 	Pixbuf? set_avatar_pixbuf_fn (int size) {
