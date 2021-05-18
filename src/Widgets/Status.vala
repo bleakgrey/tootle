@@ -239,7 +239,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		child.set_property ("column_span", 2);
 	}
 
-
 	// This disables the button when its status property is updated.
 	// Fixes a bug where clicking one or more post action buttons
 	// triggers an infinite loop of network requests.

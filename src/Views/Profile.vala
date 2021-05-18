@@ -101,7 +101,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		menu_button = new MenuButton ();
 		var menu_builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/menus.ui");
-		var menu = "profile-menu"; //"new_style_menu_model"
+		var menu = "profile-menu";
 		menu_button.menu_model = menu_builder.get_object (menu) as MenuModel;
 		menu_button.popover.width_request = 250;
 		menu_button.icon_name = "view-more-symbolic";
@@ -109,7 +109,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		var a = new Button ();
 		a.label = _("Follow");
-		header.pack_end (a);
+		header.pack_start (a);
 	}
 
 	void build_actions () {

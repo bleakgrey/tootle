@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.ContentBase : Views.Base {
+public class Tootle.Views.ContentBase : Views.Base, Disposable {
 
 	protected GLib.ListStore model;
 	protected ListBox content;
@@ -32,13 +32,11 @@ public class Tootle.Views.ContentBase : Views.Base {
 	}
 	~ContentBase () {
 		message ("Destroying ContentBase");
-		// model.remove_all ();
 	}
 
-	// GTK4's ListBox refuses to be destroyed when bound to a
-	// model. We need to unbind it manually here.
 	public override void dispose () {
-		content.bind_model (null, null);
+		if (content != null)
+			content.bind_model (null, null);
 		base.dispose ();
 	}
 
@@ -55,7 +53,6 @@ public class Tootle.Views.ContentBase : Views.Base {
 		else {
 			state = "content";
 		}
-		// check_resize ();
 	}
 
 
