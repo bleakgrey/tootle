@@ -8,23 +8,23 @@ public class Tootle.Views.Profile : Views.Timeline {
 	public bool only_media { get; set; default = false; }
 	public string source { get; set; default = "statuses"; }
 
-	SimpleAction media_action;
-	SimpleAction replies_action;
-	SimpleAction muting_action;
-	SimpleAction hiding_reblogs_action;
-	SimpleAction blocking_action;
-	SimpleAction domain_blocking_action;
-
 	protected Cover cover;
 	protected MenuButton menu_button;
 	protected Button rs_button;
 	protected SourceFunc? rs_button_action;
 
-	construct {
-		build_actions ();
+	protected SimpleAction media_action;
+	protected SimpleAction replies_action;
+	protected SimpleAction muting_action;
+	protected SimpleAction hiding_reblogs_action;
+	protected SimpleAction blocking_action;
+	protected SimpleAction domain_blocking_action;
+	protected SimpleAction source_action;
 
-		cover = new Cover ();
-		column_view.prepend (cover);
+	construct {
+        cover = build_cover ();
+        column_view.prepend (cover);
+
 		// column_view.pack_start (hdr, false, false, 0);
 		// column_view.reorder_child (hdr, 0);
 
@@ -42,8 +42,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		// relationship = builder.get_object ("relationship") as Label;
 		// rs.notify["id"].connect (on_rs_updated);
-
-		// rebuild_fields ();
 	}
 
 	public Profile (API.Account acc) {
@@ -59,6 +57,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/profile_header.ui")]
 	protected class Cover : Box {
 
+        [GtkChild] unowned Picture background;
 		[GtkChild] unowned ListBox info;
 		[GtkChild] unowned Widgets.RichLabel display_name;
 		[GtkChild] unowned Label handle;
@@ -71,11 +70,13 @@ public class Tootle.Views.Profile : Views.Timeline {
 			avatar.account = account;
 			note.content = account.note;
 
+			image_cache.request_pixbuf (account.header, on_cache_response);
+
 			if (account.fields != null) {
 				foreach (API.AccountField f in account.fields) {
 					var row = new Adw.ActionRow ();
 					var val = new Widgets.RichLabel (f.val);
-					row.can_target = false;
+					val.xalign = 1;
 					row.title = f.name;
 					row.add_suffix (val);
 
@@ -84,9 +85,18 @@ public class Tootle.Views.Profile : Views.Timeline {
 			}
 		}
 
+	    void on_cache_response (bool is_loaded, owned Gdk.Pixbuf? data) {
+	        if (background == null) return;
+
+		    if (data != null)
+		        background.paintable = Gdk.Texture.for_pixbuf (data);
+		    else
+		        background.paintable = null;
+	    }
+
 	}
 
-	public override void build_header () {
+	protected override void build_header () {
 		base.build_header ();
 		// rs_button = new Widgets.AdaptiveButton ();
 		// rs_button.clicked.connect (() => {
@@ -99,6 +109,10 @@ public class Tootle.Views.Profile : Views.Timeline {
 		// if (profile.id != accounts.active.id)
 		// 	header.pack_end (rs_button);
 
+		var a = new Button ();
+		a.label = _("Follow");
+		header.pack_start (a);
+
 		menu_button = new MenuButton ();
 		var menu_builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/menus.ui");
 		var menu = "profile-menu";
@@ -106,14 +120,14 @@ public class Tootle.Views.Profile : Views.Timeline {
 		menu_button.popover.width_request = 250;
 		menu_button.icon_name = "view-more-symbolic";
 		header.pack_end (menu_button);
-
-		var a = new Button ();
-		a.label = _("Follow");
-		header.pack_start (a);
 	}
 
-	void build_actions () {
-		actions = new SimpleActionGroup ();
+	protected virtual Cover build_cover () {
+		return new Cover ();
+	}
+
+	protected override void build_actions () {
+	    base.build_actions ();
 
 		media_action = new SimpleAction.stateful ("only-media", null, false);
 		media_action.change_state.connect (v => {
@@ -129,11 +143,12 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		actions.add_action (replies_action);
 
-		var source_action = new SimpleAction.stateful ("source", VariantType.STRING, source);
+        /////////////////////////////////////////////////
+		source_action = new SimpleAction.stateful ("source", VariantType.STRING, source);
 		source_action.change_state.connect (v => {
 			source = v.get_string ();
 			source_action.set_state (source);
-			accepts = source == "statuses" ? typeof (API.Status) : typeof (API.Account);
+			accepts = (source == "statuses" ? typeof (API.Status) : typeof (API.Account));
 
 			url = @"/api/v1/accounts/$(profile.id)/$source";
 			invalidate_actions (true);

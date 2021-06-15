@@ -30,13 +30,28 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected unowned Widgets.RichLabel spoiler_label;
 
 	[GtkChild] protected unowned Box actions;
-	[GtkChild] protected unowned Button reply_button;
-	// [GtkChild] protected unowned Image reply_button_icon;
-	[GtkChild] protected unowned ToggleButton reblog_button;
-	// [GtkChild] protected unowned Image reblog_icon;
-	[GtkChild] protected unowned ToggleButton favorite_button;
-	[GtkChild] protected unowned ToggleButton bookmark_button;
-	[GtkChild] protected unowned Button menu_button;
+
+	protected Button reply_button;
+	protected ToggleButton reblog_button;
+	protected ToggleButton favorite_button;
+	protected ToggleButton bookmark_button;
+
+	construct {
+		notify["kind"].connect (on_kind_changed);
+		notify["status"].connect (on_rebind);
+		open.connect (on_open);
+		rebuild_actions ();
+	}
+
+	public Status (API.Status status, API.NotificationType? kind = null) {
+		Object (
+			status: status,
+			kind: kind
+		);
+	}
+	~Status () {
+		message ("Destroying Status widget");
+	}
 
 	protected string spoiler_text {
 		owned get {
@@ -74,7 +89,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	}
 
 	public signal void open ();
-
 	public virtual void on_open () {
 		if (status.id == "")
 			on_avatar_clicked ();
@@ -82,41 +96,14 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			status.open ();
 	}
 
-	construct {
-		notify["kind"].connect (on_kind_changed);
-		notify["status"].connect (on_rebind);
-		open.connect (on_open);
-
-		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
-		menu_button.clicked.connect (open_menu);
-	}
-
-	public Status (API.Status status, API.NotificationType? kind = null) {
-		Object (
-			status: status,
-			kind: kind
-		);
-	}
-	~Status () {
-		message ("Destroying Status widget");
-		status = null;
-	}
-
 	protected virtual void on_rebind () {
-		// bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
-		// bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
-		// bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
-
+		// Header
 		if (kind == null) {
 			if (status.reblog != null)
 				kind = API.NotificationType.REBLOG_REMOTE_USER;
 		}
 
-		// if (status.formal.in_reply_to_id != null)
-		// 	reply_button_icon.icon_name = "mail-reply-all-symbolic";
-		// else
-		// 	reply_button_icon.icon_name = "mail-reply-sender-symbolic";
-
+		// Content
 		bind_property ("spoiler-text", spoiler_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
 		bind_property ("title_text", name_label, "label", BindingFlags.SYNC_CREATE);
@@ -125,6 +112,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
 
+		// Spoiler
 		reveal_spoiler = true;
 		spoiler_stack.visible_child_name = "content";
 
@@ -140,10 +128,25 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		// 	return true;
 		// });
 
+		// Actions
+		// bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
+		// bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
+		// bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
+
+		if (status.formal.in_reply_to_id != null)
+			reply_button.icon_name = "mail-reply-all-symbolic";
+		else
+			reply_button.icon_name = "mail-reply-sender-symbolic";
+
 		if (status.formal.visibility == API.Visibility.DIRECT) {
-			// reblog_icon.icon_name = status.formal.visibility.get_icon ();
+			reblog_button.icon_name = status.formal.visibility.get_icon ();
 			reblog_button.sensitive = false;
 			reblog_button.tooltip_text = _("This post can't be boosted");
+		}
+		else {
+			reblog_button.icon_name = "media-playlist-repeat-symbolic";
+			reblog_button.sensitive = true;
+			reblog_button.tooltip_text = null;
 		}
 
 		if (status.id == "") {
@@ -151,9 +154,42 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			date_label.destroy ();
 		}
 
-		// if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
-		// 	attachments.destroy ();
-		// }
+		// Attachments
+		if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
+			attachments.destroy ();
+		}
+	}
+
+	protected virtual void append_actions () {
+		reply_button = new Button ();
+		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
+		actions.append (reply_button);
+
+		reblog_button = new ToggleButton ();
+		actions.append (reblog_button);
+
+		favorite_button = new ToggleButton ();
+		favorite_button.icon_name = "non-starred-symbolic";
+		actions.append (favorite_button);
+
+		bookmark_button = new ToggleButton ();
+		bookmark_button.icon_name = "user-bookmarks-symbolic";
+		actions.append (bookmark_button);
+	}
+
+	void rebuild_actions () {
+		for (var w = actions.get_first_child (); w != null; w = w.get_next_sibling ())
+			actions.remove (w);
+
+		append_actions ();
+
+		var menu_button = new MenuButton ();
+		menu_button.icon_name = "view-more-symbolic";
+		actions.append (menu_button);
+
+		menu_button.get_first_child ().add_css_class ("flat");
+		for (var w = actions.get_first_child (); w != null; w = w.get_next_sibling ())
+			w.add_css_class ("flat");
 	}
 
 	[GtkCallback]
@@ -239,45 +275,43 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		child.set_property ("column_span", 2);
 	}
 
-	// This disables the button when its status property is updated.
-	// Fixes a bug where clicking one or more post action buttons
-	// triggers an infinite loop of network requests.
-	//
-	// This took me an entire day to fix and I'm quite sad.
 	public void bind_toggleable_prop (ToggleButton button, string prop, string on, string off) {
 		var init_val = Value (Type.BOOLEAN);
 		((GLib.Object) status.formal).get_property (prop, ref init_val);
 		button.active = init_val.get_boolean ();
 
-		status.formal.bind_property (prop, button, "active", BindingFlags.SYNC_CREATE);
+		status.formal.bind_property (prop, button, "active", BindingFlags.DEFAULT);
 
 		button.toggled.connect (() => {
 			if (!(button.has_focus && button.sensitive))
 				return;
 
-			button.sensitive = false;
-			var val = Value (Type.BOOLEAN);
-			((GLib.Object) status.formal).get_property (prop, ref val);
-			var act = val.get_boolean () ? off : on;
+			warning ("bruh");
 
-			var req = status.action (act);
-			req.await.begin ((obj, res) => {
-				try {
-					var msg = req.await.end (res);
-					var node = network.parse_node (msg);
-					var entity = API.Status.from (node);
+			// button.sensitive = false;
+			// var val = Value (Type.BOOLEAN);
+			// ((GLib.Object) status.formal).get_property (prop, ref val);
+			// var act = val.get_boolean () ? off : on;
 
-					var new_val = Value (Type.BOOLEAN);
-					((GLib.Object) entity.formal).get_property (prop, ref new_val);
-					((GLib.Object) status.formal).set_property (prop, new_val.get_boolean ());
-				}
-				catch (Error e) {
-					warning (@"Couldn't perform action \"$act\" on a Status:");
-					warning (e.message);
-					app.inform (Gtk.MessageType.WARNING, _("Network Error"), e.message);
-				}
-				button.sensitive = true;
-			});
+			// var req = status.action (act);
+			// req.await.begin ((obj, res) => {
+			// 	try {
+			// 		warning ("yeah");
+			// 		var msg = req.await.end (res);
+			// 		var node = network.parse_node (msg);
+			// 		var entity = API.Status.from (node);
+
+			// 		var new_val = Value (Type.BOOLEAN);
+			// 		((GLib.Object) entity.formal).get_property (prop, ref new_val);
+			// 		((GLib.Object) status.formal).set_property (prop, new_val.get_boolean ());
+			// 	}
+			// 	catch (Error e) {
+			// 		warning (@"Couldn't perform action \"$act\" on a Status:");
+			// 		warning (e.message);
+			// 		app.inform (Gtk.MessageType.WARNING, _("Network Error"), e.message);
+			// 	}
+			// 	button.sensitive = true;
+			// });
 		});
 	}
 

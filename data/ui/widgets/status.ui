@@ -205,59 +205,59 @@
             </child>
             <child>
               <object class="GtkBox" id="actions">
-                <property name="can_focus">0</property>
+                <property name="homogeneous">1</property>
                 <property name="spacing">8</property>
-                <child>
-                  <object class="GtkButton" id="reply_button">
-                    <property name="hexpand">1</property>
-                    <property name="icon_name">mail-reply-sender-symbolic</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="reblog_button">
-                    <property name="hexpand">1</property>
-                    <property name="icon_name">reblog_icon</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="favorite_button">
-                    <property name="hexpand">1</property>
-                    <property name="icon_name">image2</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="bookmark_button">
-                    <property name="hexpand">1</property>
-                    <property name="icon_name">image1</property>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="menu_button">
-                    <property name="hexpand">1</property>
-                    <property name="receives_default">1</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="can_focus">0</property>
-                        <property name="icon_name">view-more-symbolic</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
+                <!-- <child> -->
+                <!--   <object class="GtkButton" id="reply_button"> -->
+                <!--     <property name="hexpand">1</property> -->
+                <!--     <property name="icon_name">mail-reply-sender-symbolic</property> -->
+                <!--     <style> -->
+                <!--       <class name="flat"/> -->
+                <!--     </style> -->
+                <!--   </object> -->
+                <!-- </child> -->
+                <!-- <child> -->
+                <!--   <object class="GtkToggleButton" id="reblog_button"> -->
+                <!--     <property name="hexpand">1</property> -->
+                <!--     <property name="icon_name">reblog_icon</property> -->
+                <!--     <style> -->
+                <!--       <class name="flat"/> -->
+                <!--     </style> -->
+                <!--   </object> -->
+                <!-- </child> -->
+                <!-- <child> -->
+                <!--   <object class="GtkToggleButton" id="favorite_button"> -->
+                <!--     <property name="hexpand">1</property> -->
+                <!--     <property name="icon_name">image2</property> -->
+                <!--     <style> -->
+                <!--       <class name="flat"/> -->
+                <!--     </style> -->
+                <!--   </object> -->
+                <!-- </child> -->
+                <!-- <child> -->
+                <!--   <object class="GtkToggleButton" id="bookmark_button"> -->
+                <!--     <property name="hexpand">1</property> -->
+                <!--     <property name="icon_name">image1</property> -->
+                <!--     <style> -->
+                <!--       <class name="flat"/> -->
+                <!--     </style> -->
+                <!--   </object> -->
+                <!-- </child> -->
+                <!-- <child> -->
+                <!--   <object class="GtkButton" id="menu_button"> -->
+                <!--     <property name="hexpand">1</property> -->
+                <!--     <property name="receives_default">1</property> -->
+                <!--     <child> -->
+                <!--       <object class="GtkImage"> -->
+                <!--         <property name="can_focus">0</property> -->
+                <!--         <property name="icon_name">view-more-symbolic</property> -->
+                <!--       </object> -->
+                <!--     </child> -->
+                <!--     <style> -->
+                <!--       <class name="flat"/> -->
+                <!--     </style> -->
+                <!--   </object> -->
+                <!-- </child> -->
               </object>
             </child>
             <layout>

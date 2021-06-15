@@ -69,8 +69,19 @@
 	margin-bottom: 32px;
 }
 
-.header-image {
+
+
+
+/*
+  Profile
+*/
+
+.ttl-profile-cover .header-image {
   background:grey;
+}
+.ttl-profile-cover avatar {
+	border: 6px solid @theme_base_color;
+	background: @theme_base_color;
 }
 .large .header-image {
   border-radius:6px 6px 0 0;

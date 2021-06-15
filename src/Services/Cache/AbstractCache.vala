@@ -7,7 +7,7 @@ public class Tootle.AbstractCache : Object {
     protected Map<string, Object> items;
     protected Map<string, Soup.Message> items_in_progress;
 
-    public int maintenance_secs { get; set; default = 10; }
+    public int maintenance_secs { get; set; default = 5; }
     public uint size {
         get { return items.size; }
     }
@@ -34,7 +34,7 @@ public class Tootle.AbstractCache : Object {
 				// if ("jpg" in iter.get_key ()) {
 				// 	warning (@"Key \"$(iter.get_key ())\": $(obj.ref_count)/$(min_ref_count)");
 				// }
-				if (obj.ref_count <= min_ref_count) {
+				if (obj.ref_count < min_ref_count) {
 					cleared++;
 					message (@"Freeing: $(iter.get_key ())");
 					iter.unset ();
@@ -62,7 +62,7 @@ public class Tootle.AbstractCache : Object {
 		return items.has_key (get_key (id));
 	}
 
-	public string insert (string id, owned Object obj) {
+	protected string insert (string id, owned Object obj) {
 		var key = get_key (id);
 		message ("Inserting: "+key);
 		items.@set (key, (owned) obj);

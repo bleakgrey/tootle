@@ -178,7 +178,8 @@ namespace Tootle {
 				website = Build.SUPPORT_WEBSITE,
 				website_label = _("Report an issue"),
 				license_type = License.GPL_3_0_ONLY,
-				copyright = Build.COPYRIGHT
+				copyright = Build.COPYRIGHT,
+				system_information = Build.SYSTEM_INFO
 			};
 
 			// For some obscure reason, const arrays produce duplicates in the credits.

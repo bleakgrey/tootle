@@ -9,21 +9,13 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 	public weak ArrayList<API.Mention>? mentions;
 
 	public string label {
-		get {
-			return widget.label;
-		}
-		set {
-			widget.label = value;
-		}
+		get { return widget.label; }
+		set { widget.label = value; }
 	}
 
 	public bool selectable {
-		get {
-			return widget.selectable;
-		}
-		set {
-			widget.selectable = value;
-		}
+		get { return widget.selectable; }
+		set { widget.selectable = value; }
 	}
 
 	public Pango.EllipsizeMode ellipsize {
@@ -34,6 +26,11 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 	public bool single_line_mode {
 		get { return widget.single_line_mode; }
 		set { widget.single_line_mode = value; }
+	}
+
+	public float xalign {
+	    get { return widget.xalign; }
+	    set { widget.xalign = value; }
 	}
 
 	construct {

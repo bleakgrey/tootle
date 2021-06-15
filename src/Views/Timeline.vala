@@ -154,11 +154,11 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 				case Mastodon.Account.EVENT_DELETE_POST:
 					return;
 				default:
-					throw new Oopsie.INSTANCE ("Unknown event: " + ev.type);
+					return;
 			}
 		}
 		catch (Error e) {
-			warning ("Couldn't process stream event: " + e.message);
+			warning (@"Couldn't process stream event \"$(ev.type)\": $(e.message)");
 		}
 	}
 

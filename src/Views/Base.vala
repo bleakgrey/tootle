@@ -10,7 +10,7 @@ public class Tootle.Views.Base : Box {
 	public string label { get; set; default = ""; }
 	public bool needs_attention { get; set; default = false; }
 	public bool current { get; set; default = false; }
-	public SimpleActionGroup? actions { get; set; }
+	protected SimpleActionGroup actions { get; set; default = new SimpleActionGroup (); }
 
 	[GtkChild] protected unowned Adw.HeaderBar header;
 	[GtkChild] protected unowned Button back_button;
@@ -29,6 +29,9 @@ public class Tootle.Views.Base : Box {
 	public string status_message { get; set; default = STATUS_EMPTY; }
 
 	construct {
+	    build_actions ();
+	    build_header ();
+
 		status_button.label = _("Reload");
 		bind_property ("state", states, "visible-child-name", BindingFlags.SYNC_CREATE);
 
@@ -45,14 +48,19 @@ public class Tootle.Views.Base : Box {
 		});
 
 		scrolled.get_style_context ().add_class (Dialogs.MainWindow.ZOOM_CLASS);
-
-		build_header ();
 	}
 	~Base () {
 		message ("Destroying base "+label);
 	}
 
-	public virtual void build_header () {
+	public override void dispose () {
+		actions.dispose ();
+		base.dispose ();
+	}
+
+    protected virtual void build_actions () {}
+
+	protected virtual void build_header () {
 		var title = new Adw.WindowTitle (null, null);
 		bind_property ("label", title, "title", BindingFlags.SYNC_CREATE);
 		header.title_widget = title;
@@ -63,12 +71,10 @@ public class Tootle.Views.Base : Box {
 	}
 
 	public virtual void on_shown () {
-		if (actions != null)
-			app.main_window.insert_action_group ("view", actions);
+		app.main_window.insert_action_group ("view", actions);
 	}
 	public virtual void on_hidden () {
-		if (actions != null)
-			app.main_window.insert_action_group ("view", null);
+		app.main_window.insert_action_group ("view", null);
 	}
 
 	public virtual void on_content_changed () {}

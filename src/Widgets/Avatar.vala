@@ -1,27 +1,20 @@
 using Gtk;
 using Gdk;
 
-public class Tootle.Widgets.Avatar : Button, Disposable {
+public class Tootle.Widgets.Avatar : Button {
 
 	public API.Account? account { get; set; }
 	public int size {
-		get {
-			return avatar.size;
-		}
-		set {
-			avatar.size = value;
-		}
+		get { return avatar.size; }
+		set { avatar.size = value; }
 	}
 
-	protected Pixbuf? cached_data { get; set; }
 	protected Adw.Avatar? avatar {
-		get {
-			return child as Adw.Avatar;
-		}
+		get { return child as Adw.Avatar; }
 	}
 
 	construct {
-		construct_disposable ();
+		// construct_disposable ();
 
 		child = new Adw.Avatar (48, null, true);
 		halign = valign = Align.CENTER;
@@ -47,12 +40,10 @@ public class Tootle.Widgets.Avatar : Button, Disposable {
 	}
 
 	void on_cache_response (bool is_loaded, owned Pixbuf? data) {
-		cached_data = data;
-		avatar.set_image_load_func (set_avatar_pixbuf_fn);
-	}
-
-	Pixbuf? set_avatar_pixbuf_fn (int size) {
-		return cached_data;
+		if (data != null)
+		    avatar.custom_image = Gdk.Texture.for_pixbuf (data);
+		else
+		    avatar.custom_image = null;
 	}
 
 }

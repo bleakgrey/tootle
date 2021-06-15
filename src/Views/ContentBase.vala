@@ -1,6 +1,6 @@
 using Gtk;
 
-public class Tootle.Views.ContentBase : Views.Base, Disposable {
+public class Tootle.Views.ContentBase : Views.Base {
 
 	protected GLib.ListStore model;
 	protected ListBox content;

@@ -26,8 +26,8 @@ asresources = gnome.compile_resources(
   c_name: 'as'
 )
 
-libgtk_dep = dependency('gtk4', version: '>=4.0.0', required: true)
-libadwaita_dep = dependency('libadwaita-1')
+libgtk_dep = dependency('gtk4', version: '>=4.3.0', required: true)
+libadwaita_dep = dependency('libadwaita-1', version: '>=1.0.0', required: true)
 
 sources = files(
     'src/Application.vala',
@@ -62,7 +62,6 @@ sources = files(
     'src/API/SearchResults.vala',
     'src/API/Entity.vala',
     'src/Widgets/Widgetizable.vala',
-    'src/Widgets/Disposable.vala',
     'src/Widgets/Avatar.vala',
     'src/Widgets/RichLabel.vala',
     'src/Widgets/Status.vala',
