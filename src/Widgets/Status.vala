@@ -4,8 +4,29 @@ using Gdk;
 [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/status.ui")]
 public class Tootle.Widgets.Status : ListBoxRow {
 
-	public API.Status? status { get; set; }
-	public API.NotificationType? kind { get; set; }
+    API.Status? _bound_status = null;
+	public API.Status? status {
+	    get { return _bound_status; }
+	    set {
+	        if (_bound_status != null)
+	            warning ("Trying to rebind a Status widget! This is not supposed to happen!");
+
+            _bound_status = value;
+	        if (_bound_status != null)
+	            bind ();
+	    }
+	}
+
+    public API.Account? kind_instigator { get; set; default = null; }
+
+    string? _kind = null;
+	public string? kind {
+	    get { return _kind; }
+	    set {
+	        _kind = value;
+	        change_kind ();
+	    }
+	}
 
 	[GtkChild] protected unowned Grid grid;
 
@@ -37,17 +58,19 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	protected ToggleButton bookmark_button;
 
 	construct {
-		notify["kind"].connect (on_kind_changed);
-		notify["status"].connect (on_rebind);
-		open.connect (on_open);
+	    open.connect (on_open);
 		rebuild_actions ();
 	}
 
-	public Status (API.Status status, API.NotificationType? kind = null) {
+	public Status (API.Status status) {
 		Object (
-			status: status,
-			kind: kind
+		    kind_instigator: status.account,
+			status: status
 		);
+
+		if (kind == null && status.reblog != null) {
+			kind = Mastodon.Account.KIND_REMOTE_REBLOG;
+		}
 	}
 	~Status () {
 		message ("Destroying Status widget");
@@ -96,13 +119,19 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			status.open ();
 	}
 
-	protected virtual void on_rebind () {
-		// Header
-		if (kind == null) {
-			if (status.reblog != null)
-				kind = API.NotificationType.REBLOG_REMOTE_USER;
-		}
+	protected virtual void change_kind () {
+	    string icon = null;
+	    string descr = null;
+	    accounts.active.describe_kind (this.kind, out icon, out descr, this.kind_instigator);
 
+	    header_icon.visible = header_label.visible = (icon != null);
+	    if (icon == null) return;
+
+	    header_icon.icon_name = icon;
+		header_label.label = descr;
+	}
+
+	protected virtual void bind () {
 		// Content
 		bind_property ("spoiler-text", spoiler_label, "label", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("content", content, "content", BindingFlags.SYNC_CREATE);
@@ -128,10 +157,16 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		// 	return true;
 		// });
 
+        status.formal.bind_property ("favourited", favorite_button, "active", BindingFlags.SYNC_CREATE);
+
 		// Actions
-		// bind_toggleable_prop (favorite_button, "favourited", "favourite", "unfavourite");
-		// bind_toggleable_prop (reblog_button, "reblogged", "reblog", "unreblog");
-		// bind_toggleable_prop (bookmark_button, "bookmarked", "bookmark", "unbookmark");
+		favorite_button.toggled.connect (() => {
+		    warning ("toggled() to: " + this.favorite_button.active.to_string ());
+		});
+		favorite_button.notify["active"].connect (() => {
+		    warning ("p[active] changed to: " + this.favorite_button.active.to_string ());
+		});
+
 
 		if (status.formal.in_reply_to_id != null)
 			reply_button.icon_name = "mail-reply-all-symbolic";
@@ -192,76 +227,12 @@ public class Tootle.Widgets.Status : ListBoxRow {
 			w.add_css_class ("flat");
 	}
 
-	[GtkCallback]
-	public void toggle_spoiler () {
+	[GtkCallback] public void toggle_spoiler () {
 		reveal_spoiler = !reveal_spoiler;
 	}
 
-	protected virtual void on_kind_changed () {
-		header_icon.visible = header_label.visible = (kind != null);
-		if (kind == null)
-			return;
-
-		header_icon.icon_name = kind.get_icon ();
-		header_label.label = kind.get_desc (status.account);
-	}
-
-	[GtkCallback]
-	public void on_avatar_clicked () {
+	[GtkCallback] public void on_avatar_clicked () {
 		status.formal.account.open ();
-	}
-
-	protected void open_menu () {
-		// FIXME: Gtk.Menu is gone.
-		// var menu = new Gtk.Menu ();
-
-		// var item_open_link = new Gtk.MenuItem.with_label (_("Open in Browser"));
-		// item_open_link.activate.connect (() => Desktop.open_uri (status.formal.url));
-		// var item_copy_link = new Gtk.MenuItem.with_label (_("Copy Link"));
-		// item_copy_link.activate.connect (() => Desktop.copy (status.formal.url));
-		// var item_copy = new Gtk.MenuItem.with_label (_("Copy Text"));
-		// item_copy.activate.connect (() => {
-		// 	var sanitized = HtmlUtils.remove_tags (status.formal.content);
-		// 	Desktop.copy (sanitized);
-		// });
-
-		// if (is_notification) {
-		//	 var item_muting = new Gtk.MenuItem.with_label (status.muted ? _("Unmute Conversation") : _("Mute Conversation"));
-		//	 item_muting.activate.connect (() => status.update_muted (!is_muted) );
-		//	 menu.add (item_muting);
-		// }
-
-		// menu.add (item_open_link);
-		// menu.add (new SeparatorMenuItem ());
-		// menu.add (item_copy_link);
-		// menu.add (item_copy);
-
-		// if (status.is_owned ()) {
-		// 	menu.add (new SeparatorMenuItem ());
-
-		// 	var item_pin = new Gtk.MenuItem.with_label (status.pinned ? _("Unpin from Profile") : _("Pin on Profile"));
-		// 	item_pin.activate.connect (() => {
-		// 		status.action (status.formal.pinned ? "unpin" : "pin");
-		// 	});
-		// 	menu.add (item_pin);
-
-		// 	var item_delete = new Gtk.MenuItem.with_label (_("Delete"));
-		// 	item_delete.activate.connect (() => {
-		// 		status.annihilate ()
-		// 			.then ((sess, mess) => {
-		// 				streams.force_delete (status.id);
-		// 			})
-		// 			.exec ();
-		// 	});
-		// 	menu.add (item_delete);
-
-		// 	var item_redraft = new Gtk.MenuItem.with_label (_("Redraft"));
-		// 	item_redraft.activate.connect (() => new Dialogs.Compose.redraft (status.formal));
-		// 	menu.add (item_redraft);
-		// }
-
-		// menu.show_all ();
-		// menu.popup_at_widget (menu_button, Gravity.SOUTH_EAST, Gravity.SOUTH_EAST);
 	}
 
 	public void expand_root () {
@@ -275,45 +246,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		child.set_property ("column_span", 2);
 	}
 
-	public void bind_toggleable_prop (ToggleButton button, string prop, string on, string off) {
-		var init_val = Value (Type.BOOLEAN);
-		((GLib.Object) status.formal).get_property (prop, ref init_val);
-		button.active = init_val.get_boolean ();
-
-		status.formal.bind_property (prop, button, "active", BindingFlags.DEFAULT);
-
-		button.toggled.connect (() => {
-			if (!(button.has_focus && button.sensitive))
-				return;
-
-			warning ("bruh");
-
-			// button.sensitive = false;
-			// var val = Value (Type.BOOLEAN);
-			// ((GLib.Object) status.formal).get_property (prop, ref val);
-			// var act = val.get_boolean () ? off : on;
-
-			// var req = status.action (act);
-			// req.await.begin ((obj, res) => {
-			// 	try {
-			// 		warning ("yeah");
-			// 		var msg = req.await.end (res);
-			// 		var node = network.parse_node (msg);
-			// 		var entity = API.Status.from (node);
-
-			// 		var new_val = Value (Type.BOOLEAN);
-			// 		((GLib.Object) entity.formal).get_property (prop, ref new_val);
-			// 		((GLib.Object) status.formal).set_property (prop, new_val.get_boolean ());
-			// 	}
-			// 	catch (Error e) {
-			// 		warning (@"Couldn't perform action \"$act\" on a Status:");
-			// 		warning (e.message);
-			// 		app.inform (Gtk.MessageType.WARNING, _("Network Error"), e.message);
-			// 	}
-			// 	button.sensitive = true;
-			// });
-		});
-	}
 
 
 

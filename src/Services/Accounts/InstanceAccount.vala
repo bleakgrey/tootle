@@ -19,6 +19,7 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 	}
 
 	construct {
+	    //TODO: Show notifications
 		// on_notification.connect (show_notification);
 		construct_streamable ();
 	}
@@ -58,21 +59,25 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	// TODO: notification actions
 	void show_notification (API.Notification obj) {
-		var title = HtmlUtils.remove_tags (obj.kind.get_desc (obj.account));
-		var notification = new GLib.Notification (title);
-		if (obj.status != null) {
-			var body = "";
-			body += domain;
-			body += "\n";
-			body += HtmlUtils.remove_tags (obj.status.content);
-			notification.set_body (body);
-		}
+		// var title = HtmlUtils.remove_tags (obj.kind.get_desc (obj.account));
+		// var notification = new GLib.Notification (title);
+		// if (obj.status != null) {
+		// 	var body = "";
+		// 	body += domain;
+		// 	body += "\n";
+		// 	body += HtmlUtils.remove_tags (obj.status.content);
+		// 	notification.set_body (body);
+		// }
 
-		app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
+		// app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
 	}
 
 	public virtual void populate_user_menu (GLib.ListStore model) {}
 
+    public virtual void describe_kind (string kind, out string? icon, out string? descr, API.Account account) {
+        icon = null;
+        descr = null;
+    }
 
 
 	// Streamable

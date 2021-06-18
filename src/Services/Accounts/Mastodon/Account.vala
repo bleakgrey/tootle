@@ -6,6 +6,14 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 	public const string EVENT_DELETE_POST = "delete";
 	public const string EVENT_NOTIFICATION = "notification";
 
+    public const string KIND_MENTION = "mention";
+    public const string KIND_REBLOG = "reblog";
+    public const string KIND_FAVOURITE = "favourite";
+    public const string KIND_FOLLOW = "follow";
+    public const string KIND_POLL = "poll";
+    public const string KIND_FOLLOW_REQUEST = "__follow-request";
+    public const string KIND_REMOTE_REBLOG = "__remote-reblog";
+
 	class Test : AccountStore.BackendTest {
 
 		public override string? get_backend (Json.Object obj) {
@@ -28,10 +36,13 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 			label = "Timelines",
 			icon = "user-home-symbolic"
 		});
-		// model.append (new Views.Sidebar.Item () {
-		// 	label = "Notifications",
-		// 	icon = "preferences-system-notifications-symbolic"
-		// });
+		model.append (new Views.Sidebar.Item () {
+			label = "Notifications",
+			icon = "preferences-system-notifications-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Notifications ());
+			}
+		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
 			icon = API.Visibility.DIRECT.get_icon ()
@@ -53,5 +64,42 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 			icon = "system-search-symbolic"
 		});
 	}
+
+    public override void describe_kind (string kind, out string? icon, out string? descr, API.Account account) {
+        switch (kind) {
+            case KIND_MENTION:
+                icon = "user-available-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> mentioned you</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_REBLOG:
+                icon = "media-playlist-repeat-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> boosted your status</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_REMOTE_REBLOG:
+                icon = "media-playlist-repeat-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> boosted</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_FAVOURITE:
+                icon = "starred-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> favorited your status</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_FOLLOW:
+                icon = "contact-new-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> now follows you</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_FOLLOW_REQUEST:
+                icon = "contact-new-symbolic";
+                descr = _("<span underline=\"none\"><a href=\"%s\">%s</a> wants to follow you</span>").printf (account.url, account.display_name);
+                break;
+            case KIND_POLL:
+                icon = "emblem-default-symbolic";
+                descr = _("Poll results");
+                break;
+            default:
+                icon = null;
+                descr = null;
+                break;
+        }
+    }
 
 }

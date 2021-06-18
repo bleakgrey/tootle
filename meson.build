@@ -55,7 +55,6 @@ sources = files(
     'src/API/Status.vala',
     'src/API/Visibility.vala',
     'src/API/Notification.vala',
-    'src/API/NotificationType.vala',
     'src/API/Attachment.vala',
     'src/API/Conversation.vala',
     'src/API/List.vala',

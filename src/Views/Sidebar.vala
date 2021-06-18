@@ -134,6 +134,10 @@ public class Tootle.Views.Sidebar : Box, AccountHolder {
 		var row = _row as ItemRow;
 		if (row.item.on_activated != null)
 			row.item.on_activated ();
+
+        var flap = app.main_window.flap;
+        if (flap.folded)
+		    flap.reveal_flap = false;
 	}
 
 	void on_item_header_update (ListBoxRow _row, ListBoxRow? _before) {

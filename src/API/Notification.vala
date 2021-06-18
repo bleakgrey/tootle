@@ -2,7 +2,7 @@ public class Tootle.API.Notification : Entity, Widgetizable {
 
     public string id { get; set; }
     public API.Account account { get; set; }
-    public API.NotificationType kind { get; set; }
+    public string? kind { get; set; default = null; }
     public string created_at { get; set; }
     public API.Status? status { get; set; default = null; }
 
@@ -10,16 +10,16 @@ public class Tootle.API.Notification : Entity, Widgetizable {
         return new Widgets.Notification (this);
     }
 
-    public Soup.Message? dismiss () {
-        if (kind == NotificationType.FOLLOW_REQUEST)
-            return reject_follow_request ();
+  //   public Soup.Message? dismiss () {
+  //       if (kind == NotificationType.FOLLOW_REQUEST)
+  //           return reject_follow_request ();
 
-		var req = new Request.POST ("/api/v1/notifications/dismiss")
-		    .with_account (accounts.active)
-			.with_param ("id", id)
-			.exec ();
-        return req;
-    }
+		// var req = new Request.POST ("/api/v1/notifications/dismiss")
+		//     .with_account (accounts.active)
+		// 	.with_param ("id", id)
+		// 	.exec ();
+  //       return req;
+  //   }
 
     public Soup.Message accept_follow_request () {
         var req = new Request.POST (@"/api/v1/follow_requests/$(account.id)/authorize")

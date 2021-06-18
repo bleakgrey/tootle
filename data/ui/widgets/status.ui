@@ -15,7 +15,7 @@
         <property name="column_spacing">8</property>
         <child>
           <object class="GtkImage" id="header_icon">
-            <property name="can_focus">0</property>
+            <property name="visible">0</property>
             <property name="halign">end</property>
             <property name="margin_bottom">8</property>
             <property name="icon_name">oops</property>
@@ -28,7 +28,7 @@
         </child>
         <child>
           <object class="TootleWidgetsRichLabel" id="header_label">
-            <property name="visible">True</property>
+            <property name="visible">0</property>
             <property name="ellipsize">end</property>
             <property name="margin-bottom">8</property>
             <style>
