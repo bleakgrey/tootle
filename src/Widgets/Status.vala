@@ -53,9 +53,9 @@ public class Tootle.Widgets.Status : ListBoxRow {
 	[GtkChild] protected unowned Box actions;
 
 	protected Button reply_button;
-	protected ToggleButton reblog_button;
-	protected ToggleButton favorite_button;
-	protected ToggleButton bookmark_button;
+	protected StatusActionButton reblog_button;
+	protected StatusActionButton favorite_button;
+	protected StatusActionButton bookmark_button;
 
 	construct {
 	    open.connect (on_open);
@@ -145,7 +145,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		reveal_spoiler = true;
 		spoiler_stack.visible_child_name = "content";
 
-	// status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.INVERT_BOOLEAN);
+		// status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.INVERT_BOOLEAN);
 
 		// status.formal.bind_property ("has-spoiler", this, "reveal-spoiler", BindingFlags.SYNC_CREATE, (b, src, ref target) => {
 		// 	target.set_boolean (!src.get_boolean ());
@@ -157,16 +157,10 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		// 	return true;
 		// });
 
-        status.formal.bind_property ("favourited", favorite_button, "active", BindingFlags.SYNC_CREATE);
-
 		// Actions
-		favorite_button.toggled.connect (() => {
-		    warning ("toggled() to: " + this.favorite_button.active.to_string ());
-		});
-		favorite_button.notify["active"].connect (() => {
-		    warning ("p[active] changed to: " + this.favorite_button.active.to_string ());
-		});
-
+		reblog_button.bind (status.formal);
+		favorite_button.bind (status.formal);
+		bookmark_button.bind (status.formal);
 
 		if (status.formal.in_reply_to_id != null)
 			reply_button.icon_name = "mail-reply-all-symbolic";
@@ -200,15 +194,27 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		reply_button.clicked.connect (() => new Dialogs.Compose.reply (status));
 		actions.append (reply_button);
 
-		reblog_button = new ToggleButton ();
+		reblog_button = new StatusActionButton () {
+		    prop_name = "reblogged",
+		    action_on = "reblog",
+		    action_off = "unreblog"
+		};
 		actions.append (reblog_button);
 
-		favorite_button = new ToggleButton ();
-		favorite_button.icon_name = "non-starred-symbolic";
+		favorite_button = new StatusActionButton () {
+		    prop_name = "favourited",
+		    action_on = "favourite",
+		    action_off = "unfavourite",
+		    icon_name = "non-starred-symbolic"
+		};
 		actions.append (favorite_button);
 
-		bookmark_button = new ToggleButton ();
-		bookmark_button.icon_name = "user-bookmarks-symbolic";
+		bookmark_button = new StatusActionButton () {
+		    prop_name = "bookmarked",
+		    action_on = "bookmark",
+		    action_off = "unbookmark",
+		    icon_name = "user-bookmarks-symbolic"
+		};
 		actions.append (bookmark_button);
 	}
 

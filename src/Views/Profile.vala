@@ -143,7 +143,6 @@ public class Tootle.Views.Profile : Views.Timeline {
 		});
 		actions.add_action (replies_action);
 
-        /////////////////////////////////////////////////
 		source_action = new SimpleAction.stateful ("source", VariantType.STRING, source);
 		source_action.change_state.connect (v => {
 			source = v.get_string ();

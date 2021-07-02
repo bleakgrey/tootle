@@ -69,6 +69,8 @@ sources = files(
     'src/Widgets/VisibilityPopover.vala',
     'src/Widgets/Attachment/Box.vala',
     'src/Widgets/AdaptiveButton.vala',
+    'src/Widgets/LockableToggleButton.vala',
+    'src/Widgets/StatusActionButton.vala',
     'src/Widgets/MarkupView.vala',
     'src/Dialogs/Saveable.vala',
     'src/Dialogs/NewAccount.vala',
