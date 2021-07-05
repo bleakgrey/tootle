@@ -28,7 +28,6 @@
             <property name="valign">center</property>
             <style>
               <class name="badge"/>
-              <class name="osd"/>
             </style>
           </object>
         </child>

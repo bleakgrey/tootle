@@ -12,7 +12,6 @@
         <property name="centering-policy">strict</property>
         <child>
           <object class="GtkButton" id="back_button">
-            <property name="tooltip_text" translatable="yes">Back</property>
             <property name="icon_name">go-previous-symbolic</property>
             <signal name="clicked" handler="on_close" swapped="no"/>
           </object>

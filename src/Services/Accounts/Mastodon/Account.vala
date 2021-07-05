@@ -38,7 +38,7 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Notifications",
-			icon = "preferences-system-notifications-symbolic",
+			icon = "bell-symbolic",
 			on_activated = () => {
 			    app.main_window.open_view (new Views.Notifications ());
 			}

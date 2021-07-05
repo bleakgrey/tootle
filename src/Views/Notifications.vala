@@ -9,7 +9,7 @@ public class Tootle.Views.Notifications : Views.Timeline, AccountHolder, Streama
         Object (
             url: "/api/v1/notifications",
         	label: _("Notifications"),
-        	icon: "preferences-system-notifications-symbolic"
+        	icon: "bell-symbolic"
         );
         accepts = typeof (API.Notification);
     }
