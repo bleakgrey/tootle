@@ -52,7 +52,7 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="margin_top">12</property>
+        <property name="margin_top">6</property>
         <property name="margin_bottom">12</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
@@ -75,6 +75,13 @@
             </style>
           </object>
         </child>
+
+        <child>
+          <object class="TootleWidgetsMarkupView" id="note">
+            <property name="margin_top">6</property>
+          </object>
+        </child>
+
         <!-- <child> -->
         <!--   <object class="GtkLabel" id="rs-box"> -->
         <!--     <property name="label">Follows you</property> -->
@@ -111,19 +118,6 @@
         <!--     </child> -->
         <!--   </object> -->
         <!-- </child> -->
-
-        <child>
-          <object class="GtkListBoxRow">
-            <child>
-              <object class="TootleWidgetsMarkupView" id="note">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
 
 
       </object>

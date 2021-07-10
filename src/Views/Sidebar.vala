@@ -79,13 +79,13 @@ public class Tootle.Views.Sidebar : Box, AccountHolder {
 		item_model.append (item_preferences);
 		item_model.append (item_about);
 
-		item_model.append (new Item () {
-			label = "(Debug) Empty View",
-			separated = true,
-			on_activated = () => {
-				app.main_window.open_view (new Views.ContentBase ());
-			}
-		});
+		// item_model.append (new Item () {
+		// 	label = "(Debug) Empty View",
+		// 	separated = true,
+		// 	on_activated = () => {
+		// 		app.main_window.open_view (new Views.ContentBase ());
+		// 	}
+		// });
 	}
 
 	[GtkCallback] void on_mode_changed () {
