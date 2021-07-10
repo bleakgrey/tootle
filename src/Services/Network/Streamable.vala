@@ -23,8 +23,10 @@ public abstract interface Tootle.Streamable : Object {
 	public abstract string? _connection_url { get; set; }
 	public abstract bool subscribed { get; set; default = false; }
 
-	public abstract void on_stream_event (Event ev);
     public abstract string? get_stream_url ();
+
+    [Signal (detailed = true)]
+    public signal void stream_event (Event ev);
 
 	void subscribe () {
 		streams.unsubscribe (_connection_url, this);
@@ -63,8 +65,6 @@ public abstract interface Tootle.Streamable : Object {
 			subscribe ();
 	}
 
-	protected virtual void on_streaming_policy_changed () {
-
-	}
+	protected virtual void on_streaming_policy_changed () {}
 
 }

@@ -18,7 +18,10 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 		status_button.clicked.connect (on_refresh);
 
 		construct_account_holder ();
+
 		construct_streamable ();
+		stream_event[Mastodon.Account.EVENT_NEW_POST].connect (on_new_post);
+		stream_event[Mastodon.Account.EVENT_DELETE_POST].connect (on_delete_post);
 
 		content.bind_model (model, on_create_model_widget);
 	}
@@ -144,22 +147,13 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 		return null;
 	}
 
-	public virtual void on_stream_event (Streamable.Event ev) {
-		try {
-			switch (ev.type) {
-				case Mastodon.Account.EVENT_NEW_POST:
-					var entity = Entity.from_json (accepts, ev.get_node ());
-					model.insert (0, entity);
-					return;
-				case Mastodon.Account.EVENT_DELETE_POST:
-					return;
-				default:
-					return;
-			}
-		}
-		catch (Error e) {
-			warning (@"Couldn't process stream event \"$(ev.type)\": $(e.message)");
-		}
+	public virtual void on_new_post (Streamable.Event ev) {
+		var entity = Entity.from_json (accepts, ev.get_node ());
+		model.insert (0, entity);
+	}
+
+	public virtual void on_delete_post (Streamable.Event ev) {
+		//TODO: This
 	}
 
 }

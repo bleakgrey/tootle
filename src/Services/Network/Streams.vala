@@ -117,8 +117,8 @@ public class Tootle.Streams : Object {
 				decode (bytes, out ev);
 
 				subscribers.@foreach (s => {
-					// message (@"$(name): $(ev.type) for $(s.get_subscriber_name ())");
-					s.on_stream_event (ev);
+					message (@"$(name): $(ev.type) for $(s.get_subscriber_name ())");
+					s.stream_event[ev.type] (ev);
 					return true;
 				});
 			}

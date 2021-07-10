@@ -10,18 +10,17 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 	public string? access_token { get; set; }
 	public Error? error { get; set; }
 
-	public int64 last_seen_notification { get; set; default = 0; }
-	public bool has_unread_notifications { get; set; default = false; }
-	public ArrayList<API.Notification> cached_notifications { get; set; default = new ArrayList<API.Notification> (); }
+	public ArrayList<GLib.Notification> desktop_inbox { get; set; default = new ArrayList<GLib.Notification> (); }
+	public int64 last_read_notification { get; set; default = 0; }
+	public uint unread_notifications { get; set; default = 0; }
 
 	public new string handle {
 		owned get { return @"@$username@$domain"; }
 	}
 
 	construct {
-	    //TODO: Show notifications
-		// on_notification.connect (show_notification);
 		construct_streamable ();
+		stream_event[Mastodon.Account.EVENT_NOTIFICATION].connect (on_notification);
 	}
 
 	public InstanceAccount.empty (string instance){
@@ -57,27 +56,13 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		return entity;
 	}
 
-	// TODO: notification actions
-	void show_notification (API.Notification obj) {
-		// var title = HtmlUtils.remove_tags (obj.kind.get_desc (obj.account));
-		// var notification = new GLib.Notification (title);
-		// if (obj.status != null) {
-		// 	var body = "";
-		// 	body += domain;
-		// 	body += "\n";
-		// 	body += HtmlUtils.remove_tags (obj.status.content);
-		// 	notification.set_body (body);
-		// }
-
-		// app.send_notification (app.application_id + ":" + obj.id.to_string (), notification);
-	}
-
 	public virtual void populate_user_menu (GLib.ListStore model) {}
 
-    public virtual void describe_kind (string kind, out string? icon, out string? descr, API.Account account) {
-        icon = null;
-        descr = null;
-    }
+	public virtual void describe_kind (string kind, out string? icon, out string? descr, API.Account account) {
+		icon = null;
+		descr = null;
+	}
+
 
 
 	// Streamable
@@ -89,8 +74,29 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
 	}
 
-	public virtual void on_stream_event (Streamable.Event ev) {
+	public virtual void on_notification (Streamable.Event ev) {
+		var obj = Entity.from_json (typeof (API.Notification), ev.get_node ()) as API.Notification;
+		var toast = create_desktop_toast (obj);
+		app.send_notification (obj.id.to_string (), toast);
+	}
 
+	// TODO: notification actions
+	public virtual GLib.Notification create_desktop_toast (API.Notification obj) {
+		string descr;
+		describe_kind (obj.kind, null, out descr, obj.account);
+
+		var toast = new GLib.Notification ( HtmlUtils.remove_tags (descr) );
+		if (obj.status != null) {
+			var body = "";
+			body += HtmlUtils.remove_tags (obj.status.content);
+			toast.set_body (body);
+		}
+
+		var file = GLib.File.new_for_uri (avatar);
+		var icon = new FileIcon (file);
+		toast.set_icon (icon);
+
+		return toast;
 	}
 
 }
