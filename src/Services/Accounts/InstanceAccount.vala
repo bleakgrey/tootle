@@ -8,19 +8,30 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 	public string? client_id { get; set; }
 	public string? client_secret { get; set; }
 	public string? access_token { get; set; }
-	public Error? error { get; set; }
-
-	public ArrayList<GLib.Notification> desktop_inbox { get; set; default = new ArrayList<GLib.Notification> (); }
-	public int64 last_read_notification { get; set; default = 0; }
-	public uint unread_notifications { get; set; default = 0; }
+	public Error? error { get; set; } //TODO: use this field when server invalidates the auth token
 
 	public new string handle {
 		owned get { return @"@$username@$domain"; }
 	}
 
+	public virtual signal void added () {
+		subscribed = true;
+		check_notifications ();
+	}
+	public virtual signal void removed () {
+		subscribed = false;
+	}
+
+	public virtual signal void activated () {}
+	public virtual signal void deactivated () {}
+
+
 	construct {
 		construct_streamable ();
 		stream_event[Mastodon.Account.EVENT_NOTIFICATION].connect (on_notification);
+	}
+	~InstanceAccount () {
+		destruct_streamable ();
 	}
 
 	public InstanceAccount.empty (string instance){
@@ -29,9 +40,10 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 			instance: instance
 		);
 	}
-	~InstanceAccount () {
-		destruct_streamable ();
-	}
+
+
+
+	// Core functions
 
 	public bool is_current () {
 		return accounts.active.access_token == access_token;
@@ -65,6 +77,41 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 
 
+	// Notifications
+
+	public int unread_count { get; set; default = 0; }
+	public int last_read_id { get; set; default = 0; }
+	public ArrayList<GLib.Notification> unread_toasts { get; set; default = new ArrayList<GLib.Notification> (); }
+	public ArrayList<Object> toast_inhibitors { get; set; default = new ArrayList<Object> (); }
+
+	public virtual void check_notifications () {
+		new Request.GET ("/api/v1/markers?timeline[]=notifications")
+			.with_account (this)
+			.then ((sess, msg) => {
+				var root = network.parse (msg);
+				var notifications = root.get_object_member ("notifications");
+				last_read_id = int.parse (notifications.get_string_member ("last_read_id") );
+
+				if (notifications.has_member ("pleroma")) {
+					var pleroma = notifications.get_object_member ("pleroma");
+					unread_count = (int)pleroma.get_int_member ("unread_count");
+				}
+			})
+			.exec ();
+	}
+
+	public virtual void read_notifications () {
+		message ("Read notifications");
+		unread_count = 0;
+		unread_toasts.@foreach (toast => {
+			var id = toast.get_data<string> ("id");
+			app.withdraw_notification (id);
+			return true;
+		});
+	}
+
+
+
 	// Streamable
 
 	public string? _connection_url { get; set; }
@@ -76,12 +123,13 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	public virtual void on_notification (Streamable.Event ev) {
 		var obj = Entity.from_json (typeof (API.Notification), ev.get_node ()) as API.Notification;
-		var toast = create_desktop_toast (obj);
-		app.send_notification (obj.id.to_string (), toast);
+		send_toast (obj);
 	}
 
 	// TODO: notification actions
-	public virtual GLib.Notification create_desktop_toast (API.Notification obj) {
+	public void send_toast (API.Notification obj) {
+		if (!toast_inhibitors.is_empty) return;
+
 		string descr;
 		describe_kind (obj.kind, null, out descr, obj.account);
 
@@ -96,7 +144,10 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		var icon = new FileIcon (file);
 		toast.set_icon (icon);
 
-		return toast;
+		var id = obj.id.to_string ();
+		toast.set_data<string> ("id", id);
+		app.send_notification (id, toast);
+		unread_toasts.add (toast);
 	}
 
 }

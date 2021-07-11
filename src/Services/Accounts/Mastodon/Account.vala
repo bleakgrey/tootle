@@ -14,6 +14,19 @@ public class Tootle.Mastodon.Account : InstanceAccount {
     public const string KIND_FOLLOW_REQUEST = "__follow-request";
     public const string KIND_REMOTE_REBLOG = "__remote-reblog";
 
+    public Views.Sidebar.Item notifications_item;
+
+    construct {
+        notifications_item = new Views.Sidebar.Item () {
+			label = "Notifications",
+			icon = "bell-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Notifications ());
+			}
+		};
+		bind_property ("unread_count", notifications_item, "badge", BindingFlags.SYNC_CREATE);
+    }
+
 	class Test : AccountStore.BackendTest {
 
 		public override string? get_backend (Json.Object obj) {
@@ -36,13 +49,7 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 			label = "Timelines",
 			icon = "user-home-symbolic"
 		});
-		model.append (new Views.Sidebar.Item () {
-			label = "Notifications",
-			icon = "bell-symbolic",
-			on_activated = () => {
-			    app.main_window.open_view (new Views.Notifications ());
-			}
-		});
+		model.append (notifications_item);
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
 			icon = API.Visibility.DIRECT.get_icon ()

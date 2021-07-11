@@ -37,7 +37,7 @@ public class Tootle.SecretAccountStore : AccountStore {
 			var account = secret_to_account (item);
 			if (account != null) {
 				saved.add (account);
-				account.subscribed = true;
+				account.added ();
 			}
 		});
 		changed (saved);
