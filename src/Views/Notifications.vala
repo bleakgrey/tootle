@@ -19,7 +19,7 @@ public class Tootle.Views.Notifications : Views.Timeline, AccountHolder, Streama
 		base.on_account_changed (acc);
 
 		if (last_account != null) {
-			last_account.toast_inhibitors.remove (this);
+			last_account.notification_inhibitors.remove (this);
 			acc.stream_event[Mastodon.Account.EVENT_NOTIFICATION].disconnect (on_new_post);
 		}
 
@@ -30,8 +30,8 @@ public class Tootle.Views.Notifications : Views.Timeline, AccountHolder, Streama
 	public override void on_shown () {
 		base.on_shown ();
 		if (account != null) {
-			if (!account.toast_inhibitors.contains (this))
-				account.toast_inhibitors.add (this);
+			if (!account.notification_inhibitors.contains (this))
+				account.notification_inhibitors.add (this);
 
 			account.read_notifications ();
 		}
@@ -39,8 +39,8 @@ public class Tootle.Views.Notifications : Views.Timeline, AccountHolder, Streama
 	public override void on_hidden () {
 		base.on_hidden ();
 		if (account != null) {
-			if (account.toast_inhibitors.contains (this))
-				account.toast_inhibitors.remove (this);
+			if (account.notification_inhibitors.contains (this))
+				account.notification_inhibitors.remove (this);
 		}
 	}
 

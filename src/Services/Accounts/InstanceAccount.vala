@@ -28,7 +28,7 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	construct {
 		construct_streamable ();
-		stream_event[Mastodon.Account.EVENT_NOTIFICATION].connect (on_notification);
+		stream_event[Mastodon.Account.EVENT_NOTIFICATION].connect (on_notification_event);
 	}
 	~InstanceAccount () {
 		destruct_streamable ();
@@ -81,8 +81,9 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	public int unread_count { get; set; default = 0; }
 	public int last_read_id { get; set; default = 0; }
+	public int last_received_id { get; set; default = 0; }
 	public ArrayList<GLib.Notification> unread_toasts { get; set; default = new ArrayList<GLib.Notification> (); }
-	public ArrayList<Object> toast_inhibitors { get; set; default = new ArrayList<Object> (); }
+	public ArrayList<Object> notification_inhibitors { get; set; default = new ArrayList<Object> (); }
 
 	public virtual void check_notifications () {
 		new Request.GET ("/api/v1/markers?timeline[]=notifications")
@@ -91,45 +92,27 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 				var root = network.parse (msg);
 				var notifications = root.get_object_member ("notifications");
 				last_read_id = int.parse (notifications.get_string_member ("last_read_id") );
-
-				if (notifications.has_member ("pleroma")) {
-					var pleroma = notifications.get_object_member ("pleroma");
-					unread_count = (int)pleroma.get_int_member ("unread_count");
-				}
 			})
 			.exec ();
 	}
 
 	public virtual void read_notifications () {
-		message ("Read notifications");
+		message (@"Read notifications up to ID $last_received_id");
 		unread_count = 0;
+		last_read_id = last_received_id;
 		unread_toasts.@foreach (toast => {
 			var id = toast.get_data<string> ("id");
 			app.withdraw_notification (id);
 			return true;
 		});
-	}
 
-
-
-	// Streamable
-
-	public string? _connection_url { get; set; }
-	public bool subscribed { get; set; }
-
-	public virtual string? get_stream_url () {
-		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
-	}
-
-	public virtual void on_notification (Streamable.Event ev) {
-		var obj = Entity.from_json (typeof (API.Notification), ev.get_node ()) as API.Notification;
-		send_toast (obj);
+		if (last_read_id > 0) {
+			// TODO: Actually send read req
+		}
 	}
 
 	// TODO: notification actions
 	public void send_toast (API.Notification obj) {
-		if (!toast_inhibitors.is_empty) return;
-
 		string descr;
 		describe_kind (obj.kind, null, out descr, obj.account);
 
@@ -148,6 +131,34 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		toast.set_data<string> ("id", id);
 		app.send_notification (id, toast);
 		unread_toasts.add (toast);
+	}
+
+
+
+	// Streamable
+
+	public string? _connection_url { get; set; }
+	public bool subscribed { get; set; }
+
+	public virtual string? get_stream_url () {
+		return @"$instance/api/v1/streaming/?stream=user&access_token=$access_token";
+	}
+
+	public virtual void on_notification_event (Streamable.Event ev) {
+		var entity = Entity.from_json (typeof (API.Notification), ev.get_node ()) as API.Notification;
+
+		var id = int.parse (entity.id);
+		if (id > last_received_id) {
+			last_received_id = id;
+
+			if (notification_inhibitors.is_empty) {
+				unread_count++;
+				send_toast (entity);
+			}
+			else {
+				read_notifications ();
+			}
+		}
 	}
 
 }
