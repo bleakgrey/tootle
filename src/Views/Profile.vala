@@ -22,8 +22,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 	protected SimpleAction source_action;
 
 	construct {
-        cover = build_cover ();
-        column_view.prepend (cover);
+		cover = build_cover ();
+		column_view.prepend (cover);
 
 		// column_view.pack_start (hdr, false, false, 0);
 		// column_view.reorder_child (hdr, 0);
@@ -57,7 +57,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 	[GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/views/profile_header.ui")]
 	protected class Cover : Box {
 
-        [GtkChild] unowned Picture background;
+		[GtkChild] unowned Widgets.Background background;
 		[GtkChild] unowned ListBox info;
 		[GtkChild] unowned Widgets.RichLabel display_name;
 		[GtkChild] unowned Label handle;
@@ -83,16 +83,17 @@ public class Tootle.Views.Profile : Views.Timeline {
 					info.append (row);
 				}
 			}
+
 		}
 
-	    void on_cache_response (bool is_loaded, owned Gdk.Pixbuf? data) {
-	        if (background == null) return;
+		void on_cache_response (bool is_loaded, owned Gdk.Pixbuf? data) {
+			if (background == null) return;
 
-		    if (data != null)
-		        background.paintable = Gdk.Texture.for_pixbuf (data);
-		    else
-		        background.paintable = null;
-	    }
+			if (data != null)
+				background.paintable = Gdk.Texture.for_pixbuf (data);
+			else
+				background.paintable = null;
+		}
 
 	}
 
@@ -127,7 +128,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 	}
 
 	protected override void build_actions () {
-	    base.build_actions ();
+		base.build_actions ();
 
 		media_action = new SimpleAction.stateful ("only-media", null, false);
 		media_action.change_state.connect (v => {
