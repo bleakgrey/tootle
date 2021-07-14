@@ -20,8 +20,8 @@ public class Tootle.Views.Timeline : AccountHolder, Streamable, Views.ContentBas
 		construct_account_holder ();
 
 		construct_streamable ();
-		stream_event[Mastodon.Account.EVENT_NEW_POST].connect (on_new_post);
-		stream_event[Mastodon.Account.EVENT_DELETE_POST].connect (on_delete_post);
+		stream_event[InstanceAccount.EVENT_NEW_POST].connect (on_new_post);
+		stream_event[InstanceAccount.EVENT_DELETE_POST].connect (on_delete_post);
 
 		content.bind_model (model, on_create_model_widget);
 	}

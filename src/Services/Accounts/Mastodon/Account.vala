@@ -2,10 +2,6 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 
 	public const string BACKEND = "Mastodon";
 
-	public const string EVENT_NEW_POST = "update";
-	public const string EVENT_DELETE_POST = "delete";
-	public const string EVENT_NOTIFICATION = "notification";
-
     public const string KIND_MENTION = "mention";
     public const string KIND_REBLOG = "reblog";
     public const string KIND_FAVOURITE = "favourite";

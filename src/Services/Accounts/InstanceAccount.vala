@@ -3,6 +3,10 @@ using Gee;
 
 public class Tootle.InstanceAccount : API.Account, Streamable {
 
+	public const string EVENT_NEW_POST = "update";
+	public const string EVENT_DELETE_POST = "delete";
+	public const string EVENT_NOTIFICATION = "notification";
+
 	public string? backend { set; get; }
 	public string? instance { get; set; }
 	public string? client_id { get; set; }
@@ -14,6 +18,15 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		owned get { return @"@$username@$domain"; }
 	}
 
+	public bool is_active {
+		get { return accounts.active.access_token == access_token; }
+	}
+
+	public HashMap<Type,Type> type_overrides = new HashMap<Type,Type> ();
+
+
+	public virtual signal void activated () {}
+	public virtual signal void deactivated () {}
 	public virtual signal void added () {
 		subscribed = true;
 		check_notifications ();
@@ -22,13 +35,11 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 		subscribed = false;
 	}
 
-	public virtual signal void activated () {}
-	public virtual signal void deactivated () {}
 
 
 	construct {
 		construct_streamable ();
-		stream_event[Mastodon.Account.EVENT_NOTIFICATION].connect (on_notification_event);
+		stream_event[EVENT_NOTIFICATION].connect (on_notification_event);
 	}
 	~InstanceAccount () {
 		destruct_streamable ();
@@ -45,8 +56,19 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	// Core functions
 
-	public bool is_current () {
-		return accounts.active.access_token == access_token;
+	public T create_entity<T> (Json.Node node) throws Error {
+		var type = typeof (T);
+		if (type_overrides.has_key (type))
+			type = type_overrides[type];
+
+		return Entity.from_json (type, node);
+	}
+
+	public Entity create_dynamic_entity (Type type, Json.Node node) throws Error {
+		if (type_overrides.has_key (type))
+			type = type_overrides[type];
+
+		return Entity.from_json (type, node);
 	}
 
 	public async void verify_credentials () throws Error {
@@ -82,7 +104,7 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 	public int unread_count { get; set; default = 0; }
 	public int last_read_id { get; set; default = 0; }
 	public int last_received_id { get; set; default = 0; }
-	public ArrayList<GLib.Notification> unread_toasts { get; set; default = new ArrayList<GLib.Notification> (); }
+	public HashMap<int,GLib.Notification> unread_toasts { get; set; default = new HashMap<int,GLib.Notification> (); }
 	public ArrayList<Object> notification_inhibitors { get; set; default = new ArrayList<Object> (); }
 
 	public virtual void check_notifications () {
@@ -96,41 +118,36 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 			.exec ();
 	}
 
-	public virtual void read_notifications () {
-		message (@"Read notifications up to ID $last_received_id");
-		unread_count = 0;
-		last_read_id = last_received_id;
-		unread_toasts.@foreach (toast => {
-			var id = toast.get_data<string> ("id");
-			app.withdraw_notification (id);
+	public void read_notifications (int up_to_id) {
+		message (@"Reading notifications up to id $up_to_id");
+
+		if (up_to_id > last_read_id) {
+			last_read_id = up_to_id;
+
+			// TODO: Actually send read req to the instance
+		}
+
+		unread_toasts.@foreach (entry => {
+			var id = entry.key;
+			read_notification (id);
 			return true;
 		});
-
-		if (last_read_id > 0) {
-			// TODO: Actually send read req
-		}
 	}
 
-	// TODO: notification actions
-	public void send_toast (API.Notification obj) {
-		string descr;
-		describe_kind (obj.kind, null, out descr, obj.account);
-
-		var toast = new GLib.Notification ( HtmlUtils.remove_tags (descr) );
-		if (obj.status != null) {
-			var body = "";
-			body += HtmlUtils.remove_tags (obj.status.content);
-			toast.set_body (body);
+	public void read_notification (int id) {
+		if (id <= last_read_id) {
+			message (@"Read notification with id: $id");
+			app.withdraw_notification (id.to_string ());
+			unread_toasts.unset (id);
 		}
+		unread_count = unread_toasts.size;
+	}
 
-		var file = GLib.File.new_for_uri (avatar);
-		var icon = new FileIcon (file);
-		toast.set_icon (icon);
-
-		var id = obj.id.to_string ();
-		toast.set_data<string> ("id", id);
+	public void send_toast (API.Notification obj) {
+		var toast = obj.to_toast (this);
+		var id = obj.id;
 		app.send_notification (id, toast);
-		unread_toasts.add (toast);
+		unread_toasts.set (int.parse (id), toast);
 	}
 
 
@@ -145,7 +162,7 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 	}
 
 	public virtual void on_notification_event (Streamable.Event ev) {
-		var entity = Entity.from_json (typeof (API.Notification), ev.get_node ()) as API.Notification;
+		var entity = create_entity<API.Notification> (ev.get_node ());
 
 		var id = int.parse (entity.id);
 		if (id > last_received_id) {
@@ -156,7 +173,7 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 				send_toast (entity);
 			}
 			else {
-				read_notifications ();
+				read_notifications (last_received_id);
 			}
 		}
 	}
