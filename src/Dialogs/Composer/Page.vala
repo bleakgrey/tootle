@@ -8,7 +8,7 @@ public class Tootle.ComposerPage : Gtk.Box {
 
 	ScrolledWindow scroller;
 	protected Box content;
-	protected ActionBar? bottom_bar;
+	protected ActionBar bottom_bar;
 
 	construct {
 		orientation = Orientation.VERTICAL;
@@ -19,8 +19,19 @@ public class Tootle.ComposerPage : Gtk.Box {
 		};
 		append (scroller);
 
-		content = new Box (Orientation.VERTICAL, 6);
+		content = new Box (Orientation.VERTICAL, 0);
 		scroller.child = content;
+
+		bottom_bar = new ActionBar () {
+			visible = false
+		};
+		append (bottom_bar);
+	}
+
+	protected void add_button (Widget widget) {
+		bottom_bar.pack_start (widget);
+		widget.add_css_class ("flat");
+		bottom_bar.show ();
 	}
 
 }

@@ -33,7 +33,6 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 
 
 
-	[GtkChild] unowned Adw.HeaderBar header;
 	[GtkChild] unowned Adw.ViewSwitcherTitle title_switcher;
 	[GtkChild] unowned Button commit_button;
 
