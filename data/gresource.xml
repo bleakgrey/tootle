@@ -10,6 +10,9 @@
 
         <file>gtk/help-overlay.ui</file>
 
+        <file>gtk/dropdown/icon.ui</file>
+        <file>gtk/dropdown/full.ui</file>
+
         <file>ui/views/new_account.ui</file>
         <file>ui/views/base.ui</file>
         <file>ui/views/profile_header.ui</file>
@@ -31,5 +34,6 @@
         <file>ui/dialogs/preferences.ui</file>
         <file>ui/dialogs/list_editor.ui</file>
         <file>ui/menus.ui</file>
+
     </gresource>
 </gresources>

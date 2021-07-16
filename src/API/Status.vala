@@ -23,7 +23,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
     public bool sensitive { get; set; default = false; }
     public bool muted { get; set; default = false; }
     public bool pinned { get; set; default = false; }
-    public API.Visibility visibility { get; set; default = settings.default_post_visibility; }
+    public string visibility { get; set; default = "public"; } // TODO: Bring back default post visibility preference
     public API.Status? reblog { get; set; default = null; }
     public ArrayList<API.Mention>? mentions { get; set; default = null; }
     public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
@@ -51,14 +51,19 @@ public class Tootle.API.Status : Entity, Widgetizable {
         }
     }
 
+    public bool can_be_boosted {
+    	get {
+    		return this.formal.visibility != "direct";
+    	}
+    }
+
 	public static Status from (Json.Node node) throws Error {
 		return Entity.from_json (typeof (API.Status), node) as API.Status;
 	}
 
     public Status.empty () {
         Object (
-        	id: "",
-        	visibility: settings.default_post_visibility
+        	id: ""
         );
     }
 

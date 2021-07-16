@@ -43,10 +43,9 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	public Compose (API.Status template = new API.Status.empty ()) {
 		Object (
 			status: template,
-			button_label: _("Compose"),
+			button_label: _("Publish"),
 			button_class: "suggested-action"
 		);
-		// set_visibility (status.visibility);
 	}
 
 	public Compose.redraft (API.Status status) {

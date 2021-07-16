@@ -5,14 +5,16 @@ public class Tootle.EditorPage : ComposerPage {
 	protected TextView editor;
 	protected Label char_counter;
 	protected ToggleButton cw_button;
+	protected DropDown visibility_button;
 
 	protected uint char_limit { get; set; default = 500; } //TODO: Ask the instance to get this value
 	protected int remaining_chars { get; set; default = 0; }
 
 	protected virtual signal void recount_chars () {}
 	protected virtual signal void build_dialog () {
-		install_text_editor ();
-		install_cw_editor ();
+		install_editor ();
+		install_visibility ();
+		install_cw ();
 	}
 
 	public EditorPage () {
@@ -31,7 +33,7 @@ public class Tootle.EditorPage : ComposerPage {
 		recount_chars ();
 	}
 
-	protected void install_text_editor () {
+	protected void install_editor () {
 		recount_chars.connect (() => {
 			remaining_chars = (int) char_limit;
 		});
@@ -67,7 +69,7 @@ public class Tootle.EditorPage : ComposerPage {
 		editor.buffer.changed.connect (validate);
 	}
 
-	protected void install_cw_editor () {
+	protected void install_cw () {
 		var cw_entry = new Gtk.Entry () {
 			placeholder_text = _("Write your warning here"),
 			margin_top = 6,
@@ -94,6 +96,21 @@ public class Tootle.EditorPage : ComposerPage {
 			if (cw_button.active)
 				remaining_chars -= (int) cw_entry.buffer.length;
 		});
+	}
+
+	protected void install_visibility () {
+		visibility_button = create_visibility_dropdown ();
+		add_button (visibility_button);
+		add_button (new Gtk.Separator (Orientation.VERTICAL));
+	}
+
+	DropDown create_visibility_dropdown () {
+		var expr = new PropertyExpression (typeof (InstanceAccount.Visibility), null, "name");
+		var widget = new DropDown (accounts.active.visibility_list, expr) {
+			factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/icon.ui"),
+			list_factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/full.ui")
+		};
+		return widget;
 	}
 
 }

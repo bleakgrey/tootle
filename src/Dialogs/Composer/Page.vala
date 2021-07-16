@@ -31,6 +31,9 @@ public class Tootle.ComposerPage : Gtk.Box {
 	protected void add_button (Widget widget) {
 		bottom_bar.pack_start (widget);
 		widget.add_css_class ("flat");
+		for (var w = widget.get_first_child (); w != null; w = w.get_next_sibling ()) {
+			w.add_css_class ("flat");
+		}
 		bottom_bar.show ();
 	}
 

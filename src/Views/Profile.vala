@@ -158,7 +158,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		var mention_action = new SimpleAction ("mention", VariantType.STRING);
 		mention_action.activate.connect (v => {
 			var status = new API.Status.empty ();
-			status.visibility = API.Visibility.from_string (v.get_string ());
+			status.visibility = v.get_string ();
 			status.content = @"$(profile.handle) ";
 			new Dialogs.Compose (status);
 		});

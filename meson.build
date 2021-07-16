@@ -53,7 +53,6 @@ sources = files(
     'src/API/Mention.vala',
     'src/API/Tag.vala',
     'src/API/Status.vala',
-    'src/API/Visibility.vala',
     'src/API/Notification.vala',
     'src/API/Attachment.vala',
     'src/API/Conversation.vala',

@@ -167,8 +167,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		else
 			reply_button.icon_name = "mail-reply-sender-symbolic";
 
-		if (status.formal.visibility == API.Visibility.DIRECT) {
-			reblog_button.icon_name = status.formal.visibility.get_icon ();
+		if (!status.can_be_boosted) {
 			reblog_button.sensitive = false;
 			reblog_button.tooltip_text = _("This post can't be boosted");
 		}

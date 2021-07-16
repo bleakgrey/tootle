@@ -10,25 +10,10 @@ public class Tootle.Mastodon.Account : InstanceAccount {
     public const string KIND_FOLLOW_REQUEST = "__follow-request";
     public const string KIND_REMOTE_REBLOG = "__remote-reblog";
 
-    public Views.Sidebar.Item notifications_item;
-
-    construct {
-        notifications_item = new Views.Sidebar.Item () {
-			label = "Notifications",
-			icon = "bell-symbolic",
-			on_activated = () => {
-			    app.main_window.open_view (new Views.Notifications ());
-			}
-		};
-		bind_property ("unread_count", notifications_item, "badge", BindingFlags.SYNC_CREATE);
-    }
-
 	class Test : AccountStore.BackendTest {
-
 		public override string? get_backend (Json.Object obj) {
 			return BACKEND; // Always treat instances as compatible with Mastodon
 		}
-
 	}
 
 	public static void register (AccountStore store) {
@@ -40,6 +25,47 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 		});
 	}
 
+
+
+    public Views.Sidebar.Item notifications_item;
+
+    construct {
+        notifications_item = new Views.Sidebar.Item () {
+			label = "Notifications",
+			icon = "bell-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Notifications ());
+			}
+		};
+		bind_property ("unread_count", notifications_item, "badge", BindingFlags.SYNC_CREATE);
+
+		// Populate possible visibility variants
+		set_visibility (new Visibility () {
+			id = "public",
+			name = _("Public"),
+			icon_name = "globe-symbolic",
+			description = _("Post to public timelines")
+		});
+		set_visibility (new Visibility () {
+			id = "unlisted",
+			name = _("Unlisted"),
+			icon_name = "changes-allow-symbolic",
+			description = _("Don\'t post to public timelines")
+		});
+		set_visibility (new Visibility () {
+			id = "private",
+			name = _("Followers-only"),
+			icon_name = "changes-prevent-symbolic",
+			description = _("Post to followers only")
+		});
+		set_visibility (new Visibility () {
+			id = "direct",
+			name = _("Direct"),
+			icon_name = "mail-unread-symbolic",
+			description = _("Post to mentioned users only")
+		});
+    }
+
 	public override void populate_user_menu (GLib.ListStore model) {
 		model.append (new Views.Sidebar.Item () {
 			label = "Timelines",
@@ -48,7 +74,7 @@ public class Tootle.Mastodon.Account : InstanceAccount {
 		model.append (notifications_item);
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
-			icon = API.Visibility.DIRECT.get_icon ()
+			icon = "mail-unread-symbolic"
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Bookmarks",

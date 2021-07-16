@@ -24,7 +24,6 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 
 	public HashMap<Type,Type> type_overrides = new HashMap<Type,Type> ();
 
-
 	public virtual signal void activated () {}
 	public virtual signal void deactivated () {}
 	public virtual signal void added () {
@@ -50,6 +49,23 @@ public class Tootle.InstanceAccount : API.Account, Streamable {
 			id: "",
 			instance: instance
 		);
+	}
+
+
+
+	// Visibility options
+
+	public class Visibility : Object {
+		public string id { get; construct set; }
+		public string name { get; construct set; }
+		public string icon_name { get; construct set; }
+		public string description { get; construct set; }
+	}
+	public HashMap<string,Visibility> visibility = new HashMap<string,Visibility> ();
+	public ListStore visibility_list = new ListStore (typeof (Visibility));
+	public void set_visibility (Visibility obj) {
+		this.visibility[obj.id] = obj;
+		visibility_list.append (obj);
 	}
 
 
