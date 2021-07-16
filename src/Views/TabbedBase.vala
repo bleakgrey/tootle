@@ -6,7 +6,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 
 	protected Adw.ViewSwitcherTitle switcher_title;
 	protected Adw.ViewSwitcherBar switcher_bar;
-	protected Stack stack;
+	protected Adw.ViewStack stack;
 
 	Views.Base? last_view = null;
 
@@ -18,9 +18,7 @@ public class Tootle.Views.TabbedBase : Views.Base {
 		(scrolled.get_parent () as Box).remove (scrolled);
 		insert_child_after (states, header);
 
-		stack = new Stack ();
-		stack.transition_duration = 100;
-		stack.transition_type = StackTransitionType.CROSSFADE;
+		stack = new Adw.ViewStack ();
 		stack.notify["visible-child"].connect (on_view_switched);
 		content_box.append (stack);
 

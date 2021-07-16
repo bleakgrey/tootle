@@ -87,9 +87,9 @@
   border-radius:6px 6px 0 0;
 }
 
-.badge {
-  padding: 2px 12px;
-  border-radius: 999px;
-  background: @accent_bg_color;
-  color: @text_view_bg;
-}
+/* .badge { */
+/*   padding: 2px 12px; */
+/*   border-radius: 999px; */
+/*   background: @accent_bg_color; */
+/*   color: @text_view_bg; */
+/* } */

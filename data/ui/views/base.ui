@@ -47,7 +47,6 @@
                             <child>
                               <object class="GtkStackPage">
                                 <property name="name">status</property>
-                                <property name="title">page1</property>
                                 <property name="child">
                                   <object class="GtkBox" id="status">
                                     <property name="valign">center</property>
@@ -111,7 +110,6 @@
                             <child>
                               <object class="GtkStackPage">
                                 <property name="name">content</property>
-                                <property name="title">page0</property>
                                 <property name="child">
                                   <object class="GtkBox" id="content_box">
                                     <property name="orientation">vertical</property>
