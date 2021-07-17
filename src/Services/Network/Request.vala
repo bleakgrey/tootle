@@ -4,12 +4,11 @@ using Gee;
 public class Tootle.Request : Soup.Message {
 
 	public string url { set; get; }
+	public weak InstanceAccount? account { get; set; default = null; }
 	Network.SuccessCallback? cb;
 	Network.ErrorCallback? error_cb;
 	HashMap<string, string>? pars;
 	Soup.Multipart? form_data;
-	weak InstanceAccount? account;
-	bool needs_token = false;
 
 	weak Gtk.Widget? ctx;
 	bool has_ctx = false;
@@ -59,9 +58,7 @@ public class Tootle.Request : Soup.Message {
 	}
 
 	public Request with_account (InstanceAccount? account = null) {
-		this.needs_token = true;
-		if (account != null)
-			this.account = account;
+		this.account = account;
 		return this;
 	}
 
@@ -104,11 +101,7 @@ public class Tootle.Request : Soup.Message {
 		if (form_data != null)
 			form_data.to_message(request_headers, request_body);
 
-		if (needs_token) {
-			if (account == null) {
-				warning (@"No account was specified or found for $method: $url$parameters");
-				return this;
-			}
+		if (account != null) {
 			request_headers.append ("Authorization", @"Bearer $(account.access_token)");
 		}
 

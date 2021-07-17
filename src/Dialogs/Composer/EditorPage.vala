@@ -2,11 +2,6 @@ using Gtk;
 
 public class Tootle.EditorPage : ComposerPage {
 
-	protected TextView editor;
-	protected Label char_counter;
-	protected ToggleButton cw_button;
-	protected DropDown visibility_button;
-
 	protected uint char_limit { get; set; default = 500; } //TODO: Ask the instance to get this value
 	protected int remaining_chars { get; set; default = 0; }
 
@@ -32,6 +27,9 @@ public class Tootle.EditorPage : ComposerPage {
 	protected void validate () {
 		recount_chars ();
 	}
+
+	protected TextView editor;
+	protected Label char_counter;
 
 	protected void install_editor () {
 		recount_chars.connect (() => {
@@ -69,8 +67,11 @@ public class Tootle.EditorPage : ComposerPage {
 		editor.buffer.changed.connect (validate);
 	}
 
+	protected ToggleButton cw_button;
+	protected Entry cw_entry;
+
 	protected void install_cw () {
-		var cw_entry = new Gtk.Entry () {
+		cw_entry = new Gtk.Entry () {
 			placeholder_text = _("Write your warning here"),
 			margin_top = 6,
 			margin_end = 6,
@@ -98,19 +99,43 @@ public class Tootle.EditorPage : ComposerPage {
 		});
 	}
 
+	protected DropDown visibility_button;
+
 	protected void install_visibility () {
-		visibility_button = create_visibility_dropdown ();
+		visibility_button = new DropDown (accounts.active.visibility_list, null) {
+			expression = new PropertyExpression (typeof (InstanceAccount.Visibility), null, "name"),
+			factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/icon.ui"),
+			list_factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/full.ui")
+		};
 		add_button (visibility_button);
 		add_button (new Gtk.Separator (Orientation.VERTICAL));
 	}
 
-	DropDown create_visibility_dropdown () {
-		var expr = new PropertyExpression (typeof (InstanceAccount.Visibility), null, "name");
-		var widget = new DropDown (accounts.active.visibility_list, expr) {
-			factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/icon.ui"),
-			list_factory = new BuilderListItemFactory.from_resource (null, Build.RESOURCES+"gtk/dropdown/full.ui")
-		};
-		return widget;
+	public override void sync () {
+		warning ("syncing");
+
+		status.content = editor.buffer.text;
+		status.sensitive = cw_button.active;
+		if (status.sensitive) {
+			status.spoiler_text = cw_entry.text;
+		}
+
+		status.visibility = (visibility_button.selected_item as InstanceAccount.Visibility).id;
+	}
+
+	public override void on_modify_req (Request req) {
+		req.with_form_data ("status", status.content);
+		req.with_form_data ("visibility", status.visibility);
+
+		if (dialog.status.in_reply_to_id != null)
+			req.with_form_data ("in_reply_to_id", dialog.status.in_reply_to_id);
+		if (dialog.status.in_reply_to_account_id != null)
+			req.with_form_data ("in_reply_to_account_id", dialog.status.in_reply_to_account_id);
+
+		if (cw_button.active) {
+			req.with_form_data ("sensitive", "true");
+			req.with_form_data ("spoiler_text", status.spoiler_text);
+		}
 	}
 
 }

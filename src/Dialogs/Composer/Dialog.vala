@@ -21,11 +21,11 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		transient_for = app.main_window;
 		title_switcher.stack = stack;
 
-		on_constructed ();
+		build ();
 		present ();
 	}
 
-	public virtual signal void on_constructed () {
+	protected virtual signal void build () {
 		add_page (new EditorPage ());
 		add_page (new AttachmentsPage ());
 		add_page (new PollPage ());
@@ -69,21 +69,27 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 			button_label: _("Reply"),
 			button_class: "suggested-action"
 		);
-		// set_visibility (to.visibility);
 	}
 
 	protected T? get_page<T> () {
-		// return widget as typeof(T);
+		var pages = stack.get_pages ();
+		for (var i = 0; i < pages.get_n_items (); i++) {
+			var page = pages.get_object (i);
+			if (page is T)
+				return page;
+		}
 		return null;
 	}
 
 	protected void add_page (ComposerPage page) {
 		var wrapper = stack.add (page);
+		page.dialog = this;
+		modify_req.connect (page.sync);
+		modify_req.connect (page.on_modify_req);
 		page.bind_property ("visible", wrapper, "visible", GLib.BindingFlags.SYNC_CREATE);
 		page.bind_property ("title", wrapper, "title", GLib.BindingFlags.SYNC_CREATE);
 		page.bind_property ("icon_name", wrapper, "icon_name", GLib.BindingFlags.SYNC_CREATE);
 		page.bind_property ("badge_number", wrapper, "badge_number", GLib.BindingFlags.SYNC_CREATE);
-		// wrapper.badge_number;
 	}
 
 	[GtkCallback] void on_close () {
@@ -91,7 +97,36 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	}
 
 	[GtkCallback] void on_commit () {
-		destroy ();
+		//working = true
+		transaction.begin ((obj, res) => {
+				try {
+					transaction.end (res);
+					// on_close ();
+				}
+				catch (Error e) {
+					// working = false;
+					// on_error (0, e.message);
+					warning (e.message);
+				}
+			});
+	}
+
+	protected signal void modify_req (Request req);
+
+	protected virtual async void transaction () throws Error {
+		var publish_req = new Request () {
+			method = "POST",
+			url = "/api/v1/statuses",
+			account = accounts.active
+		};
+		modify_req (publish_req);
+		yield publish_req.await ();
+
+		var node = network.parse_node (publish_req);
+		var status = API.Status.from (node);
+		message (@"Published post with id $(status.id)");
+
+		on_close ();
 	}
 
 }

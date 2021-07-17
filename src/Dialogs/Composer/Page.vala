@@ -6,6 +6,13 @@ public class Tootle.ComposerPage : Gtk.Box {
 	public string icon_name { get; set; }
 	public uint badge_number { get; set; default = 0; }
 
+	public weak Dialogs.Compose dialog;
+	protected API.Status status {
+		get {
+			return dialog.status;
+		}
+	}
+
 	ScrolledWindow scroller;
 	protected Box content;
 	protected ActionBar bottom_bar;
@@ -36,5 +43,9 @@ public class Tootle.ComposerPage : Gtk.Box {
 		}
 		bottom_bar.show ();
 	}
+
+	public virtual void sync () {}
+
+	public virtual void on_modify_req (Request req) {}
 
 }
