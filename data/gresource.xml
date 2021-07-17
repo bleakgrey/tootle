@@ -3,10 +3,10 @@
     <gresource prefix="/com/github/bleakgrey/tootle/">
         <file alias="app.css">app.css</file>
 
-        <file preprocess="xml-stripblanks">icons/mention-symbolic.svg</file>
-        <file preprocess="xml-stripblanks">icons/hashtag-symbolic.svg</file>
-        <file preprocess="xml-stripblanks">icons/globe-symbolic.svg</file>
-        <file preprocess="xml-stripblanks">icons/bell-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/mention-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/hashtag-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/globe-symbolic.svg</file>
+        <file preprocess="xml-stripblanks">icons/scalable/actions/bell-symbolic.svg</file>
 
         <file>gtk/help-overlay.ui</file>
 
@@ -37,3 +37,4 @@
 
     </gresource>
 </gresources>
+
