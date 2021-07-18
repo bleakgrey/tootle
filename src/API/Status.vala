@@ -96,7 +96,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
     }
 
 	public bool has_media () {
-		return media_attachments != null && media_attachments.size > 0;
+		return media_attachments != null && !media_attachments.is_empty;
 	}
 
     public string get_reply_mentions () {

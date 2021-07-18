@@ -4,19 +4,11 @@
 /*   border: 1px solid black; */
 /* } */
 
-/* .attachment { */
-/* 	border-radius: 5px; */
-/* 	background: rgba (150, 150, 150, 0.2); */
-/* 	padding:0px; */
-/* 	margin:0px; */
-/* } */
-/* .attachment .pic { */
-/* 	border-radius: 5px; */
-/* } */
-/* .attachment .chip { */
-/* 	padding: 6px; */
-/* 	border-radius:6px; */
-/* } */
+.attachment {
+	/* border-radius: 6px; */
+	padding:0px;
+	margin:0px;
+}
 
 /* .ttl-header-button { */
 /* 	margin: 0px; */

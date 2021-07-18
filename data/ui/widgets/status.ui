@@ -86,8 +86,8 @@
                 <property name="can_focus">0</property>
                 <property name="halign">end</property>
                 <property name="valign">start</property>
-                <property name="margin_start">8</property>
-                <property name="spacing">8</property>
+                <property name="margin_start">6</property>
+                <property name="spacing">6</property>
                 <child>
                   <object class="GtkImage" id="pin_indicator">
                     <property name="visible">0</property>
@@ -133,9 +133,9 @@
         <child>
           <object class="GtkBox" id="content_column">
             <property name="can_focus">0</property>
-            <property name="margin_top">8</property>
+            <property name="margin_top">6</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">8</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkStack" id="spoiler_stack">
                 <property name="can_focus">0</property>
@@ -186,7 +186,7 @@
                       <object class="GtkBox" id="content_box">
                         <property name="can_focus">0</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">8</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="TootleWidgetsMarkupView" id="content">
                             <property name="visible">True</property>
@@ -206,58 +206,7 @@
             <child>
               <object class="GtkBox" id="actions">
                 <property name="homogeneous">1</property>
-                <property name="spacing">8</property>
-                <!-- <child> -->
-                <!--   <object class="GtkButton" id="reply_button"> -->
-                <!--     <property name="hexpand">1</property> -->
-                <!--     <property name="icon_name">mail-reply-sender-symbolic</property> -->
-                <!--     <style> -->
-                <!--       <class name="flat"/> -->
-                <!--     </style> -->
-                <!--   </object> -->
-                <!-- </child> -->
-                <!-- <child> -->
-                <!--   <object class="GtkToggleButton" id="reblog_button"> -->
-                <!--     <property name="hexpand">1</property> -->
-                <!--     <property name="icon_name">reblog_icon</property> -->
-                <!--     <style> -->
-                <!--       <class name="flat"/> -->
-                <!--     </style> -->
-                <!--   </object> -->
-                <!-- </child> -->
-                <!-- <child> -->
-                <!--   <object class="GtkToggleButton" id="favorite_button"> -->
-                <!--     <property name="hexpand">1</property> -->
-                <!--     <property name="icon_name">image2</property> -->
-                <!--     <style> -->
-                <!--       <class name="flat"/> -->
-                <!--     </style> -->
-                <!--   </object> -->
-                <!-- </child> -->
-                <!-- <child> -->
-                <!--   <object class="GtkToggleButton" id="bookmark_button"> -->
-                <!--     <property name="hexpand">1</property> -->
-                <!--     <property name="icon_name">image1</property> -->
-                <!--     <style> -->
-                <!--       <class name="flat"/> -->
-                <!--     </style> -->
-                <!--   </object> -->
-                <!-- </child> -->
-                <!-- <child> -->
-                <!--   <object class="GtkButton" id="menu_button"> -->
-                <!--     <property name="hexpand">1</property> -->
-                <!--     <property name="receives_default">1</property> -->
-                <!--     <child> -->
-                <!--       <object class="GtkImage"> -->
-                <!--         <property name="can_focus">0</property> -->
-                <!--         <property name="icon_name">view-more-symbolic</property> -->
-                <!--       </object> -->
-                <!--     </child> -->
-                <!--     <style> -->
-                <!--       <class name="flat"/> -->
-                <!--     </style> -->
-                <!--   </object> -->
-                <!-- </child> -->
+                <property name="spacing">6</property>
               </object>
             </child>
             <layout>

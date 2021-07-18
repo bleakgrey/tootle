@@ -20,7 +20,7 @@ public class Tootle.ImageCache : AbstractCache {
         return pixbuf;
 	}
 
-	public void request_pixbuf (string? url, owned OnItemChangedFn cb) {
+	public void request_pixbuf (string? url, owned OnItemChangedFn cb) { //TODO: Move cache to Gdk.Paintable
 		if (url == null)
 			return;
 

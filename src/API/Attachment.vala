@@ -1,4 +1,4 @@
-public class Tootle.API.Attachment : Entity {
+public class Tootle.API.Attachment : Entity, Widgetizable {
 
 	// https://github.com/tootsuite/mastodon/blob/master/app/models/media_attachment.rb
 	public const string[] SUPPORTED_MIMES = {
@@ -38,10 +38,6 @@ public class Tootle.API.Attachment : Entity {
 		get { return (this._preview_url == null || this._preview_url == "") ? url : _preview_url; }
 	}
 
-	public static Attachment from (Json.Node node) throws Error {
-		return Entity.from_json (typeof (API.Attachment), node) as API.Attachment;
-	}
-
 	public static async Attachment upload (string uri, string title, string? descr) throws Error {
 		message (@"Uploading new media: $(uri)...");
 
@@ -75,13 +71,13 @@ public class Tootle.API.Attachment : Entity {
 
 		string? error = null;
 		network.queue (msg,
-		(sess, mess) => {
-			upload.callback ();
-		},
-		(code, reason) => {
-			error = reason;
-			upload.callback ();
-		});
+			(sess, mess) => {
+				upload.callback ();
+			},
+			(code, reason) => {
+				error = reason;
+				upload.callback ();
+			});
 
 		yield;
 
@@ -89,10 +85,16 @@ public class Tootle.API.Attachment : Entity {
 			throw new Oopsie.INSTANCE (error);
 		else {
 			var node = network.parse_node (msg);
-			var entity = API.Attachment.from (node);
+			var entity = accounts.active.create_entity<API.Attachment> (node);
 			message (@"OK! ID $(entity.id)");
 			return entity;
 		}
 	}
+
+    public override Gtk.Widget to_widget () {
+        return new Widgets.Attachment.Image () {
+        	entity = this
+        };
+    }
 
 }

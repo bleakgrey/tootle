@@ -2,48 +2,57 @@ using Gtk;
 using GLib;
 using Gee;
 
-//FIXME: Attachments
 public class Tootle.Widgets.Attachment.Box : Adw.Bin {
 
-	public bool editing { get; construct set; }
+	ArrayList<API.Attachment>? _list = null;
+	public ArrayList<API.Attachment>? list {
+		get {
+			return _list;
+		}
+		set {
+			_list = value;
+			update ();
+		}
+	}
 
-	// construct {
-	//     hexpand = true;
-	//     can_focus = false;
-	//     column_spacing = row_spacing = 8;
-	//     selection_mode = SelectionMode.NONE;
-	// }
+	protected Gtk.FlowBox box;
 
-	// public Box (bool editing = false) {
-	// 	Object (editing: editing);
-	// }
+	construct {
+		visible = false;
+	    hexpand = true;
+	    height_request = 164;
 
-    public bool populate (ArrayList<API.Attachment>? list) {
- //        if (list == null)
- //            return false;
+	    box = new FlowBox () {
+	    	homogeneous = true,
+	    	activate_on_single_click = true,
+	    	column_spacing = 6,
+	    	row_spacing = 6,
+	    	selection_mode = SelectionMode.NONE
+	    };
+	    child = box;
+	}
 
- //        var max = 2;
- //        var min = 1;
- //        if (list.size == 1)
- //            max = 1;
- //        else if (list.size % 2 == 0)
- //            max = min = 2;
- //        else if (list.size % 3 == 0)
- //            max = min = 3;
+	protected void update () {
+		//box.clear_all ();
 
- //        max_children_per_line = max;
- //        min_children_per_line = min;
- //        list.@foreach (obj => pack (obj));
+		if (list == null || list.is_empty) {
+			visible = false;
+			return;
+		}
 
-        return true;
-    }
+		list.@foreach (item => {
+			var widget = item.to_widget ();
+			box.insert (widget, -1);
+			return true;
+		});
 
-    public bool pack (API.Attachment obj) {
- //        var w = new Widgets.Attachment.Slot (obj);
- //        insert (w, -1);
- //        show ();
+		box.max_children_per_line = 2;
+		box.min_children_per_line = 2;
+		// if (list.size > 1) {
+		// 	box.max_children_per_line = 2;
+		// }
 
-        return true;
-    }
+		visible = true;
+	}
 
 }

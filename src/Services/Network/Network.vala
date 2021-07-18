@@ -17,9 +17,10 @@ public class Tootle.Network : GLib.Object {
     public Soup.Session session;
 
     construct {
-        session = new Soup.Session ();
-        session.ssl_strict = true;
-        session.ssl_use_system_ca_file = true;
+        session = new Soup.Session () {
+        	ssl_strict = true,
+        	ssl_use_system_ca_file = true
+        };
         session.request_unqueued.connect (msg => {
             requests_processing--;
             if (requests_processing <= 0)

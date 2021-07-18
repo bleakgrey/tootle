@@ -141,7 +141,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		status.formal.bind_property ("pinned", pin_indicator, "visible", BindingFlags.SYNC_CREATE);
 		status.formal.bind_property ("account", avatar, "account", BindingFlags.SYNC_CREATE);
 
-		// Spoiler
+		// Spoiler //TODO: Spoilers
 		reveal_spoiler = true;
 		spoiler_stack.visible_child_name = "content";
 
@@ -170,11 +170,12 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		if (!status.can_be_boosted) {
 			reblog_button.sensitive = false;
 			reblog_button.tooltip_text = _("This post can't be boosted");
+			reblog_button.icon_name = accounts.active.visibility[status.visibility].icon_name;
 		}
 		else {
-			reblog_button.icon_name = "media-playlist-repeat-symbolic";
 			reblog_button.sensitive = true;
 			reblog_button.tooltip_text = null;
+			reblog_button.icon_name = "media-playlist-repeat-symbolic";
 		}
 
 		if (status.id == "") {
@@ -183,9 +184,7 @@ public class Tootle.Widgets.Status : ListBoxRow {
 		}
 
 		// Attachments
-		if (!attachments.populate (status.formal.media_attachments) || status.id == "") {
-			attachments.destroy ();
-		}
+		attachments.list = status.formal.media_attachments;
 	}
 
 	protected virtual void append_actions () {
