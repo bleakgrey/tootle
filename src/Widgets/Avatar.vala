@@ -35,15 +35,12 @@ public class Tootle.Widgets.Avatar : Button {
 		else {
 			avatar.text = account.display_name;
 			avatar.show_initials = true;
-			image_cache.request_pixbuf (account.avatar, on_cache_response);
+			image_cache.request_paintable (account.avatar, on_cache_response);
 		}
 	}
 
-	void on_cache_response (bool is_loaded, owned Pixbuf? data) {
-		if (data != null)
-		    avatar.custom_image = Gdk.Texture.for_pixbuf (data);
-		else
-		    avatar.custom_image = null;
+	void on_cache_response (bool is_loaded, owned Paintable? data) {
+		avatar.custom_image = data;
 	}
 
 }

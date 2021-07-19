@@ -70,7 +70,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 			avatar.account = account;
 			note.content = account.note;
 
-			image_cache.request_pixbuf (account.header, on_cache_response);
+			image_cache.request_paintable (account.header, on_cache_response);
 
 			if (account.fields != null) {
 				foreach (API.AccountField f in account.fields) {
@@ -86,13 +86,8 @@ public class Tootle.Views.Profile : Views.Timeline {
 
 		}
 
-		void on_cache_response (bool is_loaded, owned Gdk.Pixbuf? data) {
-			if (background == null) return;
-
-			if (data != null)
-				background.paintable = Gdk.Texture.for_pixbuf (data);
-			else
-				background.paintable = null;
+		void on_cache_response (bool is_loaded, owned Gdk.Paintable? data) {
+			background.paintable = data;
 		}
 
 	}

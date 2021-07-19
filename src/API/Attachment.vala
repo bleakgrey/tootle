@@ -91,17 +91,16 @@ public class Tootle.API.Attachment : Entity, Widgetizable {
 		}
 	}
 
-    public override Gtk.Widget to_widget () {
-    	switch (kind) {
-    		case "image":
-    		case "gifv":
-				return new Widgets.Attachment.Image () {
-		    		entity = this
-		    	};
-    	}
-    	return new Widgets.Attachment.Item () {
-    		entity = this
-    	};
-    }
+	public override Gtk.Widget to_widget () {
+		if (preview_url != null) {
+			return new Widgets.Attachment.Image () {
+				entity = this
+			};
+		}
+
+		return new Widgets.Attachment.Item () {
+			entity = this
+		};
+	}
 
 }
