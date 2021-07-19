@@ -13,10 +13,10 @@ public class Tootle.Widgets.Attachment.Image : Widgets.Attachment.Item {
 			keep_aspect_ratio = true
 		};
 		button.child = pic;
-		warning ("constru pic");
 	}
 
 	protected override void on_rebind () {
+		base.on_rebind ();
 		image_cache.request_pixbuf (entity.preview_url, on_cache_response);
 	}
 

@@ -29,7 +29,7 @@ public class Tootle.API.Attachment : Entity, Widgetizable {
 	};
 
 	public string id { get; set; }
-	public string kind { get; set; }
+	public string kind { get; set; default = "unknown"; }
 	public string url { get; set; }
 	public string? description { get; set; }
 	public string? _preview_url { get; set; }
@@ -92,9 +92,16 @@ public class Tootle.API.Attachment : Entity, Widgetizable {
 	}
 
     public override Gtk.Widget to_widget () {
-        return new Widgets.Attachment.Image () {
-        	entity = this
-        };
+    	switch (kind) {
+    		case "image":
+    		case "gifv":
+				return new Widgets.Attachment.Image () {
+		    		entity = this
+		    	};
+    	}
+    	return new Widgets.Attachment.Item () {
+    		entity = this
+    	};
     }
 
 }

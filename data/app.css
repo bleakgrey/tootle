@@ -4,10 +4,15 @@
 /*   border: 1px solid black; */
 /* } */
 
-.attachment {
-	/* border-radius: 6px; */
+.attachment, .attachment button, flowboxchild {
 	padding:0px;
 	margin:0px;
+}
+
+.attachment .osd {
+	padding: 6px 12px;
+	border-radius: 6px;
+	margin: 8px;
 }
 
 /* .ttl-header-button { */

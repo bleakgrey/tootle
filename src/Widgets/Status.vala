@@ -252,7 +252,6 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 
 
-
 	// Threads
 
 	public enum ThreadRole {

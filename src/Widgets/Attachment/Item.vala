@@ -6,6 +6,7 @@ public class Tootle.Widgets.Attachment.Item : Adw.Bin {
 
 	protected Overlay overlay;
 	protected Button button;
+	protected Label badge;
 
 	construct {
 		notify["entity"].connect (on_rebind);
@@ -15,14 +16,22 @@ public class Tootle.Widgets.Attachment.Item : Adw.Bin {
 		button = new Button ();
 		button.clicked.connect (on_click);
 
+		badge = new Label ("") {
+			valign = Align.END,
+			halign = Align.START
+		};
+		badge.add_css_class ("osd");
+		badge.add_css_class ("heading");
+
 		overlay = new Overlay ();
 		overlay.child = button;
+		overlay.add_overlay (badge);
 		child = overlay;
-
-		warning ("constr item");
 	}
 
-	protected virtual void on_rebind () {}
+	protected virtual void on_rebind () {
+		badge.label = entity == null ? "" : entity.kind.up();
+	}
 
 	protected virtual void on_click () {}
 

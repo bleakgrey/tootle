@@ -33,7 +33,7 @@ public class Tootle.Widgets.Attachment.Box : Adw.Bin {
 	}
 
 	protected void update () {
-		//box.clear_all ();
+		// box.clear_all ();
 
 		if (list == null || list.is_empty) {
 			visible = false;
