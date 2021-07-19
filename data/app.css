@@ -1,3 +1,10 @@
+.sidebar .badge {
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: @accent_bg_color;
+  color: @text_view_bg;
+}
+
 /* .header .chip { */
 /*   padding: 4px 12px; */
 /*   border-radius: 4px; */
@@ -42,12 +49,12 @@
 /*   font-size: 110%; */
 /* } */
 
-/* .ttl-code { */
-/* 	font-family: monospace; */
-/* 	padding: 12px; */
-/* 	background: rgba(150,150,150,.1); */
-/* 	border-radius: 6px; */
-/* } */
+.ttl-code {
+	font-family: monospace;
+	padding: 12px;
+	background: rgba(150,150,150,.1);
+	border-radius: 6px;
+}
 
 .ttl-view .small .content row {
 	border-left: none;
@@ -83,10 +90,3 @@
 .large .header-image {
   border-radius:6px 6px 0 0;
 }
-
-/* .badge { */
-/*   padding: 2px 12px; */
-/*   border-radius: 999px; */
-/*   background: @accent_bg_color; */
-/*   color: @text_view_bg; */
-/* } */
