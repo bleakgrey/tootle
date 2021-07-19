@@ -33,6 +33,7 @@ public class Tootle.Widgets.Attachment.Item : Adw.Bin {
 	}
 
 	protected virtual void on_rebind () {
+		button.tooltip_text = entity == null ? null : entity.description;
 		badge.label = entity == null ? "" : entity.kind.up();
 	}
 
