@@ -43,7 +43,6 @@ public class Tootle.Desktop {
 		return p1.split ("/")[0];
 	}
 
-	// Download a file from the web to a user's configured Downloads folder
 	public async static string download (string url) throws Error {
 		message (@"Downloading file: $url...");
 
@@ -52,8 +51,8 @@ public class Tootle.Desktop {
 
 		var dir_path = Path.build_path (
 			Path.DIR_SEPARATOR_S,
-			Environment.get_user_special_dir (UserDirectory.DOWNLOAD),
-			Build.NAME,
+			Environment.get_user_cache_dir (), // Environment.get_user_special_dir (UserDirectory.DOWNLOAD),
+			Build.DOMAIN,
 			get_uri_host (dir_name));
 
 		var file_path = Path.build_path (
@@ -75,17 +74,12 @@ public class Tootle.Desktop {
 			FileOutputStream stream = file.create (FileCreateFlags.PRIVATE);
 			stream.write (data);
 
-			message (@"OK: File written to: $file_path");
+			message (@"   OK: File written to: $file_path");
 		}
 		else
-			message ("OK: File exists already");
+			message ("   OK: File already exists");
 
 		return file_path;
 	}
-
-	// public static Gdk.Pixbuf icon_to_pixbuf (string name) {
-	// 	var theme = Gtk.IconTheme.get_default ();
-	// 	return theme.load_icon (name, 32, Gtk.IconLookupFlags.GENERIC_FALLBACK);
-	// }
 
 }

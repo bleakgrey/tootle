@@ -20,7 +20,6 @@ public class Tootle.Widgets.Attachment.Box : Adw.Bin {
 	construct {
 		visible = false;
 	    hexpand = true;
-	    height_request = 164;
 
 	    box = new FlowBox () {
 	    	homogeneous = true,
