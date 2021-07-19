@@ -102,7 +102,7 @@ public class Tootle.Views.Thread : Views.ContentBase, AccountHolder {
 					app.main_window.open_view (new Views.Thread (status));
 				}
 				else
-					Desktop.open_uri (q);
+					Host.open_uri (q);
 			})
 			.exec ();
 	}

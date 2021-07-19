@@ -1,6 +1,6 @@
 using GLib;
 
-public class Tootle.Desktop {
+public class Tootle.Host {
 
 	// Open a URI in the user's default application
 	public static bool open_uri (string _uri) {

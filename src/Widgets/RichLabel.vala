@@ -89,12 +89,12 @@ public class Tootle.Widgets.RichLabel : Adw.Bin {
 				catch (Error e) {
 					warning (@"Failed to resolve URL \"$url\":");
 					warning (e.message);
-					Desktop.open_uri (url);
+					Host.open_uri (url);
 				}
 			});
 		}
 		else {
-			Desktop.open_uri (url);
+			Host.open_uri (url);
 		}
 
 		return true;

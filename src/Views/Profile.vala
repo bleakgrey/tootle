@@ -167,7 +167,7 @@ public class Tootle.Views.Profile : Views.Timeline {
 		//FIXME: Take a variant to copy "handle" and "uri"
 		var copy_handle_action = new SimpleAction ("copy_handle", null);
 		copy_handle_action.activate.connect (v => {
-			Desktop.copy (profile.handle);
+			Host.copy (profile.handle);
 		});
 		actions.add_action (copy_handle_action);
 

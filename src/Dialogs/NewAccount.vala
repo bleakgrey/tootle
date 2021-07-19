@@ -132,7 +132,7 @@ public class Tootle.Dialogs.NewAccount: Adw.Window {
 
 		var pars = @"scope=$scopes&response_type=code&redirect_uri=$redirect_uri&client_id=$(account.client_id)";
 		var url = @"$(account.instance)/oauth/authorize?$pars";
-		Desktop.open_uri (url);
+		Host.open_uri (url);
 	}
 
 	async void request_token () throws Error {

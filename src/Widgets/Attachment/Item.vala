@@ -48,8 +48,8 @@ public class Tootle.Widgets.Attachment.Item : Adw.Bin {
 	}
 
 	protected async void open () throws Error {
-		var path = yield Desktop.download (entity.url);
-		Desktop.open_uri (path);
+		var path = yield Host.download (entity.url);
+		Host.open_uri (path);
 	}
 
 }
