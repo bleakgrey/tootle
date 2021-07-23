@@ -67,30 +67,45 @@ public class Tootle.Mastodon.Account : InstanceAccount {
     }
 
 	public override void populate_user_menu (GLib.ListStore model) {
-		model.append (new Views.Sidebar.Item () {
-			label = "Timelines",
-			icon = "user-home-symbolic"
-		});
+		// model.append (new Views.Sidebar.Item () {
+		// 	label = "Timelines",
+		// 	icon = "user-home-symbolic"
+		// });
 		model.append (notifications_item);
 		model.append (new Views.Sidebar.Item () {
 			label = "Direct Messages",
-			icon = "mail-unread-symbolic"
+			icon = "mail-unread-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Conversations ());
+			}
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Bookmarks",
-			icon = "user-bookmarks-symbolic"
+			icon = "user-bookmarks-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Bookmarks ());
+			}
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Favorites",
-			icon = "non-starred-symbolic"
+			icon = "non-starred-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Favorites ());
+			}
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Lists",
-			icon = "view-list-symbolic"
+			icon = "view-list-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Lists ());
+			}
 		});
 		model.append (new Views.Sidebar.Item () {
 			label = "Search",
-			icon = "system-search-symbolic"
+			icon = "system-search-symbolic",
+			on_activated = () => {
+			    app.main_window.open_view (new Views.Search ());
+			}
 		});
 	}
 

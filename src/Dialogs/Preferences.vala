@@ -6,7 +6,6 @@ public class Tootle.Dialogs.Preferences : Adw.PreferencesWindow {
     [GtkChild] unowned Switch dark_theme;
     [GtkChild] unowned Switch autostart;
     [GtkChild] unowned Switch work_in_background;
-    [GtkChild] unowned Adw.ComboRow default_post_visibility;
     [GtkChild] unowned SpinButton timeline_page_size;
     [GtkChild] unowned SpinButton post_text_size;
     [GtkChild] unowned Switch live_updates;
@@ -15,7 +14,7 @@ public class Tootle.Dialogs.Preferences : Adw.PreferencesWindow {
     construct {
         transient_for = app.main_window;
 
-		//FIXME: default_post_visibility options
+		// TODO: default_post_visibility options
         // default_post_visibility.set_for_enum (typeof (API.Visibility), e => {
         //     var i = e.get_value ();
         //     var vis = API.Visibility.all ()[i];
@@ -39,13 +38,6 @@ public class Tootle.Dialogs.Preferences : Adw.PreferencesWindow {
         settings.bind ("post-text-size", post_text_size.adjustment, "value", SettingsBindFlags.DEFAULT);
         settings.bind ("live-updates", live_updates, "active", SettingsBindFlags.DEFAULT);
         settings.bind ("public-live-updates", public_live_updates, "active", SettingsBindFlags.DEFAULT);
-
-        //FIXME: default_post_visibility options
-        // default_post_visibility.selected_index = (int) settings.default_post_visibility;
-        // default_post_visibility.notify["selected-index"].connect (p => {
-        //     var i = default_post_visibility.selected_index;
-        //     settings.default_post_visibility = (API.Visibility) i;
-        // });
 	}
 
 }
