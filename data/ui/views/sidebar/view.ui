@@ -11,7 +11,7 @@
         <child type="start">
           <object class="GtkButton" id="compose_button">
             <property name="icon-name">document-edit-symbolic</property>
-            <!-- <signal name="toggled" handler="on_mode_changed"/> -->
+            <property name="action-name">app.compose</property>
           </object>
         </child>
         <child type="end">

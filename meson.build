@@ -1,4 +1,4 @@
-project('com.github.bleakgrey.tootle', 'vala', 'c', version: 'master')
+project('com.github.bleakgrey.tootle', 'vala', 'c', version: '2.0-alpha1')
 
 add_global_arguments([
         '-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()),
