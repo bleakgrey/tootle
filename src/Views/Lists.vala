@@ -1,5 +1,6 @@
 using Gtk;
 
+// TODO: Lists is borken
 public class Tootle.Views.Lists : Views.Timeline {
 
     [GtkTemplate (ui = "/com/github/bleakgrey/tootle/ui/widgets/list_item.ui")]
