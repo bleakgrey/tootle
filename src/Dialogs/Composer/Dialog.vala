@@ -7,22 +7,20 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	public API.Status status { get; construct set; }
 
 	public string button_label {
-		set {
-			commit_button.label = value;
-		}
+		set { commit_button.label = value; }
 	}
 	public string button_class {
-		set {
-			commit_button.add_css_class (value);
-		}
+		set { commit_button.add_css_class (value); }
 	}
 
 	construct {
 		transient_for = app.main_window;
 		title_switcher.stack = stack;
 
-		build ();
-		present ();
+		notify["status"].connect (() => {
+			build ();
+			present ();
+		});
 	}
 
 	protected virtual signal void build () {
@@ -30,8 +28,6 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 		add_page (new AttachmentsPage ());
 		add_page (new PollPage ());
 	}
-
-
 
 	[GtkChild] unowned Adw.ViewSwitcherTitle title_switcher;
 	[GtkChild] unowned Button commit_button;
@@ -83,8 +79,8 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 
 	protected void add_page (ComposerPage page) {
 		var wrapper = stack.add (page);
-		page.dialog = this;
-		modify_req.connect (page.sync);
+		page.on_build (this, this.status);
+		modify_req.connect (page.on_sync);
 		modify_req.connect (page.on_modify_req);
 		page.bind_property ("visible", wrapper, "visible", GLib.BindingFlags.SYNC_CREATE);
 		page.bind_property ("title", wrapper, "title", GLib.BindingFlags.SYNC_CREATE);
@@ -99,16 +95,16 @@ public class Tootle.Dialogs.Compose : Adw.Window {
 	[GtkCallback] void on_commit () {
 		//working = true
 		transaction.begin ((obj, res) => {
-				try {
-					transaction.end (res);
-					// on_close ();
-				}
-				catch (Error e) {
-					// working = false;
-					// on_error (0, e.message);
-					warning (e.message);
-				}
-			});
+			try {
+				transaction.end (res);
+				// on_close ();
+			}
+			catch (Error e) {
+				// working = false;
+				// on_error (0, e.message);
+				warning (e.message);
+			}
+		});
 	}
 
 	protected signal void modify_req (Request req);

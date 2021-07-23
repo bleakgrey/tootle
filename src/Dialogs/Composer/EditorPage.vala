@@ -5,28 +5,56 @@ public class Tootle.EditorPage : ComposerPage {
 	protected uint char_limit { get; set; default = 500; } //TODO: Ask the instance to get this value
 	protected int remaining_chars { get; set; default = 0; }
 
-	protected virtual signal void recount_chars () {}
-	protected virtual signal void build_dialog () {
+	construct {
+		title = _("Text");
+		icon_name = "document-edit-symbolic";
+	}
+
+	public override void on_build (Dialogs.Compose dialog, API.Status status) {
+		base.on_build (dialog, status);
+
 		install_editor ();
+		populate_editor ();
 		install_visibility ();
 		install_cw ();
-	}
 
-	public EditorPage () {
-		Object (
-			title: _("Text"),
-			icon_name: "document-edit-symbolic"
-		);
-	}
-
-	construct {
-		build_dialog ();
 		validate ();
 	}
+
+	protected virtual signal void recount_chars () {}
 
 	protected void validate () {
 		recount_chars ();
 	}
+
+	public override void on_sync () {
+		warning ("syncing");
+
+		status.content = editor.buffer.text;
+		status.sensitive = cw_button.active;
+		if (status.sensitive) {
+			status.spoiler_text = cw_entry.text;
+		}
+
+		status.visibility = (visibility_button.selected_item as InstanceAccount.Visibility).id;
+	}
+
+	public override void on_modify_req (Request req) {
+		req.with_form_data ("status", status.content);
+		req.with_form_data ("visibility", status.visibility);
+
+		if (dialog.status.in_reply_to_id != null)
+			req.with_form_data ("in_reply_to_id", dialog.status.in_reply_to_id);
+		if (dialog.status.in_reply_to_account_id != null)
+			req.with_form_data ("in_reply_to_account_id", dialog.status.in_reply_to_account_id);
+
+		if (cw_button.active) {
+			req.with_form_data ("sensitive", "true");
+			req.with_form_data ("spoiler_text", status.spoiler_text);
+		}
+	}
+
+
 
 	protected TextView editor;
 	protected Label char_counter;
@@ -67,6 +95,12 @@ public class Tootle.EditorPage : ComposerPage {
 		editor.buffer.changed.connect (validate);
 	}
 
+	protected void populate_editor () {
+		editor.buffer.text = dialog.status.content;
+	}
+
+
+
 	protected ToggleButton cw_button;
 	protected Entry cw_entry;
 
@@ -99,6 +133,8 @@ public class Tootle.EditorPage : ComposerPage {
 		});
 	}
 
+
+
 	protected DropDown visibility_button;
 
 	protected void install_visibility () {
@@ -109,33 +145,6 @@ public class Tootle.EditorPage : ComposerPage {
 		};
 		add_button (visibility_button);
 		add_button (new Gtk.Separator (Orientation.VERTICAL));
-	}
-
-	public override void sync () {
-		warning ("syncing");
-
-		status.content = editor.buffer.text;
-		status.sensitive = cw_button.active;
-		if (status.sensitive) {
-			status.spoiler_text = cw_entry.text;
-		}
-
-		status.visibility = (visibility_button.selected_item as InstanceAccount.Visibility).id;
-	}
-
-	public override void on_modify_req (Request req) {
-		req.with_form_data ("status", status.content);
-		req.with_form_data ("visibility", status.visibility);
-
-		if (dialog.status.in_reply_to_id != null)
-			req.with_form_data ("in_reply_to_id", dialog.status.in_reply_to_id);
-		if (dialog.status.in_reply_to_account_id != null)
-			req.with_form_data ("in_reply_to_account_id", dialog.status.in_reply_to_account_id);
-
-		if (cw_button.active) {
-			req.with_form_data ("sensitive", "true");
-			req.with_form_data ("spoiler_text", status.spoiler_text);
-		}
 	}
 
 }

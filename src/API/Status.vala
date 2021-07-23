@@ -99,7 +99,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
 		return media_attachments != null && !media_attachments.is_empty;
 	}
 
-    public string get_reply_mentions () {
+    public virtual string get_reply_mentions () {
         var result = "";
         if (account.acct != accounts.active.acct)
             result = @"$(account.handle) ";
@@ -109,7 +109,7 @@ public class Tootle.API.Status : Entity, Widgetizable {
                 var equals_current = mention.acct == accounts.active.acct;
                 var already_mentioned = mention.acct in result;
 
-                if (!equals_current && ! already_mentioned)
+                if (!equals_current && !already_mentioned)
                     result += @"$(mention.handle) ";
             }
         }
