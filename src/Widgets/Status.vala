@@ -222,11 +222,11 @@ public class Tootle.Widgets.Status : ListBoxRow {
 
 		append_actions ();
 
-		var menu_button = new MenuButton ();
-		menu_button.icon_name = "view-more-symbolic";
-		actions.append (menu_button);
+		// var menu_button = new MenuButton (); //TODO: Status menu
+		// menu_button.icon_name = "view-more-symbolic";
+		// menu_button.get_first_child ().add_css_class ("flat");
+		// actions.append (menu_button);
 
-		menu_button.get_first_child ().add_css_class ("flat");
 		for (var w = actions.get_first_child (); w != null; w = w.get_next_sibling ())
 			w.add_css_class ("flat");
 	}

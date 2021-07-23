@@ -105,9 +105,10 @@ public class Tootle.Views.Profile : Views.Timeline {
 		// if (profile.id != accounts.active.id)
 		// 	header.pack_end (rs_button);
 
-		var a = new Button ();
-		a.label = _("Follow");
-		header.pack_start (a);
+		// TODO: RS button
+		// var a = new Button ();
+		// a.label = _("Follow");
+		// header.pack_start (a);
 
 		menu_button = new MenuButton ();
 		var menu_builder = new Builder.from_resource (@"$(Build.RESOURCES)ui/menus.ui");

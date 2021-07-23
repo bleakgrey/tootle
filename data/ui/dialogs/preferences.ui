@@ -67,9 +67,9 @@
         <child>
           <object class="AdwPreferencesGroup">
             <property name="title" translatable="yes">Behavior</property>
+            <property name="sensitive">0</property>
             <child>
               <object class="AdwActionRow">
-                <property name="visible">0</property>
                 <property name="title" translatable="yes">Autostart</property>
                 <property name="activatable_widget">autostart</property>
                 <property name="subtitle" translatable="yes">Start minimized at boot</property>
@@ -83,7 +83,6 @@
             </child>
             <child>
               <object class="AdwActionRow">
-                <property name="visible">0</property>
                 <property name="title" translatable="yes">Background work</property>
                 <property name="activatable_widget">work_in_background</property>
                 <property name="subtitle" translatable="yes">Receive notifications even when the app is closed</property>
@@ -92,11 +91,6 @@
                     <property name="valign">center</property>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwComboRow" id="default_post_visibility">
-                <property name="title" translatable="yes">Default post visibility</property>
               </object>
             </child>
           </object>
