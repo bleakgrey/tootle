@@ -88,7 +88,7 @@ public class Tootle.Cache : GLib.Object {
                 try {
                     var code = msg.status_code;
 					if (code != Soup.Status.OK) {
-					    var error = network.describe_error (code);
+					    var error = msg.reason_phrase;
 					    throw new Oopsie.INSTANCE (@"Server returned $error");
 					}
 
