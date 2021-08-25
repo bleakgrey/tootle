@@ -318,7 +318,7 @@ msgstr "Redigera"
 #. TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
 #: src/Build.vala:15
 msgid " "
-msgstr " "
+msgstr "Åke Engelbrektson"
 
 #: src/Desktop.vala:18
 #, c-format
