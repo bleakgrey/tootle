@@ -25,6 +25,8 @@
   <url type="bugtracker">https://github.com/bleakgrey/tootle/issues</url>
   <url type="donation">https://liberapay.com/bleakgrey/donate</url>
 
+  <translation type="gettext">com.github.bleakgrey.tootle</translation>
+
   <content_rating type="oars-1.1">
     <content_attribute id="violence-cartoon">none</content_attribute>
     <content_attribute id="violence-fantasy">none</content_attribute>
@@ -54,6 +56,16 @@
     <content_attribute id="money-purchasing">none</content_attribute>
     <content_attribute id="money-gambling">none</content_attribute>
   </content_rating>
+
+  <recommends>
+    <control>keyboard</control>
+    <control>pointing</control>
+    <control>touch</control>
+  </recommends>
+
+  <requires>
+    <display_length compare="ge">360</display_length>
+  </requires>
 
   <custom>
     <value key="Purism::form_factor">workstation</value>
