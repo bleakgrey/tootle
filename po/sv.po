@@ -1,0 +1,592 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.bleakgrey.tootle package.
+# Åke Engelbrektson <eson@svenskasprakfiler.se>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.bleakgrey.tootle\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-30 16:21+0300\n"
+"PO-Revision-Date: 2021-04-03 11:43+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: sv\n"
+
+#: data/com.github.bleakgrey.tootle.desktop.in:4
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:7
+msgid "Tootle"
+msgstr "Tootle"
+
+#: data/com.github.bleakgrey.tootle.desktop.in:5
+#: data/com.github.bleakgrey.tootle.desktop.in:6
+msgid "Mastodon Client"
+msgstr "Mastodon-klient"
+
+#: data/com.github.bleakgrey.tootle.desktop.in:8
+msgid "com.github.bleakgrey.tootle"
+msgstr "com.github.bleakgrey.tootle"
+
+#: data/com.github.bleakgrey.tootle.desktop.in:11
+msgid "toot;mastodon;social;network;post;"
+msgstr "toot;mastodon;social;nätverk;post;"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:8
+msgid "Lightning fast client for Mastodon"
+msgstr "Blixtsnabb klient för Mastodon"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:11
+msgid ""
+"Tootle is a GTK client for the world's largest, decentralized, microblogging "
+"platform, Mastodon. With the user experience in mind, it provides a clean, "
+"native interface that allows you to integrate Mastodon's social experience "
+"seamlessly with your desktop environment."
+msgstr ""
+"Tootle är en GTK-kklient för världens största, decentraliserade "
+"mikrobloggplattform, Mastodon. Med användarupplevelsen i åtanke ger den ett "
+"rent, inhemskt gränssnitt som gör att du kan integrera Mastodons sociala "
+"upplevelse sömlöst med din skrivbordsmiljö."
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:14
+msgid ""
+"Mastodon is a free and open source microblogging platform similar to "
+"Twitter, but with user privacy and decentralization in mind. It is one of "
+"many protocols that interacts with the Fediverse of protocols like Pleroma, "
+"GNU Social, and others. The power of federated microblogging that Mastodon "
+"brings and the agility of Tootle creates a fantastic duo for all of your "
+"social media needs."
+msgstr ""
+"Mastodon är fri och öppen källkod, en mikrobloggplattform som liknar "
+"Twitter, men med användarnas integritet och decentralisering i åtanke. Det "
+"är ett av många protokoll som interagerar med olika protokoll som Pleroma, "
+"GNU Social och andra. Kraften i en förbunden mikrobloggtjänst som Mastodon "
+"ger och Tootles smidighet skapar en fantastisk duo för alla dina sociala "
+"mediebehov."
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:23
+msgid "bleak_grey"
+msgstr "bleak_grey"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:71
+msgid "New app icon (Kudos to Tobias Bernard!)"
+msgstr "Ny programikon (Tack till Tobias Bernard!)"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:72
+msgid "New interface design"
+msgstr "Ny gränssnittsdesign"
+
+#: data/com.github.bleakgrey.tootle.appdata.xml.in:73
+msgid "Fixed bugs"
+msgstr "Fixade kodfel"
+
+#: data/ui/dialogs/compose.ui:42
+msgid "Publish"
+msgstr "Publicera"
+
+#: data/ui/dialogs/compose.ui:71 data/ui/dialogs/list_editor.ui:59
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: data/ui/dialogs/compose.ui:119
+msgid "Write your warning here"
+msgstr "Skriv din varning här"
+
+#: data/ui/dialogs/compose.ui:185
+msgid "Visibility"
+msgstr "Synlighet"
+
+#: data/ui/dialogs/compose.ui:238
+msgid "Attach Media"
+msgstr "Bifoga media"
+
+#: data/ui/dialogs/compose.ui:260
+msgid "Instance Emojis"
+msgstr "Instans-emojis"
+
+#: data/ui/dialogs/compose.ui:284
+msgid "Spoiler Warning"
+msgstr "Spoilervarning"
+
+#: data/ui/dialogs/compose.ui:329
+msgid "Text"
+msgstr "Text"
+
+#: data/ui/dialogs/compose.ui:389
+msgid "Media"
+msgstr "Media"
+
+#: data/ui/dialogs/list_editor.ui:33
+msgid "Name"
+msgstr "Namn"
+
+#: data/ui/dialogs/list_editor.ui:83
+msgid "Save"
+msgstr "Spara"
+
+#: data/ui/dialogs/list_editor.ui:200
+msgid "Search among people you follow"
+msgstr "Sök bland användare du följer"
+
+#: data/ui/dialogs/list_editor.ui:256
+msgid "Nobody here"
+msgstr "Ingen här"
+
+#: data/ui/dialogs/preferences.ui:29
+msgid "General"
+msgstr "Allmänt"
+
+#: data/ui/dialogs/preferences.ui:34
+msgid "Appearance"
+msgstr "Utseende"
+
+#: data/ui/dialogs/preferences.ui:39
+msgid "Dark theme"
+msgstr "Mörkt tema"
+
+#: data/ui/dialogs/preferences.ui:54
+msgid "Text scale (%)"
+msgstr "Textskala (%)"
+
+#: data/ui/dialogs/preferences.ui:61
+msgid "100"
+msgstr "100"
+
+#: data/ui/dialogs/preferences.ui:75
+msgid "Behavior"
+msgstr "Beteende"
+
+#: data/ui/dialogs/preferences.ui:79
+msgid "Autostart"
+msgstr "Autostart"
+
+#: data/ui/dialogs/preferences.ui:81
+msgid "Start minimized at boot"
+msgstr "Starta minimerad vid systemstart"
+
+#: data/ui/dialogs/preferences.ui:94
+msgid "Background work"
+msgstr "Bakgrundsarbete"
+
+#: data/ui/dialogs/preferences.ui:96
+msgid "Receive notifications even when the app is closed"
+msgstr "Ta emot avisering även när programmet är stängt"
+
+#: data/ui/dialogs/preferences.ui:110
+msgid "Default post visibility"
+msgstr "Standardsynlighet för inlägg"
+
+#: data/ui/dialogs/preferences.ui:119
+msgid "Timelines"
+msgstr "Tidslinjer"
+
+#: data/ui/dialogs/preferences.ui:124
+msgid "Posts per page"
+msgstr "Inlägg per sida"
+
+#: data/ui/dialogs/preferences.ui:131
+msgid "10"
+msgstr "10"
+
+#: data/ui/dialogs/preferences.ui:141
+msgid "Infinite scrolling"
+msgstr "Oändlig skrollning"
+
+#: data/ui/dialogs/preferences.ui:143 data/ui/dialogs/preferences.ui:176
+msgid "Warning: This will increase memory usage"
+msgstr "Varning! Detta kommer att öka minnesanvändningen"
+
+#: data/ui/dialogs/preferences.ui:157
+msgid "Stream timelines"
+msgstr "Strömma tidslinjer"
+
+#: data/ui/dialogs/preferences.ui:159
+msgid "Receive new posts and notifications in real-time"
+msgstr "Ta emot nya inlägg och aviseringar i realtid"
+
+#: data/ui/dialogs/preferences.ui:174
+msgid "Stream public timelines"
+msgstr "Strömma offentliga tidslinjer"
+
+#: data/ui/dialogs/new_account.ui:21
+msgid "Add Account"
+msgstr "Lägg till konto"
+
+#: data/ui/dialogs/new_account.ui:25 data/ui/views/base.ui:26
+#: src/Dialogs/NewAccount.vala:85
+msgid "Back"
+msgstr "Tillbaka"
+
+#: data/ui/dialogs/new_account.ui:48 src/Dialogs/NewAccount.vala:84
+msgid "Next"
+msgstr "Nästa"
+
+#: data/ui/dialogs/new_account.ui:129
+msgid "What is your instance?"
+msgstr "Vilken är din instans?"
+
+#: data/ui/dialogs/new_account.ui:191
+msgid "<a href=\"https://joinmastodon.org/\">Don't have one yet?</a>"
+msgstr "<a href=\"https://joinmastodon.org/\">Har du ännu ingen?</a>"
+
+#: data/ui/dialogs/new_account.ui:242
+msgid "Enter authorization code"
+msgstr "Ange auktoriseringskod"
+
+#: data/ui/dialogs/new_account.ui:276
+msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
+msgstr "<a href=\"tootle://manual_auth\">Försök med manuell auktorisering</a>"
+
+#: data/ui/widgets/accounts_button.ui:64 src/Views/Conversations.vala:6
+msgid "Conversations"
+msgstr "Konversationer"
+
+#: data/ui/widgets/accounts_button.ui:93 src/Views/Favorites.vala:6
+msgid "Favorites"
+msgstr "Favoriter"
+
+#: data/ui/widgets/accounts_button.ui:122 src/Views/Bookmarks.vala:6
+msgid "Bookmarks"
+msgstr "Bokmärken"
+
+#: data/ui/widgets/accounts_button.ui:152 src/Views/Lists.vala:59
+msgid "Lists"
+msgstr "Listor"
+
+#: data/ui/widgets/accounts_button.ui:204
+msgid "POSTS"
+msgstr "INLÄGG"
+
+#: data/ui/widgets/accounts_button.ui:247
+msgid "FOLLOWING"
+msgstr "FÖLJER"
+
+#: data/ui/widgets/accounts_button.ui:290
+msgid "FOLLOWERS"
+msgstr "FÖLJARE"
+
+#: data/ui/widgets/accounts_button.ui:344
+msgid "Refresh"
+msgstr "Uppdatera"
+
+#: data/ui/widgets/accounts_button.ui:357
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: data/ui/widgets/accounts_button.ui:371
+msgid "About"
+msgstr "Om"
+
+#: data/ui/widgets/accounts_button.ui:397 src/Views/Search.vala:43
+msgid "Accounts"
+msgstr "Konton"
+
+#: data/ui/widgets/accounts_button_item.ui:60
+msgid "Forget"
+msgstr "Glöm"
+
+#: data/ui/widgets/accounts_button_item.ui:88
+msgid "Title"
+msgstr "Titel"
+
+#: data/ui/widgets/compose_attachment.ui:29
+msgid "Describe for the visually impaired"
+msgstr "Beskriv för synskadade"
+
+#: data/ui/widgets/compose_attachment.ui:90
+msgid "Unknown"
+msgstr "Okänd"
+
+#: data/ui/widgets/compose_attachment.ui:113 data/ui/widgets/list_item.ui:74
+#: src/Widgets/Status.vala:243
+msgid "Delete"
+msgstr "Ta bort"
+
+#: data/ui/widgets/list_item.ui:26 src/Dialogs/ListEditor.vala:87
+msgid "Untitled"
+msgstr "Namnlös"
+
+#: data/ui/widgets/list_item.ui:42
+msgid "Edit"
+msgstr "Redigera"
+
+#. Please do not remove the credits below. You may add your own, but keep the existing ones intact.
+#. TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
+#: src/Build.vala:15
+msgid " "
+msgstr "Åke Engelbrektson"
+
+#: src/Desktop.vala:18
+#, c-format
+msgid ""
+"Open this URL in your browser:\n"
+"\n"
+"%s"
+msgstr ""
+"Öppna denna URL i din webbläsare:\n"
+"\n"
+"%s"
+
+#: src/Html.vala:3
+msgid "[ There was an error parsing this text :c ]"
+msgstr "[ Det inträffade ett fel vid tolkning av den här texten :c ]"
+
+#: src/DateTime.vala:11
+msgid "Just now"
+msgstr "Just nu"
+
+#: src/DateTime.vala:21
+msgid "Yesterday"
+msgstr "Igår"
+
+#: src/DateTime.vala:24
+msgid "%b %e"
+msgstr "%e %b"
+
+#: src/DateTime.vala:27
+msgid "%b %e, %Y"
+msgstr "%e %b %Y"
+
+#: src/Dialogs/About.vala:14
+msgid "Report an issue"
+msgstr "Rapportera ett ärende"
+
+#: src/Dialogs/Compose.vala:81 src/Views/Lists.vala:33
+msgid "This action cannot be reverted."
+msgstr "Denna åtgärd kan inte ångras."
+
+#: src/Dialogs/Compose.vala:125 src/Views/Main.vala:25
+msgid "Compose"
+msgstr "Komponera"
+
+#: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:253
+msgid "Redraft"
+msgstr "Komponera om"
+
+#: src/Dialogs/Compose.vala:154
+msgid "Reply"
+msgstr "Svara"
+
+#: src/Dialogs/Compose.vala:197
+msgid "Select media"
+msgstr "Välj media"
+
+#: src/Dialogs/Compose.vala:200
+msgid "_Open"
+msgstr "_Öppna"
+
+#: src/Dialogs/Compose.vala:201
+msgid "_Cancel"
+msgstr "_Avbryt"
+
+#: src/Dialogs/ListEditor.vala:201
+msgid "Discard changes?"
+msgstr "Kassera ändringar?"
+
+#: src/Dialogs/ListEditor.vala:202
+msgid "You need to save the list if you want to keep them."
+msgstr "Du måste spara listan om du vill behålla den."
+
+#: src/Dialogs/NewAccount.vala:84
+msgid "Close"
+msgstr "Stäng"
+
+#: src/Dialogs/NewAccount.vala:85
+msgid "Add Another"
+msgstr "Lägg till en till"
+
+#: src/Dialogs/NewAccount.vala:127
+msgid "Please enter a valid instance URL"
+msgstr "Ange en giltig instans-URL"
+
+#: src/Dialogs/NewAccount.vala:160
+msgid "Please enter a valid authorization code"
+msgstr "Ange en giltig auktoriseringskod"
+
+#: src/Dialogs/NewAccount.vala:176
+msgid "Instance failed to authorize the access token"
+msgstr "Instansen kunde inte auktorisera åtkomsttoken"
+
+#: src/Dialogs/NewAccount.vala:190
+#, c-format
+msgid "Hello, %s!"
+msgstr "Hej %s!"
+
+#: src/Dialogs/NewAccount.vala:218
+msgid "Server returned an error"
+msgstr "Servern returnerade ett fel"
+
+#: src/Services/Accounts.vala:32
+msgid "Network Error"
+msgstr "Nätverksfel"
+
+#: src/Services/Accounts.vala:33
+#, c-format
+msgid ""
+"The instance has invalidated this session. Please sign in again.\n"
+"\n"
+"%s"
+msgstr ""
+"Instansen har ogiltigförklarat den här sessionen. Logga in igen.\n"
+"\n"
+"%s"
+
+#: src/Views/Base.vala:6
+msgid "Nothing to see here"
+msgstr "Inget att se här"
+
+#: src/Views/Base.vala:58
+msgid "Reload"
+msgstr "Uppdatera"
+
+#: src/Views/Main.vala:31 src/Views/Search.vala:15
+msgid "Search"
+msgstr "Sök"
+
+#: src/Views/Thread.vala:13
+msgid "Conversation"
+msgstr "Konversation"
+
+#: src/Views/Federated.vala:7
+msgid "Federated"
+msgstr "Förenad"
+
+#: src/Views/Home.vala:6
+msgid "Home"
+msgstr "Hem"
+
+#: src/Views/Lists.vala:32
+#, c-format
+msgid "Delete \"%s\"?"
+msgstr "Vill du ta bort \"%s\"?"
+
+#: src/Views/Local.vala:4
+msgid "Local"
+msgstr "Lokal"
+
+#: src/Views/Notifications.vala:11
+msgid "Notifications"
+msgstr "Avisering"
+
+#: src/Views/Profile.vala:150
+#, c-format
+msgid "Block \"%s\"?"
+msgstr "Vill du blockera \"%s\"?"
+
+#: src/Views/Profile.vala:150
+#, c-format
+msgid "Unblock \"%s\"?"
+msgstr "Vill du avblockera \"%s\"?"
+
+#: src/Views/Profile.vala:161
+#, c-format
+msgid "Block Entire \"%s\"?"
+msgstr "Vill du blockera hela \"%s\"?"
+
+#: src/Views/Profile.vala:161
+#, c-format
+msgid "Unblock Entire \"%s\"?"
+msgstr "Vill du avblockera hela \"%s\"?"
+
+#: src/Views/Profile.vala:164
+msgid ""
+"Blocking a domain will:\n"
+"\n"
+"• Remove its public posts and notifications from your timelines\n"
+"• Remove its followers from your account\n"
+"• Prevent you from following its users"
+msgstr ""
+"Blockering av en domän kommer att:\n"
+"\n"
+"• Ta bort dess inlägg och aviseringar från dina tidslinjer\n"
+"• Ta bort dess följare från ditt konto\n"
+"• Förhindra att du följer dess användare"
+
+#: src/Views/Profile.vala:204
+msgid "Sent follow request"
+msgstr "Skickade följbegäran"
+
+#: src/Views/Profile.vala:206
+msgid "Mutually follows you"
+msgstr "Följer dig ömsesidigt"
+
+#: src/Views/Profile.vala:208
+msgid "Follows you"
+msgstr "Följer dig"
+
+#: src/Views/Profile.vala:229
+msgid "Unblock"
+msgstr "Avblockera"
+
+#: src/Views/Profile.vala:239
+msgid "Unfollow"
+msgstr "Sluta följ"
+
+#: src/Views/Profile.vala:248
+msgid "Follow"
+msgstr "Följ"
+
+#: src/Views/Search.vala:44
+msgid "Statuses"
+msgstr "Status"
+
+#: src/Views/Search.vala:45
+msgid "Hashtags"
+msgstr "Hashtaggar"
+
+#: src/Views/Search.vala:61
+msgid "Enter query"
+msgstr "Ange förfrågan"
+
+#: src/Widgets/Attachment/Slot.vala:46
+msgid "File saved to Downloads"
+msgstr "Filen sparades i Nedladdningar"
+
+#: src/Widgets/AccountsButton.vala:40
+#, c-format
+msgid "Forget %s?"
+msgstr "Vill du glömma %s?"
+
+#: src/Widgets/AccountsButton.vala:41
+msgid "This account will be removed from the application."
+msgstr "Detta konto kommer att tas bort från programmet."
+
+#: src/Widgets/AccountsButton.vala:148
+msgid "Anonymous"
+msgstr "Anonymt"
+
+#: src/Widgets/AccountsButton.vala:149
+msgid "No active account"
+msgstr "Inget aktivt konto"
+
+#: src/Widgets/Status.vala:72
+msgid "Click to show sensitive content"
+msgstr "Klicka för att visa känsligt innehåll"
+
+#: src/Widgets/Status.vala:163
+msgid "This post can't be boosted"
+msgstr "Detta inlägg kan inte boostas"
+
+#: src/Widgets/Status.vala:213
+msgid "Open in Browser"
+msgstr "Öppna i webbläsaren"
+
+#: src/Widgets/Status.vala:215
+msgid "Copy Link"
+msgstr "Kopiera länk"
+
+#: src/Widgets/Status.vala:217
+msgid "Copy Text"
+msgstr "Kopiera text"
+
+#: src/Widgets/Status.vala:237
+msgid "Unpin from Profile"
+msgstr "Lösgör från profilen"
+
+#: src/Widgets/Status.vala:237
+msgid "Pin on Profile"
+msgstr "Fäst på profilen"
