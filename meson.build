@@ -9,6 +9,7 @@ add_global_arguments([
 config = configuration_data()
 config.set('EXEC_NAME', meson.project_name())
 config.set('GETTEXT_PACKAGE', meson.project_name())
+config.set('LOCALEDIR', join_paths(get_option('prefix'), get_option('localedir')))
 config.set('RESOURCES', '/' + '/'.join(meson.project_name().split('.')) + '/' )
 config.set('VERSION', meson.project_version())
 config.set('PREFIX', get_option('prefix'))
