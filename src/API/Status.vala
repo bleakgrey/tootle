@@ -28,16 +28,16 @@ public class Tootle.API.Status : Entity, Widgetizable {
     public ArrayList<API.Mention>? mentions { get; set; default = null; }
     public ArrayList<API.Attachment>? media_attachments { get; set; default = null; }
 
-    public string? _url { get; set; }
+    public string? unmodified_url { get; set; }
     public string url {
         owned get { return this.get_modified_url (); }
-        set { this._url = value; }
+        set { this.unmodified_url = value; }
     }
     string get_modified_url () {
-        if (this._url == null) {
+        if (this.unmodified_url == null) {
             return this.uri.replace ("/activity", "");
         }
-        return this._url;
+        return this.unmodified_url;
     }
 
     public Status formal {
