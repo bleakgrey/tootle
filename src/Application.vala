@@ -151,23 +151,23 @@ namespace Tootle {
 		// 		return false;
 		// }
 
-		void compose_activated () {
+		public void compose_activated () {
 			new Dialogs.Compose ();
 		}
 
-		void back_activated () {
+		public void back_activated () {
 			main_window.back ();
 		}
 
-		void search_activated () {
+		public void search_activated () {
 			main_window.open_view (new Views.Search ());
 		}
 
-		void refresh_activated () {
+		public void refresh_activated () {
 			refresh ();
 		}
 
-		void about_activated () {
+		public void about_activated () {
 			var dialog = new AboutDialog () {
 				transient_for = main_window,
 				modal = true,
