@@ -1,23 +1,23 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the com.github.bleakgrey.tootle package.
-# Milo Ivir <mail@milotype.de>, 2021.
+# Marcus M <github@ohgodfucking.no>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-30 16:21+0300\n"
-"PO-Revision-Date: 2021-09-19 15:54+0100\n"
-"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"PO-Revision-Date: 2022-08-03 22:26+0200\n"
 "Language-Team: \n"
-"Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: hr\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:7
@@ -27,7 +27,7 @@ msgstr "Tootle"
 #: data/com.github.bleakgrey.tootle.desktop.in:5
 #: data/com.github.bleakgrey.tootle.desktop.in:6
 msgid "Mastodon Client"
-msgstr "Klijent za Mastodon"
+msgstr "Mastodon klijent"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:8
 msgid "com.github.bleakgrey.tootle"
@@ -35,11 +35,11 @@ msgstr "com.github.bleakgrey.tootle"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:11
 msgid "toot;mastodon;social;network;post;"
-msgstr "toot;mastodon;društvena mreža;poruka;objava;"
+msgstr "toot;mastodon;društvena mreža;mreža;objava;"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:8
 msgid "Lightning fast client for Mastodon"
-msgstr "Ultra brz klijent za Mastodon"
+msgstr "Super brzi klijent za Mastodon"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:11
 msgid ""
@@ -48,26 +48,26 @@ msgid ""
 "native interface that allows you to integrate Mastodon's social experience "
 "seamlessly with your desktop environment."
 msgstr ""
-"Tootle je GTK klijent za najveću, decentraliziranu svjetsku platformu za "
-"mikroblogiranje na svijetu – Mastodon. S obzirom na korisničko iskustvo, "
-"pruža čisto, izvorno sučelje koje omogućuje besprijekornu integraciju"
-" s tvojim radnim okruženjem."
+"Tootle je GTK klijent za najveću svjetsku decentraliziranu platformu za "
+"mikroblogiranje, Mastodon. Imajući na umu korisničko iskustvo, pruža čisto, "
+"izvorno sučelje koje omogućuje integraciju Mastodonovog društvenog iskustva "
+"s okruženjem tvoje radne površine."
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:14
 msgid ""
 "Mastodon is a free and open source microblogging platform similar to "
 "Twitter, but with user privacy and decentralization in mind. It is one of "
-"many protocols that interacts with the Fediverse of protocols like 
-, "
+"many protocols that interacts with the Fediverse of protocols like Pleroma, "
 "GNU Social, and others. The power of federated microblogging that Mastodon "
 "brings and the agility of Tootle creates a fantastic duo for all of your "
 "social media needs."
 msgstr ""
-"Mastodon je besplatna platforma za mikroblogiranje otvorenog koda"
-" slična Twitteru, s naglaskom na privatnost korisnika i decentralizaciju. Jedan od"
-" mnogih protokola koji stupa u interakciju s Fediverse protokolima poput "
-"Pleroma, GNU Social i drugima. Snaga decentraliziranog mikroblogiranja koju "donosi Mastodon i agilnost Tootlea stvara fantastičan dvojac za sve potrebe na"
-" razini društvenih medija."
+"Mastodon je besplatna platforma za mikroblogiranje otvorenog koda slična "
+"Twitteru, ali s pažnjom na privatnost korisnika i decentralizaciju. To je "
+"jedan od mnogih protokola interagiraju s Fedivers protokolima kao što su "
+"Pleroma, GNU Social i drugi. Snaga federaliziranog mikroblogiranja pomoću "
+"Mastodona i agilnost Tootlea stvaraju fantastičan duo za sve tvoje potrebe u "
+"društvenim medijima."
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:23
 msgid "bleak_grey"
@@ -75,7 +75,7 @@ msgstr "bleak_grey"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:71
 msgid "New app icon (Kudos to Tobias Bernard!)"
-msgstr "Nova ikona za program (Hvala Tobias Bernard!)"
+msgstr "Nova ikona programa (hvala Tobias Bernard!)"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:72
 msgid "New interface design"
@@ -83,7 +83,7 @@ msgstr "Novi dizajn sučelja"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:73
 msgid "Fixed bugs"
-msgstr "Ispravljanje grešaka"
+msgstr "Ispravljene greške"
 
 #: data/ui/dialogs/compose.ui:42
 msgid "Publish"
@@ -107,11 +107,11 @@ msgstr "Priloži medij"
 
 #: data/ui/dialogs/compose.ui:260
 msgid "Instance Emojis"
-msgstr "Emoji sličice instance"
+msgstr "Instanca emojija"
 
 #: data/ui/dialogs/compose.ui:284
 msgid "Spoiler Warning"
-msgstr "Spoiler upozorenje"
+msgstr "Upozorenje sprečavanja"
 
 #: data/ui/dialogs/compose.ui:329
 msgid "Text"
@@ -119,7 +119,7 @@ msgstr "Tekst"
 
 #: data/ui/dialogs/compose.ui:389
 msgid "Media"
-msgstr "Medij"
+msgstr "Mediji"
 
 #: data/ui/dialogs/list_editor.ui:33
 msgid "Name"
@@ -131,7 +131,7 @@ msgstr "Spremi"
 
 #: data/ui/dialogs/list_editor.ui:200
 msgid "Search among people you follow"
-msgstr "Traži među ljudima koje pratiš"
+msgstr "Traži muđu ljudima koje pratiš"
 
 #: data/ui/dialogs/list_editor.ui:256
 msgid "Nobody here"
@@ -151,7 +151,7 @@ msgstr "Tamna tema"
 
 #: data/ui/dialogs/preferences.ui:54
 msgid "Text scale (%)"
-msgstr "Uvećanje teksta (%)"
+msgstr "Veličina teksta (%)"
 
 #: data/ui/dialogs/preferences.ui:61
 msgid "100"
@@ -167,11 +167,11 @@ msgstr "Automatsko pokretanje"
 
 #: data/ui/dialogs/preferences.ui:81
 msgid "Start minimized at boot"
-msgstr "Pokreni skriveno nakon pokretanja sustava"
+msgstr "Pokreni sklopljeno pri pokretanju"
 
 #: data/ui/dialogs/preferences.ui:94
 msgid "Background work"
-msgstr "Posao u pozadini"
+msgstr "Rad u pozadini"
 
 #: data/ui/dialogs/preferences.ui:96
 msgid "Receive notifications even when the app is closed"
@@ -179,15 +179,15 @@ msgstr "Primaj obavijesti čak i kad je program zatvoren"
 
 #: data/ui/dialogs/preferences.ui:110
 msgid "Default post visibility"
-msgstr "Zadana vidljivost poruka"
+msgstr "Standardna vidljivost objava"
 
 #: data/ui/dialogs/preferences.ui:119
 msgid "Timelines"
-msgstr "Vremenske crte"
+msgstr "Kronologija"
 
 #: data/ui/dialogs/preferences.ui:124
 msgid "Posts per page"
-msgstr "Poruka po stranici"
+msgstr "Broj objava po stranici"
 
 #: data/ui/dialogs/preferences.ui:131
 msgid "10"
@@ -199,20 +199,19 @@ msgstr "Beskonačno listanje"
 
 #: data/ui/dialogs/preferences.ui:143 data/ui/dialogs/preferences.ui:176
 msgid "Warning: This will increase memory usage"
-msgstr "Upozorenje: To će povećati korištenje memorije"
+msgstr "Upozornje: Ovo će povećati upotrebu memorije"
 
 #: data/ui/dialogs/preferences.ui:157
 msgid "Stream timelines"
-msgstr "Primaj vremenske crte izravno"
+msgstr "Kronologija prijenosa"
 
 #: data/ui/dialogs/preferences.ui:159
 msgid "Receive new posts and notifications in real-time"
-msgstr "Primaj nove poruke i obavijesti izravno"
+msgstr "Primaj nove objave i obavijesti uživo"
 
 #: data/ui/dialogs/preferences.ui:174
 msgid "Stream public timelines"
-msgstr "Primaj javne vremenske crte izravno
-"
+msgstr "Prenosi javne kronologije"
 
 #: data/ui/dialogs/new_account.ui:21
 msgid "Add Account"
@@ -237,7 +236,7 @@ msgstr "<a href=\"https://joinmastodon.org/\">Još nemaš nijednu?</a>"
 
 #: data/ui/dialogs/new_account.ui:242
 msgid "Enter authorization code"
-msgstr "Upiši kod za autorizaciju"
+msgstr "Upiši kod autorizacije"
 
 #: data/ui/dialogs/new_account.ui:276
 msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
@@ -253,7 +252,7 @@ msgstr "Favoriti"
 
 #: data/ui/widgets/accounts_button.ui:122 src/Views/Bookmarks.vala:6
 msgid "Bookmarks"
-msgstr "Straničnici"
+msgstr "Zabilješke"
 
 #: data/ui/widgets/accounts_button.ui:152 src/Views/Lists.vala:59
 msgid "Lists"
@@ -261,15 +260,15 @@ msgstr "Popisi"
 
 #: data/ui/widgets/accounts_button.ui:204
 msgid "POSTS"
-msgstr "PORUKE"
+msgstr "OBJAVE"
 
 #: data/ui/widgets/accounts_button.ui:247
 msgid "FOLLOWING"
-msgstr "PRATIM"
+msgstr "PRAĆENJA"
 
 #: data/ui/widgets/accounts_button.ui:290
 msgid "FOLLOWERS"
-msgstr "PRATIOCI"
+msgstr "PRATITELJI"
 
 #: data/ui/widgets/accounts_button.ui:344
 msgid "Refresh"
@@ -320,7 +319,7 @@ msgstr "Uredi"
 #. TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
 #: src/Build.vala:15
 msgid " "
-msgstr "Milo Ivir <mail@milotype.de>"
+msgstr "Milo Ivir"
 
 #: src/Desktop.vala:18
 #, c-format
@@ -329,13 +328,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Otvori ovaj URL u pregledniku:\n"
+"Otvori ovu URL adresu u tvom pregledniku:\n"
 "\n"
 "%s"
 
 #: src/Html.vala:3
 msgid "[ There was an error parsing this text :c ]"
-msgstr "[ Došlo je do greške u obradi ovog teksta :c ]""
+msgstr "[ Došlo je do greške prilikom obrade ovog teksta :c ]"
 
 #: src/DateTime.vala:11
 msgid "Just now"
@@ -347,11 +346,11 @@ msgstr "Jučer"
 
 #: src/DateTime.vala:24
 msgid "%b %e"
-msgstr "%e. %B"
+msgstr "%d. %m."
 
 #: src/DateTime.vala:27
 msgid "%b %e, %Y"
-msgstr "%e. %B %Y."
+msgstr "%d. %m. %Y."
 
 #: src/Dialogs/About.vala:14
 msgid "Report an issue"
@@ -359,7 +358,7 @@ msgstr "Prijavi problem"
 
 #: src/Dialogs/Compose.vala:81 src/Views/Lists.vala:33
 msgid "This action cannot be reverted."
-msgstr "Ovo je nepovratna radnja."
+msgstr "Ova se radnja ne može obnoviti."
 
 #: src/Dialogs/Compose.vala:125 src/Views/Main.vala:25
 msgid "Compose"
@@ -367,7 +366,7 @@ msgstr "Sastavi"
 
 #: src/Dialogs/Compose.vala:135 src/Widgets/Status.vala:253
 msgid "Redraft"
-msgstr "Sastavi nanovo"
+msgstr "Stvori novu verziju"
 
 #: src/Dialogs/Compose.vala:154
 msgid "Reply"
@@ -383,7 +382,7 @@ msgstr "_Otvori"
 
 #: src/Dialogs/Compose.vala:201
 msgid "_Cancel"
-msgstr "O_dustani"
+msgstr "Odu_stani"
 
 #: src/Dialogs/ListEditor.vala:201
 msgid "Discard changes?"
@@ -391,7 +390,7 @@ msgstr "Odbaciti promjene?"
 
 #: src/Dialogs/ListEditor.vala:202
 msgid "You need to save the list if you want to keep them."
-msgstr "Ako ih želiš zadržati moraš spremiti popis."
+msgstr "Ako želiš sadržati popis moraš ih spremiti."
 
 #: src/Dialogs/NewAccount.vala:84
 msgid "Close"
@@ -399,15 +398,15 @@ msgstr "Zatvori"
 
 #: src/Dialogs/NewAccount.vala:85
 msgid "Add Another"
-msgstr "Dodaj jedan drugi"
+msgstr "Dodaj drugu"
 
 #: src/Dialogs/NewAccount.vala:127
 msgid "Please enter a valid instance URL"
-msgstr "Upiši jednu ispravnu URL adresu instance"
+msgstr "Upiši ispravni URL adresu instance"
 
 #: src/Dialogs/NewAccount.vala:160
 msgid "Please enter a valid authorization code"
-msgstr "Upiši jednan ispravan autorizacijski kod"
+msgstr "Upiši ispravni kod autorizacije"
 
 #: src/Dialogs/NewAccount.vala:176
 msgid "Instance failed to authorize the access token"
@@ -424,7 +423,7 @@ msgstr "Poslužitelj je vratio grešku"
 
 #: src/Services/Accounts.vala:32
 msgid "Network Error"
-msgstr "Greška u mreži"
+msgstr "Greška mreže"
 
 #: src/Services/Accounts.vala:33
 #, c-format
@@ -433,13 +432,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Instanca je poništila sesiju. Prijavi se ponovo.\n"
+"Instanca je poništila ovu sesiju. Prijavi se ponovo.\n"
 "\n"
 "%s"
 
 #: src/Views/Base.vala:6
 msgid "Nothing to see here"
-msgstr "Ovdje se nema što vidjeti"
+msgstr "Ovdje nema ničega"
 
 #: src/Views/Base.vala:58
 msgid "Reload"
@@ -451,7 +450,7 @@ msgstr "Traži"
 
 #: src/Views/Thread.vala:13
 msgid "Conversation"
-msgstr "Razgovor"
+msgstr "Konverzacija"
 
 #: src/Views/Federated.vala:7
 msgid "Federated"
@@ -459,12 +458,12 @@ msgstr "Federalizirano"
 
 #: src/Views/Home.vala:6
 msgid "Home"
-msgstr "Početna"
+msgstr "Početna stranica"
 
 #: src/Views/Lists.vala:32
 #, c-format
 msgid "Delete \"%s\"?"
-msgstr "Izbrisati \"%s\"?"
+msgstr "Izbrisati „%s”?"
 
 #: src/Views/Local.vala:4
 msgid "Local"
@@ -477,22 +476,22 @@ msgstr "Obavijesti"
 #: src/Views/Profile.vala:150
 #, c-format
 msgid "Block \"%s\"?"
-msgstr "Blokirati \"%s\"?"
+msgstr "Blokirati „%s”?"
 
 #: src/Views/Profile.vala:150
 #, c-format
 msgid "Unblock \"%s\"?"
-msgstr "Deblokirati \"%s\"?"
+msgstr "Deblokirati „%s”?"
 
 #: src/Views/Profile.vala:161
 #, c-format
 msgid "Block Entire \"%s\"?"
-msgstr "Blokirati cijelu \"%s\"?"
+msgstr "Blokirati cijelu „%s”?"
 
 #: src/Views/Profile.vala:161
 #, c-format
 msgid "Unblock Entire \"%s\"?"
-msgstr "Deblokirati cijelu \"%s\"?"
+msgstr "Deblokirati cijelu „%s”?"
 
 #: src/Views/Profile.vala:164
 msgid ""
@@ -504,17 +503,17 @@ msgid ""
 msgstr ""
 "Blokiranje domene će:\n"
 "\n"
-"• ukloniti njene javne objave i obavijesti s tvojih vremenskih crta\n"
-"• ukloniti njene pratioce s tvog računa\n"
-"• spriječiti da pratiš njene korisnike"
+"• Ukloniti njene javne objave i obavijesti iz tvojih kronologija\n"
+"• Ukloniti njene pratitelje s tvog računa\n"
+"• Spriječiti da pratiš njegove korisnike"
 
 #: src/Views/Profile.vala:204
 msgid "Sent follow request"
-msgstr "Poslan zahtjev za praćenje"
+msgstr "Pošalji zahtjev za praćenje"
 
 #: src/Views/Profile.vala:206
 msgid "Mutually follows you"
-msgstr "Uzajamno se pratite"
+msgstr "Uzajamno te prati"
 
 #: src/Views/Profile.vala:208
 msgid "Follows you"
@@ -538,7 +537,7 @@ msgstr "Stanja"
 
 #: src/Views/Search.vala:45
 msgid "Hashtags"
-msgstr "Hashtagovi"
+msgstr "Hash-oznake"
 
 #: src/Views/Search.vala:61
 msgid "Enter query"
@@ -563,15 +562,15 @@ msgstr "Anonimno"
 
 #: src/Widgets/AccountsButton.vala:149
 msgid "No active account"
-msgstr "Nema aktivnog računa"
+msgstr "Bez aktivnog računa"
 
 #: src/Widgets/Status.vala:72
 msgid "Click to show sensitive content"
-msgstr "Pritisni za prikaz osjetljivog sadržaja"
+msgstr "Pritisni za prikaz neprikladnog sadržaja"
 
 #: src/Widgets/Status.vala:163
 msgid "This post can't be boosted"
-msgstr "Ova se objava ne može proslijediti"
+msgstr "Ova se objava ne može pojačati"
 
 #: src/Widgets/Status.vala:213
 msgid "Open in Browser"
@@ -587,7 +586,7 @@ msgstr "Kopiraj tekst"
 
 #: src/Widgets/Status.vala:237
 msgid "Unpin from Profile"
-msgstr "Otkvači s profila"
+msgstr "Otkvači od profila"
 
 #: src/Widgets/Status.vala:237
 msgid "Pin on Profile"
