@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: com.github.bleakgrey.tootle\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-10-30 16:21+0300\n"
-"PO-Revision-Date: 2020-10-23 12:38+0200\n"
-"Last-Translator: Automatically generated\n"
+"PO-Revision-Date: 2022-08-04 15:00+0200\n"
+"Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: none\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.0\n"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:4
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:7
@@ -34,7 +34,7 @@ msgstr "com.github.bleakgrey.tootle"
 
 #: data/com.github.bleakgrey.tootle.desktop.in:11
 msgid "toot;mastodon;social;network;post;"
-msgstr "toot;mastodon;social;network;post;"
+msgstr "toot;mastodon;soziales Netzwerk;Netzwerk;Beitrag;"
 
 #: data/com.github.bleakgrey.tootle.appdata.xml.in:8
 msgid "Lightning fast client for Mastodon"
@@ -130,7 +130,7 @@ msgstr "Speichern"
 
 #: data/ui/dialogs/list_editor.ui:200
 msgid "Search among people you follow"
-msgstr "Suche unter Personen, denen du folgst"
+msgstr "Suche unter Personen denen du folgst"
 
 #: data/ui/dialogs/list_editor.ui:256
 msgid "Nobody here"
@@ -149,13 +149,12 @@ msgid "Dark theme"
 msgstr "Dunkles Thema"
 
 #: data/ui/dialogs/preferences.ui:54
-#, fuzzy
 msgid "Text scale (%)"
-msgstr "Textgröße für Beiträge (%)"
+msgstr "Textsgröße (%)"
 
 #: data/ui/dialogs/preferences.ui:61
 msgid "100"
-msgstr ""
+msgstr "100"
 
 #: data/ui/dialogs/preferences.ui:75
 msgid "Behavior"
@@ -174,15 +173,12 @@ msgid "Background work"
 msgstr "Hintergrundarbeit"
 
 #: data/ui/dialogs/preferences.ui:96
-#, fuzzy
 msgid "Receive notifications even when the app is closed"
-msgstr ""
-"Erhalte weiterhin Benachrichtigungen, auch wenn das App-Fenster geschlossen "
-"ist"
+msgstr "Erhalte Benachrichtigungen, auch wenn das App-Fenster geschlossen ist"
 
 #: data/ui/dialogs/preferences.ui:110
 msgid "Default post visibility"
-msgstr "Standard-Post-Sichtbarkeit"
+msgstr "Standardmäßige Sichtbarkeit der Beiträge"
 
 #: data/ui/dialogs/preferences.ui:119
 msgid "Timelines"
@@ -194,17 +190,15 @@ msgstr "Beiträge pro Seite"
 
 #: data/ui/dialogs/preferences.ui:131
 msgid "10"
-msgstr ""
+msgstr "10"
 
 #: data/ui/dialogs/preferences.ui:141
 msgid "Infinite scrolling"
-msgstr ""
+msgstr "Unbegrenzter Verlauf"
 
 #: data/ui/dialogs/preferences.ui:143 data/ui/dialogs/preferences.ui:176
-#, fuzzy
 msgid "Warning: This will increase memory usage"
-msgstr ""
-"Warnung: Dadurch werden in überfüllten Instanzen mehr Ressourcen verbraucht"
+msgstr "Warnung: Dies erhöht die Speichernutzung"
 
 #: data/ui/dialogs/preferences.ui:157
 msgid "Stream timelines"
@@ -212,7 +206,7 @@ msgstr "Zeitleisten streamen"
 
 #: data/ui/dialogs/preferences.ui:159
 msgid "Receive new posts and notifications in real-time"
-msgstr ""
+msgstr "Erhalte neue Beiträge und Benachrichtigungen in Echtzeit"
 
 #: data/ui/dialogs/preferences.ui:174
 msgid "Stream public timelines"
@@ -240,9 +234,8 @@ msgid "<a href=\"https://joinmastodon.org/\">Don't have one yet?</a>"
 msgstr "<a href=\"https://joinmastodon.org/\">Hast du noch keinen?</a>"
 
 #: data/ui/dialogs/new_account.ui:242
-#, fuzzy
 msgid "Enter authorization code"
-msgstr "Gib den Autorisierungscode ein"
+msgstr "Autorisierungscode eingeben"
 
 #: data/ui/dialogs/new_account.ui:276
 msgid "<a href=\"tootle://manual_auth\">Try manual authorization</a>"
@@ -267,15 +260,15 @@ msgstr "Listen"
 
 #: data/ui/widgets/accounts_button.ui:204
 msgid "POSTS"
-msgstr ""
+msgstr "BEITRÄGE"
 
 #: data/ui/widgets/accounts_button.ui:247
 msgid "FOLLOWING"
-msgstr ""
+msgstr "ICH FOLGE"
 
 #: data/ui/widgets/accounts_button.ui:290
 msgid "FOLLOWERS"
-msgstr ""
+msgstr "VERFOLGER"
 
 #: data/ui/widgets/accounts_button.ui:344
 msgid "Refresh"
@@ -326,7 +319,9 @@ msgstr "Bearbeiten"
 #. TRANSLATORS: Replace this with your name. It will be displayed in the About dialog.
 #: src/Build.vala:15
 msgid " "
-msgstr "koyu - @koyu@koyu.space"
+msgstr ""
+"koyu - @koyu@koyu.space\n"
+"Milo Ivir <mail@milotype.de>"
 
 #: src/Desktop.vala:18
 #, c-format
@@ -341,7 +336,7 @@ msgstr ""
 
 #: src/Html.vala:3
 msgid "[ There was an error parsing this text :c ]"
-msgstr "[ Es gab einen Fehler als versucht wurde den Text zu parsen :c ]"
+msgstr "[ Beim analysieren dieses Textes ist ein Fehler aufgetreten :c ]"
 
 #: src/DateTime.vala:11
 msgid "Just now"
@@ -445,7 +440,7 @@ msgstr ""
 
 #: src/Views/Base.vala:6
 msgid "Nothing to see here"
-msgstr "Es gibt hier nichts zu sehen"
+msgstr "Hier git es nichts zu sehen"
 
 #: src/Views/Base.vala:58
 msgid "Reload"
@@ -456,9 +451,8 @@ msgid "Search"
 msgstr "Suchen"
 
 #: src/Views/Thread.vala:13
-#, fuzzy
 msgid "Conversation"
-msgstr "Konversationen"
+msgstr "Konversation"
 
 #: src/Views/Federated.vala:7
 msgid "Federated"
@@ -484,22 +478,22 @@ msgstr "Benachrichtigungen"
 #: src/Views/Profile.vala:150
 #, c-format
 msgid "Block \"%s\"?"
-msgstr "\"%s\" blockieren?"
+msgstr "„%s“ blockieren?"
 
 #: src/Views/Profile.vala:150
 #, c-format
 msgid "Unblock \"%s\"?"
-msgstr "\"%s\" nicht mehr blockieren?"
+msgstr "„%s“ nicht mehr blockieren?"
 
 #: src/Views/Profile.vala:161
 #, c-format
 msgid "Block Entire \"%s\"?"
-msgstr "Blockiere alles von \"%s\"?"
+msgstr "Alles von „%s“ blokieren?"
 
 #: src/Views/Profile.vala:161
 #, c-format
 msgid "Unblock Entire \"%s\"?"
-msgstr "Nicht mehr alles von \"%s\" blockieren?"
+msgstr "Alles von „%s“ nicht mehr blockieren?"
 
 #: src/Views/Profile.vala:164
 msgid ""
@@ -509,12 +503,12 @@ msgid ""
 "• Remove its followers from your account\n"
 "• Prevent you from following its users"
 msgstr ""
-"Eine Domain zu blockieren wird:\n"
+"Das Blockieren einer Domain wird:\n"
 "\n"
-"• Öffentliche Beiträge und Benachrichtigungen der Domain von deinen "
-"Zeitleisten entfernen\n"
-"• Alle Follower von der Domain von deinem Account entfernen\n"
-"• Dich davon abhalten Leuten von der Domain zu folgen"
+"• Öffentliche Beiträge und Benachrichtigungen werden von deinen Zeitleisten "
+"entfernen\n"
+"• Verfolger von deinem Account entfernen\n"
+"• Dich davon abhalten Benutzern der Domain zu folgen"
 
 #: src/Views/Profile.vala:204
 msgid "Sent follow request"
@@ -529,9 +523,8 @@ msgid "Follows you"
 msgstr "Folgt dir"
 
 #: src/Views/Profile.vala:229
-#, fuzzy
 msgid "Unblock"
-msgstr "\"%s\" nicht mehr blockieren?"
+msgstr "Nicht mehr blockieren"
 
 #: src/Views/Profile.vala:239
 msgid "Unfollow"
@@ -543,7 +536,7 @@ msgstr "Folgen"
 
 #: src/Views/Search.vala:44
 msgid "Statuses"
-msgstr ""
+msgstr "Status"
 
 #: src/Views/Search.vala:45
 msgid "Hashtags"
@@ -551,7 +544,7 @@ msgstr "Hashtags"
 
 #: src/Views/Search.vala:61
 msgid "Enter query"
-msgstr ""
+msgstr "Anfrage eintragen"
 
 #: src/Widgets/Attachment/Slot.vala:46
 msgid "File saved to Downloads"
@@ -576,11 +569,11 @@ msgstr "Kein aktives Konto"
 
 #: src/Widgets/Status.vala:72
 msgid "Click to show sensitive content"
-msgstr ""
+msgstr "Klicke, um unangemessenen Inhalt anzuzeigen"
 
 #: src/Widgets/Status.vala:163
 msgid "This post can't be boosted"
-msgstr "Dieser Beitrag kann nicht geteilt werden"
+msgstr "Dieser Beitrag kann nicht beworben werden"
 
 #: src/Widgets/Status.vala:213
 msgid "Open in Browser"
@@ -596,23 +589,8 @@ msgstr "Text kopieren"
 
 #: src/Widgets/Status.vala:237
 msgid "Unpin from Profile"
-msgstr "Nicht mehr im Profil anpinnen"
+msgstr "Vom Profil lösen"
 
 #: src/Widgets/Status.vala:237
 msgid "Pin on Profile"
-msgstr "Im Profil anpinnen"
-
-#~ msgid "Add and remove posts in real-time"
-#~ msgstr "Hinzufügen und Entfernen von Posts in Echtzeit"
-
-#~ msgid "Handle"
-#~ msgstr "Handle"
-
-#~ msgid "People"
-#~ msgstr "Leute"
-
-#~ msgid "Posts"
-#~ msgstr "Beiträge"
-
-#~ msgid "[ Toggle content ]"
-#~ msgstr "[ Inhalt anzeigen/verbergen ]"
+msgstr "Dem Profil anhängen"
