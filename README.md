@@ -1,3 +1,8 @@
+### Project Discontinued
+This project is no longer maintained and doesn't accept pull requests. If you wish to contribute to Tootle, feel free to do so on <a href='https://gitlab.gnome.org/World/tootle'>Gnome World's Tootle repository</a>.
+
+
+
 ## Tootle
 Simple [Mastodon](https://github.com/tootsuite/mastodon) client for Linux
 
