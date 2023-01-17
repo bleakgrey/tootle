@@ -4,10 +4,9 @@ public class Tootle.API.Attachment : Entity, Widgetizable {
 	public string kind { get; set; default = "unknown"; }
 	public string url { get; set; }
 	public string? description { get; set; }
-	public string? _preview_url { get; set; }
 	public string? preview_url {
-		set { this._preview_url = value; }
-		get { return (this._preview_url == null || this._preview_url == "") ? url : _preview_url; }
+		set { this.preview_url = value; }
+		get { return (this.preview_url == null || this.preview_url == "") ? url : preview_url; }
 	}
 
 	public File? source_file { get; set; }
