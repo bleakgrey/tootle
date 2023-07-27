@@ -45,6 +45,7 @@ You can always help by reporting bugs, submitting pull requests, and suggesting 
 
 ### Credits
 * Icon design by [Tobias Bernard](https://github.com/bertob)
-* German translation by [@koyuawsmbrtn](https://github.com/koyuawsmbrtn)
+* German translation by [@koyuawsmbrtn](https://github.com/koyuawsmbrtn), [@milotype](https://github.com/milotype)
 * Spanish translation by [@oscfdezdz](https://github.com/oscfdezdz)
 * Norwegian (Bokmål) translation by [@Octolinger](https://github.com/Octolinger)
+* Croatian translation by [@milotype](https://github.com/milotype)
